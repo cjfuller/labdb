@@ -1,0 +1,17 @@
+<%= form_for(@plasmid, :html => {:multipart => true}) do |f| %>
+  <% if @plasmid.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@plasmid.errors.count, "error") %> prohibited this plasmid from being saved:</h2>
+
+      <ul>
+      <% @plasmid.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+	
+	<%= render :partial=>'plasmid_display', :locals=>{:f => f} %>
+
+
+<% end %>

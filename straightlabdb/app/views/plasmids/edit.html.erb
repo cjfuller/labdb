@@ -1,0 +1,16 @@
+<h1>Editing plasmid</h1>
+
+<%= def readonly?
+		false
+	end
+%>
+
+<%= def submit_text
+	"Update plasmid"
+	end
+%>
+
+<%= render 'plasmidinfo' %>
+
+<%= link_to 'Show', @plasmid %> |
+<%= link_to 'Back', plasmids_path %>

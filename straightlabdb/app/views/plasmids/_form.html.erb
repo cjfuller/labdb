@@ -1,0 +1,73 @@
+<%= form_for(@plasmid) do |f| %>
+  <% if @plasmid.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@plasmid.errors.count, "error") %> prohibited this plasmid from being saved:</h2>
+
+      <ul>
+      <% @plasmid.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :plasmidnumber %><br />
+    <%= f.text_field :plasmidnumber %>
+  </div>
+  <div class="field">
+    <%= f.label :datefrozen %><br />
+    <%= f.date_select :datefrozen %>
+  </div>
+  <div class="field">
+    <%= f.label :enteredby %><br />
+    <%= f.text_field :enteredby %>
+  </div>
+  <div class="field">
+    <%= f.label :notebook %><br />
+    <%= f.number_field :notebook %>
+  </div>
+  <div class="field">
+    <%= f.label :verified %><br />
+    <%= f.check_box :verified %>
+  </div>
+  <div class="field">
+    <%= f.label :plasmidalias %><br />
+    <%= f.text_field :plasmidalias %>
+  </div>
+  <div class="field">
+    <%= f.label :antibiotic %><br />
+    <%= f.text_field :antibiotic %>
+  </div>
+  <div class="field">
+    <%= f.label :plasmidsize %><br />
+    <%= f.number_field :plasmidsize %>
+  </div>
+  <div class="field">
+    <%= f.label :concentration %><br />
+    <%= f.text_field :concentration %>
+  </div>
+  <div class="field">
+    <%= f.label :strainnumbers %><br />
+    <%= f.text_field :strainnumbers %>
+  </div>
+  <div class="field">
+    <%= f.label :description %><br />
+    <%= f.text_area :description %>
+  </div>
+  <div class="field">
+    <%= f.label :sequence %><br />
+    <%= f.text_area :sequence %>
+  </div>
+  <div class="field">
+    <%= f.label :vector %><br />
+    <%= f.text_field :vector %>
+  </div>
+  <div class="field">
+    <%= f.label :mapreference %><br />
+    <%= f.text_field :mapreference %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

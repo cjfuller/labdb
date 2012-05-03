@@ -1,0 +1,114 @@
+<table class=plasmidinfo>
+	<tr>
+		<td><b><%=h PlasmidsController.get_heading(:plasmidnumber) %> </b></td>
+		<td><%= f.text_field(:plasmidnumber, :disabled=>readonly?, :size=>6) %></td>
+		<td class="plasmid_spaced"></td>
+		<td><b><%=h PlasmidsController.get_heading(:datefrozen) %></b></td>
+		<td><%= f.text_field(:datefrozen, :disabled=>readonly?, :size=>11) %></td>
+	</tr>
+</table>
+<table class=plasmidinfo>
+	<tr>
+		<td><b><%=h PlasmidsController.get_heading(:enteredby) %></b></td>
+		<td><%= f.text_field(:enteredby, :disabled=>readonly?, :size=>20) %></td>
+		<td class="plasmid_spaced"></td>
+		<td><b><%=h PlasmidsController.get_heading(:notebook) %></b></td>
+		<td><%= f.text_field(:notebook, :disabled=>readonly?, :size=>4) %></td>
+		<td class="plasmid_spaced"></td>
+		<td><b><%=h PlasmidsController.get_heading(:verified) %></b></td>
+		<td><%= f.check_box(:verified, :disabled=>readonly?, :size=>6) %></td>
+	</tr>
+</table>
+<table class=plasmidinfo>
+	<tr>
+		<td><b><%=h PlasmidsController.get_heading(:plasmidalias) %></b></td>
+		<td><%= f.text_field(:plasmidalias, :disabled=>readonly?) %></td>
+		<td class="plasmid_spaced"></td>
+		<td><b><%=h PlasmidsController.get_heading(:antibiotic) %></b></td>
+		<td><% Plasmid.get_antibiotics.each_key do |k| %>
+		
+		<%=	f.check_box(Plasmid.get_antibiotics[k].to_sym, :disabled=>readonly?, :size=>2) %>
+		<%= f.label(Plasmid.get_antibiotics[k].to_sym, k, :class=>"antibiotic") %>
+		<br>
+		<% end %></td>
+		<td></td>
+		<td class="plasmid_spaced"></td>
+		<td><b><%=h PlasmidsController.get_heading(:plasmidsize) %></b></td>
+		<td><%= f.text_field(:plasmidsize, :disabled=>true, :size=>6) %></td>
+	</tr>
+</table>
+<table class=plasmidinfo>
+	<tr>
+		<td><b><%=h PlasmidsController.get_heading(:concentration) %></b></td>
+		<td><%= f.text_field(:concentration, :disabled=>readonly?, :size=>6) %></td>
+		<td class="plasmid_spaced"></td>
+		<td><b><%=h PlasmidsController.get_heading(:strainnumbers) %></b></td>
+		<td><%= f.text_field(:strainnumbers, :disabled=>readonly?, :size=>20) %></td>
+	</tr>
+</table>
+
+
+<p>
+
+	<span class="plasmid_nonspaced">
+
+		<b><%=h PlasmidsController.get_heading(:description) %></b>
+
+	</span>
+	<br>
+	<%= f.text_area(:description, :disabled=>readonly?, :rows=>12, :cols=>80)%>
+
+</p>
+
+<p>
+
+	<span class="plasmid_nonspaced">
+
+		<b><%=h PlasmidsController.get_heading(:sequence) %></b>
+
+	</span>
+	<br>
+	<%= f.text_area(:sequence, :disabled => readonly?, :rows=>4, :cols=>50) %>
+
+
+</p>
+
+<p>
+
+	<span class="plasmid_nonspaced">
+
+		<b><%=h PlasmidsController.get_heading(:vector) %></b>
+
+	</span>
+
+	<%= f.text_field(:vector, :disabled => readonly?, :size=>20)%>
+
+</p>
+
+<p>
+
+	<span class="plasmid_nonspaced">
+
+		<b><%=h PlasmidsController.get_heading(:mapreference) %></b>
+	</span>
+
+	<br>
+	<% if @plasmid.has_map? then %>
+	<%= image_tag @plasmid.map_path %>
+	<% else %>
+	(Map not uploaded.)
+	<% end %>
+	<% unless readonly? then %>
+	<p>
+		<%= f.label "Upload new map:" %>
+		<%= f.file_field :mapreference %>
+	</p>
+	<% end %>
+
+</p>
+<% unless readonly? then %>
+<p>
+    <%= f.submit(submit_text) %>
+</p>
+
+<% end %>

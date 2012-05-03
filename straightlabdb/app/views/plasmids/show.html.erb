@@ -1,0 +1,12 @@
+<p id="notice"><%= notice %></p>
+
+<%= def readonly?
+		true
+	end
+%>
+
+<%= render 'plasmidinfo' %>
+
+
+<%= link_to 'Edit', edit_plasmid_path(@plasmid) %> |
+<%= link_to 'Back', plasmids_path %>

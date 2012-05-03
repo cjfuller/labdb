@@ -1,0 +1,47 @@
+// Place all the styles related to the Plasmids controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+table.plasmidinfo
+{
+	border-style:none;
+	font-size:large;
+}
+
+td.plasmid_spaced
+{
+	width:40px;
+}
+
+td
+{
+	font-size:small;
+}
+
+span.plasmid_spaced
+{
+position:relative;
+left: 40px;
+display:inline-block;
+}
+
+span.plasmid_nonspaced
+{
+display:inline-block;
+}
+
+th.plasmidindex {
+	background:#e0dddd
+}
+
+tr.plasmidindex:nth-child(odd){
+	background:#d0ebff
+}
+
+tr.plasmidindex:nth-child(even) {
+	background:#ffffff
+}
+
+.antibiotic {
+	font-size:6pt;
+}

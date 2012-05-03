@@ -1,0 +1,14 @@
+<h1>New plasmid</h1>
+
+<%= def readonly?
+		false
+	end
+%>
+<%= def submit_text
+	"Create plasmid"
+	end
+%>
+
+<%= render 'plasmidinfo' %>
+
+<%= link_to 'Back', plasmids_path %>
