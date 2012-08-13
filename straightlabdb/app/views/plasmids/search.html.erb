@@ -22,6 +22,9 @@
       </ul>
     </div>
   <% end %>
+
+	<%=	f.check_box(:search_by_regex, :size=>2) %>
+	<%= f.label(:search_by_regex, "Search by regular expression")%>
 	
 	<%= render :partial=>'plasmid_display', :locals=>{:f => f} %>
 

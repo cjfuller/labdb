@@ -7,8 +7,31 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
+	<header class="navbar navbar-fixed-top">
+			
+				<div class="navbar-inner">
+					<div class="container">
+						<%= link_to "AS Plasmids", "/plasmids", id:"logo" %>
+						<nav>
+						<ul class="nav pull-left">
+							<li class="divider-vertical"></li>
+							<li><%= link_to 'New Plasmid', new_plasmid_path %></li>
+							<li class="divider-vertical"></li>
+							<li><%= link_to 'Search', '/plasmids/search'%></li>
+							<li class="divider-vertical"></li>
+							<li><%= link_to 'Show All', '/plasmids' %></li>
+							<li class="divider-vertical"></li>
+						</ul>
+						</nav>
+					</div>
+				</div>
+			
+			
 
-<%= yield %>
+	</header>
+	<div class="container">
+	<%= yield %>
+	</div>
 
 </body>
 </html>

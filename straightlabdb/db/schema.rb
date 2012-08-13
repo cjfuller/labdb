@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120502070603) do
+ActiveRecord::Schema.define(:version => 20120508225756) do
 
   create_table "plasmids", :force => true do |t|
     t.string   "plasmidnumber"
@@ -27,9 +27,12 @@ ActiveRecord::Schema.define(:version => 20120502070603) do
     t.text     "description"
     t.text     "sequence"
     t.string   "vector"
-    t.string   "mapreference"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.datetime "created_at",              :null => false
+    t.datetime "updated_at",              :null => false
+    t.string   "plasmidmap_file_name"
+    t.string   "plasmidmap_content_type"
+    t.integer  "plasmidmap_file_size"
+    t.datetime "plasmidmap_updated_at"
   end
 
 end

@@ -2,46 +2,83 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-table.plasmidinfo
-{
-	border-style:none;
-	font-size:large;
+@import "bootstrap";
+
+h1 {
+	margin-bottom: 10px;
+  }
+
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1;
 }
 
-td.plasmid_spaced
-{
-	width:40px;
+h1 {
+  font-size: 3em;
+  letter-spacing: -2px;
+  margin-bottom: 30px;
+  text-align: center;
 }
 
-td
-{
-	font-size:small;
+h2 {
+  font-size: 1.7em;
+  letter-spacing: -1px;
+  margin-bottom: 30px;
+  text-align: center;
+  font-weight: normal;
+  color: $grayLight;
 }
 
-span.plasmid_spaced
-{
-position:relative;
-left: 40px;
-display:inline-block;
+p {
+  font-size: 1.1em;
+  line-height: 1.7em;
 }
 
-span.plasmid_nonspaced
-{
-display:inline-block;
+/* header */
+
+#logo {
+  float: left;
+  margin-right: 10px;
+  font-size: 1.7em;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: -1px;
+  padding-top: 9px;
+  font-weight: bold;
+  line-height: 1;
+
+  &:hover {
+	color: #fff;
+	text-decoration: none;
+  }
 }
 
-th.plasmidindex {
-	background:#e0dddd
+
+/* footer */
+
+footer {
+  margin-top: 45px;
+  padding-top: 5px;
+  border-top: 1px solid #eaeaea;
+  color: $grayLight;
+
+  a {
+	color: $gray;
+	&:hover {
+	  color: $grayDarker;
+	}
+  }
+
+  small {
+    float: left;
+  }
+
+  ul {
+    float: right;
+	list-style: none;
+	li {
+	  float: left;
+	  margin-left: 10px;
+	}
+  }
 }
 
-tr.plasmidindex:nth-child(odd){
-	background:#d0ebff
-}
-
-tr.plasmidindex:nth-child(even) {
-	background:#ffffff
-}
-
-.antibiotic {
-	font-size:6pt;
-}

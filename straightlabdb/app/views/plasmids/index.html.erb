@@ -1,45 +1,4 @@
-<h1>AS Plasmids</h1>
-
-<%= link_to 'New Plasmid', new_plasmid_path %>
-<br>
-<%= link_to 'Search', '/plasmids/search'%>
-<br>
-<%= link_to 'Show All', '/plasmids' %>
-<table>
-  <tr>
-    <th class="plasmidindex"><%= PlasmidsController.get_heading(:plasmidnumber) %></th>
-    <th class="plasmidindex"><%= PlasmidsController.get_heading(:datefrozen) %></th>
-    <th class="plasmidindex"><%= PlasmidsController.get_heading(:enteredby) %></th>
-    <th class="plasmidindex"><%= PlasmidsController.get_heading(:plasmidalias) %></th>
-    <th class="plasmidindex"><%= PlasmidsController.get_heading(:antibiotic) %></th>
-    <th class="plasmidindex"><%= PlasmidsController.get_heading(:plasmidsize) %></th>
-    <th class="plasmidindex"><%= PlasmidsController.get_heading(:strainnumbers) %></th>
-    <th class="plasmidindex"><%= PlasmidsController.get_heading(:description) %></th>
-    <th class="plasmidindex"><%= PlasmidsController.get_heading(:sequence) %></th>
-    <th class="plasmidindex"><%= PlasmidsController.get_heading(:vector) %></th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-
-<% @plasmids.each do |plasmid| %>
-  <tr class="plasmidindex">
-    <td><%= plasmid.plasmidnumber %></td>
-    <td><%= plasmid.datefrozen %></td>
-    <td><%= plasmid.enteredby %></td>
-    <td><%= plasmid.plasmidalias %></td>
-    <td><%= plasmid.antibiotic %></td>
-    <td><%= plasmid.plasmidsize %></td>
-    <td><%= plasmid.strainnumbers %></td>
-    <td><%= plasmid.description %></td>
-    <td><%= plasmid.sequence %></td>
-    <td><%= plasmid.vector %></td>
-    <td><%= link_to 'Show', plasmid %></td>
-    <td><%= link_to 'Edit', edit_plasmid_path(plasmid) %></td>
-    <td><%= link_to 'Destroy', plasmid, confirm: 'Are you sure?', method: :delete %></td>
-  </tr>
-<% end %>
-</table>
-
-<br />
-
+	
+<%= render "plasmid_table" %>
+	
+	

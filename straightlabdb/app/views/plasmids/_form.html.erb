@@ -1,4 +1,4 @@
-<%= form_for(@plasmid) do |f| %>
+<%= form_for(@plasmid,  html: {:class => "form-horizontal"}) do |f| %>
   <% if @plasmid.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@plasmid.errors.count, "error") %> prohibited this plasmid from being saved:</h2>

@@ -14,18 +14,18 @@ class PlasmidsController < ApplicationController
   end
   
   def generate_plasmid_number(a_plasmid)
+    
     @@plasmid_number_mutex.synchronize do
     
       max_number = 1
-      unless defined? @@max_number then
-        Plasmid.find_each do |p|
-          if p.plasmidnumber and p.plasmidnumber.to_i > max_number then
-            max_number = p.plasmidnumber.to_i
-          end
+     
+      Plasmid.find_each do |p|
+        if p.plasmidnumber and p.plasmidnumber.to_i > max_number then
+          max_number = p.plasmidnumber.to_i
         end
-      
-        @@max_number = max_number
       end
+    
+      @@max_number = max_number
       @@max_number += 1
       a_plasmid.plasmidnumber = @@max_number    
       
@@ -73,17 +73,53 @@ class PlasmidsController < ApplicationController
     puts "SEARCHING"
     antibiotics_string = generate_antibiotics_string(searchparams)
     searchparams = fix_antibiotic_params(searchparams)
+    search_by_regex = (searchparams["search_by_regex"] == "1")
+    puts search_by_regex
+    searchparams.delete("search_by_regex")
     conditions = Hash.new
+    regex_conditions = Hash.new
+    regex_detection_regex = /^\/.*\/$/
     searchparams.each_key do |k|
       if searchparams[k] and searchparams[k] != "" and k != "verified" then #todo: is there a better way to deal with the verified field?
-        conditions[k] = searchparams[k]
+        unless search_by_regex and regex_detection_regex.match(searchparams[k]) then
+          conditions[k] = searchparams[k]
+        else
+          regex_conditions[k] = Regexp.new(searchparams[k][1...(searchparams[k].length-1)])
+        end
       end
     end
     if antibiotics_string != "" then
       conditions[:antibiotic] = antibiotics_string
     end
-    puts conditions
-    Plasmid.where(conditions)
+    
+    preliminary_list = Plasmid.where(conditions)
+    
+    final_list = Array.new
+    
+    if search_by_regex then
+    
+      preliminary_list.each do |p|
+        include_plasmid = true
+        regex_conditions.each_key do |k|
+          val = p.send(k.to_s)
+          unless regex_conditions[k].match(val) then
+            include_plasmid = false
+            break
+          end
+        end
+        if include_plasmid then
+          final_list << p
+        end
+      end
+      
+    else
+      
+      final_list.concat(preliminary_list)
+    end
+    
+    final_list
+    
+    
   end
   
   # GET /plasmids
@@ -135,7 +171,7 @@ class PlasmidsController < ApplicationController
   # POST /plasmids
   # POST /plasmids.json
   def create
-    @plasmid = Plasmid.new(fix_antibiotic_params(params[:plasmid]))
+    @plasmid = Plasmid.create(fix_antibiotic_params(params[:plasmid]))
     @plasmid.calculate_size
     @plasmid.antibiotic= generate_antibiotics_string(params[:plasmid])
     respond_to do |format|
@@ -185,6 +221,9 @@ class PlasmidsController < ApplicationController
       format.html
       format.json { render json: @plasmid }
     end
+  end
+  
+  def upload
   end
     
 end
