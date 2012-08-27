@@ -1,0 +1,12 @@
+<% if readonly? then %>
+
+<% else %>
+    <div class="row-fluid">
+      <div class="span2">
+        <%= submit_tag submit_text, class: "btn btn-success" %>
+      </div>
+      <div class="span2">
+        <%= link_to 'Cancel', @plasmid, class: "btn btn-inverse" %>
+      </div>
+    </div>
+<% end %>

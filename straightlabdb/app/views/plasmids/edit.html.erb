@@ -1,5 +1,3 @@
-<h1>Editing plasmid</h1>
-
 <%= def readonly?
 		false
 	end
@@ -10,7 +8,15 @@
 	end
 %>
 
+<%= def status_text
+      "Editing plasmid."
+    end
+%>
+
+<%= def show_map?
+      true
+    end
+%>
+
 <%= render 'plasmidinfo' %>
 
-<%= link_to 'Show', @plasmid %> |
-<%= link_to 'Back', plasmids_path %>

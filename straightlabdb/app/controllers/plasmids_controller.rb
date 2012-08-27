@@ -1,6 +1,6 @@
 class PlasmidsController < ApplicationController
   
-  @@headings = {:plasmidnumber => "ASP Number", :datefrozen => "Date frozen", 
+  @@headings = {:plasmidnumber => "ASP Number", :date_entered => "Date entered",
     :enteredby => "Entered by", :notebook => "Notebook", :verified => "Sequence verified?",
     :plasmidalias => "Alias", :antibiotic => "Antibiotic resistances", :plasmidsize => "Size",
     :concentration => "Concentration (ug/mL)", :strainnumbers => "ASBS numbers",
@@ -69,22 +69,25 @@ class PlasmidsController < ApplicationController
     
   end
   
-  def process_search_query(searchparams)
-    puts "SEARCHING"
-    antibiotics_string = generate_antibiotics_string(searchparams)
-    searchparams = fix_antibiotic_params(searchparams)
-    search_by_regex = (searchparams["search_by_regex"] == "1")
-    puts search_by_regex
-    searchparams.delete("search_by_regex")
+  def process_search_query(search_params)
+
+    antibiotics_string = generate_antibiotics_string(search_params)
+    search_params = fix_antibiotic_params(search_params)
+
     conditions = Hash.new
     regex_conditions = Hash.new
     regex_detection_regex = /^\/.*\/$/
-    searchparams.each_key do |k|
-      if searchparams[k] and searchparams[k] != "" and k != "verified" then #todo: is there a better way to deal with the verified field?
-        unless search_by_regex and regex_detection_regex.match(searchparams[k]) then
-          conditions[k] = searchparams[k]
+    search_params.each_key do |k|
+      if search_params[k] and search_params[k] != "" and k != "verified" then #TODO: is there a better way to deal with the verified field?
+        unless regex_detection_regex.match(search_params[k]) then
+          #if a regex has not been entered:
+          #substitute * for .* to turn the old filemaker-style glob syntax into a regex
+          search_params[k].gsub!("*", ".*")
+          #add start and end of line matchers to avoid, e.g., matching all plasmids with a 1 when searching for #1
+          search_params[k]= "^" + search_params[k] + "$"
+          regex_conditions[k] = Regexp.new(search_params[k])
         else
-          regex_conditions[k] = Regexp.new(searchparams[k][1...(searchparams[k].length-1)])
+          regex_conditions[k] = Regexp.new(search_params[k][1...(search_params[k].length-1)])
         end
       end
     end
@@ -96,26 +99,22 @@ class PlasmidsController < ApplicationController
     
     final_list = Array.new
     
-    if search_by_regex then
-    
-      preliminary_list.each do |p|
-        include_plasmid = true
-        regex_conditions.each_key do |k|
-          val = p.send(k.to_s)
-          unless regex_conditions[k].match(val) then
-            include_plasmid = false
-            break
-          end
-        end
-        if include_plasmid then
-          final_list << p
+
+    preliminary_list.each do |p|
+      include_plasmid = true
+      regex_conditions.each_key do |k|
+        val = p.send(k.to_s).to_s
+        unless regex_conditions[k].match(val) then
+          include_plasmid = false
+          break
         end
       end
-      
-    else
-      
-      final_list.concat(preliminary_list)
+      if include_plasmid then
+        final_list << p
+      end
     end
+      
+
     
     final_list
     

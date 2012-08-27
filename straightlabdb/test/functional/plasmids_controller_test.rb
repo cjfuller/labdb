@@ -18,7 +18,7 @@ class PlasmidsControllerTest < ActionController::TestCase
 
   test "should create plasmid" do
     assert_difference('Plasmid.count') do
-      post :create, plasmid: { antibiotic: @plasmid.antibiotic, concentration: @plasmid.concentration, datefrozen: @plasmid.datefrozen, description: @plasmid.description, enteredby: @plasmid.enteredby, mapreference: @plasmid.mapreference, notebook: @plasmid.notebook, plasmidalias: @plasmid.plasmidalias, plasmidnumber: @plasmid.plasmidnumber, plasmidsize: @plasmid.plasmidsize, sequence: @plasmid.sequence, strainnumbers: @plasmid.strainnumbers, vector: @plasmid.vector, verified: @plasmid.verified }
+      post :create, plasmid: { antibiotic: @plasmid.antibiotic, concentration: @plasmid.concentration, date_entered: @plasmid.datefrozen, description: @plasmid.description, enteredby: @plasmid.enteredby, mapreference: @plasmid.mapreference, notebook: @plasmid.notebook, plasmidalias: @plasmid.plasmidalias, plasmidnumber: @plasmid.plasmidnumber, plasmidsize: @plasmid.plasmidsize, sequence: @plasmid.sequence, strainnumbers: @plasmid.strainnumbers, vector: @plasmid.vector, verified: @plasmid.verified }
     end
 
     assert_redirected_to plasmid_path(assigns(:plasmid))
@@ -35,7 +35,7 @@ class PlasmidsControllerTest < ActionController::TestCase
   end
 
   test "should update plasmid" do
-    put :update, id: @plasmid, plasmid: { antibiotic: @plasmid.antibiotic, concentration: @plasmid.concentration, datefrozen: @plasmid.datefrozen, description: @plasmid.description, enteredby: @plasmid.enteredby, mapreference: @plasmid.mapreference, notebook: @plasmid.notebook, plasmidalias: @plasmid.plasmidalias, plasmidnumber: @plasmid.plasmidnumber, plasmidsize: @plasmid.plasmidsize, sequence: @plasmid.sequence, strainnumbers: @plasmid.strainnumbers, vector: @plasmid.vector, verified: @plasmid.verified }
+    put :update, id: @plasmid, plasmid: { antibiotic: @plasmid.antibiotic, concentration: @plasmid.concentration, date_entered: @plasmid.datefrozen, description: @plasmid.description, enteredby: @plasmid.enteredby, mapreference: @plasmid.mapreference, notebook: @plasmid.notebook, plasmidalias: @plasmid.plasmidalias, plasmidnumber: @plasmid.plasmidnumber, plasmidsize: @plasmid.plasmidsize, sequence: @plasmid.sequence, strainnumbers: @plasmid.strainnumbers, vector: @plasmid.vector, verified: @plasmid.verified }
     assert_redirected_to plasmid_path(assigns(:plasmid))
   end
 

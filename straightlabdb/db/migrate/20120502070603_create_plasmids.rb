@@ -2,7 +2,7 @@ class CreatePlasmids < ActiveRecord::Migration
   def change
     create_table :plasmids do |t|
       t.string :plasmidnumber
-      t.date :datefrozen
+      t.date :date_entered
       t.string :enteredby
       t.integer :notebook
       t.boolean :verified

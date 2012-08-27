@@ -1,0 +1,15 @@
+<% if readonly? then %>
+    <div class="span2">
+    </div>
+    <div class="span2">
+      <%=  link_to 'Edit plasmid', edit_plasmid_path(@plasmid), class: "btn btn-warning" %>
+    </div>
+<% else %>
+    <div class="span2">
+      <p class="pull-right"><strong><%= status_text %></strong></p>
+    </div>
+    <div class="span2">
+      <%=  link_to 'Cancel', @plasmid, class: "btn btn-inverse" %>
+    </div>
+
+<% end %>

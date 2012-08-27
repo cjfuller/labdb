@@ -7,7 +7,7 @@
 <thead>
 <tr>
 <th class="plasmidindex"><%= PlasmidsController.get_heading(:plasmidnumber) %></th>
-<th class="plasmidindex"><%= PlasmidsController.get_heading(:datefrozen) %></th>
+<th class="plasmidindex"><%= PlasmidsController.get_heading(:date_entered) %></th>
 <th class="plasmidindex"><%= PlasmidsController.get_heading(:enteredby) %></th>
 <th class="plasmidindex"><%= PlasmidsController.get_heading(:plasmidalias) %></th>
 <th class="plasmidindex"><%= PlasmidsController.get_heading(:antibiotic) %></th>
@@ -22,7 +22,7 @@
 <% @plasmids.each do |plasmid| %>
 <tr class="plasmidindex">
 <td><%= plasmid.plasmidnumber %></td>
-<td><%= plasmid.datefrozen %></td>
+<td><%= plasmid.date_entered %></td>
 <td><%= plasmid.enteredby %></td>
 <td><%= plasmid.plasmidalias %></td>
 <td><%= plasmid.antibiotic %></td>

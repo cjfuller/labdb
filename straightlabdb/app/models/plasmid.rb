@@ -1,7 +1,7 @@
 MAP_STORE = File.join Rails.root, 'public', 'map_store'
 
 class Plasmid < ActiveRecord::Base
-  attr_accessible :antibiotic, :concentration, :datefrozen, :description, :enteredby, :mapreference, :notebook, :plasmidalias, :plasmidmap, :plasmidnumber, :plasmidsize, :sequence, :strainnumbers, :vector, :verified
+  attr_accessible :antibiotic, :concentration, :date_entered, :description, :enteredby, :mapreference, :notebook, :plasmidalias, :plasmidmap, :plasmidnumber, :plasmidsize, :sequence, :strainnumbers, :vector, :verified
 
   has_attached_file :plasmidmap, :styles => { :thumb => ["256x256", "png"]}
   validates_attachment :plasmidmap, :content_type => {:content_type=>/image/}
@@ -40,7 +40,7 @@ class Plasmid < ActiveRecord::Base
   end
   
   def generate_date
-    self.datefrozen= Time.now
+    self.date_entered= Time.now
   end	
 
 

@@ -9,6 +9,12 @@
 	end
 %>
 
+<%= def show_map?
+      true
+    end
+%>
+
 <%= render 'plasmidinfo' %>
 
-<%= link_to 'Back', plasmids_path %>
+<%= submit_tag "Create new plasmid", class: "btn btn-success"  %>
+

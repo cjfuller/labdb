@@ -1,0 +1,32 @@
+<% if show_map? then %>
+
+<div class="row-fluid" id="map">
+  <div class="span6">
+    <div class="control-group">
+      <label class="label control-label">
+        <%=h PlasmidsController.get_heading(:mapreference) %>
+      </label>
+      <div class="controls">
+        <% if @plasmid.plasmidmap.file? then %>
+            <%= image_tag @plasmid.plasmidmap.url %>
+        <% else %>
+            (Map not uploaded.)
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <% unless readonly? then %>
+      <div class="span3">
+        <div class="control-group">
+          <%= f.label "Upload new map:", :class=>"label control-label" %>
+          <div class="controls">
+            <%= f.file_field :plasmidmap %>
+          </div>
+        </div>
+      </div>
+  <% end %>
+
+</div>
+
+<% end %>

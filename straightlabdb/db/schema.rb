@@ -11,11 +11,11 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120508225756) do
+ActiveRecord::Schema.define(:version => 20120827055823) do
 
   create_table "plasmids", :force => true do |t|
     t.string   "plasmidnumber"
-    t.date     "datefrozen"
+    t.date     "date_entered"
     t.string   "enteredby"
     t.integer  "notebook"
     t.boolean  "verified"

@@ -1,4 +1,3 @@
-<h2>Search the ASPlasmid database:</h2>
 
 <%= def readonly?
 		false
@@ -8,6 +7,16 @@
 <%= def submit_text
 	"Search"
 	end
+%>
+
+<%= def show_map?
+      false
+    end
+%>
+
+<%= def status_text
+      "Searching"
+    end
 %>
 
 <%= form_for(@plasmid, :html => {:multipart => true}, :method=>'get') do |f| %>
@@ -22,9 +31,6 @@
       </ul>
     </div>
   <% end %>
-
-	<%=	f.check_box(:search_by_regex, :size=>2) %>
-	<%= f.label(:search_by_regex, "Search by regular expression")%>
 	
 	<%= render :partial=>'plasmid_display', :locals=>{:f => f} %>
 
