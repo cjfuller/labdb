@@ -1,10 +1,11 @@
-MAP_STORE = File.join Rails.root, 'public', 'map_store'
 
 class Plasmid < ActiveRecord::Base
   attr_accessible :antibiotic, :concentration, :date_entered, :description, :enteredby, :mapreference, :notebook, :plasmidalias, :plasmidmap, :plasmidnumber, :plasmidsize, :sequence, :strainnumbers, :vector, :verified
 
   has_attached_file :plasmidmap, :styles => { :thumb => ["256x256", "png"]}
   validates_attachment :plasmidmap, :content_type => {:content_type=>/image/}
+
+  attr_accessor :antibiotics
 
 
   @@Antibiotics = {"carbenicillin" => "carb", "kanamycin"=>"kan", "chloramphenicol"=>"chlor", "gentamycin"=>"gent", "tetracycline"=>"tet", "streptomycin"=>"strep"}

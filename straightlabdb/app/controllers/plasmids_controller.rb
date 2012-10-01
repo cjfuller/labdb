@@ -32,6 +32,8 @@ class PlasmidsController < ApplicationController
     end
   end
   
+  def antibiotics_db_to
+  
   def fix_antibiotic_params(param_hash)
     
     abs = Plasmid.get_antibiotics
@@ -73,6 +75,9 @@ class PlasmidsController < ApplicationController
 
     antibiotics_string = generate_antibiotics_string(search_params)
     search_params = fix_antibiotic_params(search_params)
+    
+    puts antibiotics_string
+    puts search_params
 
     conditions = Hash.new
     regex_conditions = Hash.new

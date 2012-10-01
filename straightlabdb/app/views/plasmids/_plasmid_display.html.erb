@@ -2,9 +2,9 @@
 	<div class="row-fluid">
 		<div class="span2">
 			<div class="control-group">
-				<label class="label control-label label-info">
-					<%=h PlasmidsController.get_heading(:plasmidnumber) %>
-				</label>
+				
+				<%= f.label(:plasmidnumber, PlasmidsController.get_heading(:plasmidnumber), :class=> "label control-label label-info") %>
+				
 				<div class="controls">
 					<%= f.text_field(:plasmidnumber, :disabled=>readonly?, :class=>"input-small") %>
 				</div>
@@ -23,27 +23,33 @@
 	<div class="row-fluid">
 		<div class="span3">
 			<div class="control-group">
-				<label class="label control-label">
-					<%=h PlasmidsController.get_heading(:enteredby) %>
-				</label>
+				
+				<%= f.label(:enteredby, PlasmidsController.get_heading(:enteredby), :class=> "label control-label") %>
+
 				<div class="controls">
 					<%= f.text_field(:enteredby, :disabled=>readonly?, :class=>"input-large") %>
 				</div>
+				
 			</div>
 		</div>
 		<div class="span3">
-			<label class="label control-label">
-				<%=h PlasmidsController.get_heading(:notebook) %>
-			</label>
-			<div class="controls">
-				<%= f.text_field(:notebook, :disabled=>readonly?, :class=>"input-small") %>
+			
+			<div class="control-group">
+			
+				<%= f.label(:notebook, PlasmidsController.get_heading(:notebook), :class=> "label control-label") %>
+			
+				<div class="controls">
+					<%= f.text_field(:notebook, :disabled=>readonly?, :class=>"input-small") %>
+				</div>
+			
 			</div>
+			
 		</div>
 		<div class="span3">
 			<div class="control-group">
-				<label class="label control-label">
-					<%=h PlasmidsController.get_heading(:verified) %>
-				</label>
+				
+				<%= f.label(:verified, PlasmidsController.get_heading(:verified), :class=> "label control-label") %>
+				
 				<div class="controls">
 					<%= f.check_box(:verified, :disabled=>readonly?, :class=>"inline") %>
 				</div>
@@ -51,9 +57,9 @@
 		</div>
 		<div class="span3">
 			<div class="control-group">
-				<label class="label control-label">
-					<%=h PlasmidsController.get_heading(:date_entered) %>
-				</label>
+				
+				<%= f.label(:date_entered, PlasmidsController.get_heading(:date_entered), :class=> "label control-label") %>
+				
 				<div class="controls">
 					<%= f.text_field(:date_entered, :disabled=>readonly?, :class=>"input-small") %>
 				</div>
@@ -64,9 +70,9 @@
 	<div class="row-fluid">
 		<div class="span6">
 			<div class="control-group">
-				<label class="label control-label label-info">
-					<%=h PlasmidsController.get_heading(:plasmidalias) %>
-				</label>
+				
+				<%= f.label(:plasmidalias, PlasmidsController.get_heading(:plasmidalias), :class=> "label control-label label-info") %>
+				
 				<div class="controls">
 					<%= f.text_field(:plasmidalias, :disabled=>readonly?) %>
 				</div>
@@ -74,9 +80,9 @@
 		</div>
 		<div class="span3">
 			<div class="control-group">
-				<label class="label control-label">
-					<%=h PlasmidsController.get_heading(:vector) %>
-				</label>
+				
+				<%= f.label(:vector, PlasmidsController.get_heading(:vector), :class=> "label control-label") %>
+				
 				<div class="controls">
 					<%= f.text_field(:vector, :disabled => readonly?, :class=>"input-large")%>
 				</div>
@@ -84,9 +90,10 @@
 		</div>
 		<div class="span3">
 			<div class="control-group">
-				<label class="label control-label">
-					<%=h PlasmidsController.get_heading(:strainnumbers) %>
-				</label>
+			
+				<%= f.label(:strainnumbers, PlasmidsController.get_heading(:strainnumbers), :class=> "label control-label") %>
+				
+			
 				<div class="controls">
 					<%= f.text_field(:strainnumbers, :disabled=>readonly?) %>
 				</div>
@@ -99,6 +106,7 @@
 	<div class="row-fluid">
 		<div class="span6">
 			<div class="control-group">
+								
 				<label class="label control-label" for="inlineCheckboxes">
 					<%=h PlasmidsController.get_heading(:antibiotic) %>
 				</label>
@@ -114,9 +122,9 @@
 		</div>
 		<div class="span3">
 			<div class="control-group">
-				<label class="label control-label">
-					<%=h PlasmidsController.get_heading(:concentration) %>
-				</label>
+				
+				<%= f.label(:concentration, PlasmidsController.get_heading(:concentration), :class=> "label control-label") %>
+				
 				<div class="controls">
 					<%= f.text_field(:concentration, :disabled=>readonly?, :class=>"input-large") %>
 				</div>
@@ -124,9 +132,9 @@
 		</div>
 		<div class="span3">
 			<div class="control-group">
-				<label class="label control-label">
-					<%=h PlasmidsController.get_heading(:plasmidsize) %>
-				</label>
+				
+				<%= f.label(:plasmidsize, PlasmidsController.get_heading(:plasmidsize), :class=> "label control-label") %>
+				
 				<div class="controls">
 					<%= f.text_field(:plasmidsize, :disabled=>true) %>
 				</div>
@@ -137,9 +145,9 @@
 	<div class="row-fluid" id="description-row">
 		<div class="span12">
 			<div class="control-group">
-				<label class="label control-label label-info">
-					<%=h PlasmidsController.get_heading(:description) %>
-				</label>
+				
+				<%= f.label(:description, PlasmidsController.get_heading(:description), :class=> "label control-label label-info") %>
+
 				<div class="controls">
 					<%= f.text_area(:description, :disabled=>readonly?, :rows=>12, :class=>"input-xxlarge")%>
 				</div>
@@ -149,9 +157,9 @@
 	<div class="row-fluid" id="sequence-row">
 		<div class="span12">
 			<div class="control-group">
-				<label class="label control-label label-info">
-					<%=h PlasmidsController.get_heading(:sequence) %>
-				</label>
+				
+				<%= f.label(:sequence, PlasmidsController.get_heading(:sequence), :class=> "label control-label label-info") %>
+				
 				<div class="controls">
 					<%= f.text_area(:sequence, :disabled=>readonly?, :rows=>4, :class=>"input-xxlarge")%>
 				</div>
