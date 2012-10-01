@@ -1,4 +1,10 @@
-<%= form_for(@plasmid, :html => {:multipart => true, :class => "form-vertical"}) do |f| %>
+<%= form_for(@plasmid, :html => {:multipart => true, :class => "form-vertical"}, :builder=>BootstrapFormBuilder ) do |f| %>
+  
+<% 	def readonly_for(property_list) 
+	  property_list.inject({}) { |a, e| a[e]= readonly?; a } 
+   	end
+%>
+  
   <% if @plasmid.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@plasmid.errors.count, "error") %> prohibited this plasmid from being saved:</h2>

@@ -13,6 +13,15 @@ class PlasmidsController < ApplicationController
     @@headings[var_name]
   end
   
+  def self.headings_for(headings_list)
+    
+    headings_list.inject({}) do |a, e| 
+      a[e]= PlasmidsController.get_heading(e)
+      a
+    end
+    
+  end
+    
   def generate_plasmid_number(a_plasmid)
     
     @@plasmid_number_mutex.synchronize do
@@ -31,8 +40,6 @@ class PlasmidsController < ApplicationController
       
     end
   end
-  
-  def antibiotics_db_to
   
   def fix_antibiotic_params(param_hash)
     
