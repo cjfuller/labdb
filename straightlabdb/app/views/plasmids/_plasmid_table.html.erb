@@ -10,26 +10,27 @@
 <th class="plasmidindex"><%= PlasmidsController.get_heading(:date_entered) %></th>
 <th class="plasmidindex"><%= PlasmidsController.get_heading(:enteredby) %></th>
 <th class="plasmidindex"><%= PlasmidsController.get_heading(:plasmidalias) %></th>
-<th class="plasmidindex"><%= PlasmidsController.get_heading(:antibiotic) %></th>
+<!--<th class="plasmidindex"><%= PlasmidsController.get_heading(:antibiotic) %></th>-->
 <th class="plasmidindex"><%= PlasmidsController.get_heading(:plasmidsize) %></th>
 <th class="plasmidindex"><%= PlasmidsController.get_heading(:strainnumbers) %></th>
 <th class="plasmidindex"><%= PlasmidsController.get_heading(:description) %></th>
-<th class="plasmidindex"><%= PlasmidsController.get_heading(:sequence) %></th>
+<!--<th class="plasmidindex"><%= PlasmidsController.get_heading(:sequence) %></th>-->
 <th class="plasmidindex"><%= PlasmidsController.get_heading(:vector) %></th>
 </tr>
 </thead>
 <tbody>
 <% @plasmids.each do |plasmid| %>
 <tr class="plasmidindex">
+
 <td><%= plasmid.plasmidnumber %></td>
 <td><%= plasmid.date_entered %></td>
 <td><%= plasmid.enteredby %></td>
-<td><%= plasmid.plasmidalias %></td>
-<td><%= plasmid.antibiotic %></td>
+<td><%= truncate_string(plasmid.plasmidalias) %></td>
+<!--<td><%= plasmid.antibiotic %></td>-->
 <td><%= plasmid.plasmidsize %></td>
 <td><%= plasmid.strainnumbers %></td>
-<td><%= plasmid.description %></td>
-<td><%= plasmid.sequence %></td>
+<td><%= truncate_string(plasmid.description) %></td>
+<!--<td><%= truncate_string(plasmid.sequence) %></td>-->
 <td><%= plasmid.vector %></td>
 <td><%= link_to 'Show', plasmid, :class => "btn btn-mini btn-info" %></td>
 <td><%= link_to 'Edit', edit_plasmid_path(plasmid), :class => "btn btn-mini btn-info" %></td>

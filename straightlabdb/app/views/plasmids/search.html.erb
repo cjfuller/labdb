@@ -19,7 +19,7 @@
     end
 %>
 
-<%= form_for(@plasmid, :html => {:multipart => true}, :method=>'get') do |f| %>
+<%= form_for(@plasmid, :html => {:multipart => true}, :method=>'get', :builder=> BootstrapFormBuilder) do |f| %>
   <% if @plasmid.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@plasmid.errors.count, "error") %> prohibited this plasmid from being saved:</h2>

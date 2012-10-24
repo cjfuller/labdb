@@ -1,5 +1,6 @@
 
 class Plasmid < ActiveRecord::Base
+
   attr_accessible :antibiotic, :concentration, :date_entered, :description, :enteredby, :mapreference, :notebook, :plasmidalias, :plasmidmap, :plasmidnumber, :plasmidsize, :sequence, :strainnumbers, :vector, :verified
 
   has_attached_file :plasmidmap, :styles => { :thumb => ["256x256", "png"]}
@@ -42,7 +43,6 @@ class Plasmid < ActiveRecord::Base
   
   def generate_date
     self.date_entered= Time.now
-  end	
-
+  end
 
 end
