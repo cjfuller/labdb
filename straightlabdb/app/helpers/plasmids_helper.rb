@@ -8,6 +8,9 @@ module PlasmidsHelper
 
   end
 
+  def readonly_for(property_list)
+    property_list.inject({}) { |a, e| a[e]= readonly?; a }
+  end
 
 
 end
