@@ -2,8 +2,7 @@ source 'https://rubygems.org'
 
 gem 'rails', '3.2.8'
 gem 'bootstrap-sass'
-gem 'oauth'
-gem 'oauth-plugin'
+gem 'oauth2'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -28,7 +27,9 @@ gem 'jquery-rails'
 gem 'paperclip', '~> 3.0'
 
 # To use ActiveModel has_secure_password
-# gem 'bcrypt-ruby', '~> 3.0.0'
+gem 'bcrypt-ruby', '~> 3.0.0'
+
+gem 'omniauth-github'
 
 # To use Jbuilder templates for JSON
 # gem 'jbuilder'

@@ -10,7 +10,7 @@ module Rails
   class Server < ::Rack::Server
     def default_options
       super.merge(Port: 3000,
-                  SSLEnable:false,
+                  SSLEnable:true,
                   SSLVerifyClient: OpenSSL::SSL::VERIFY_NONE,           #TODO make sure to change to verify certificates before going out of dev environment with self-signed certs
                   SSLCertName:[["CN", WEBrick::Utils::getservername]])
     end

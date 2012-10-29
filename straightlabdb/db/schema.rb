@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120827055823) do
+ActiveRecord::Schema.define(:version => 20121028230747) do
 
   create_table "plasmids", :force => true do |t|
     t.string   "plasmidnumber"
@@ -33,6 +33,14 @@ ActiveRecord::Schema.define(:version => 20120827055823) do
     t.string   "plasmidmap_content_type"
     t.integer  "plasmidmap_file_size"
     t.datetime "plasmidmap_updated_at"
+  end
+
+  create_table "users", :force => true do |t|
+    t.string   "provider"
+    t.string   "uid"
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
 end

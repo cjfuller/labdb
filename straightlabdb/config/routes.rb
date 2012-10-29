@@ -1,5 +1,7 @@
 Straightlabdb::Application.routes.draw do
     
+  resources :users
+
   resources :plasmids do
     collection do
       get 'search'
