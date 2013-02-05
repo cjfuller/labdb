@@ -4,5 +4,6 @@ class FixDateFrozen < ActiveRecord::Migration
   end
 
   def down
+    rename_column :plasmids, :date_entered, :datefrozen
   end
 end

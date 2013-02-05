@@ -7,37 +7,45 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-	<header class="navbar navbar-fixed-top">
-			
-				<div class="navbar-inner">
-					<div class="container">
-						<%= link_to "AS Plasmids", "/plasmids", id:"logo" %>
-						<nav>
-						<ul class="nav pull-left">
-							<li class="divider-vertical"></li>
-							<li><%= link_to 'New Plasmid', new_plasmid_path %></li>
-							<li class="divider-vertical"></li>
-							<li><%= link_to 'Search', '/plasmids/search'%></li>
-							<li class="divider-vertical"></li>
-							<li><%= link_to 'Show All', '/plasmids' %></li>
-							<li class="divider-vertical"></li>
-						</ul>
-						</nav>
-					</div>
-				</div>
-			
-			
+<header class="navbar navbar-fixed-top navbar-inverse">
 
-	</header>
+  <div class="navbar-inner">
+    <div class="container">
+      <%= link_to "ASDB", "/", id:"logo" %>
+      <nav>
+        <ul class="nav pull-left">
+          <li class="divider-vertical"></li>
+          <li><%= link_to 'Plasmids', '/plasmids' %></li>
+          <li class="divider-vertical"></li>
+          <li><%= link_to 'Oligos', '/oligos'%></li>
+          <li class="divider-vertical"></li>
+          <li><%= link_to 'Bacteria', '/bacteria' %></li>
+          <li class="divider-vertical"></li>
+          <li><%= link_to 'Samples', '/samples' %></li>
+          <li class="divider-vertical"></li>
+          <li><%= link_to 'Antibodies', '/antibodies' %></li>
+          <li class="divider-vertical"></li>
+          <li><%= link_to 'TC', '/tclines' %></li>
+          <li class="divider-vertical"></li>
+          <li><%= link_to 'Yeast', '/yeast' %></li>
+          <li class="divider-vertical"></li>
+          <li><%= link_to 'Log out', '/logout' %></li>
+        </ul>
+      </nav>
+  </div>
 
-    <%= def status_text
-          nil
-        end
-    %>
 
-	<div class="container">
-	<%= yield %>
-	</div>
+
+</header>
+
+<%= def status_text
+      nil
+    end
+%>
+
+<div class="container">
+  <%= yield %>
+</div>
 
 </body>
 </html>

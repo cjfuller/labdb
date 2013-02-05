@@ -26,7 +26,7 @@ class PlasmidsController < ApplicationController
     
     @@plasmid_number_mutex.synchronize do
     
-      max_number = 1
+      max_number = 0
      
       Plasmid.find_each do |p|
         if p.plasmidnumber and p.plasmidnumber.to_i > max_number then

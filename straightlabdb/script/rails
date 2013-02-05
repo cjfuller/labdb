@@ -4,13 +4,13 @@
 require 'rails/commands/server'
 require 'rack'
 require 'webrick'
-require 'webrick/https'
+#require 'webrick/https'
 
 module Rails
   class Server < ::Rack::Server
     def default_options
       super.merge(Port: 3000,
-                  SSLEnable:true,
+                  SSLEnable:false,
                   SSLVerifyClient: OpenSSL::SSL::VERIFY_NONE,           #TODO make sure to change to verify certificates before going out of dev environment with self-signed certs
                   SSLCertName:[["CN", WEBrick::Utils::getservername]])
     end

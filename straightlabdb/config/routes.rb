@@ -1,6 +1,16 @@
 Straightlabdb::Application.routes.draw do
-    
-  resources :users
+
+  get '/login', :to => redirect('/auth/google'), :as => :login
+  get '/logout', :to => 'sessions#destroy', :as => :logout
+
+  match '/auth/:provider/callback', :to => 'sessions#create'
+  match '/auth/failure', :to => 'sessions#failure'
+
+ # get "sessions/new"
+
+ # get "sessions/create"
+
+ # get "sessions/failure"
 
   resources :plasmids do
     collection do
@@ -8,6 +18,8 @@ Straightlabdb::Application.routes.draw do
       post 'search'
     end
   end
+
+  root :to => "static#index"
     
 
   # The priority is based upon order of creation:
