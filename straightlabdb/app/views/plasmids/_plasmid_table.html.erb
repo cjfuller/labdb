@@ -1,5 +1,9 @@
 <div class="container hero-unit">
-<div class="navbar">
+
+  <%=  render :partial => "shared/subnavbar" %>
+
+
+  <div class="navbar">
 
 </div>
 
@@ -13,9 +17,9 @@
 <!--<th class="plasmidindex"><%= PlasmidsController.get_heading(:antibiotic) %></th>-->
 <th class="plasmidindex"><%= PlasmidsController.get_heading(:plasmidsize) %></th>
 <th class="plasmidindex"><%= PlasmidsController.get_heading(:strainnumbers) %></th>
-<th class="plasmidindex"><%= PlasmidsController.get_heading(:description) %></th>
+<!--<th class="plasmidindex"><%= PlasmidsController.get_heading(:description) %></th>-->
 <!--<th class="plasmidindex"><%= PlasmidsController.get_heading(:sequence) %></th>-->
-<th class="plasmidindex"><%= PlasmidsController.get_heading(:vector) %></th>
+<!--<th class="plasmidindex"><%= PlasmidsController.get_heading(:vector) %></th>-->
 </tr>
 </thead>
 <tbody>
@@ -29,9 +33,9 @@
 <!--<td><%= plasmid.antibiotic %></td>-->
 <td><%= plasmid.plasmidsize %></td>
 <td><%= plasmid.strainnumbers %></td>
-<td><%= truncate_string(plasmid.description) %></td>
+<!--<td><%= truncate_string(plasmid.description) %></td>-->
 <!--<td><%= truncate_string(plasmid.sequence) %></td>-->
-<td><%= plasmid.vector %></td>
+<!--<td><%= plasmid.vector %></td>-->
 <td><%= link_to 'Show', plasmid, :class => "btn btn-mini btn-info" %></td>
 <td><%= link_to 'Edit', edit_plasmid_path(plasmid), :class => "btn btn-mini btn-info" %></td>
 <td><%= link_to 'Destroy', plasmid, :confirm => 'Are you sure?', :method => :delete, :class => "btn btn-mini btn-danger" %></td>

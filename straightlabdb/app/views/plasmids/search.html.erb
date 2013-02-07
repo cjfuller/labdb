@@ -1,26 +1,27 @@
 
-<%= def readonly?
+<% def readonly?
 		false
 	end
 %>
 
-<%= def submit_text
+<% def submit_text
 	"Search"
 	end
 %>
 
-<%= def show_map?
+<% def show_map?
       false
     end
 %>
 
-<%= def status_text
+<% def status_text
       "Searching"
     end
 %>
 
 <%= form_for(@plasmid, :html => {:multipart => true}, :method=>'get', :builder=> BootstrapFormBuilder) do |f| %>
   <% if @plasmid.errors.any? %>
+
     <div id="error_explanation">
       <h2><%= pluralize(@plasmid.errors.count, "error") %> prohibited this plasmid from being saved:</h2>
 
@@ -30,6 +31,7 @@
       <% end %>
       </ul>
     </div>
+
   <% end %>
 	
 	<%= render :partial=>'plasmid_display', :locals=>{:f => f} %>

@@ -1,0 +1,32 @@
+<div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+
+      <nav>
+        <ul class="nav pull-left">
+
+          <li><a class="brand"><%= @status_text %></a></li>
+
+          <li class="divider-vertical"></li>
+
+          <li><%= link_to 'Show all', '/plasmids' %></li>
+          <li class="divider-vertical"></li>
+
+          <li><%= link_to 'Search', '/plasmids/search' %></li>
+          <li class="divider-vertical"></li>
+
+          <li><%= link_to 'New', new_plasmid_path %></li>
+          <li class="divider-vertical"></li>
+
+
+        </ul>
+      </nav>
+      <nav>
+
+        <ul class="nav pull-right">
+          <%=  render :partial => @context_specific_buttons if @context_specific_buttons %>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>

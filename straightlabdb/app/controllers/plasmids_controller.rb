@@ -1,5 +1,7 @@
 class PlasmidsController < ApplicationController
-  
+
+  PLASMID_TAG = "ASP"
+
   @@headings = {:plasmidnumber => "ASP Number", :date_entered => "Date entered",
     :enteredby => "Entered by", :notebook => "Notebook", :verified => "Sequence verified?",
     :plasmidalias => "Alias", :antibiotic => "Antibiotic resistances", :plasmidsize => "Size",
@@ -126,16 +128,14 @@ class PlasmidsController < ApplicationController
       end
     end
       
-
-    
     final_list
-    
     
   end
   
   # GET /plasmids
   # GET /plasmids.json
   def index
+    @status_text = "Plasmids"
     puts params
     if params.has_key?(:plasmid) then
       @plasmids = process_search_query(params[:plasmid])
@@ -152,7 +152,10 @@ class PlasmidsController < ApplicationController
   # GET /plasmids/1.json
   def show
     @plasmid = Plasmid.find(params[:id])
-    @plasmid.parse_antibiotics
+    @status_text = "#{PLASMID_TAG} #{@plasmid.plasmidnumber}"
+    @context_specific_buttons = "plasmids/top_editing_buttons"
+
+        @plasmid.parse_antibiotics
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @plasmid }
@@ -162,6 +165,9 @@ class PlasmidsController < ApplicationController
   # GET /plasmids/new
   # GET /plasmids/new.json
   def new
+
+    @status_text = "New Plasmid"
+
     @plasmid = Plasmid.new
 
     @plasmid.generate_date
@@ -176,6 +182,10 @@ class PlasmidsController < ApplicationController
   # GET /plasmids/1/edit
   def edit
     @plasmid = Plasmid.find(params[:id])
+    @context_specific_buttons = "plasmids/top_editing_buttons"
+
+    @status_text = "Editing #{PLASMID_TAG} #{@plasmid.plasmidnumber}"
+
     @plasmid.parse_antibiotics
   end
 

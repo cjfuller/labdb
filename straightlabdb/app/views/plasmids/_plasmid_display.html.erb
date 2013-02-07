@@ -1,4 +1,7 @@
 <div class="container hero-unit">
+
+  <%=  render :partial => "shared/subnavbar" %>
+
 	<div class="row-fluid">
 
 		
@@ -9,8 +12,7 @@
 		</div>
 
 
-      <%= render :partial=>'top_editing_buttons' %>
-
+<!-- buttons were here -->
 		
 	</div>
 	
@@ -54,7 +56,7 @@
 				<%= f.label(:description, PlasmidsController.get_heading(:description), :class=> "label control-label label-info") %>
 
 				<div class="controls">
-					<%= f.text_area(:description, :disabled=>readonly?, :rows=>12, :class=>"input-xxlarge")%>
+					<%= f.text_area(:description, :readonly=>readonly?, :rows=>12, :class=>"input-xxlarge")%>
 				</div>
 			</div>
 		</div>
@@ -66,7 +68,7 @@
 				<%= f.label(:sequence, PlasmidsController.get_heading(:sequence), :class=> "label control-label label-info") %>
 				
 				<div class="controls">
-					<%= f.text_area(:sequence, :disabled=>readonly?, :rows=>4, :class=>"input-xxlarge")%>
+					<%= f.text_area(:sequence, :readonly=>readonly?, :rows=>4, :class=>"input-xxlarge")%>
 				</div>
 			</div>
 		</div>
