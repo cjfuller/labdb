@@ -5,44 +5,33 @@
 
   <div class="navbar">
 
-</div>
+  </div>
 
-<table class="table table-striped table-condensed">
-<thead>
-<tr>
-<th class="plasmidindex"><%= PlasmidsController.get_heading(:plasmidnumber) %></th>
-<th class="plasmidindex"><%= PlasmidsController.get_heading(:date_entered) %></th>
-<th class="plasmidindex"><%= PlasmidsController.get_heading(:enteredby) %></th>
-<th class="plasmidindex"><%= PlasmidsController.get_heading(:plasmidalias) %></th>
-<!--<th class="plasmidindex"><%= PlasmidsController.get_heading(:antibiotic) %></th>-->
-<th class="plasmidindex"><%= PlasmidsController.get_heading(:plasmidsize) %></th>
-<th class="plasmidindex"><%= PlasmidsController.get_heading(:strainnumbers) %></th>
-<!--<th class="plasmidindex"><%= PlasmidsController.get_heading(:description) %></th>-->
-<!--<th class="plasmidindex"><%= PlasmidsController.get_heading(:sequence) %></th>-->
-<!--<th class="plasmidindex"><%= PlasmidsController.get_heading(:vector) %></th>-->
-</tr>
-</thead>
-<tbody>
-<% @plasmids.each do |plasmid| %>
-<tr class="plasmidindex">
+  <% @table_columns = [:plasmidnumber, :date_entered, :enteredby, :plasmidalias, :plasmidsize, :strainnumbers] %>
+  <% @controller = PlasmidsController %>
+  <% @table_objects = @plasmids %>
 
-<td><%= plasmid.plasmidnumber %></td>
-<td><%= plasmid.date_entered %></td>
-<td><%= plasmid.enteredby %></td>
-<td><%= truncate_string(plasmid.plasmidalias) %></td>
-<!--<td><%= plasmid.antibiotic %></td>-->
-<td><%= plasmid.plasmidsize %></td>
-<td><%= plasmid.strainnumbers %></td>
-<!--<td><%= truncate_string(plasmid.description) %></td>-->
-<!--<td><%= truncate_string(plasmid.sequence) %></td>-->
-<!--<td><%= plasmid.vector %></td>-->
-<td><%= link_to 'Show', plasmid, :class => "btn btn-mini btn-info" %></td>
-<td><%= link_to 'Edit', edit_plasmid_path(plasmid), :class => "btn btn-mini btn-info" %></td>
-<td><%= link_to 'Destroy', plasmid, :confirm => 'Are you sure?', :method => :delete, :class => "btn btn-mini btn-danger" %></td>
-</tr>
-<% end %>
-</tbody>
-</table>
+  <table class="table table-striped table-condensed">
+    <thead>
+    <tr>
+      <% @table_columns.each do |tc| %>
+          <th class="plasmidindex"><%= @controller.get_heading(tc) %></th>
+      <% end %>
+    </tr>
+    </thead>
+    <tbody>
+    <% @table_objects.each do |obj| %>
+        <tr class="plasmidindex">
+          <% @table_columns.each do |tc| %>
+              <td><%= obj.send(tc) %></td>
+          <% end %>
+          <td><%= link_to 'Show', obj, :class => "btn btn-mini btn-info" %></td>
+          <td><%= link_to 'Edit', edit_polymorphic_path(obj), :class => "btn btn-mini btn-info" %></td>
+          <td><%= link_to 'Destroy', obj, :confirm => 'Delete this entry?  Are you sure?', :method => :delete, :class => "btn btn-mini btn-danger" %></td>
+        </tr>
+    <% end %>
+    </tbody>
+  </table>
 
 <br />
 </div>
