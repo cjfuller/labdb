@@ -11,27 +11,7 @@
   <% @controller = PlasmidsController %>
   <% @table_objects = @plasmids %>
 
-  <table class="table table-striped table-condensed">
-    <thead>
-    <tr>
-      <% @table_columns.each do |tc| %>
-          <th class="plasmidindex"><%= @controller.get_heading(tc) %></th>
-      <% end %>
-    </tr>
-    </thead>
-    <tbody>
-    <% @table_objects.each do |obj| %>
-        <tr class="plasmidindex">
-          <% @table_columns.each do |tc| %>
-              <td><%= obj.send(tc) %></td>
-          <% end %>
-          <td><%= link_to 'Show', obj, :class => "btn btn-mini btn-info" %></td>
-          <td><%= link_to 'Edit', edit_polymorphic_path(obj), :class => "btn btn-mini btn-info" %></td>
-          <td><%= link_to 'Destroy', obj, :confirm => 'Delete this entry?  Are you sure?', :method => :delete, :class => "btn btn-mini btn-danger" %></td>
-        </tr>
-    <% end %>
-    </tbody>
-  </table>
+  <%= render :partial => "shared/objecttable" %>
 
 <br />
 </div>
