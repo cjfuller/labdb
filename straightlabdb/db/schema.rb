@@ -11,7 +11,21 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130204230809) do
+ActiveRecord::Schema.define(:version => 20130208011823) do
+
+  create_table "oligos", :force => true do |t|
+    t.integer  "oligo_number"
+    t.string   "oligoalias"
+    t.date     "date_entered"
+    t.string   "entered_by"
+    t.integer  "notebook"
+    t.string   "vendor"
+    t.string   "organism"
+    t.text     "sequence"
+    t.text     "purpose"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
 
   create_table "plasmids", :force => true do |t|
     t.string   "plasmidnumber"

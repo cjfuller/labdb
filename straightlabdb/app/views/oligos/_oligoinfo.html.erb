@@ -1,0 +1,20 @@
+<%= form_for(@oligo, :html => {:multipart => true, :class => "form-vertical"}, :builder=>BootstrapFormBuilder ) do |f| %>
+
+
+
+    <% if @oligo.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@oligo.errors.count, "error") %> prohibited this plasmid from being saved:</h2>
+
+          <ul>
+            <% @oligo.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+
+    <%= render :partial=>'oligo_display', :locals=>{:f => f} %>
+
+
+<% end %>

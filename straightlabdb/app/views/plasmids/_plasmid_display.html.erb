@@ -12,8 +12,6 @@
 		</div>
 
 
-<!-- buttons were here -->
-		
 	</div>
 	
 	<% keys = [:enteredby, :notebook, :verified, :date_entered] %> 
@@ -33,12 +31,12 @@
 					<%=h PlasmidsController.get_heading(:antibiotic) %>
 				</label>
 				<div class="controls">
-					<% Plasmid.get_antibiotics.each_key do |k| %>
+                  <% Plasmid.get_antibiotics.each_key do |k| %>
 						<label class="checkbox inline">
 							<%= Plasmid.get_antibiotics[k] %>
-						</label>
-						<%=	f.check_box(Plasmid.get_antibiotics[k].to_sym, :disabled=>readonly?) %>
-					<% end %>
+                          <%=	f.check_box(Plasmid.get_antibiotics[k].to_sym, :disabled=>readonly?) %>
+                        </label>
+                  <% end %>
 				</div>
 			</div>
 		</div>
@@ -77,7 +75,7 @@
   <%= render partial:'map_display', locals: {:f => f}  %>
 
 
-  <%= render :partial=>'bottom_buttons' %>
+  <%= render :partial=> "shared/bottom_buttons" %>
 
 
 </div>

@@ -57,6 +57,6 @@ module Straightlabdb
     config.assets.version = '1.0'
 
     #require https communication
-    config.force_ssl = false
+    config.force_ssl = true
   end
 end

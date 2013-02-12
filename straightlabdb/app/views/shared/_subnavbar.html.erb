@@ -9,13 +9,13 @@
 
           <li class="divider-vertical"></li>
 
-          <li><%= link_to 'Show all', '/plasmids' %></li>
+          <li><%= link_to 'Show all', polymorphic_path(@model_class) %></li>
           <li class="divider-vertical"></li>
 
-          <li><%= link_to 'Search', '/plasmids/search' %></li>
+          <li><%= link_to 'Search', @search_path %></li>
           <li class="divider-vertical"></li>
 
-          <li><%= link_to 'New', new_plasmid_path %></li>
+          <li><%= link_to 'New', new_polymorphic_path(@model_class) %></li>
           <li class="divider-vertical"></li>
 
 

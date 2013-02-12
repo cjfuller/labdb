@@ -1,0 +1,9 @@
+<% if readonly? then %>
+    <li>
+      <%=  link_to 'Edit', edit_polymorphic_path(@obj) %>
+    </li>
+<% else %>
+    <li>
+      <%=  link_to 'Cancel', @obj %>
+    </li>
+<% end %>

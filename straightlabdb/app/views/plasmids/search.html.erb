@@ -1,23 +1,8 @@
-
-<% def readonly?
-		false
-	end
-%>
-
-<% def submit_text
-	"Search"
-	end
-%>
-
 <% def show_map?
       false
     end
 %>
 
-<% def status_text
-      "Searching"
-    end
-%>
 
 <%= form_for(@plasmid, :html => {:multipart => true}, :method=>'get', :builder=> BootstrapFormBuilder) do |f| %>
   <% if @plasmid.errors.any? %>

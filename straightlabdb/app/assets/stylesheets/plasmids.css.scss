@@ -5,8 +5,8 @@
 @import "bootstrap";
 
 h1 {
-	margin-bottom: 10px;
-  }
+  margin-bottom: 10px;
+}
 
 h1, h2, h3, h4, h5, h6 {
   line-height: 1;
@@ -25,7 +25,6 @@ h2 {
   margin-bottom: 30px;
   text-align: center;
   font-weight: normal;
-  color: $grayLight;
 }
 
 p {
@@ -47,38 +46,7 @@ p {
   line-height: 1;
 
   &:hover {
-	color: #fff;
-	text-decoration: none;
+    color: #fff;
+    text-decoration: none;
   }
 }
-
-
-// footer
-
-footer {
-  margin-top: 45px;
-  padding-top: 5px;
-  border-top: 1px solid #eaeaea;
-  color: $grayLight;
-
-  a {
-	color: $gray;
-	&:hover {
-	  color: $grayDarker;
-	}
-  }
-
-  small {
-    float: left;
-  }
-
-  ul {
-    float: right;
-	list-style: none;
-	li {
-	  float: left;
-	  margin-left: 10px;
-	}
-  }
-}
-

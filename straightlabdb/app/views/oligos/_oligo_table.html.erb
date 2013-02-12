@@ -1,0 +1,17 @@
+<div class="container hero-unit">
+
+  <%=  render :partial => "shared/subnavbar" %>
+
+
+  <div class="navbar">
+
+  </div>
+
+  <% @table_columns = [:oligo_number, :date_entered, :entered_by, :oligoalias] %>
+  <% @controller = OligosController %>
+  <% @table_objects = @oligos %>
+
+  <%= render :partial => "shared/objecttable" %>
+
+  <br />
+</div>

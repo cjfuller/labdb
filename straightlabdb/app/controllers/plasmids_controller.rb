@@ -14,14 +14,15 @@ class PlasmidsController < ApplicationController
   def self.get_heading(var_name)
     @@headings[var_name]
   end
-  
-  def self.headings_for(headings_list)
-    
-    headings_list.inject({}) do |a, e| 
-      a[e]= PlasmidsController.get_heading(e)
-      a
-    end
-    
+
+  def search_path
+    "/plasmids/search"
+  end
+
+  def define_ui_variables(params)
+    params[:search_path] = search_path
+    params[:model_class] = Plasmid
+    super(params)
   end
     
   def generate_plasmid_number(a_plasmid)
@@ -46,7 +47,7 @@ class PlasmidsController < ApplicationController
   def fix_antibiotic_params(param_hash)
     
     abs = Plasmid.get_antibiotics
-    
+
     newparams = Hash.new
     
     param_hash.each_key do |k|
@@ -79,66 +80,35 @@ class PlasmidsController < ApplicationController
     antibiotic
     
   end
-  
-  def process_search_query(search_params)
+
+  def preprocess_search_query(search_params)
 
     antibiotics_string = generate_antibiotics_string(search_params)
-    search_params = fix_antibiotic_params(search_params)
-    
+    mod_search_params = fix_antibiotic_params(search_params)
+
+    search_params.delete_if { |e| not (mod_search_params.include?(e)) }
+
     puts antibiotics_string
     puts search_params
 
-    conditions = Hash.new
-    regex_conditions = Hash.new
-    regex_detection_regex = /^\/.*\/$/
-    search_params.each_key do |k|
-      if search_params[k] and search_params[k] != "" and k != "verified" then #TODO: is there a better way to deal with the verified field?
-        unless regex_detection_regex.match(search_params[k]) then
-          #if a regex has not been entered:
-          #substitute * for .* to turn the old filemaker-style glob syntax into a regex
-          search_params[k].gsub!("*", ".*")
-          #add start and end of line matchers to avoid, e.g., matching all plasmids with a 1 when searching for #1
-          search_params[k]= "^" + search_params[k] + "$"
-          regex_conditions[k] = Regexp.new(search_params[k])
-        else
-          regex_conditions[k] = Regexp.new(search_params[k][1...(search_params[k].length-1)])
-        end
-      end
-    end
+    conditions = {}
+
     if antibiotics_string != "" then
       conditions[:antibiotic] = antibiotics_string
     end
-    
-    preliminary_list = Plasmid.where(conditions)
-    
-    final_list = Array.new
-    
 
-    preliminary_list.each do |p|
-      include_plasmid = true
-      regex_conditions.each_key do |k|
-        val = p.send(k.to_s).to_s
-        unless regex_conditions[k].match(val) then
-          include_plasmid = false
-          break
-        end
-      end
-      if include_plasmid then
-        final_list << p
-      end
-    end
-      
-    final_list
-    
+    conditions
+
   end
   
   # GET /plasmids
   # GET /plasmids.json
   def index
-    @status_text = "Plasmids"
-    puts params
+
+    define_ui_variables(status_text: "Plasmids")
+
     if params.has_key?(:plasmid) then
-      @plasmids = process_search_query(params[:plasmid])
+      @plasmids = process_search_query(params[:plasmid], Plasmid)
     else
       @plasmids = Plasmid.all
     end
@@ -151,11 +121,14 @@ class PlasmidsController < ApplicationController
   # GET /plasmids/1
   # GET /plasmids/1.json
   def show
-    @plasmid = Plasmid.find(params[:id])
-    @status_text = "#{PLASMID_TAG} #{@plasmid.plasmidnumber}"
-    @context_specific_buttons = "plasmids/top_editing_buttons"
 
-        @plasmid.parse_antibiotics
+    @plasmid = Plasmid.find(params[:id])
+
+    puts @plasmid.antibiotic
+
+    define_ui_variables(status_text: "#{PLASMID_TAG} #{@plasmid.plasmidnumber}", context_specific_buttons: "shared/top_editing_buttons", obj: @plasmid, readonly: true)
+
+    @plasmid.parse_antibiotics
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @plasmid }
@@ -166,9 +139,9 @@ class PlasmidsController < ApplicationController
   # GET /plasmids/new.json
   def new
 
-    @status_text = "New Plasmid"
-
     @plasmid = Plasmid.new
+
+    define_ui_variables(status_text: "New Plasmid", readonly: false, submit_text: "Create plasmid")
 
     @plasmid.generate_date
     generate_plasmid_number(@plasmid)
@@ -182,12 +155,12 @@ class PlasmidsController < ApplicationController
   # GET /plasmids/1/edit
   def edit
     @plasmid = Plasmid.find(params[:id])
-    @context_specific_buttons = "plasmids/top_editing_buttons"
 
-    @status_text = "Editing #{PLASMID_TAG} #{@plasmid.plasmidnumber}"
+    define_ui_variables(status_text: "Editing #{PLASMID_TAG} #{@plasmid.plasmidnumber}", context_specific_buttons: "shared/top_editing_buttons", obj: @plasmid, readonly: false, submit_text: "Update plasmid")
 
     @plasmid.parse_antibiotics
   end
+
 
   # POST /plasmids
   # POST /plasmids.json
@@ -238,6 +211,9 @@ class PlasmidsController < ApplicationController
   
   def search
     @plasmid = Plasmid.new
+
+    define_ui_variables(status_text: "Searching plasmids", obj: @plasmid, readonly: false, submit_text: "Search")
+
     respond_to do |format|
       format.html
       format.json { render json: @plasmid }

@@ -1,0 +1,9 @@
+<% if readonly? then %>
+
+<% else %>
+    <div class="row-fluid">
+      <div class="span2">
+        <%= submit_tag @submit_text, class: "btn btn-success" %>
+      </div>
+    </div>
+<% end %>
