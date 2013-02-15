@@ -143,7 +143,8 @@ class PlasmidsController < ApplicationController
 
     define_ui_variables(status_text: "New Plasmid", readonly: false, submit_text: "Create plasmid")
 
-    @plasmid.generate_date
+    generate_date(@plasmid)
+    generate_name(@plasmid)
     generate_plasmid_number(@plasmid)
     @plasmid.parse_antibiotics
     respond_to do |format|

@@ -1,7 +1,5 @@
 Straightlabdb::Application.routes.draw do
 
-  resources :oligos
-
   get '/login', :to => redirect('/auth/google'), :as => :login
   get '/logout', :to => 'sessions#destroy', :as => :logout
 
@@ -15,6 +13,13 @@ Straightlabdb::Application.routes.draw do
  # get "sessions/failure"
 
   resources :plasmids do
+    collection do
+      get 'search'
+      post 'search'
+    end
+  end
+
+  resources :oligos do
     collection do
       get 'search'
       post 'search'

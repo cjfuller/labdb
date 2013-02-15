@@ -38,6 +38,32 @@ class ApplicationController < ActionController::Base
 
   end
 
+  def curr_username
+
+    curr_uid = session[:user_id]
+
+    return false if curr_uid.nil?
+
+    curr_user = User.find_by_uid(curr_uid)
+
+    curr_user.name
+
+  end
+
+  def generate_date(an_obj)
+    an_obj.date_entered= Time.now
+  end
+
+  def generate_name(an_obj)
+    if an_obj.respond_to?(:entered_by) then
+      an_obj.entered_by = curr_username
+    end
+
+    if an_obj.respond_to?(:enteredby) then
+      an_obj.enteredby = curr_username
+    end
+  end
+
 
   def authorized?
 

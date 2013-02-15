@@ -42,8 +42,6 @@ class Plasmid < ActiveRecord::Base
     self.plasmidsize= self.sequence.chomp.length
   end
   
-  def generate_date
-    self.date_entered= Time.now
-  end
+
 
 end

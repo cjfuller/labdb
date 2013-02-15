@@ -28,9 +28,15 @@ class OligosController < ApplicationController
   # GET /oligos
   # GET /oligos.json
   def index
-    @oligos = Oligo.all
 
     define_ui_variables(status_text: "Oligos")
+
+    if params.has_key?(:oligo) then
+      @oligos = process_search_query(params[:oligo], Oligo)
+    else
+      @oligos = Oligo.all
+    end
+
 
     respond_to do |format|
       format.html # index.html.erb
@@ -59,6 +65,8 @@ class OligosController < ApplicationController
 
     define_ui_variables(status_text: "New oligo", readonly: false, submit_text: "Create oligo")
 
+    generate_date(@oligo)
+    generate_name(@oligo)
 
     respond_to do |format|
       format.html # new.html.erb
@@ -119,4 +127,16 @@ class OligosController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  def search
+    @oligo = Oligo.new
+
+    define_ui_variables(status_text: "Searching oligos", obj: @oligo, readonly: false, submit_text: "Search")
+
+    respond_to do |format|
+      format.html
+      format.json { render json: @oligo }
+    end
+  end
+
 end
