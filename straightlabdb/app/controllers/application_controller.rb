@@ -129,8 +129,8 @@ class ApplicationController < ActionController::Base
           #if a regex has not been entered:
           #substitute * for .* to turn the old filemaker-style glob syntax into a regex
           search_params[k].gsub!("*", ".*")
-          #add start and end of line matchers to avoid, e.g., matching all plasmids with a 1 when searching for #1
-          search_params[k]= "^" + search_params[k] + "$"
+          #add start and end of string matchers to avoid, e.g., matching all plasmids with a 1 when searching for #1
+          search_params[k]= "\A" + search_params[k] + "\Z"
           regex_conditions[k] = Regexp.new(search_params[k])
         else
           regex_conditions[k] = Regexp.new(search_params[k][1...(search_params[k].length-1)])
