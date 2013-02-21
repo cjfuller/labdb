@@ -1,33 +1,30 @@
-<div class="container hero-unit">
 
-  <%=  render :partial => "shared/subnavbar" %>
+<%=  render :partial => "shared/subnavbar" %>
 
-  <% keys = [:ab_number, :alias, :label, :date_entered ] %>
-  <%= f.row([3,3,3,3], keys, AntibodiesController.headings_for(keys), {}, readonly_for(keys), {}) %>
+<% keys = [:ab_number, :alias, :label, :date_entered ] %>
+<%= f.row([3,3,3,3], keys, AntibodiesController.headings_for(keys), {}, readonly_for(keys), {}) %>
 
 
-  <% keys = [:entered_by, :box, :vendor, :host] %>
-  <%= f.row([3,3,3,3], keys, AntibodiesController.headings_for(keys), {}, readonly_for(keys), {} ) %>
+<% keys = [:entered_by, :box, :vendor, :host] %>
+<%= f.row([3,3,3,3], keys, AntibodiesController.headings_for(keys), {}, readonly_for(keys), {} ) %>
 
-  <% keys = [:fluorophore, :good_for_if, :good_for_western] %>
-  <%= f.row([3,3,3], keys, AntibodiesController.headings_for(keys), {}, readonly_for(keys), {good_for_if: true, good_for_western: true}) %>
+<% keys = [:fluorophore, :good_for_if, :good_for_western] %>
+<%= f.row([3,3,3], keys, AntibodiesController.headings_for(keys), {}, readonly_for(keys), {good_for_if: true, good_for_western: true}) %>
 
-  <div class="row-fluid" id="description-row">
-    <div class="span12">
-      <div class="control-group">
+<div class="row-fluid" id="description-row">
+  <div class="span12">
+    <div class="control-group">
 
-        <%= f.label(:comments, AntibodiesController.get_heading(:comments), :class=> "label control-label label-info") %>
+      <%= f.label(:comments, AntibodiesController.get_heading(:comments), :class=> "label control-label label-info") %>
 
-        <div class="controls">
-          <%= f.text_area(:comments, :readonly=>readonly?, :rows=>12, :class=>"input-xxlarge")%>
-        </div>
+      <div class="controls">
+        <%= f.text_area(:comments, :readonly=>readonly?, :rows=>12, :class=>"input-xxlarge")%>
       </div>
     </div>
   </div>
-
-
-  <%= render :partial=>'shared/bottom_buttons' %>
-
-
 </div>
+
+
+<%= render :partial=>'shared/bottom_buttons' %>
+
 

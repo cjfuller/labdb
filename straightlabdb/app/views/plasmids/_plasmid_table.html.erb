@@ -1,17 +1,15 @@
-<div class="container hero-unit">
 
-  <%=  render :partial => "shared/subnavbar" %>
+<%=  render :partial => "shared/subnavbar" %>
 
 
-  <div class="navbar">
+<div class="navbar">
 
-  </div>
+</div>
 
-  <% @table_columns = [:plasmidnumber, :date_entered, :enteredby, :plasmidalias, :plasmidsize, :strainnumbers] %>
-  <% @controller = PlasmidsController %>
-  <% @table_objects = @plasmids %>
+<% @table_columns = [:plasmidnumber, :date_entered, :enteredby, :plasmidalias, :plasmidsize, :strainnumbers] %>
+<% @controller = PlasmidsController %>
+<% @table_objects = @plasmids %>
 
-  <%= render :partial => "shared/objecttable" %>
+<%= render :partial => "shared/objecttable" %>
 
 <br />
-</div>

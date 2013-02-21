@@ -1,19 +1,14 @@
-<div class="container hero-unit">
 
-  <% user = User.find_by_uid(session[:user_id]) %>
+<% user = User.find_by_uid(session[:user_id]) %>
 
-  <%  if (not @logged_in) or user.nil? then %>
-      Log in with Google:
-      <%=  link_to 'Login', '/login', class: "btn btn-success" %>
-  <% else %>
-      <div class="row-fluid">
-        <div class="span6">
-          <%= "Logged in as: #{user.name} <#{user.email}>" %>
-        </div>
-        <div class="span3">
-          <%= link_to 'Log out', '/logout', class: 'btn btn-primary' %>
-        </div>
-      </div>
-  <%  end %>
+<%  if (not @logged_in) or user.nil? then %>
+<h4>Log in with Google</h4>
 
-</div>
+<%=  link_to 'Log in', '/login', class: "btn btn-success" %>
+
+<% else %>
+
+<h4><%= "Logged in as: #{user.name} <#{user.email}>" %></h4>
+<%= link_to 'Log out', '/logout', class: 'btn btn-primary' %>
+
+<%  end %>

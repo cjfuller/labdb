@@ -1,17 +1,15 @@
-<div class="container hero-unit">
 
-  <%=  render :partial => "shared/subnavbar" %>
+<%=  render :partial => "shared/subnavbar" %>
 
 
-  <div class="navbar">
+<div class="navbar">
 
-  </div>
-
-  <% @table_columns = [:ab_number, :date_entered, :entered_by, :alias, :host] %>
-  <% @controller = AntibodiesController %>
-  <% @table_objects = @antibodies %>
-
-  <%= render :partial => "shared/objecttable" %>
-
-  <br />
 </div>
+
+<% @table_columns = [:ab_number, :date_entered, :entered_by, :alias, :host] %>
+<% @controller = AntibodiesController %>
+<% @table_objects = @antibodies %>
+
+<%= render :partial => "shared/objecttable" %>
+
+<br />
