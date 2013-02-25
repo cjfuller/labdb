@@ -1,0 +1,5 @@
+- if readonly? then
+    %li= link_to 'Edit', edit_polymorphic_path(@obj)
+
+- else
+	%li= link_to 'Cancel', @obj

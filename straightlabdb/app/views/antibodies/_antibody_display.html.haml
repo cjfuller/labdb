@@ -1,0 +1,23 @@
+
+= render :partial => "shared/subnavbar"
+
+- keys = [:ab_number, :alias, :label, :date_entered ]
+= f.row([3,3,3,3], keys, AntibodiesController.headings_for(keys), {}, readonly_for(keys), {})
+
+
+- keys = [:entered_by, :box, :vendor, :host]
+= f.row([3,3,3,3], keys, AntibodiesController.headings_for(keys), {}, readonly_for(keys), {} )
+
+- keys = [:fluorophore, :good_for_if, :good_for_western]
+= f.row([3,3,3], keys, AntibodiesController.headings_for(keys), {}, readonly_for(keys), {good_for_if: true, good_for_western: true})
+
+.row-fluid#description-row
+	.span12
+		.control-group
+			= f.label(:comments, AntibodiesController.get_heading(:comments), :class=> "label control-label label-info")
+			.controls= f.text_area(:comments, :readonly=>readonly?, :rows=>12, :class=>"input-xxlarge")
+
+
+= render :partial=>'shared/bottom_buttons'
+
+

@@ -4,6 +4,8 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery
 
+  DATABASE_SYSTEM_NAME = "StraightlabDB"
+  DATABASE_SYSTEM_SHORT_NAME = "ASDB"
 
   AUTH_FN = Rails.root.join('config/authusers.yml')
   ALLOWED_LABEL = "allowedusers"
@@ -97,13 +99,13 @@ class ApplicationController < ActionController::Base
   end
 
   def define_ui_variables(opts_hash)
-    @model_class = opts_hash[:model_class]
-    @obj = opts_hash[:obj]
-    @status_text = opts_hash[:status_text]
-    @context_specific_buttons = opts_hash[:context_specific_buttons]
-    @submit_text = opts_hash[:submit_text]
-    @readonly = opts_hash[:readonly]
-    @search_path = opts_hash[:search_path]
+
+    opts_hash.each do |k, v|
+
+      instance_variable_set("@#{k}", v)
+
+    end
+
   end
 
 

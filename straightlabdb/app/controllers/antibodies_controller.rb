@@ -74,18 +74,28 @@ class AntibodiesController < ApplicationController
   end
 
 
+  def define_table_view_vars
+
+    @table_columns = [:ab_number, :date_entered, :entered_by, :alias, :host]
+    @controller = AntibodiesController
+    @table_objects = @antibodies
+
+  end
+
+
   # GET /antibodies
   # GET /antibodies.json
   def index
 
     define_ui_variables(status_text: "Antibodies")
 
-
     if params.has_key?(:antibody) then
       @antibodies = process_search_query(params[:antibody], Antibody)
     else
       @antibodies = Antibody.all
     end
+
+    define_table_view_vars
 
     respond_to do |format|
       format.html # index.html.erb

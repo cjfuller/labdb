@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+%html
+%head
+  %title= ApplicationController::DATABASE_SYSTEM_NAME
+  = stylesheet_link_tag "application", media: "all"
+  = csrf_meta_tags
+
+  :css
+    body {
+      padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+    } 
+
+%body
+
+%header{class: "navbar navbar-fixed-top navbar-inverse"}
+
+  .navbar-inner
+    .container
+      = link_to ApplicationController::DATABASE_SYSTEM_SHORT_NAME, "/", id:"logo"
+      %nav
+        %ul{class: "nav pull-left"}
+          %li.divider-vertical
+          %li= link_to 'Plasmids', '/plasmids'
+          %li.divider-vertical
+          %li= link_to 'Oligos', '/oligos'
+          %li.divider-vertical
+          %li= link_to 'Bacteria', '/bacteria'
+          %li.divider-vertical
+          %li= link_to 'Samples', '/samples'
+          %li.divider-vertical
+          %li= link_to 'Antibodies', '/antibodies'
+          %li.divider-vertical
+          %li= link_to 'TC', '/tclines'
+          %li.divider-vertical
+          %li= link_to 'Yeast', '/yeast'
+          %li.divider-vertical
+          %li= link_to 'Log out', '/logout'
+
+
+.container= yield
+
+= javascript_include_tag "application"

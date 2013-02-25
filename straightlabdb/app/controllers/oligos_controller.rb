@@ -24,6 +24,14 @@ class OligosController < ApplicationController
 
   end
 
+  def define_table_view_vars
+
+    @table_columns = [:oligo_number, :date_entered, :entered_by, :oligoalias]
+    @controller = OligosController
+    @table_objects = @oligos
+
+  end
+
 
   # GET /oligos
   # GET /oligos.json
@@ -37,6 +45,7 @@ class OligosController < ApplicationController
       @oligos = Oligo.all
     end
 
+    define_table_view_vars
 
     respond_to do |format|
       format.html # index.html.erb

@@ -24,6 +24,14 @@ class PlasmidsController < ApplicationController
     params[:model_class] = Plasmid
     super(params)
   end
+
+  def define_table_view_vars
+    
+    @table_columns = [:plasmidnumber, :date_entered, :enteredby, :plasmidalias, :plasmidsize, :strainnumbers]
+    @controller = PlasmidsController
+    @table_objects = @plasmids
+
+  end
     
   def generate_plasmid_number(a_plasmid)
     
@@ -112,6 +120,9 @@ class PlasmidsController < ApplicationController
     else
       @plasmids = Plasmid.all
     end
+
+    define_table_view_vars
+
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @plasmids }
@@ -126,7 +137,7 @@ class PlasmidsController < ApplicationController
 
     puts @plasmid.antibiotic
 
-    define_ui_variables(status_text: "#{PLASMID_TAG} #{@plasmid.plasmidnumber}", context_specific_buttons: "shared/top_editing_buttons", obj: @plasmid, readonly: true)
+    define_ui_variables(status_text: "#{PLASMID_TAG} #{@plasmid.plasmidnumber}", context_specific_buttons: "shared/top_editing_buttons", obj: @plasmid, readonly: true, show_map: true)
 
     @plasmid.parse_antibiotics
     respond_to do |format|
@@ -141,7 +152,7 @@ class PlasmidsController < ApplicationController
 
     @plasmid = Plasmid.new
 
-    define_ui_variables(status_text: "New Plasmid", readonly: false, submit_text: "Create plasmid")
+    define_ui_variables(status_text: "New Plasmid", readonly: false, submit_text: "Create plasmid", show_map: true)
 
     generate_date(@plasmid)
     generate_name(@plasmid)
@@ -157,7 +168,7 @@ class PlasmidsController < ApplicationController
   def edit
     @plasmid = Plasmid.find(params[:id])
 
-    define_ui_variables(status_text: "Editing #{PLASMID_TAG} #{@plasmid.plasmidnumber}", context_specific_buttons: "shared/top_editing_buttons", obj: @plasmid, readonly: false, submit_text: "Update plasmid")
+    define_ui_variables(status_text: "Editing #{PLASMID_TAG} #{@plasmid.plasmidnumber}", context_specific_buttons: "shared/top_editing_buttons", obj: @plasmid, readonly: false, submit_text: "Update plasmid", show_map: true)
 
     @plasmid.parse_antibiotics
   end
@@ -213,7 +224,7 @@ class PlasmidsController < ApplicationController
   def search
     @plasmid = Plasmid.new
 
-    define_ui_variables(status_text: "Searching plasmids", obj: @plasmid, readonly: false, submit_text: "Search")
+    define_ui_variables(status_text: "Searching plasmids", obj: @plasmid, readonly: false, submit_text: "Search", show_map: false)
 
     respond_to do |format|
       format.html

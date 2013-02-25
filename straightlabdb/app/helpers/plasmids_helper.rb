@@ -12,5 +12,10 @@ module PlasmidsHelper
     property_list.inject({}) { |a, e| a[e]= readonly?; a }
   end
 
+  
+  def show_map?
+    @show_map
+  end
+
 
 end
