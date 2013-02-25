@@ -124,18 +124,24 @@ class ApplicationController < ActionController::Base
 
     conditions = Hash.new
     regex_conditions = Hash.new
-    regex_detection_regex = /^\/.*\/$/
+    regex_detection_regex = /\A\/.*\/\Z/
     search_params.each_key do |k|
       if search_params[k] and search_params[k] != "" and k != "verified" then #TODO: is there a better way to deal with the verified field?
-        unless regex_detection_regex.match(search_params[k]) then
+
+        matched = regex_detection_regex.match(search_params[k])
+
+        if matched then
+          
+          regex_conditions[k] = Regexp.new(search_params[k][1...(search_params[k].length-1)])
+        
+        else
           #if a regex has not been entered:
           #substitute * for .* to turn the old filemaker-style glob syntax into a regex
           search_params[k].gsub!("*", ".*")
           #add start and end of string matchers to avoid, e.g., matching all plasmids with a 1 when searching for #1
-          search_params[k]= "\A" + search_params[k] + "\Z"
-          regex_conditions[k] = Regexp.new(search_params[k])
-        else
-          regex_conditions[k] = Regexp.new(search_params[k][1...(search_params[k].length-1)])
+          search_params[k]= '\A' + search_params[k] + '\Z'
+          #also make it case-insensitive since there's no way to specify one or the other here
+          regex_conditions[k] = Regexp.new(search_params[k], true)
         end
       end
     end
