@@ -124,15 +124,23 @@ class ApplicationController < ActionController::Base
 
     conditions = Hash.new
     regex_conditions = Hash.new
-    regex_detection_regex = /\A\/.*\/\Z/
+    regex_detection_regex = /\A\/.*\/(i?)\Z/
     search_params.each_key do |k|
       if search_params[k] and search_params[k] != "" and k != "verified" then #TODO: is there a better way to deal with the verified field?
 
         matched = regex_detection_regex.match(search_params[k])
 
         if matched then
+
+          case_insensitive = (matched[1].length > 0)
+
+          end_of_regex_offset = 1
+
+          if case_insensitive then
+            end_of_regex_offset = 2
+          end
           
-          regex_conditions[k] = Regexp.new(search_params[k][1...(search_params[k].length-1)])
+          regex_conditions[k] = Regexp.new(search_params[k][1...(search_params[k].length-end_of_regex_offset)], case_insensitive)
         
         else
           #if a regex has not been entered:
