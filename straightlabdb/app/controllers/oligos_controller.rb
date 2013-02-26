@@ -76,6 +76,8 @@ class OligosController < ApplicationController
 
     generate_date(@oligo)
     generate_name(@oligo)
+    @oligo.oligo_number = generate_object_number(Oligo, :oligo_number)
+
 
     respond_to do |format|
       format.html # new.html.erb

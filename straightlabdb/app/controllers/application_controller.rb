@@ -1,4 +1,5 @@
 require 'psych'
+require 'number_assignment'
 
 class ApplicationController < ActionController::Base
 
@@ -17,6 +18,21 @@ class ApplicationController < ActionController::Base
   end
 
   before_filter :require_authorization
+  around_filter :clear_temporary_number_assignments
+
+  def clear_temporary_number_assignments
+    
+    if request.get?
+      NumberAssignment.clear_unused_temporaries(session[:session_id])
+    end
+
+    yield
+
+    if request.post? or request.put? or request.delete?
+      NumberAssignment.clear_unused_temporaries(session[:session_id])
+    end
+
+  end
 
   def require_authorization
 
@@ -81,11 +97,7 @@ class ApplicationController < ActionController::Base
 
     allowed_users = @user_data[ALLOWED_LABEL]
 
-    puts curr_user.inspect
-
     allowed_users.each do |u|
-
-      puts u
 
 
       if curr_user.email == u[EMAIL_TAG] and curr_user.name == u[NAME_TAG] then
@@ -154,8 +166,6 @@ class ApplicationController < ActionController::Base
       end
     end
 
-    puts regex_conditions
-
     preprocessed_conditions.each do |k,v|
       regex_conditions[k] = Regexp.new(v)
     end
@@ -163,8 +173,6 @@ class ApplicationController < ActionController::Base
     preliminary_list = search_class.where(conditions)
 
     final_list = Array.new
-
-    puts preliminary_list.size
 
     preliminary_list.each do |p|
       include_obj = true
@@ -188,6 +196,10 @@ class ApplicationController < ActionController::Base
     {}
   end
 
+  def generate_object_number(klass, number_field_name)
 
+    NumberAssignment.assignment_for_class(klass, number_field_name, session)
+
+  end
 
 end

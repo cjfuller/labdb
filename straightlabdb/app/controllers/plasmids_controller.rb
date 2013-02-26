@@ -32,25 +32,7 @@ class PlasmidsController < ApplicationController
     @table_objects = @plasmids
 
   end
-    
-  def generate_plasmid_number(a_plasmid)
-    
-    @@plasmid_number_mutex.synchronize do
-    
-      max_number = 0
-     
-      Plasmid.find_each do |p|
-        if p.plasmidnumber and p.plasmidnumber.to_i > max_number then
-          max_number = p.plasmidnumber.to_i
-        end
-      end
-    
-      @@max_number = max_number
-      @@max_number += 1
-      a_plasmid.plasmidnumber = @@max_number    
-      
-    end
-  end
+  
   
   def fix_antibiotic_params(param_hash)
     
@@ -156,7 +138,9 @@ class PlasmidsController < ApplicationController
 
     generate_date(@plasmid)
     generate_name(@plasmid)
-    generate_plasmid_number(@plasmid)
+    
+    @plasmid.plasmidnumber = generate_object_number(Plasmid, :plasmidnumber)
+
     @plasmid.parse_antibiotics
     respond_to do |format|
       format.html # new.html.erb

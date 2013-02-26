@@ -126,6 +126,8 @@ class AntibodiesController < ApplicationController
 
     generate_date(@antibody)
     generate_name(@antibody)
+    @antibody.ab_number = generate_object_number(Antibody, :ab_number)
+
 
     respond_to do |format|
       format.html # new.html.erb
