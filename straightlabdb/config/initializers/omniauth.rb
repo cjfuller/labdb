@@ -1,5 +1,8 @@
 require 'omniauth-openid'
 require 'openid/store/filesystem'
+require 'openid/fetchers'
+
+OpenID.fetcher.ca_file = "#{Rails.root}/config/ca-bundle.crt"
 
 Rails.application.config.middleware.use Rack::Session::Cookie
 

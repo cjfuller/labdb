@@ -9,10 +9,6 @@ class SessionsController < ApplicationController
 
   def create
 
-    puts "creating new session!"
-
-    puts "hello world"
-
     reset_session
 
     auth_hash = request.env['omniauth.auth']
