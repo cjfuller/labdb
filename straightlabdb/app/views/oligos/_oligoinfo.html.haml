@@ -1,0 +1,12 @@
+= form_for(@oligo, html: {multipart: true, class: "form-vertical"}, builder: BootstrapFormBuilder ) do |f|
+
+  - if @oligo.errors.any?
+    #error_explanation
+      %h2 #{pluralize(@oligo.errors.count, "error")} prohibited this oligo from being saved:
+
+      %ul
+        - @oligo.errors.full_messages.each do |msg|
+          %li= msg
+
+  = render partial: 'oligo_display', locals: {f: f}
+

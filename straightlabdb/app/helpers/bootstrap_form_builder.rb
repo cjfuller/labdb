@@ -67,9 +67,13 @@ class BootstrapFormBuilder < ActionView::Helpers::FormBuilder
     end
     
     html << label(propertyname, displayname, :class=> class_string)
+
+    html << '<div>'
     
     html << check_box(propertyname, :disabled=>readonly)
         
+    html << '</div>'
+
     html << '</div>'
     
   end

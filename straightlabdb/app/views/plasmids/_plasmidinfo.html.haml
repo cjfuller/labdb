@@ -1,0 +1,12 @@
+= form_for(@plasmid, html: {multipart: true, class: "form-vertical"}, builder: BootstrapFormBuilder) do |f|
+
+	- if @plasmid.errors.any?
+		#error_explanation
+			%h2 #{pluralize(@plasmid.errors.count, "error")} prohibited this plasmid from being saved:
+
+			%ul
+				- @plasmid.errors.full_messages.each do |msg|
+					%li= msg
+
+	= render partial: 'plasmid_display', locals: {f: f}
+

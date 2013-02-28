@@ -33,6 +33,7 @@ class Plasmid < ActiveRecord::Base
     self.antibiotic.split(",").each do |ab|
       if self.respond_to?(ab.to_sym) then
         self.send((ab+"=").to_sym, "1")
+        puts "found #{ab}"
       end
     end
   end
@@ -41,8 +42,6 @@ class Plasmid < ActiveRecord::Base
     self.plasmidsize= self.sequence.chomp.length
   end
   
-  def generate_date
-    self.date_entered= Time.now
-  end
+
 
 end

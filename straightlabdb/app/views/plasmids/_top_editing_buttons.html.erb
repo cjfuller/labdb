@@ -1,9 +1,0 @@
-<% if readonly? then %>
-    <li>
-      <%=  link_to 'Edit plasmid', edit_plasmid_path(@plasmid) %>
-    </li>
-<% else %>
-    <li>
-      <%=  link_to 'Cancel', @plasmid %>
-    </li>
-<% end %>

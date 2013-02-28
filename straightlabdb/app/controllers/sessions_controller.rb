@@ -1,3 +1,5 @@
+require 'number_assignment'
+
 class SessionsController < ApplicationController
 
   skip_before_filter :require_authorization, :only => [:create, :failure, :destroy]
@@ -6,6 +8,10 @@ class SessionsController < ApplicationController
   end
 
   def create
+
+    puts "creating new session!"
+
+    puts "hello world"
 
     reset_session
 
@@ -34,6 +40,7 @@ class SessionsController < ApplicationController
   def destroy
 
     session[:user_id] = nil
+
     redirect_to '/', notice: "You have successfully logged out."
 
   end

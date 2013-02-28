@@ -19,6 +19,20 @@ Straightlabdb::Application.routes.draw do
     end
   end
 
+  resources :oligos do
+    collection do
+      get 'search'
+      post 'search'
+    end
+  end
+
+  resources :antibodies do
+    collection do
+      get 'search'
+      post 'search'
+    end
+  end
+
   root :to => "static#index"
     
 
