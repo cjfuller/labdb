@@ -29,9 +29,8 @@ gem 'paperclip', '~> 3.0'
 gem 'bcrypt-ruby', '~> 3.0.0'
 
 gem 'omniauth'
-gem 'omniauth-openid'
 
-gem 'thin'
+gem 'omniauth-openid'
 
 gem 'sass'
 
