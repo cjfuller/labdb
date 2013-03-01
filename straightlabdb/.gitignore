@@ -18,8 +18,9 @@
 /config/authusers.yml
 
 # Ignore certificates
-/config/171.65.21.123.cert.crt
-/config/171.65.21.123.cert.csr
-/config/171.65.21.123.cert.key
-/config/privkey.pem
+/config/*.crt
+/config/*.csr
+/config/*.key
+/config/*.pem
+
 
