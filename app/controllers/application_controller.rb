@@ -8,7 +8,6 @@ class ApplicationController < ActionController::Base
   DATABASE_SYSTEM_NAME = "StraightlabDB"
   DATABASE_SYSTEM_SHORT_NAME = "ASDB"
 
-  AUTH_FN = Rails.root.join('config/authusers.yml')
   ALLOWED_LABEL = "allowedusers"
   NAME_TAG = "name"
   EMAIL_TAG = "email"
@@ -46,11 +45,7 @@ class ApplicationController < ActionController::Base
 
   def load_auth
 
-    @user_data = nil
-
-    File.open(AUTH_FN, 'r') do |f|
-      @user_data = Psych.load(f.read)
-    end
+    @user_data = Rails.configuration.user_data
 
     @users_loaded = true
 
