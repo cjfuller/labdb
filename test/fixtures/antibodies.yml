@@ -1,0 +1,27 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  ab_number: 1
+  host: MyString
+  label: MyString
+  box: MyString
+  alias: MyString
+  fluorophore: MyString
+  entered_by: MyString
+  good_for_if: false
+  good_for_western: false
+  comments: MyText
+  vendor: MyString
+
+two:
+  ab_number: 1
+  host: MyString
+  label: MyString
+  box: MyString
+  alias: MyString
+  fluorophore: MyString
+  entered_by: MyString
+  good_for_if: false
+  good_for_western: false
+  comments: MyText
+  vendor: MyString

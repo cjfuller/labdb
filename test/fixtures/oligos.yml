@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  oligo_number: 1
+  alias: MyString
+  date_entered: 2013-02-07
+  entered_by: MyString
+  notebook: 1
+  vendor: MyString
+  organism: MyString
+  sequence: MyText
+  purpose: MyText
+
+two:
+  oligo_number: 1
+  alias: MyString
+  date_entered: 2013-02-07
+  entered_by: MyString
+  notebook: 1
+  vendor: MyString
+  organism: MyString
+  sequence: MyText
+  purpose: MyText

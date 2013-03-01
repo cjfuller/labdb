@@ -1,0 +1,33 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  plasmidnumber: MyString
+  datefrozen: 2012-05-02
+  enteredby: MyString
+  notebook: 1
+  verified: false
+  plasmidalias: MyString
+  antibiotic: MyString
+  plasmidsize: 1
+  concentration: 1.5
+  strainnumbers: MyString
+  description: MyText
+  sequence: MyText
+  vector: MyString
+  mapreference: MyString
+
+two:
+  plasmidnumber: MyString
+  datefrozen: 2012-05-02
+  enteredby: MyString
+  notebook: 1
+  verified: false
+  plasmidalias: MyString
+  antibiotic: MyString
+  plasmidsize: 1
+  concentration: 1.5
+  strainnumbers: MyString
+  description: MyText
+  sequence: MyText
+  vector: MyString
+  mapreference: MyString
