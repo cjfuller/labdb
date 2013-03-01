@@ -33,6 +33,8 @@ gem 'omniauth-openid'
 
 gem 'thin'
 
+gem 'sass'
+
 # To use Jbuilder templates for JSON
 # gem 'jbuilder'
 
