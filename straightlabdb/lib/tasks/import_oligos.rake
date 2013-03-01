@@ -9,7 +9,7 @@ desc "Import oligos."
 task :import_oligos => :environment do
 
 
-  doc = Nokogiri::XML(File.new("/home/cfuller/Documents/databases/oligo_database.xml"))
+  doc = Nokogiri::XML(File.new("db/db_imports/oligo_database.xml"))
 
   doc.remove_namespaces!
 

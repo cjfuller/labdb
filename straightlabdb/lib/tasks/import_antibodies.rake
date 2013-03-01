@@ -21,7 +21,7 @@ desc "Import antibodies."
 task :import_antibodies => :environment do
 
 
-  doc = Nokogiri::XML(File.new("/home/cfuller/Documents/databases/antibody_database.xml"))
+  doc = Nokogiri::XML(File.new("db/db_imports/antibody_database.xml"))
 
   doc.remove_namespaces!
 

@@ -9,7 +9,7 @@ desc "Import plasmids."
 task :import_plasmids => :environment do
 
 
-  doc = Nokogiri::XML(File.new("/home/cfuller/Documents/databases/plasmid_database.xml"))
+  doc = Nokogiri::XML(File.new("/db/db_imports/plasmid_database.xml"))
 
   doc.remove_namespaces!
 
