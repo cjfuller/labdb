@@ -1,0 +1,30 @@
+
+=  render :partial => "shared/subnavbar"
+
+- keys = %i[strain_number species_bkg date_entered]
+= f.row([3,6,3], keys, BacteriaController.headings_for(keys), {}, readonly_for(keys), {}) 
+
+
+- keys = %i[entered_by notebook plasmid_number]
+= f.row([3,3,3,3], keys, BacteriaController.headings_for(keys), {}, readonly_for(keys), {} )
+
+
+.row-fluid#description-row
+  .span12
+    .control-group
+      = f.label(:genotype, BacteriaController.get_heading(:genotype), class: "label control-label label-info")
+      .controls
+        = f.text_area(:genotype, readonly: readonly?, rows: 3, class: "input-xxlarge")
+
+
+.row-fluid#sequence-row
+  .span12
+    .control-group
+      = f.label(:comments, BacteriaController.get_heading(:comments), class: "label control-label label-info")
+      .controls
+        = f.text_area(:comments, readonly: readonly?, rows: 3, class: "input-xxlarge")
+
+
+= render :partial=>'shared/bottom_buttons'
+
+

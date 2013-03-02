@@ -1,0 +1,11 @@
+= form_for(@bacterium, html: {multipart: true, class: "form-vertical"}, builder: BootstrapFormBuilder ) do |f|
+
+  - if @bacterium.errors.any?
+    #error_explanation
+      %h2 #{pluralize(@bacterium.errors.count, "error")} prohibited this strain from being saved:
+
+      %ul
+        - @bacterium.errors.full_messages.each do |msg|
+          %li= msg
+
+  = render partial: 'strain_display', locals: {f: f}

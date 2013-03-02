@@ -33,6 +33,13 @@ Straightlabdb::Application.routes.draw do
     end
   end
 
+  resources :bacteria do
+    collection do
+      get 'search'
+      post 'search'
+    end
+  end
+
   root :to => "static#index"
     
 
