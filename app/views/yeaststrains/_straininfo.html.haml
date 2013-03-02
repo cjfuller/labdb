@@ -1,0 +1,11 @@
+= form_for(@yeaststrain, html: {multipart: true, class: "form-vertical"}, builder: BootstrapFormBuilder ) do |f|
+
+  - if @yeaststrain.errors.any?
+    #error_explanation
+      %h2 #{pluralize(@yeaststrain.errors.count, "error")} prohibited this strain from being saved:
+
+      %ul
+        - @yeaststrain.errors.full_messages.each do |msg|
+          %li= msg
+
+  = render partial: 'strain_display', locals: {f: f}

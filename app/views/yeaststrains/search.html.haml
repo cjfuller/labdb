@@ -1,0 +1,3 @@
+= form_for(@yeaststrain, html: {multipart: true}, method: 'get', builder: BootstrapFormBuilder) do |f|
+
+  = render partial: 'strain_display', :locals=>{f: f}

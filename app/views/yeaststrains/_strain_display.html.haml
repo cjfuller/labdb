@@ -1,0 +1,40 @@
+
+=  render :partial => "shared/subnavbar"
+
+- keys = %i[strain_number strainalias date_entered]
+= f.row([3,6,3], keys, YeaststrainsController.headings_for(keys), {}, readonly_for(keys), {}) 
+
+
+- keys = %i[entered_by notebook location plasmidnumber]
+= f.row([3,3,3,3], keys, YeaststrainsController.headings_for(keys), {}, readonly_for(keys), {} )
+
+- keys = %i[antibiotic species strain_bkg]
+= f.row([3,3,6], keys, YeaststrainsController.headings_for(keys), {}, readonly_for(keys), {})
+
+.row-fluid#description-row
+  .span12
+    .control-group
+      = f.label(:genotype, YeaststrainsController.get_heading(:genotype), class: "label control-label label-info")
+      .controls
+        = f.text_area(:genotype, readonly: readonly?, rows: 3, class: "input-xxlarge")
+
+
+.row-fluid#sequence-row
+  .span12
+    .control-group
+      = f.label(:comments, YeaststrainsController.get_heading(:comments), class: "label control-label label-info")
+      .controls
+        = f.text_area(:comments, readonly: readonly?, rows: 3, class: "input-xxlarge")
+
+.row-fluid#sequence-row
+  .span12
+    .control-group
+      = f.label(:sequence, YeaststrainsController.get_heading(:sequence), class: "label control-label label-info")
+
+      .controls= f.text_area(:sequence, readonly: readonly?, rows: 4, class: "input-xxlarge")
+
+
+
+= render :partial=>'shared/bottom_buttons'
+
+

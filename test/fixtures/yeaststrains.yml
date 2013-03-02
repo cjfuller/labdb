@@ -1,0 +1,29 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  strainalias: MyString
+  antibiotic: MyString
+  plasmidnumber: MyString
+  strain_number: 1
+  strain_bkg: MyString
+  date_entered: 2013-03-02
+  sequence: MyText
+  entered_by: MyString
+  comments: MyText
+  genotype: MyText
+  location: MyString
+  species: MyString
+
+two:
+  strainalias: MyString
+  antibiotic: MyString
+  plasmidnumber: MyString
+  strain_number: 1
+  strain_bkg: MyString
+  date_entered: 2013-03-02
+  sequence: MyText
+  entered_by: MyString
+  comments: MyText
+  genotype: MyText
+  location: MyString
+  species: MyString

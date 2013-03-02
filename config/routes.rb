@@ -40,6 +40,13 @@ Straightlabdb::Application.routes.draw do
     end
   end
 
+  resources :yeaststrains do
+    collection do
+      get 'search'
+      post 'search'
+    end
+  end
+
   root :to => "static#index"
     
 
