@@ -103,6 +103,9 @@ class PlasmidsController < ApplicationController
       @plasmids = Plasmid.all
     end
 
+    #NB: not doing a Plasmid.all order: "plasmidnumber" because this sorts them as strings
+    @plasmids.sort! { |e0, e1| e0.plasmidnumber.to_i <=> e1.plasmidnumber.to_i }
+
     define_table_view_vars
 
     respond_to do |format|

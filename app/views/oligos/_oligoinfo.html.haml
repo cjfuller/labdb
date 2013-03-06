@@ -8,5 +8,5 @@
         - @oligo.errors.full_messages.each do |msg|
           %li= msg
 
-  = render partial: 'oligo_display', locals: {f: f}
+  = render partial: 'oligo_display', locals: {f: f, obj: @oligo}
 

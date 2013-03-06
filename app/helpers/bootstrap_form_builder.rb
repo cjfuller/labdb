@@ -1,5 +1,17 @@
+require 'action_view/helpers/tag_helper'
+require 'action_view/helpers/url_helper'
+
+
 class BootstrapFormBuilder < ActionView::Helpers::FormBuilder
 
+  include Rails.application.routes.url_helpers
+
+  include ActionView::Helpers::TagHelper
+  include ActionView::Helpers::UrlHelper
+
+  def controller #this appears to be necessary to use link_to or url_for
+    nil
+  end
 
   class HTMLString < String
 
@@ -39,7 +51,7 @@ class BootstrapFormBuilder < ActionView::Helpers::FormBuilder
     
     
   def text_field_with_label(html, propertyname, displayname, span_size, emph_label_color=false, readonly=false)
-    
+
     html << '<div class="control-group">'
     
     class_string = "label control-label"
@@ -49,9 +61,35 @@ class BootstrapFormBuilder < ActionView::Helpers::FormBuilder
     end
     
     html << label(propertyname, displayname, :class=> class_string)
-    
-    html << text_field(propertyname, :disabled=>readonly, :class=> "span#{span_size}", :size=> nil)
-    
+    html << tag("br")
+
+    linked_items = nil
+
+    if not self.object.nil? then
+
+      linked_items = self.object.get_linked(propertyname)
+
+    end
+
+    if readonly and not linked_items.nil? and not linked_items.size == 0 then
+
+      content = ""
+
+      linked_items.each do |k, lnkd_obj|
+
+        if content.length > 0 then
+          content << ", "
+        end
+
+        content << link_to(k, lnkd_obj)
+
+      end
+
+      html << content_tag(:div, content.html_safe, class: "span#{span_size}")
+    else
+      html << text_field(propertyname, :disabled=>readonly, :class=> "span#{span_size}", :size=> nil)
+    end
+
     html << '</div>'
     
   end

@@ -45,6 +45,8 @@ class OligosController < ApplicationController
       @oligos = Oligo.all
     end
 
+    @oligos.sort! { |e0, e1| e0.oligo_number.to_i <=> e1.oligo_number.to_i }
+
     define_table_view_vars
 
     respond_to do |format|

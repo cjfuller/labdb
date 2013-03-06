@@ -8,5 +8,5 @@
 				- @plasmid.errors.full_messages.each do |msg|
 					%li= msg
 
-	= render partial: 'plasmid_display', locals: {f: f}
+	= render partial: 'plasmid_display', locals: {f: f, obj: @plasmid}
 

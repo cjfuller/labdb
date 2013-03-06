@@ -7,10 +7,10 @@
 	.span6
 
 - keys = %i[enteredby notebook verified date_entered]
-= f.row([3,3,3,3], keys, PlasmidsController.headings_for(keys), {}, readonly_for(keys), {verified: true} )
+= f.row([3,3,3,3], keys, PlasmidsController.headings_for(keys), {}, readonly_for(keys), {verified: true})
 
 - keys = %i[plasmidalias vector strainnumbers]
-= f.row([6,3,3], keys, PlasmidsController.headings_for(keys), {plasmidalias: true}, readonly_for(keys), {} )
+= f.row([6,3,3], keys, PlasmidsController.headings_for(keys), {plasmidalias: true}, readonly_for(keys), {})
 
 .row-fluid
 	.span6
@@ -25,7 +25,7 @@
 
 	- keys = %i[concentration plasmidsize]
 
-	= f.span_series([3,3], keys, PlasmidsController.headings_for(keys), {}, {concentration: readonly?, plasmidsize: true}, {} )
+	= f.span_series([3,3], keys, PlasmidsController.headings_for(keys), {}, {concentration: readonly?, plasmidsize: true}, {})
 
 .row-fluid#description-row
 	.span12

@@ -46,9 +46,9 @@ class YeaststrainsController < ApplicationController
       @yeaststrains = Yeaststrain.all
     end
 
-    define_table_view_vars
+    @yeaststrains.sort! { |e0, e1| e0.strain_number.to_i <=> e1.strain_number.to_i }
 
-    @yeaststrains = Yeaststrain.all
+    define_table_view_vars
 
     respond_to do |format|
       format.html # index.html.erb

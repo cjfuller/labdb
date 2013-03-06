@@ -95,6 +95,8 @@ class AntibodiesController < ApplicationController
       @antibodies = Antibody.all
     end
 
+    @antibodies.sort! { |e0, e1| e0.ab_number.to_i <=> e1.ab_number.to_i }
+
     define_table_view_vars
 
     respond_to do |format|

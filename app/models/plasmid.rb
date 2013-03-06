@@ -1,5 +1,6 @@
-
 class Plasmid < ActiveRecord::Base
+
+  include LinkableModel
 
   attr_accessible :antibiotic, :concentration, :date_entered, :description, :enteredby, :mapreference, :notebook, :plasmidalias, :plasmidmap, :plasmidnumber, :plasmidsize, :sequence, :strainnumbers, :vector, :verified
 
@@ -42,6 +43,11 @@ class Plasmid < ActiveRecord::Base
     self.plasmidsize= self.sequence.chomp.length
   end
   
-
+  def get_linked(property_name)
+    return nil unless property_name == :strainnumbers
+    return nil if self.strainnumbers.nil?
+    numbers = self.strainnumbers.split(",").map! { |e| e.strip }
+    get_linked_bacterial_strains(numbers)
+  end
 
 end
