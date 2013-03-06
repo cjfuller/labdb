@@ -12,7 +12,7 @@ First, clone the repository.  You will need to add some configuration options be
 
  - Edit config/authusers.yml and add the names and e-mail addresses of the users who will be able to access the database.  Login is done through google, so these must be the exact names and e-mails associated with the users' google accounts.
 
- - You may also wish to check or replace the config/cacert.pem file; this is a bundle of certificate authority certificates that will be used to verify the identity of the google website used for authentication.  This was downloaded this bundle from the maintainers of the curl utility; use at your own risk.
+ - You may also wish to check or replace the config/cacert.pem file; this is a bundle of certificate authority certificates that will be used to verify the identity of the google website used for authentication.  This was downloaded from the maintainers of the curl utility; use at your own risk.
 
  
 Next, install dependencies using bundler:
