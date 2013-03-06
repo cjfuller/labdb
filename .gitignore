@@ -14,9 +14,6 @@
 /log/*.log
 /tmp
 
-# Ignore authorized users list
-/config/authusers.yml
-
 # Ignore certificates
 /config/*.crt
 /config/*.csr
