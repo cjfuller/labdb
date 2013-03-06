@@ -12,11 +12,17 @@ class ApplicationController < ActionController::Base
   NAME_TAG = "name"
   EMAIL_TAG = "email"
 
+  def redirect_https
+    puts request.protocol
+    redirect_to :protocol => "https://" unless request.protocol == "https://"
+  end
+
   def denied
     render :text => "Access denied."
   end
 
   before_filter :require_authorization
+  prepend_before_filter :redirect_https
   around_filter :clear_temporary_number_assignments
 
   def clear_temporary_number_assignments
