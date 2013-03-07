@@ -16,10 +16,29 @@
 #++
 
 require 'yaml'
+require 'object_naming'
 
 module Exportable
 
-	Formats = {yaml: :export_to_yaml, fasta: :export_to_fasta}
+	Formats = {yml: :export_to_yaml, fasta: :export_to_fasta}
+
+	def name_str
+		Naming.name_for(self.class) + number_field.to_s
+	end
+
+	def get_export_params(format)
+
+		exp_params = {}
+
+		exp_params[:filename] = name_str + "." + format.to_s
+
+		if format.to_s == "fasta" then
+			exp_params[:type] = "text/plain"
+		end
+
+		exp_params
+	end
+
 
 	def export_to(format)
 
@@ -47,13 +66,25 @@ module Exportable
 
 	def export_to_fasta
 
+		output = ""
+
+		output << ">" << name_str << " " << info_field.to_s << "\n"
+
+		output << wrap_string(self.sequence, 80)
+
+		output
+
 	end
 
 	def has_sequence?
 		self.respond_to? :sequence
 	end
 
+	def wrap_string(str, length)
 
+		str.scan(/.{#{length}}|.+/).join("\n")
+
+	end
 
 
 end

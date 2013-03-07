@@ -38,4 +38,8 @@ class Bacterium < ActiveRecord::Base
 		Fields
 	end
 
+  def number_field
+    self.strain_number
+  end
+
 end

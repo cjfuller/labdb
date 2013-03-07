@@ -178,7 +178,7 @@ class BacteriaController < ApplicationController
 
     @bacterium = Bacterium.find(params[:id])
 
-    send_data(@bacterium.export_to(params["exportformat"].to_sym), filename: (obj_tag + @bacterium.strain_number.to_s + params["exportformat"]))
+    do_export(@bacterium)
 
   end
 

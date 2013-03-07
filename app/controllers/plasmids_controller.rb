@@ -246,8 +246,8 @@ class PlasmidsController < ApplicationController
 
     @plasmid = Plasmid.find(params[:id])
 
-    send_data(@plasmid.export_to(params["exportformat"].to_sym), filename: (obj_tag + @plasmid.plasmidnumber.to_s + ".yml"))
-
+    do_export(@plasmid)
+    
   end
   
   def upload

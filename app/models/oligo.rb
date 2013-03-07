@@ -31,4 +31,12 @@ class Oligo < ActiveRecord::Base
 		Fields
 	end
 
+	def number_field
+		self.oligo_number
+	end
+
+	def info_field
+		self.oligoalias
+	end
+
 end

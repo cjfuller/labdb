@@ -33,6 +33,8 @@ class Antibody < ActiveRecord::Base
 		Fields
 	end
 
-
+	def number_field
+		self.ab_number
+	end
 
 end

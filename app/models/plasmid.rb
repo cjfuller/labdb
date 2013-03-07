@@ -78,4 +78,12 @@ class Plasmid < ActiveRecord::Base
     Fields
   end
 
+  def number_field
+    self.plasmidnumber
+  end
+
+  def info_field
+    self.plasmidalias
+  end
+
 end

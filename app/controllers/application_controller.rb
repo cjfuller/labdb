@@ -220,5 +220,11 @@ class ApplicationController < ActionController::Base
 
   end
 
+  def do_export(obj)
+
+    send_data(obj.export_to(params["exportformat"].to_sym), obj.get_export_params(params["exportformat"].to_sym))
+
+  end
+
 
 end

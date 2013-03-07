@@ -38,4 +38,12 @@ class Yeaststrain < ActiveRecord::Base
 		Fields
 	end
 
+	def number_field
+		self.strain_number
+	end
+
+	def info_field
+		self.strainalias
+	end
+
 end

@@ -229,8 +229,8 @@ class AntibodiesController < ApplicationController
 
     @antibody = Antibody.find(params[:id])
 
-    send_data(@antibody.export_to(params["exportformat"].to_sym), filename: (obj_tag + @antibody.ab_number.to_s + ".yml"))
-
+    do_export(@antibody)
+    
   end
 
 end
