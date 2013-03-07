@@ -15,6 +15,20 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
+require 'exporters'
+
+
 class Oligo < ActiveRecord::Base
-  attr_accessible :oligoalias, :date_entered, :entered_by, :notebook, :oligo_number, :organism, :purpose, :sequence, :vendor
+
+	include Exportable
+
+  Fields = [:oligoalias, :date_entered, :entered_by, :notebook, :oligo_number, :organism, :purpose, :sequence, :vendor]
+
+  attr_accessible *Fields
+
+  	
+	def exportable_fields
+		Fields
+	end
+
 end

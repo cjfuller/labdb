@@ -235,6 +235,14 @@ class PlasmidsController < ApplicationController
       format.json { render json: @plasmid }
     end
   end
+
+  def export
+
+    @plasmid = Plasmid.find(params[:id])
+
+    send_data(@plasmid.export_to(params["exportformat"].to_sym), filename: (PLASMID_TAG + @plasmid.plasmidnumber.to_s + ".yml"))
+
+  end
   
   def upload
   end

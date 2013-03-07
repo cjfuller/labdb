@@ -15,27 +15,47 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-require 'exporters'
+require 'yaml'
 
+module Exportable
 
-class Bacterium < ActiveRecord::Base
-  Fields = [:comments, :date_entered, :entered_by, :genotype, :notebook, :plasmid_number, :species_bkg, :strain_number]
+	Formats = {yaml: :export_to_yaml, fasta: :export_to_fasta}
 
-  attr_accessible *Fields
+	def export_to(format)
 
-  include Exportable
-  include LinkableModel
+		if Formats[format] then
+			self.send(Formats[format])
+		end
 
-  def get_linked(property_name)
-  	return nil unless property_name == :plasmid_number
-  	 return nil if self.plasmid_number.nil?
-  	numbers = self.plasmid_number.split(",").map! { |e| e.strip }
-  	get_linked_plasmids(numbers)
-  end
-
-  	
-	def exportable_fields
-		Fields
 	end
 
+	def export_to_yaml
+
+		fields = exportable_fields
+
+		output = {}
+
+		fields.each do |f|
+
+			output[f.to_s] = self.send(f).to_s
+
+		end
+
+		YAML.dump({self.class.to_s => output})
+
+	end
+
+	def export_to_fasta
+
+	end
+
+	def has_sequence?
+		self.respond_to? :sequence
+	end
+
+
+
+
 end
+
+

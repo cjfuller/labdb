@@ -15,6 +15,11 @@
 -# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -#++
 
+%li= link_to 'Export YAML', polymorphic_path(@obj, action: "export", exportformat: :yaml)
+
+- if @obj.respond_to? :has_sequence? and @obj.has_sequence? then
+	%li= link_to 'Export FASTA', polymorphic_path(@obj, action: "export", exportformat: :fasta)
+
 - if readonly? then
 	%li= link_to 'Edit', edit_polymorphic_path(@obj)
 

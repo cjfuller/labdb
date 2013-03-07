@@ -15,16 +15,27 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
+require 'exporters'
+
 class Yeaststrain < ActiveRecord::Base
-  attr_accessible :antibiotic, :comments, :date_entered, :entered_by, :genotype, :location, :plasmidnumber, :sequence, :species, :strain_bkg, :strain_number, :strainalias, :notebook
 
-  include LinkableModel
+	Fields = :antibiotic, :comments, :date_entered, :entered_by, :genotype, :location, :plasmidnumber, :sequence, :species, :strain_bkg, :strain_number, :strainalias, :notebook
 
-  def get_linked(property_name)
-  	return nil unless property_name == :plasmidnumber
-  	return nil if self.plasmidnumber.nil?
-  	numbers = self.plasmidnumber.split(",").map! { |e| e.strip }
-  	get_linked_plasmids(numbers)
-  end
+	attr_accessible *Fields
+
+	include Exportable
+	include LinkableModel
+
+	def get_linked(property_name)
+		return nil unless property_name == :plasmidnumber
+		return nil if self.plasmidnumber.nil?
+		numbers = self.plasmidnumber.split(",").map! { |e| e.strip }
+		get_linked_plasmids(numbers)
+	end
+
+		
+	def exportable_fields
+		Fields
+	end
 
 end

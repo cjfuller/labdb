@@ -30,7 +30,6 @@ class ApplicationController < ActionController::Base
   EMAIL_TAG = "email"
 
   def redirect_https
-    puts request.protocol
     redirect_to :protocol => "https://" unless request.protocol == "https://"
   end
 

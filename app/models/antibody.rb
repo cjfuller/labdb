@@ -15,11 +15,24 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
+require 'exporters'
+
 class Antibody < ActiveRecord::Base
-  attr_accessible :ab_number, :alias, :box, :comments, :entered_by, :fluorophore, :good_for_if, :good_for_western, :host, :label, :vendor, :date_entered
+
+	include Exportable
+
+	Fields = [:ab_number, :alias, :box, :comments, :entered_by, :fluorophore, :good_for_if, :good_for_western, :host, :label, :vendor, :date_entered]
+
+	attr_accessible *Fields
 
   def get_linked(propertyname)
   	nil
   end
+
+	def exportable_fields
+		Fields
+	end
+
+
 
 end

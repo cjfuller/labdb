@@ -165,4 +165,12 @@ class YeaststrainsController < ApplicationController
     end
   end
 
+  def export
+
+    @strain = Yeaststrain.find(params[:id])
+
+    send_data(@strain.export_to(params["exportformat"].to_sym), filename: (YEAST_TAG + @strain.strain_number.to_s + ".yml"))
+
+  end
+
 end

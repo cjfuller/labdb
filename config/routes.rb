@@ -34,12 +34,18 @@ Straightlabdb::Application.routes.draw do
       get 'search'
       post 'search'
     end
+    member do
+      get 'export'
+    end
   end
 
   resources :oligos do
     collection do
       get 'search'
       post 'search'
+    end
+    member do
+      get 'export'
     end
   end
 
@@ -48,6 +54,9 @@ Straightlabdb::Application.routes.draw do
       get 'search'
       post 'search'
     end
+    member do
+      get 'export'
+    end
   end
 
   resources :bacteria do
@@ -55,12 +64,18 @@ Straightlabdb::Application.routes.draw do
       get 'search'
       post 'search'
     end
+    member do
+      get 'export'
+    end
   end
 
   resources :yeaststrains do
     collection do
       get 'search'
       post 'search'
+    end
+    member do
+      get 'export'
     end
   end
 

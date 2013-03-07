@@ -169,4 +169,12 @@ class OligosController < ApplicationController
     end
   end
 
+  def export
+
+    @oligo = Oligo.find(params[:id])
+
+    send_data(@oligo.export_to(params["exportformat"].to_sym), filename: (OLIGO_TAG + @oligo.oligo_number.to_s + ".yml"))
+
+  end
+
 end

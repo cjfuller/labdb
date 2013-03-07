@@ -15,11 +15,17 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
+require 'exporters'
+
+
 class Plasmid < ActiveRecord::Base
 
+  include Exportable
   include LinkableModel
 
-  attr_accessible :antibiotic, :concentration, :date_entered, :description, :enteredby, :mapreference, :notebook, :plasmidalias, :plasmidmap, :plasmidnumber, :plasmidsize, :sequence, :strainnumbers, :vector, :verified
+  Fields = :antibiotic, :concentration, :date_entered, :description, :enteredby, :notebook, :plasmidalias, :plasmidmap, :plasmidnumber, :plasmidsize, :sequence, :strainnumbers, :vector, :verified
+
+  attr_accessible *Fields
 
   has_attached_file :plasmidmap, :styles => { :thumb => ["256x256", "png"]}
   validates_attachment :plasmidmap, :content_type => {:content_type=>/image/}
@@ -65,6 +71,11 @@ class Plasmid < ActiveRecord::Base
     return nil if self.strainnumbers.nil?
     numbers = self.strainnumbers.split(",").map! { |e| e.strip }
     get_linked_bacterial_strains(numbers)
+  end
+
+
+  def exportable_fields
+    Fields
   end
 
 end

@@ -170,4 +170,12 @@ class BacteriaController < ApplicationController
     end
   end
 
+  def export
+
+    @bacterium = Bacterium.find(params[:id])
+
+    send_data(@bacterium.export_to(params["exportformat"].to_sym), filename: (BACT_TAG + @bacterium.strain_number.to_s + ".yml"))
+
+  end
+
 end

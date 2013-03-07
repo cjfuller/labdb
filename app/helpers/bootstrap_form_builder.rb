@@ -82,7 +82,7 @@ class BootstrapFormBuilder < ActionView::Helpers::FormBuilder
 
     linked_items = nil
 
-    if not self.object.nil? then
+    if not self.object.nil? and self.object.respond_to? :get_linked then
 
       linked_items = self.object.get_linked(propertyname)
 
