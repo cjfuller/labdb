@@ -15,11 +15,17 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
+require 'object_naming'
+
 class AntibodiesController < ApplicationController
 
-  AB_TAG = "ASAB"
+  OBJ_TAG = Naming.name_for(Antibody)
 
-  @@headings = {:ab_number => "ASAB Number", :date_entered => "Date entered", :label => "Label",
+  def obj_tag
+    OBJ_TAG
+  end
+
+  @@headings = {:ab_number => "#{OBJ_TAG} Number", :date_entered => "Date entered", :label => "Label",
                 :entered_by => "Entered by", :alias => "Alias", :comments => "Description", :host => "Host",
                 :vendor => "Vendor", :good_for_if => "Good for IF?", :good_for_western => "Good for westerns?",
                 :fluorophores => "Fluorophores", :box => "Box"}
@@ -127,7 +133,7 @@ class AntibodiesController < ApplicationController
   def show
     @antibody = Antibody.find(params[:id])
 
-    define_ui_variables(status_text: "#{AB_TAG} #{@antibody.ab_number}", context_specific_buttons: "shared/top_editing_buttons", obj: @antibody, readonly: true)
+    define_ui_variables(status_text: "#{obj_tag} #{@antibody.ab_number}", context_specific_buttons: "shared/top_editing_buttons", obj: @antibody, readonly: true)
 
     respond_to do |format|
       format.html # show.html.erb
@@ -159,7 +165,7 @@ class AntibodiesController < ApplicationController
 
     @antibody = Antibody.find(params[:id])
 
-    define_ui_variables(status_text: "Editing #{AB_TAG} #{@antibody.ab_number}", context_specific_buttons: "shared/top_editing_buttons", obj: @antibody, readonly: false, submit_text: "Update antibody")
+    define_ui_variables(status_text: "Editing #{obj_tag} #{@antibody.ab_number}", context_specific_buttons: "shared/top_editing_buttons", obj: @antibody, readonly: false, submit_text: "Update antibody")
 
   end
 
@@ -223,7 +229,7 @@ class AntibodiesController < ApplicationController
 
     @antibody = Antibody.find(params[:id])
 
-    send_data(@antibody.export_to(params["exportformat"].to_sym), filename: (AB_TAG + @antibody.ab_number.to_s + ".yml"))
+    send_data(@antibody.export_to(params["exportformat"].to_sym), filename: (obj_tag + @antibody.ab_number.to_s + ".yml"))
 
   end
 

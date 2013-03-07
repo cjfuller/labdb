@@ -15,14 +15,20 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
+require 'object_naming'
+
 class PlasmidsController < ApplicationController
 
-  PLASMID_TAG = "ASP"
+  OBJ_TAG = Naming.name_for(Plasmid)
 
-  @@headings = {:plasmidnumber => "ASP Number", :date_entered => "Date entered",
+  def obj_tag
+    OBJ_TAG
+  end
+
+  @@headings = {:plasmidnumber => "#{OBJ_TAG} Number", :date_entered => "Date entered",
     :enteredby => "Entered by", :notebook => "Notebook", :verified => "Sequence verified?",
     :plasmidalias => "Alias", :antibiotic => "Antibiotic resistances", :plasmidsize => "Size",
-    :concentration => "Concentration (ug/mL)", :strainnumbers => "ASBS numbers",
+    :concentration => "Concentration (ug/mL)", :strainnumbers => "#{Naming.name_for(Bacterium)} numbers",
     :description => "Description", :sequence => "Sequence", :vector => "Vector",
     :mapreference => "Map"}
   
@@ -139,7 +145,7 @@ class PlasmidsController < ApplicationController
 
     puts @plasmid.antibiotic
 
-    define_ui_variables(status_text: "#{PLASMID_TAG} #{@plasmid.plasmidnumber}", context_specific_buttons: "shared/top_editing_buttons", obj: @plasmid, readonly: true, show_map: true)
+    define_ui_variables(status_text: "#{obj_tag} #{@plasmid.plasmidnumber}", context_specific_buttons: "shared/top_editing_buttons", obj: @plasmid, readonly: true, show_map: true)
 
     @plasmid.parse_antibiotics
     respond_to do |format|
@@ -172,7 +178,7 @@ class PlasmidsController < ApplicationController
   def edit
     @plasmid = Plasmid.find(params[:id])
 
-    define_ui_variables(status_text: "Editing #{PLASMID_TAG} #{@plasmid.plasmidnumber}", context_specific_buttons: "shared/top_editing_buttons", obj: @plasmid, readonly: false, submit_text: "Update plasmid", show_map: true)
+    define_ui_variables(status_text: "Editing #{obj_tag} #{@plasmid.plasmidnumber}", context_specific_buttons: "shared/top_editing_buttons", obj: @plasmid, readonly: false, submit_text: "Update plasmid", show_map: true)
 
     @plasmid.parse_antibiotics
   end
@@ -240,7 +246,7 @@ class PlasmidsController < ApplicationController
 
     @plasmid = Plasmid.find(params[:id])
 
-    send_data(@plasmid.export_to(params["exportformat"].to_sym), filename: (PLASMID_TAG + @plasmid.plasmidnumber.to_s + ".yml"))
+    send_data(@plasmid.export_to(params["exportformat"].to_sym), filename: (obj_tag + @plasmid.plasmidnumber.to_s + ".yml"))
 
   end
   

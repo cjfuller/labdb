@@ -15,13 +15,19 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
+require 'object_naming'
+
 class YeaststrainsController < ApplicationController
   
-  YEAST_TAG = "ASYS"
+  OBJ_TAG = Naming.name_for(Yeaststrain)
 
-  @@headings = {strain_number: "ASYS Number", date_entered: "Date entered",
+  def obj_tag
+    OBJ_TAG
+  end
+
+  @@headings = {strain_number: "#{OBJ_TAG} Number", date_entered: "Date entered",
                 entered_by: "Entered by", notebook: "Notebook", 
-                comments: "Description", plasmidnumber: "ASP Number", strain_bkg: "Strain background", genotype: "Genotype", antibiotic: "Antibiotics", location: "Location in freezer", sequence: "Sequence", species: "Species", strainalias: "Alias"}
+                comments: "Description", plasmidnumber: "#{Naming.name_for(Plasmid)} Number", strain_bkg: "Strain background", genotype: "Genotype", antibiotic: "Antibiotics", location: "Location in freezer", sequence: "Sequence", species: "Species", strainalias: "Alias"}
 
 
   def self.get_heading(var_name)
@@ -78,7 +84,7 @@ class YeaststrainsController < ApplicationController
   def show
     @yeaststrain = Yeaststrain.find(params[:id])
 
-    define_ui_variables(status_text: "#{YEAST_TAG} #{@yeaststrain.strain_number}", context_specific_buttons: "shared/top_editing_buttons", obj: @yeaststrain, readonly: true)
+    define_ui_variables(status_text: "#{obj_tag} #{@yeaststrain.strain_number}", context_specific_buttons: "shared/top_editing_buttons", obj: @yeaststrain, readonly: true)
 
     respond_to do |format|
       format.html # show.html.erb
@@ -107,7 +113,7 @@ class YeaststrainsController < ApplicationController
   def edit
     @yeaststrain = Yeaststrain.find(params[:id])
 
-    define_ui_variables(status_text: "Editing #{YEAST_TAG} #{@yeaststrain.strain_number}", context_specific_buttons: "shared/top_editing_buttons", obj: @yeaststrain, readonly: false, submit_text: "Update strain")
+    define_ui_variables(status_text: "Editing #{obj_tag} #{@yeaststrain.strain_number}", context_specific_buttons: "shared/top_editing_buttons", obj: @yeaststrain, readonly: false, submit_text: "Update strain")
   end
 
   # POST /yeaststrains
@@ -169,7 +175,7 @@ class YeaststrainsController < ApplicationController
 
     @strain = Yeaststrain.find(params[:id])
 
-    send_data(@strain.export_to(params["exportformat"].to_sym), filename: (YEAST_TAG + @strain.strain_number.to_s + ".yml"))
+    send_data(@strain.export_to(params["exportformat"].to_sym), filename: (obj_tag + @strain.strain_number.to_s + ".yml"))
 
   end
 

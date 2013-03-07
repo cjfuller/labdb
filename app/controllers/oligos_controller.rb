@@ -15,13 +15,17 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
+require 'object_naming'
+
 class OligosController < ApplicationController
 
-  OLIGO_TAG = "ASO"
+  OBJ_TAG = Naming.name_for(Oligo)
 
-  @@headings = {:oligo_number => "ASO Number", :date_entered => "Date entered",
-                :entered_by => "Entered by", :notebook => "Notebook", :oligoalias => "Alias",
-                :purpose => "Description", :sequence => "Sequence", :organism => "Organism", :vendor => "Vendor"}
+  def obj_tag
+    OBJ_TAG
+  end
+
+  @@headings = {:oligo_number => "#{OBJ_TAG} Number", :date_entered => "Date entered", :entered_by => "Entered by", :notebook => "Notebook", :oligoalias => "Alias", :purpose => "Description", :sequence => "Sequence", :organism => "Organism", :vendor => "Vendor"}
 
 
   def self.get_heading(var_name)
@@ -77,7 +81,7 @@ class OligosController < ApplicationController
   def show
     @oligo = Oligo.find(params[:id])
 
-    define_ui_variables(status_text: "#{OLIGO_TAG} #{@oligo.oligo_number}", context_specific_buttons: "shared/top_editing_buttons", obj: @oligo, readonly: true)
+    define_ui_variables(status_text: "#{obj_tag} #{@oligo.oligo_number}", context_specific_buttons: "shared/top_editing_buttons", obj: @oligo, readonly: true)
 
     respond_to do |format|
       format.html # show.html.erb
@@ -109,7 +113,7 @@ class OligosController < ApplicationController
 
     @oligo = Oligo.find(params[:id])
 
-    define_ui_variables(status_text: "Editing #{OLIGO_TAG} #{@oligo.oligo_number}", context_specific_buttons: "shared/top_editing_buttons", obj: @oligo, readonly: false, submit_text: "Update oligo")
+    define_ui_variables(status_text: "Editing #{obj_tag} #{@oligo.oligo_number}", context_specific_buttons: "shared/top_editing_buttons", obj: @oligo, readonly: false, submit_text: "Update oligo")
 
 
   end
@@ -173,7 +177,7 @@ class OligosController < ApplicationController
 
     @oligo = Oligo.find(params[:id])
 
-    send_data(@oligo.export_to(params["exportformat"].to_sym), filename: (OLIGO_TAG + @oligo.oligo_number.to_s + ".yml"))
+    send_data(@oligo.export_to(params["exportformat"].to_sym), filename: (obj_tag + @oligo.oligo_number.to_s + ".yml"))
 
   end
 

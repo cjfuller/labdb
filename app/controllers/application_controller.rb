@@ -17,13 +17,14 @@
 
 require 'psych'
 require 'number_assignment'
+require 'object_naming'
 
 class ApplicationController < ActionController::Base
 
   protect_from_forgery
 
-  DATABASE_SYSTEM_NAME = "StraightlabDB"
-  DATABASE_SYSTEM_SHORT_NAME = "ASDB"
+  DATABASE_SYSTEM_NAME = Naming.name_for("database_full")
+  DATABASE_SYSTEM_SHORT_NAME = Naming.name_for("database_short")
 
   ALLOWED_LABEL = "allowedusers"
   NAME_TAG = "name"

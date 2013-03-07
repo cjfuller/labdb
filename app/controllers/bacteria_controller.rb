@@ -15,13 +15,17 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
+require 'object_naming'
+
 class BacteriaController < ApplicationController
 
-  BACT_TAG = "ASBS"
+  OBJ_TAG = Naming.name_for(Bacterium)
 
-  @@headings = {strain_number: "ASBS Number", date_entered: "Date entered",
-                entered_by: "Entered by", notebook: "Notebook", 
-                comments: "Description", plasmid_number: "ASP Number", species_bkg: "Species and background", genotype: "Genotype"}
+  def obj_tag
+    OBJ_TAG
+  end
+
+  @@headings = {strain_number: "#{OBJ_TAG} Number", date_entered: "Date entered", entered_by: "Entered by", notebook: "Notebook", comments: "Description", plasmid_number: "#{Naming.name_for(Plasmid)} Number", species_bkg: "Species and background", genotype: "Genotype"}
 
 
   def self.get_heading(var_name)
@@ -78,7 +82,7 @@ class BacteriaController < ApplicationController
 
     @bacterium = Bacterium.find(params[:id])
 
-    define_ui_variables(status_text: "#{BACT_TAG} #{@bacterium.strain_number}", context_specific_buttons: "shared/top_editing_buttons", obj: @bacterium, readonly: true)
+    define_ui_variables(status_text: "#{obj_tag} #{@bacterium.strain_number}", context_specific_buttons: "shared/top_editing_buttons", obj: @bacterium, readonly: true)
 
 
     respond_to do |format|
@@ -111,7 +115,7 @@ class BacteriaController < ApplicationController
 
     @bacterium = Bacterium.find(params[:id])
 
-     define_ui_variables(status_text: "Editing #{BACT_TAG} #{@bacterium.strain_number}", context_specific_buttons: "shared/top_editing_buttons", obj: @bacterium, readonly: false, submit_text: "Update strain")
+     define_ui_variables(status_text: "Editing #{obj_tag} #{@bacterium.strain_number}", context_specific_buttons: "shared/top_editing_buttons", obj: @bacterium, readonly: false, submit_text: "Update strain")
 
   end
 
@@ -174,7 +178,7 @@ class BacteriaController < ApplicationController
 
     @bacterium = Bacterium.find(params[:id])
 
-    send_data(@bacterium.export_to(params["exportformat"].to_sym), filename: (BACT_TAG + @bacterium.strain_number.to_s + ".yml"))
+    send_data(@bacterium.export_to(params["exportformat"].to_sym), filename: (obj_tag + @bacterium.strain_number.to_s + params["exportformat"]))
 
   end
 
