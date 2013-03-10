@@ -23,8 +23,6 @@ module Naming
 
 	NAMES = YAML.load(File.read(NAMES_FN))
 
-	puts NAMES
-
 	def self.name_for(objtype)
 		NAMES[objtype.to_s]
 	end

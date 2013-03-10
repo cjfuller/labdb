@@ -117,7 +117,6 @@ class ApplicationController < ActionController::Base
 
     allowed_users.each do |u|
 
-
       if curr_user.email == u[EMAIL_TAG] and curr_user.name == u[NAME_TAG] then
         return true
       end

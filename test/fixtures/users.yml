@@ -1,11 +1,13 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 one:
-  provider: MyString
-  uid: MyString
-  name: MyString
+  provider: google
+  uid: "0001"
+  name: First Last
+  email: example@gmail.com
 
 two:
-  provider: MyString
-  uid: MyString
-  name: MyString
+  provider: google
+  uid: "0002"
+  name: Not Auth
+  email: not_auth@gmail.com

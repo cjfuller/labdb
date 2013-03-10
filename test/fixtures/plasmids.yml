@@ -2,7 +2,7 @@
 
 one:
   plasmidnumber: MyString
-  datefrozen: 2012-05-02
+  date_entered: 2012-05-02
   enteredby: MyString
   notebook: 1
   verified: false
@@ -14,11 +14,10 @@ one:
   description: MyText
   sequence: MyText
   vector: MyString
-  mapreference: MyString
 
 two:
   plasmidnumber: MyString
-  datefrozen: 2012-05-02
+  date_entered: 2012-05-02
   enteredby: MyString
   notebook: 1
   verified: false
@@ -30,4 +29,3 @@ two:
   description: MyText
   sequence: MyText
   vector: MyString
-  mapreference: MyString

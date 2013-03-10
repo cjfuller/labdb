@@ -2,6 +2,8 @@ require 'test_helper'
 
 class YeaststrainsControllerTest < ActionController::TestCase
   setup do
+    log_in(@request.session)
+    @request.env['HTTPS'] = 'on'
     @yeaststrain = yeaststrains(:one)
   end
 

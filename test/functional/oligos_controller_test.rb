@@ -2,6 +2,8 @@ require 'test_helper'
 
 class OligosControllerTest < ActionController::TestCase
   setup do
+    log_in(@request.session)
+    @request.env['HTTPS'] = 'on'
     @oligo = oligos(:one)
   end
 
@@ -18,7 +20,7 @@ class OligosControllerTest < ActionController::TestCase
 
   test "should create oligo" do
     assert_difference('Oligo.count') do
-      post :create, oligo: { alias: @oligo.alias, date_entered: @oligo.date_entered, entered_by: @oligo.entered_by, notebook: @oligo.notebook, oligo_number: @oligo.oligo_number, organism: @oligo.organism, purpose: @oligo.purpose, sequence: @oligo.sequence, vendor: @oligo.vendor }
+      post :create, oligo: { oligoalias: @oligo.oligoalias, date_entered: @oligo.date_entered, entered_by: @oligo.entered_by, notebook: @oligo.notebook, oligo_number: @oligo.oligo_number, organism: @oligo.organism, purpose: @oligo.purpose, sequence: @oligo.sequence, vendor: @oligo.vendor }
     end
 
     assert_redirected_to oligo_path(assigns(:oligo))
@@ -35,7 +37,7 @@ class OligosControllerTest < ActionController::TestCase
   end
 
   test "should update oligo" do
-    put :update, id: @oligo, oligo: { alias: @oligo.alias, date_entered: @oligo.date_entered, entered_by: @oligo.entered_by, notebook: @oligo.notebook, oligo_number: @oligo.oligo_number, organism: @oligo.organism, purpose: @oligo.purpose, sequence: @oligo.sequence, vendor: @oligo.vendor }
+    put :update, id: @oligo, oligo: { oligoalias: @oligo.oligoalias, date_entered: @oligo.date_entered, entered_by: @oligo.entered_by, notebook: @oligo.notebook, oligo_number: @oligo.oligo_number, organism: @oligo.organism, purpose: @oligo.purpose, sequence: @oligo.sequence, vendor: @oligo.vendor }
     assert_redirected_to oligo_path(assigns(:oligo))
   end
 

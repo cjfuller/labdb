@@ -2,26 +2,29 @@
 
 one:
   ab_number: 1
-  host: MyString
-  label: MyString
-  box: MyString
-  alias: MyString
-  fluorophore: MyString
-  entered_by: MyString
-  good_for_if: false
-  good_for_western: false
-  comments: MyText
-  vendor: MyString
+  host: rabbit
+  label: anti-CENP-A
+  box: human
+  alias: human anti-CENP-A
+  fluorophore:
+  entered_by: Colin
+  good_for_if: true
+  good_for_western: true
+  comments: Fix in methanol for best results.
+  vendor: Cocalico/straightlab
+  date_entered: 2013-03-08
 
 two:
-  ab_number: 1
-  host: MyString
-  label: MyString
-  box: MyString
-  alias: MyString
-  fluorophore: MyString
-  entered_by: MyString
-  good_for_if: false
-  good_for_western: false
-  comments: MyText
-  vendor: MyString
+  ab_number: 2
+  host: rabbit
+  label: anti-CENP-C
+  box: human 
+  alias: human anti-CENP-C
+  fluorophore: A647
+  entered_by: Colin
+  good_for_if: true
+  good_for_western: true
+  comments: Use 1:500 for IF
+  vendor: Cocalico/straightlab
+  date_entered: 2013-03-08
+

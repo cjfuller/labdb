@@ -2,48 +2,41 @@ require 'test_helper'
 
 class UsersControllerTest < ActionController::TestCase
   setup do
+    log_in(@request.session)
+    @request.env['HTTPS'] = 'on'
     @user = users(:one)
   end
 
-  test "should get index" do
-    get :index
-    assert_response :success
-    assert_not_nil assigns(:users)
+  test "should not get index" do
+    assert_raises_subcl(StandardError) { get :index }
   end
 
-  test "should get new" do
-    get :new
+  test "should not get new" do
+    assert_raises_subcl(StandardError) { get :new }
     assert_response :success
   end
 
-  test "should create user" do
-    assert_difference('User.count') do
+  test "should not create user" do
+    assert_raises_subcl(StandardError) do
       post :create, user: { name: @user.name, provider: @user.provider, uid: @user.uid }
     end
-
-    assert_redirected_to user_path(assigns(:user))
   end
 
-  test "should show user" do
-    get :show, id: @user
-    assert_response :success
+  test "should not show user" do
+    assert_raises_subcl(StandardError) { get :show, id: @user } 
   end
 
-  test "should get edit" do
-    get :edit, id: @user
-    assert_response :success
+  test "should not get edit" do
+    assert_raises_subcl(StandardError) { get :edit, id: @user }
   end
 
-  test "should update user" do
-    put :update, id: @user, user: { name: @user.name, provider: @user.provider, uid: @user.uid }
-    assert_redirected_to user_path(assigns(:user))
+  test "should not update user" do
+    assert_raises_subcl(StandardError) { put :update, id: @user, user: { name: @user.name, provider: @user.provider, uid: @user.uid } }
   end
 
-  test "should destroy user" do
-    assert_difference('User.count', -1) do
+  test "should not destroy user" do
+    assert_raises_subcl(StandardError) do
       delete :destroy, id: @user
     end
-
-    assert_redirected_to users_path
   end
 end

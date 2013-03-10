@@ -2,7 +2,7 @@
 
 one:
   oligo_number: 1
-  alias: MyString
+  oligoalias: MyString
   date_entered: 2013-02-07
   entered_by: MyString
   notebook: 1
@@ -13,7 +13,7 @@ one:
 
 two:
   oligo_number: 1
-  alias: MyString
+  oligoalias: MyString
   date_entered: 2013-02-07
   entered_by: MyString
   notebook: 1

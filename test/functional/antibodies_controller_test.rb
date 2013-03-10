@@ -2,6 +2,8 @@ require 'test_helper'
 
 class AntibodiesControllerTest < ActionController::TestCase
   setup do
+    log_in(@request.session)
+    @request.env['HTTPS'] = 'on'
     @antibody = antibodies(:one)
   end
 

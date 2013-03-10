@@ -2,6 +2,8 @@ require 'test_helper'
 
 class BacteriaControllerTest < ActionController::TestCase
   setup do
+    log_in(@request.session)
+    @request.env['HTTPS'] = 'on'
     @bacterium = bacteria(:one)
   end
 
