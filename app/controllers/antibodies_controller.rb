@@ -77,8 +77,6 @@ class AntibodiesController < ApplicationController
 
     conditions = generate_goodfor_conditions(search_params)
 
-    puts conditions
-
     mod_search_params = fix_goodfor_params(search_params)
 
     search_params.delete_if { |e| not (mod_search_params.include?(e)) }

@@ -48,4 +48,68 @@ class AntibodiesControllerTest < ActionController::TestCase
 
     assert_redirected_to antibodies_path
   end
+
+  test "should get search" do
+
+    get :search
+    assert_response :success
+
+  end
+
+  test "should do regexp search correctly" do
+
+    get :index, antibody: {alias: "/CENP/"}
+
+    abs= assigns(:antibodies)
+
+    assert_equal(abs.size, 2)
+
+    get :index, antibody: {alias: "/CENP-C/"}
+
+    abs= assigns(:antibodies)
+
+    assert_equal(abs.size, 1)
+
+    get :index, antibody: {alias: "/CENP-F/"}
+
+    abs= assigns(:antibodies)
+
+    assert_equal(abs.size, 0)
+
+  end
+
+  test "should do non-regexp search correctly" do
+
+    get :index, antibody: {alias: "*CENP*"}
+
+    abs= assigns(:antibodies)
+
+    assert_equal(abs.size, 2)
+
+    get :index, antibody: {alias: "CENP"}
+
+    abs= assigns(:antibodies)
+
+    assert_equal(abs.size, 0)
+
+  end
+
+
+  test "should do case-insensitive search correctly" do
+
+    get :index, antibody: {alias: "/cenp-c/"}
+
+    abs= assigns(:antibodies)
+
+    assert_equal(abs.size, 0)
+
+    get :index, antibody: {alias: "/cenp-c/i"}
+
+    abs= assigns(:antibodies)
+
+    assert_equal(abs.size, 1)
+
+  end
+
+
 end
