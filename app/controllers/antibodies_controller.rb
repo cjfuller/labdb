@@ -115,6 +115,7 @@ class AntibodiesController < ApplicationController
 
     if params.has_key?(:antibody) then
       @antibodies = process_search_query(params[:antibody], Antibody)
+      page_size = @antibodies.size
     else
       @antibodies = Antibody.all
     end

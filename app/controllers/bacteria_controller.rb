@@ -65,6 +65,7 @@ class BacteriaController < ApplicationController
 
     if params.has_key?(:bacterium) then
       @bacteria = process_search_query(params[:bacterium], Bacterium)
+      page_size = @bacteria.size
     else
       @bacteria = Bacterium.all
     end

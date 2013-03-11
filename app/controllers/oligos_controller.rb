@@ -65,6 +65,7 @@ class OligosController < ApplicationController
 
     if params.has_key?(:oligo) then
       @oligos = process_search_query(params[:oligo], Oligo)
+      page_size = @oligos.size
     else
       @oligos = Oligo.all
     end

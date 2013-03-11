@@ -68,6 +68,7 @@ class YeaststrainsController < ApplicationController
 
     if params.has_key?(:yeaststrain) then
       @yeaststrains = process_search_query(params[:yeaststrain], Yeaststrain)
+      page_size = @yeaststrains.size
     else
       @yeaststrains = Yeaststrain.all
     end
