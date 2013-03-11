@@ -34,8 +34,6 @@ task :update_bacteria => :environment do
 
   all = Bacterium.all
 
-  puts all.size
-
   bacts.each do |bact|
 
     asbs = node_text(bact, "ASBS_Number")
