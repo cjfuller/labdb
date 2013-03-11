@@ -42,4 +42,8 @@ class Bacterium < ActiveRecord::Base
     self.strain_number
   end
 
+  def info_field
+    self.strainalias
+  end
+
 end
