@@ -108,7 +108,10 @@ class AntibodiesController < ApplicationController
   # GET /antibodies.json
   def index
 
-    define_ui_variables(status_text: "Antibodies")
+    define_ui_variables(status_text: "Antibodies", context_specific_buttons: "shared/top_pagination_buttons")
+
+    page_size = 250
+    params[:page] = 1 unless params[:page]
 
     if params.has_key?(:antibody) then
       @antibodies = process_search_query(params[:antibody], Antibody)
@@ -117,6 +120,8 @@ class AntibodiesController < ApplicationController
     end
 
     @antibodies.sort! { |e0, e1| e0.ab_number.to_i <=> e1.ab_number.to_i }
+
+    @antibodies = Kaminari.paginate_array(@antibodies).page(params[:page]).per(page_size)
 
     define_table_view_vars
 

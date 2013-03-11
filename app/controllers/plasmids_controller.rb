@@ -118,14 +118,14 @@ class PlasmidsController < ApplicationController
   # GET /plasmids.json
   def index
 
-    define_ui_variables(status_text: "Plasmids")
+    define_ui_variables(status_text: "Plasmids", context_specific_buttons: "shared/top_pagination_buttons")
 
     page_size = 250
     params[:page] = 1 unless params[:page]
 
     if params.has_key?(:plasmid) then
       @plasmids = process_search_query(params[:plasmid], Plasmid)
-      page_size = nil
+      page_size = @plasmids.size
     else
       @plasmids = Plasmid.all
     end
@@ -133,7 +133,7 @@ class PlasmidsController < ApplicationController
     #NB: not doing a Plasmid.all order: "plasmidnumber" because this sorts them as strings
     @plasmids.sort! { |e0, e1| e0.plasmidnumber.to_i <=> e1.plasmidnumber.to_i }
 
-    Kaminari.paginate_array(@plasmids).page(params[:page]).per(page_size)
+    @plasmids = Kaminari.paginate_array(@plasmids).page(params[:page]).per(page_size)
 
     define_table_view_vars
 

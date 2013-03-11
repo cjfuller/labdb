@@ -61,7 +61,10 @@ class YeaststrainsController < ApplicationController
   # GET /yeaststrains.json
   def index
 
-    define_ui_variables(status_text: "Yeast strains")
+    define_ui_variables(status_text: "Yeast strains", context_specific_buttons: "shared/top_pagination_buttons")
+
+    page_size = 250
+    params[:page] = 1 unless params[:page]
 
     if params.has_key?(:yeaststrain) then
       @yeaststrains = process_search_query(params[:yeaststrain], Yeaststrain)
@@ -70,6 +73,8 @@ class YeaststrainsController < ApplicationController
     end
 
     @yeaststrains.sort! { |e0, e1| e0.strain_number.to_i <=> e1.strain_number.to_i }
+
+    @yeaststrains = Kaminari.paginate_array(@yeaststrains).page(params[:page]).per(page_size)
 
     define_table_view_vars
 

@@ -58,7 +58,10 @@ class BacteriaController < ApplicationController
   # GET /bacteria.json
   def index
 
-    define_ui_variables(status_text: "Bacterial strains")
+    define_ui_variables(status_text: "Bacterial strains", context_specific_buttons: "shared/top_pagination_buttons")
+
+    page_size = 250
+    params[:page] = 1 unless params[:page]
 
     if params.has_key?(:bacterium) then
       @bacteria = process_search_query(params[:bacterium], Bacterium)
@@ -67,6 +70,8 @@ class BacteriaController < ApplicationController
     end
 
     @bacteria.sort! { |e0, e1| e0.strain_number.to_i <=> e1.strain_number.to_i }
+
+    @bacteria = Kaminari.paginate_array(@bacteria).page(params[:page]).per(page_size)
 
     define_table_view_vars
 

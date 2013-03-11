@@ -58,7 +58,10 @@ class OligosController < ApplicationController
   # GET /oligos.json
   def index
 
-    define_ui_variables(status_text: "Oligos")
+    define_ui_variables(status_text: "Oligos", context_specific_buttons: "shared/top_pagination_buttons")
+
+    page_size = 250
+    params[:page] = 1 unless params[:page]
 
     if params.has_key?(:oligo) then
       @oligos = process_search_query(params[:oligo], Oligo)
@@ -67,6 +70,8 @@ class OligosController < ApplicationController
     end
 
     @oligos.sort! { |e0, e1| e0.oligo_number.to_i <=> e1.oligo_number.to_i }
+
+    @oligos = Kaminari.paginate_array(@oligos).page(params[:page]).per(page_size)
 
     define_table_view_vars
 

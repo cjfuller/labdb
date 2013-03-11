@@ -15,23 +15,12 @@
 -# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -#++
 
-= page_entries_info @table_objects
+- prev_button = link_to_previous_page @table_objects, 'Previous page', params
+- next_button = link_to_next_page @table_objects, 'Next page', params
 
-%table{class: "table table-striped table-condensed"}
-  %thead
-    %tr
-      - @table_columns.each do |tc|
-        %th= @controller.get_heading(tc)
-
-  %tbody
-    - @table_objects.each do |obj|
-      %tr
-        
-        - @table_columns.each do |tc|
-          %td= obj.send(tc)
-        
-        %td= link_to 'Show', obj, class: "btn btn-mini btn-info"
-        %td= link_to 'Edit', edit_polymorphic_path(obj), class: "btn btn-mini btn-info"
-        %td= link_to 'Destroy', obj, confirm: 'Delete this entry?  Are you sure?', method: :delete, class: "btn btn-mini btn-danger"
-
-= paginate @table_objects
+- if prev_button then
+	%li.divider-vertical
+	%li= prev_button
+- if next_button then
+	%li.divider-vertical
+	%li= next_button
