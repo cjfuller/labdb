@@ -25,7 +25,7 @@ class BacteriaController < ApplicationController
     OBJ_TAG
   end
 
-  @@headings = {strain_number: "#{OBJ_TAG} Number", date_entered: "Date entered", entered_by: "Entered by", notebook: "Notebook", comments: "Description", plasmid_number: "#{Naming.name_for(Plasmid)} Number", species_bkg: "Species and background", genotype: "Genotype"}
+  @@headings = {strain_number: "#{OBJ_TAG} Number", date_entered: "Date entered", entered_by: "Entered by", notebook: "Notebook", comments: "Description", plasmid_number: "#{Naming.name_for(Plasmid)} Number", species_bkg: "Species and background", genotype: "Genotype", sequence: "Sequence", strainalias: "Alias"}
 
 
   def self.get_heading(var_name)
@@ -47,7 +47,7 @@ class BacteriaController < ApplicationController
 
   def define_table_view_vars
 
-    @table_columns = [:strain_number, :date_entered, :entered_by, :species_bkg, :plasmid_number]
+    @table_columns = [:strain_number, :date_entered, :entered_by, :strainalias, :plasmid_number]
     @controller = BacteriaController
     @table_objects = @bacteria
 

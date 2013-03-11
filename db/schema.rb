@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130302232052) do
+ActiveRecord::Schema.define(:version => 20130311191843) do
 
   create_table "antibodies", :force => true do |t|
     t.integer  "ab_number"
@@ -41,6 +41,8 @@ ActiveRecord::Schema.define(:version => 20130302232052) do
     t.string   "plasmid_number"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
+    t.text     "sequence"
+    t.string   "strainalias"
   end
 
   create_table "oligos", :force => true do |t|

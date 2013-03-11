@@ -19,7 +19,7 @@ require 'exporters'
 
 
 class Bacterium < ActiveRecord::Base
-  Fields = [:comments, :date_entered, :entered_by, :genotype, :notebook, :plasmid_number, :species_bkg, :strain_number]
+  Fields = [:comments, :date_entered, :entered_by, :genotype, :notebook, :plasmid_number, :species_bkg, :strain_number, :sequence, :strainalias]
 
   attr_accessible *Fields
 
