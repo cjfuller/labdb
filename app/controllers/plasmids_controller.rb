@@ -121,6 +121,7 @@ class PlasmidsController < ApplicationController
     define_ui_variables(status_text: "Plasmids")
 
     page_size = 250
+    params[:page] = 1 unless params[:page]
 
     if params.has_key?(:plasmid) then
       @plasmids = process_search_query(params[:plasmid], Plasmid)
