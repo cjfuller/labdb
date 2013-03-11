@@ -1,4 +1,5 @@
 require 'test_helper'
+require 'yaml'
 
 class AntibodiesControllerTest < ActionController::TestCase
   setup do
@@ -108,6 +109,16 @@ class AntibodiesControllerTest < ActionController::TestCase
     abs= assigns(:antibodies)
 
     assert_equal(abs.size, 1)
+
+  end
+
+  test "should export to yaml" do
+
+    get :export, exportformat: "yml", id: @antibody
+
+    assert_nothing_raised do
+      YAML.load(response.body)
+    end
 
   end
 
