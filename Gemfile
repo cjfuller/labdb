@@ -26,3 +26,5 @@ gem 'omniauth'
 gem 'omniauth-openid'
 
 gem 'sass'
+
+gem 'kaminari'
