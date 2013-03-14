@@ -5,4 +5,4 @@ branches:
   only:
     - testing
 before_script:
-	- psql -c 'create database test;' -U postgres
+  - psql -c 'create database test;' -U postgres
