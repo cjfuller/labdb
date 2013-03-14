@@ -17,11 +17,11 @@
 
 =  render :partial => "shared/subnavbar"
 
-- keys = %i[strain_number strainalias species_bkg date_entered]
+- keys = [:strain_number, :strainalias, :species_bkg, :date_entered]
 = f.row([3,3,3,3], keys, BacteriaController.headings_for(keys), {}, readonly_for(keys), {}) 
 
 
-- keys = %i[entered_by notebook plasmid_number]
+- keys = [:entered_by, :notebook, :plasmid_number]
 = f.row([3,3,3,3], keys, BacteriaController.headings_for(keys), {}, readonly_for(keys), {})
 
 

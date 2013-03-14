@@ -17,14 +17,14 @@
 
 =  render :partial => "shared/subnavbar"
 
-- keys = %i[strain_number strainalias date_entered]
+- keys = [:strain_number, :strainalias, :date_entered]
 = f.row([3,6,3], keys, YeaststrainsController.headings_for(keys), {}, readonly_for(keys), {}) 
 
 
-- keys = %i[entered_by notebook location plasmidnumber]
+- keys = [:entered_by, :notebook, :location, :plasmidnumber]
 = f.row([3,3,3,3], keys, YeaststrainsController.headings_for(keys), {}, readonly_for(keys), {})
 
-- keys = %i[antibiotic species strain_bkg]
+- keys = [:antibiotic, :species, :strain_bkg]
 = f.row([3,3,6], keys, YeaststrainsController.headings_for(keys), {}, readonly_for(keys), {})
 
 .row-fluid#description-row

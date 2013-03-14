@@ -17,11 +17,11 @@
 
 =  render :partial => "shared/subnavbar"
 
-- keys = %i[oligo_number oligoalias date_entered]
+- keys = [:oligo_number, :oligoalias, :date_entered]
 = f.row([3,6,3], keys, OligosController.headings_for(keys), {}, readonly_for(keys), {}) 
 
 
-- keys = %i[entered_by notebook vendor organism]
+- keys = [:entered_by, :notebook, :vendor, :organism]
 = f.row([3,3,3,3], keys, OligosController.headings_for(keys), {}, readonly_for(keys), {})
 
 
