@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/cjfuller/labdb.png)](https://travis-ci.org/cjfuller/labdb)
+
 #Introduction
 
 Labdb is a laboratory database system for simply and cleanly tracking objects like plasmids, bacterial strains, and the like.  The system is written using ruby on rails; users interact with it through a browser.

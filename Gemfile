@@ -15,6 +15,10 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
 end
 
+group :test do
+	gem 'rake'
+end
+
 gem 'jquery-rails'
 
 gem 'paperclip', '~> 3.0'
