@@ -15,11 +15,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-# SQLite version 3.x
-#   gem install sqlite3
-#
-#   Ensure the SQLite 3 gem is defined in your Gemfile
-#   gem 'sqlite3'
 development:
   adapter: postgresql
   database: development
@@ -34,6 +29,7 @@ test:
   database: test
   pool: 5
   timeout: 5000
+  username: postgres
 
 
 production:
