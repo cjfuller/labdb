@@ -104,7 +104,7 @@ class BootstrapFormBuilder < ActionView::Helpers::FormBuilder
 
       html << content_tag(:div, content.html_safe, class: "span#{span_size}")
     else
-      html << text_field(propertyname, :disabled=>readonly, :class=> "span#{span_size}", :size=> nil)
+      html << text_field(propertyname, readonly: readonly, class: "span#{span_size}", size: nil)
     end
 
     html << '</div>'
