@@ -18,14 +18,14 @@
 =  render :partial => "shared/subnavbar"
 
 .row-fluid
-	- keys = %i[plasmidnumber]
+	- keys = [:plasmidnumber]
 	= f.span_series([2], keys, PlasmidsController.headings_for(keys), {plasmidnumber: true}, readonly_for(keys), {})
 	.span6
 
-- keys = %i[enteredby notebook verified date_entered]
+- keys = [:enteredby, :notebook, :verified, :date_entered]
 = f.row([3,3,3,3], keys, PlasmidsController.headings_for(keys), {}, readonly_for(keys), {verified: true})
 
-- keys = %i[plasmidalias vector strainnumbers]
+- keys = [:plasmidalias, :vector, :strainnumbers]
 = f.row([6,3,3], keys, PlasmidsController.headings_for(keys), {plasmidalias: true}, readonly_for(keys), {})
 
 .row-fluid
@@ -39,7 +39,7 @@
 						= Plasmid.get_antibiotics[k]
 						= f.check_box(Plasmid.get_antibiotics[k].to_sym, disabled: readonly?)
 
-	- keys = %i[concentration plasmidsize]
+	- keys = [:concentration, :plasmidsize]
 
 	= f.span_series([3,3], keys, PlasmidsController.headings_for(keys), {}, {concentration: readonly?, plasmidsize: true}, {})
 

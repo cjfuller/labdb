@@ -20,4 +20,6 @@
 /config/*.key
 /config/*.pem
 
+# ignore rubinius files
+/.rbx
 

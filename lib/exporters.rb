@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-require 'yaml'
+require 'psych'
 require 'object_naming'
 
 module Exportable
@@ -56,11 +56,13 @@ module Exportable
 
 		fields.each do |f|
 
-			output[f.to_s] = self.send(f).to_s
+			fe = f.to_s.encode('utf-8')
+
+			output[fe] = self.send(f).to_s.encode('utf-8')
 
 		end
 
-		YAML.dump({self.class.to_s => output})
+		Psych.dump({self.class.to_s.encode('utf-8') => output})
 
 	end
 
