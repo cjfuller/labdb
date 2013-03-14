@@ -2,20 +2,20 @@
 
 one:
   strain_number: 1
-  species_bkg: MyString
+  species_bkg: E. coli DH5a
   date_entered: 2013-03-02
-  entered_by: MyString
+  entered_by: Colin
   notebook: 1
-  genotype: MyText
-  comments: MyText
-  plasmid_number: MyString
+  genotype: 
+  comments: strain 1
+  plasmid_number: 2
 
 two:
   strain_number: 1
-  species_bkg: MyString
+  species_bkg: E. coli BL21
   date_entered: 2013-03-02
-  entered_by: MyString
+  entered_by: Colin
   notebook: 1
-  genotype: MyText
-  comments: MyText
-  plasmid_number: MyString
+  genotype:
+  comments: strain 2
+  plasmid_number: 1
