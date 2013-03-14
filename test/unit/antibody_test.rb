@@ -1,4 +1,5 @@
 require 'test_helper'
+require 'object_naming'
 
 class AntibodyTest < ActiveSupport::TestCase
 
@@ -22,7 +23,7 @@ class AntibodyTest < ActiveSupport::TestCase
 
 	test "should name itself correctly" do
 
-		assert_equal(antibodies(:one).name_str, "ASAB1")
+		assert_equal("#{Naming.name_for(Antibody)}1", antibodies(:one).name_str)
 
 	end
 
@@ -30,7 +31,7 @@ class AntibodyTest < ActiveSupport::TestCase
 
 		e_p = antibodies(:one).get_export_params("yml")
 
-		assert_equal(e_p[:filename], "ASAB1.yml")
+		assert_equal("#{Naming.name_for(Antibody)}1.yml", e_p[:filename])
 
 	end
 

@@ -101,9 +101,6 @@ class PlasmidsController < ApplicationController
 
     search_params.delete_if { |e| not (mod_search_params.include?(e)) }
 
-    puts antibiotics_string
-    puts search_params
-
     conditions = {}
 
     if antibiotics_string != "" then
@@ -149,8 +146,6 @@ class PlasmidsController < ApplicationController
   def show
 
     @plasmid = Plasmid.find(params[:id])
-
-    puts @plasmid.antibiotic
 
     define_ui_variables(status_text: "#{obj_tag} #{@plasmid.plasmidnumber}", context_specific_buttons: "shared/top_editing_buttons", obj: @plasmid, readonly: true, show_map: true)
 
