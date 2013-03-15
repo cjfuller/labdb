@@ -15,30 +15,18 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-def node_text(plas, name)
 
-  ch = plas.xpath(name)[0].child
+require 'psych'
+require 'importers'
 
-  return "".encode('utf-8') unless ch
+desc "Import yaml formatted entries."
+task :import_yml, [:import_fn] => :environment do |t, args|
 
-  ch.text.encode('utf-8')
+	yaml_str = File.read(args.import_fn)
 
+	objs = Importers.import_from_yaml(yaml_str)
+
+	objs.each { |o| o.save }
+	
 end
 
-def parse_date(date)
-
-  if date.length > 0 then
-    if /\d{1,2}\/\d{1,2}\/\d{4}/.match(date) then
-      date=Date.strptime(date, '%m/%d/%Y')
-    elsif /\d{1,2}-\d{1,2}-\d{4}/.match(date) then
-      date=Date.strptime(date, '%m-%d-%Y')
-    elsif /\d{4}-\d{1,2}-\d{1,2}/.match(date) then
-      date=Date.strptime(date, '%Y-%m-%d')
-    elsif /\d{4}\/\d{1,2}\/\d{1,2}/.match(date) then
-      date=Date.strptime(date, '%Y/%m/%d')
-    end
-  end
-
-  date
-
-end

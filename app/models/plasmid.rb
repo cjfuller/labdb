@@ -17,7 +17,6 @@
 
 require 'exporters'
 
-
 class Plasmid < ActiveRecord::Base
 
   include Exportable

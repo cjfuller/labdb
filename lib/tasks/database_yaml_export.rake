@@ -15,30 +15,32 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-def node_text(plas, name)
+desc "Export all databases to yaml format."
+task :export_databases_to_yaml, [:export_dir] => :environment do |t, args|
 
-  ch = plas.xpath(name)[0].child
+	DATABASES = [Plasmid, Oligo, Bacterium, Antibody, Yeaststrain]
+	EXT = ".yml"
 
-  return "".encode('utf-8') unless ch
+	DATABASES.each do |db|
 
-  ch.text.encode('utf-8')
+		objs = db.all
 
-end
+		objs.sort do |a,b|
+			a.number_field.to_i <=> b.number_field.to_i
+		end
 
-def parse_date(date)
+		output_fn = File.expand_path(db.to_s + EXT, args.export_dir)
 
-  if date.length > 0 then
-    if /\d{1,2}\/\d{1,2}\/\d{4}/.match(date) then
-      date=Date.strptime(date, '%m/%d/%Y')
-    elsif /\d{1,2}-\d{1,2}-\d{4}/.match(date) then
-      date=Date.strptime(date, '%m-%d-%Y')
-    elsif /\d{4}-\d{1,2}-\d{1,2}/.match(date) then
-      date=Date.strptime(date, '%Y-%m-%d')
-    elsif /\d{4}\/\d{1,2}\/\d{1,2}/.match(date) then
-      date=Date.strptime(date, '%Y/%m/%d')
-    end
-  end
+		File.open(output_fn, 'w') do |f_out|
 
-  date
+			objs.each do |obj|
 
+				f_out.puts obj.export_to_yaml
+
+			end
+
+		end
+
+	end
+	
 end
