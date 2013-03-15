@@ -1,29 +1,29 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 one:
-  strainalias: MyString
-  antibiotic: MyString
-  plasmidnumber: MyString
+  strainalias: leu-/ura- h-
+  antibiotic:
+  plasmidnumber: 2
   strain_number: 1
-  strain_bkg: MyString
+  strain_bkg: 972 h-
   date_entered: 2013-03-02
-  sequence: MyText
-  entered_by: MyString
-  comments: MyText
-  genotype: MyText
-  location: MyString
-  species: MyString
+  sequence: AATAAGAGAGC
+  entered_by: Colin
+  comments: 
+  genotype: leu1- ura4-
+  location: -80 S2R2
+  species: pombe
 
 two:
-  strainalias: MyString
-  antibiotic: MyString
-  plasmidnumber: MyString
-  strain_number: 1
-  strain_bkg: MyString
+  strainalias: leu-/ura-/ade- h-
+  antibiotic:
+  plasmidnumber:
+  strain_number: 2
+  strain_bkg: 972 h-
   date_entered: 2013-03-02
-  sequence: MyText
-  entered_by: MyString
-  comments: MyText
-  genotype: MyText
-  location: MyString
-  species: MyString
+  sequence:
+  entered_by: Colin
+  comments: 
+  genotype: leu1- ura4- ade1-
+  location: -80 S2R2
+  species: pombe

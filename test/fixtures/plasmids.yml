@@ -1,31 +1,31 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 one:
-  plasmidnumber: MyString
+  plasmidnumber: 1
   date_entered: 2012-05-02
-  enteredby: MyString
+  enteredby: Colin
   notebook: 1
-  verified: false
-  plasmidalias: MyString
-  antibiotic: MyString
+  verified: true
+  plasmidalias: CENP-I
+  antibiotic: "carb,kan,gent"
   plasmidsize: 1
   concentration: 1.5
-  strainnumbers: MyString
-  description: MyText
-  sequence: MyText
-  vector: MyString
+  strainnumbers: 2
+  description: CENP-I plasmid
+  sequence: ATTTGAGAGAAA
+  vector: pCS2
 
 two:
-  plasmidnumber: MyString
+  plasmidnumber: 2
   date_entered: 2012-05-02
-  enteredby: MyString
+  enteredby: Colin
   notebook: 1
   verified: false
-  plasmidalias: MyString
-  antibiotic: MyString
+  plasmidalias: CENP-K
+  antibiotic: carb
   plasmidsize: 1
   concentration: 1.5
-  strainnumbers: MyString
-  description: MyText
-  sequence: MyText
-  vector: MyString
+  strainnumbers: 1
+  description: CENP-K plasmid
+  sequence: GATTTAGAGCC
+  vector: pCS2

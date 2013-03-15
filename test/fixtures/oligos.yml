@@ -2,22 +2,22 @@
 
 one:
   oligo_number: 1
-  oligoalias: MyString
+  oligoalias: forward
   date_entered: 2013-02-07
-  entered_by: MyString
+  entered_by: Colin
   notebook: 1
-  vendor: MyString
-  organism: MyString
-  sequence: MyText
-  purpose: MyText
+  vendor:
+  organism: X. laevis
+  sequence: ATGGAGGAGAGGCCACCACAGAAAAGCC
+  purpose: cloning
 
 two:
   oligo_number: 1
-  oligoalias: MyString
+  oligoalias: reverse
   date_entered: 2013-02-07
-  entered_by: MyString
+  entered_by: Colin
   notebook: 1
-  vendor: MyString
-  organism: MyString
-  sequence: MyText
-  purpose: MyText
+  vendor:
+  organism: X. laevis
+  sequence: GTGACCTGCTCTCGTCAAAGTCTTGA
+  purpose: cloning

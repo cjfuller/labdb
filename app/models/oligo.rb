@@ -26,6 +26,9 @@ class Oligo < ActiveRecord::Base
 
   attr_accessible *Fields
 
+  def get_linked(propertyname)
+  	nil
+  end
   	
 	def exportable_fields
 		Fields
