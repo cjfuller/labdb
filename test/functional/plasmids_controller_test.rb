@@ -48,4 +48,99 @@ class PlasmidsControllerTest < ActionController::TestCase
 
     assert_redirected_to plasmids_path
   end
+
+  test "should get search" do
+
+    get :search
+    assert_response :success
+
+  end
+
+  test "should do regexp search correctly" do
+
+    get :index, plasmid: {plasmidalias: "/CENP/"}
+
+    obj= assigns(:plasmids)
+
+    assert_equal(obj.size, 2)
+
+    get :index, plasmid: {plasmidalias: "/CENP-I/"}
+
+    obj= assigns(:plasmids)
+
+    assert_equal(obj.size, 1)
+
+    get :index, plasmid: {plasmidalias: "/CENP-F/"}
+
+    obj= assigns(:plasmids)
+
+    assert_equal(obj.size, 0)
+
+  end
+
+  test "should do non-regexp search correctly" do
+
+    get :index, plasmid: {plasmidalias: "*CENP*"}
+
+    obj= assigns(:plasmids)
+
+    assert_equal(obj.size, 2)
+
+    get :index, plasmid: {plasmidalias: "CENP"}
+
+    obj= assigns(:plasmids)
+
+    assert_equal(obj.size, 0)
+
+  end
+
+
+  test "should do case-insensitive search correctly" do
+
+    get :index, plasmid: {plasmidalias: "/cenp-i/"}
+
+    obj= assigns(:plasmids)
+
+    assert_equal(obj.size, 0)
+
+    get :index, plasmid: {plasmidalias: "/cenp-i/i"}
+
+    obj= assigns(:plasmids)
+
+    assert_equal(obj.size, 1)
+
+  end
+
+  test "should do antibiotic search correctly" do
+
+    get :index, plasmid: {carb: "1"}
+
+    obj = assigns(:plasmids)
+
+    assert_equal(obj.size, 2)
+
+    get :index, plasmid: {gent: "1"}
+
+    obj = assigns(:plasmids)
+
+    assert_equal(obj.size, 1)
+
+    get :index, plasmid: {strep: "1"}
+
+    obj = assigns(:plasmids)
+
+    assert_equal(obj.size, 0)
+
+  end
+
+  test "should export to yaml" do
+
+    get :export, exportformat: "yml", id: @plasmid
+
+    assert_nothing_raised do
+      YAML.load(response.body)
+    end
+
+  end
+
 end

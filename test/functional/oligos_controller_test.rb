@@ -48,4 +48,78 @@ class OligosControllerTest < ActionController::TestCase
 
     assert_redirected_to oligos_path
   end
+
+
+  test "should get search" do
+
+    get :search
+    assert_response :success
+
+  end
+
+  test "should do regexp search correctly" do
+
+    get :index, oligo: {organism: "/X. laevis/"}
+
+    obj= assigns(:oligos)
+
+    assert_equal(obj.size, 2)
+
+    get :index, oligo: {oligoalias: "/forward/"}
+
+    obj= assigns(:oligos)
+
+    assert_equal(obj.size, 1)
+
+    get :index, oligo: {organism: "/X. tropicalis/"}
+
+    obj= assigns(:oligos)
+
+    assert_equal(obj.size, 0)
+
+  end
+
+  test "should do non-regexp search correctly" do
+
+    get :index, oligo: {organism: "*laevis*"}
+
+    obj= assigns(:oligos)
+
+    assert_equal(obj.size, 2)
+
+    get :index, oligo: {organism: "laevis"}
+
+    obj= assigns(:oligos)
+
+    assert_equal(obj.size, 0)
+
+  end
+
+
+  test "should do case-insensitive search correctly" do
+
+    get :index, oligo: {oligoalias: "/FORWARD/"}
+
+    obj= assigns(:oligos)
+
+    assert_equal(obj.size, 0)
+
+    get :index, oligo: {oligoalias: "/FORWARD/i"}
+
+    obj= assigns(:oligos)
+
+    assert_equal(obj.size, 1)
+
+  end
+
+  test "should export to yaml" do
+
+    get :export, exportformat: "yml", id: @oligo
+
+    assert_nothing_raised do
+      YAML.load(response.body)
+    end
+
+  end
+
 end
