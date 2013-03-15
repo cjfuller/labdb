@@ -48,4 +48,78 @@ class YeaststrainsControllerTest < ActionController::TestCase
 
     assert_redirected_to yeaststrains_path
   end
+
+  test "should get search" do
+
+    get :search
+    assert_response :success
+
+  end
+
+  test "should do regexp search correctly" do
+
+    get :index, yeaststrain: {strainalias: "/leu-/"}
+
+    obj= assigns(:yeaststrains)
+
+    assert_equal(obj.size, 2)
+
+    get :index, yeaststrain: {strainalias: "/ade-/"}
+
+    obj= assigns(:yeaststrains)
+
+    assert_equal(obj.size, 1)
+
+    get :index, yeaststrain: {strainalias: "/lys-/"}
+
+    obj= assigns(:yeaststrains)
+
+    assert_equal(obj.size, 0)
+
+  end
+
+  test "should do non-regexp search correctly" do
+
+    get :index, yeaststrain: {strainalias: "*leu*"}
+
+    obj= assigns(:yeaststrains)
+
+    assert_equal(obj.size, 2)
+
+    get :index, yeaststrain: {strainalias: "leu"}
+
+    obj= assigns(:yeaststrains)
+
+    assert_equal(obj.size, 0)
+
+  end
+
+
+  test "should do case-insensitive search correctly" do
+
+    get :index, yeaststrain: {strainalias: "/LEU/"}
+
+    obj= assigns(:yeaststrains)
+
+    assert_equal(obj.size, 0)
+
+    get :index, yeaststrain: {strainalias: "/ADE/i"}
+
+    obj= assigns(:yeaststrains)
+
+    assert_equal(obj.size, 1)
+
+  end
+
+  test "should export to yaml" do
+
+    get :export, exportformat: "yml", id: @yeaststrain
+
+    assert_nothing_raised do
+      YAML.load(response.body)
+    end
+
+  end
+
+
 end
