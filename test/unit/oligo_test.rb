@@ -23,7 +23,7 @@ class OligoTest < ActiveSupport::TestCase
 
 	test "should name itself correctly" do
 
-		assert_equal("ASO1", oligos(:one).name_str)
+		assert_equal("#{Naming.name_for(Oligo)}1", oligos(:one).name_str)
 
 	end
 

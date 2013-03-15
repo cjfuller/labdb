@@ -3,11 +3,11 @@
 one:
   strainalias: leu-/ura- h-
   antibiotic:
-  plasmidnumber:
+  plasmidnumber: 2
   strain_number: 1
   strain_bkg: 972 h-
   date_entered: 2013-03-02
-  sequence:
+  sequence: AATAAGAGAGC
   entered_by: Colin
   comments: 
   genotype: leu1- ura4-

@@ -7,7 +7,7 @@ one:
   notebook: 1
   verified: true
   plasmidalias: CENP-I
-  antibiotic: carb
+  antibiotic: "carb,kan,gent"
   plasmidsize: 1
   concentration: 1.5
   strainnumbers: 2

@@ -1,5 +1,4 @@
 require 'test_helper'
-require 'object_naming'
 
 class AntibodyTest < ActiveSupport::TestCase
 
