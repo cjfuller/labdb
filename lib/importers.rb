@@ -15,32 +15,28 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-desc "Export all databases to yaml format."
-task :export_databases_to_yaml, [:export_dir] => :environment do |t, args|
 
-	DATABASES = [Plasmid, Oligo, Bacterium, Antibody, Yeaststrain]
-	EXT = ".yml"
+module Importers
 
-	DATABASES.each do |db|
+	def self.import_from_yaml(yaml_str)
 
-		objs = db.all
+		loaded = Psych.load_stream(yaml_str)
 
-		objs.sort do |a,b|
-			a.number_field.to_i <=> b.number_field.to_i
-		end
+		objs = []
 
-		output_fn = File.expand_path(db.to_s + EXT, args.export_dir)
+		loaded.each do |obj_info|
 
-		File.open(output_fn, 'w') do |f_out|
+			classname = obj_info.keys[0]
 
-			objs.each do |obj|
+			params = obj_info[classname]
 
-				f_out.puts obj.export_to_yaml
-
-			end
+			objs << Kernel.const_get(classname).new(params)
 
 		end
+
+		objs
 
 	end
-	
+
 end
+
