@@ -19,9 +19,9 @@ def node_text(plas, name)
 
   ch = plas.xpath(name)[0].child
 
-  return "" unless ch
+  return "".encode('utf-8') unless ch
 
-  ch.text
+  ch.text.encode('utf-8')
 
 end
 

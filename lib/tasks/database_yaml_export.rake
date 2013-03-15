@@ -15,10 +15,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-DATABASES = [Plasmid, Oligo, Bacteria, Antibody, Yeast]
-
 desc "Export all databases to yaml format."
 task :export_databases_to_yaml, [:export_dir] => :environment do |t, args|
+
+	DATABASES = [Plasmid, Oligo, Bacterium, Antibody, Yeaststrain]
+	EXT = ".yml"
+
 
 	DATABASES.each do |db|
 
@@ -28,7 +30,7 @@ task :export_databases_to_yaml, [:export_dir] => :environment do |t, args|
 			a.number_field.to_i <=> b.number_field.to_i
 		end
 
-		output_fn = File.expand_path(db.to_s, args.export_dir)
+		output_fn = File.expand_path(db.to_s + EXT, args.export_dir)
 
 		File.open(output_fn, 'w') do |f_out|
 
