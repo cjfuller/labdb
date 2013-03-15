@@ -1,0 +1,11 @@
+language: ruby
+rvm:
+  - 2.0.0
+  - 1.9.3
+  - rbx-19mode
+branches:
+  only:
+    - testing
+before_script:
+  - psql -c 'create database test;' -U postgres
+  - rake db:reset
