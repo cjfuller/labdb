@@ -51,6 +51,8 @@ module Importers
 
 		lines.each do |l|
 
+			l.map! { |e| e.nil? ? "" : e }
+
 			fields = l.map(&:strip)
 
 			params = {}
