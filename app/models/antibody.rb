@@ -34,7 +34,11 @@ class Antibody < ActiveRecord::Base
 	end
 
 	def number_field
-		self.ab_number
+		self.send(number_field_name)
+	end
+
+	def number_field_name
+		:ab_number
 	end
 
 end

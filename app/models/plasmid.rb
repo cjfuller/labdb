@@ -77,11 +77,19 @@ class Plasmid < ActiveRecord::Base
   end
 
   def number_field
-    self.plasmidnumber
+    self.send(number_field_name)
+  end
+
+  def number_field_name
+    :plasmidnumber
   end
 
   def info_field
-    self.plasmidalias
+    self.send(info_field_name)
+  end
+
+  def info_field_name
+    :plasmidalias
   end
 
 end

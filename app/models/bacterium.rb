@@ -39,11 +39,19 @@ class Bacterium < ActiveRecord::Base
 	end
 
   def number_field
-    self.strain_number
+    self.send(number_field_name)
+  end
+
+  def number_field_name
+    :strain_number
   end
 
   def info_field
-    self.strainalias
+    self.send(info_field_name)
+  end
+
+  def info_field_name
+    :strainalias
   end
 
 end

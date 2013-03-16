@@ -15,6 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
+require 'psych'
+require 'csv'
 
 module Importers
 
@@ -31,6 +33,37 @@ module Importers
 			params = obj_info[classname]
 
 			objs << Kernel.const_get(classname).new(params)
+
+		end
+
+		objs
+
+	end
+
+
+	def self.import_from_csv(csv_str)
+
+		lines = CSV.parse(csv_str)
+
+		headers = lines.shift.map(&:strip).map(&:to_sym)
+
+		objs = []
+
+		lines.each do |l|
+
+			fields = l.map(&:strip)
+
+			params = {}
+
+			headers.each_with_index do |h, i|
+
+				params[h] = fields[i]
+
+			end
+
+			type = params.delete(:type)
+
+			objs << Kernel.const_get(type).new(params)
 
 		end
 
