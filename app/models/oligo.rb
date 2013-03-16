@@ -35,11 +35,19 @@ class Oligo < ActiveRecord::Base
 	end
 
 	def number_field
-		self.oligo_number
+		self.send(number_field_name)
+	end
+
+	def number_field_name
+		:oligo_number
 	end
 
 	def info_field
-		self.oligoalias
+		self.send(info_field_name)
+	end
+
+	def info_field_name
+		:oligoalias
 	end
 
 end

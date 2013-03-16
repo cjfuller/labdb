@@ -39,7 +39,6 @@ module Exportable
 		exp_params
 	end
 
-
 	def export_to(format)
 
 		if Formats[format] then
@@ -65,6 +64,7 @@ module Exportable
 		Psych.dump({self.class.to_s.encode('utf-8') => output})
 
 	end
+
 
 	def export_to_fasta
 
