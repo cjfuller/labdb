@@ -75,5 +75,6 @@ module Straightlabdb
 
     #require https communication
     config.force_ssl = true
+
   end
 end
