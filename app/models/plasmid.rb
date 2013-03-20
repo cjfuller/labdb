@@ -73,7 +73,7 @@ class Plasmid < ActiveRecord::Base
 
 
   def exportable_fields
-    Fields
+    Fields.reject { |e| e == :plasmidmap }
   end
 
   def number_field

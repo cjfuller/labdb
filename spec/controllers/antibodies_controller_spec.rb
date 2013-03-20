@@ -15,9 +15,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
+require 'spec_helper'
 
-def log_in(session_obj)
+describe AntibodiesController do
 
-	session_obj[:user_id]= "0001"
+	extend CommonControllerSpecs
+
+	search_tests model_class: Antibody, search_field: :alias, count_0_regexp: "/CENP-F/", count_1_regexp: "/CENP-C/", count_2_regexp: "/CENP/", non_regexp_exp: "CENP", ci_exp: "/cenp-c/"
 
 end

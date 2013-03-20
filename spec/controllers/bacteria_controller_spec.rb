@@ -15,9 +15,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
+require 'spec_helper'
 
-def log_in(session_obj)
+describe BacteriaController do 
+  
+  extend CommonControllerSpecs
 
-	session_obj[:user_id]= "0001"
+  search_tests model_class: Bacterium, search_field: :species_bkg, count_0_regexp: "/Bacillus/", count_1_regexp: "/DH5a/", count_2_regexp: "/E. coli/", non_regexp_exp: "E. coli", ci_exp: "/dh5a/"
 
 end

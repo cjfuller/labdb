@@ -15,9 +15,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
+require 'spec_helper'
 
-def log_in(session_obj)
+describe YeaststrainsController do
 
-	session_obj[:user_id]= "0001"
+  extend CommonControllerSpecs
+
+  search_tests model_class: Yeaststrain, search_field: :strainalias, count_0_regexp: "/lys-/", count_1_regexp: "/ade-/", count_2_regexp: "/leu-/", non_regexp_exp: "leu", ci_exp: "/ADE/"
 
 end
