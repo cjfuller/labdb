@@ -59,5 +59,3 @@ class YeaststrainsController < ApplicationController
 
 end
 
-puts YeaststrainsController.methods
-

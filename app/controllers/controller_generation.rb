@@ -27,7 +27,7 @@ def generate_standard_controller_actions(controller, model_class_in, text_in)
 		end
 
 		def type
-			model_class.to_s.downcase.to_sym
+			model_class.to_s.downcase
 		end
 
 		def model_class
@@ -35,8 +35,6 @@ def generate_standard_controller_actions(controller, model_class_in, text_in)
 		end
 
 		def index
-
-			puts model_class.all.map(&:inspect)
 
 			define_ui_variables(status_text: self.class.text.pluralize, context_specific_buttons: "shared/top_pagination_buttons")
 
@@ -54,6 +52,8 @@ def generate_standard_controller_actions(controller, model_class_in, text_in)
 
 			@objs = Kaminari.paginate_array(@objs).page(params[:page]).per(page_size)
 
+			instance_variable_set("@" + type.pluralize, @objs)
+
 			define_table_view_vars
 
 			respond_to do |format|
@@ -65,6 +65,7 @@ def generate_standard_controller_actions(controller, model_class_in, text_in)
 
 		def show
 			@obj = model_class.find(params[:id])
+			instance_variable_set("@" + type, @obj)
 
 			define_ui_variables(status_text: "#{obj_tag} #{@obj.number_field}", context_specific_buttons: "shared/top_editing_buttons", obj: @obj, readonly: true)
 
@@ -76,12 +77,13 @@ def generate_standard_controller_actions(controller, model_class_in, text_in)
 
 		def new
 			@obj = model_class.new
+			instance_variable_set("@" + type, @obj)
 
 			define_ui_variables(status_text: "New #{self.class.text.downcase}", readonly: false, submit_text: "Create #{self.class.text.downcase}")
 
 			generate_date(@obj)
 			generate_name(@obj)
-			@obj.strain_number = generate_object_number(model_class, :strain_number)
+			@obj.send(@obj.number_field_name.to_s + "=", generate_object_number(model_class, @obj.number_field_name))
 
 			respond_to do |format|
 				format.html # new.html.erb
@@ -91,12 +93,14 @@ def generate_standard_controller_actions(controller, model_class_in, text_in)
 
 		def edit
 			@obj = model_class.find(params[:id])
+			instance_variable_set("@" + type, @obj)
 
 			define_ui_variables(status_text: "Editing #{obj_tag} #{@obj.number_field}", context_specific_buttons: "shared/top_editing_buttons", obj: @obj, readonly: false, submit_text: "Update #{self.class.text.downcase}")
 		end
 
 		def create
 			@obj = model_class.new(params[:obj])
+			instance_variable_set("@" + type, @obj)
 
 			respond_to do |format|
 				if @obj.save
@@ -111,6 +115,7 @@ def generate_standard_controller_actions(controller, model_class_in, text_in)
 
 		def update
 			@obj = model_class.find(params[:id])
+			instance_variable_set("@" + type, @obj)
 
 			respond_to do |format|
 				if @obj.update_attributes(params[type])
@@ -127,6 +132,7 @@ def generate_standard_controller_actions(controller, model_class_in, text_in)
 		# DELETE /objs/1.json
 		def destroy
 			@obj = model_class.find(params[:id])
+			instance_variable_set("@" + type, @obj)
 			@obj.destroy
 
 			respond_to do |format|
@@ -137,6 +143,7 @@ def generate_standard_controller_actions(controller, model_class_in, text_in)
 
 		def search
 			@obj = model_class.new
+			instance_variable_set("@" + type, @obj)
 
 			define_ui_variables(status_text: "Searching #{self.class.text.downcase.pluralize}", obj: @obj, readonly: false, submit_text: "Search")
 
@@ -149,6 +156,7 @@ def generate_standard_controller_actions(controller, model_class_in, text_in)
 		def export
 
 			@obj = model_class.find(params[:id])
+			instance_variable_set("@" + type, @obj)
 
 			do_export(@obj)
 
@@ -157,5 +165,4 @@ def generate_standard_controller_actions(controller, model_class_in, text_in)
 	end
 
 end
-
 

@@ -18,6 +18,8 @@
 require 'psych'
 require 'number_assignment'
 require 'object_naming'
+require 'controller_generation'
+
 
 class ApplicationController < ActionController::Base
 
