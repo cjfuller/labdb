@@ -7,17 +7,17 @@ one:
   entered_by: Colin
   notebook: 1
   vendor:
-  organism: X. laevis
+  organism: Xenopus laevis
   sequence: ATGGAGGAGAGGCCACCACAGAAAAGCC
   purpose: cloning
 
 two:
   oligo_number: 1
-  oligoalias: reverse
+  oligoalias: forward
   date_entered: 2013-02-07
   entered_by: Colin
   notebook: 1
   vendor:
-  organism: X. laevis
+  organism: Xenopus tropicalis
   sequence: GTGACCTGCTCTCGTCAAAGTCTTGA
   purpose: cloning
