@@ -105,7 +105,8 @@ def generate_standard_controller_actions(controller, model_class_in, text_in)
 		end
 
 		def create
-			@obj = model_class.new(params[:obj])
+
+			@obj = model_class.new(params[type.to_sym])
 			instance_variable_set("@" + type, @obj)
 
 			respond_to do |format|
