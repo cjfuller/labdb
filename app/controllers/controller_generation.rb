@@ -76,7 +76,13 @@ def generate_standard_controller_actions(controller, model_class_in, text_in)
 		end
 
 		def new
-			@obj = model_class.new
+
+			if params[:id] then
+				@obj = model_class.find(params[:id]).dup
+			else
+				@obj = model_class.new()
+			end
+
 			instance_variable_set("@" + type, @obj)
 
 			define_ui_variables(status_text: "New #{self.class.text.downcase}", readonly: false, submit_text: "Create #{self.class.text.downcase}")
