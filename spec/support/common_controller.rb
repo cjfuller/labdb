@@ -110,6 +110,15 @@ module CommonControllerSpecs
 
 		end
 
+		it "should create a #{model_class.to_s.downcase} filled with the appropriate fields" do
+
+			post :create, model_sym => @fields_hash
+			created_obj = assigns(model_class.to_s.downcase.to_sym)
+
+			@fields_hash.each_key { |k| created_obj.send(k).should eq @fields_hash[k] }
+
+		end
+
 		it "should update the #{model_class.to_s.downcase}" do
 			put :update, id: @obj, model_sym => @fields_hash
 			response.should redirect_to(polymorphic_path(assigns(model_sym)))
