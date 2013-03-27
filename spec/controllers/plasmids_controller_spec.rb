@@ -51,4 +51,50 @@ describe PlasmidsController do
 
    end
 
+   describe "antibiotic handling" do 
+
+    it "should display antibiotics correctly" do
+
+      get :show, id: plasmids(:one)
+
+      assigns(:plasmid)[:antibiotic].should eq "carb,kan,gent"
+      assigns(:plasmid)[:carb].should eq "1"
+      assigns(:plasmid)[:kan].should eq "1"
+      assigns(:plasmid)[:gent].should eq "1"
+      assigns(:plasmid)[:chlor].should eq "0"
+
+    end
+
+    it "should update antibiotics correctly on edit" do 
+
+      get :edit, id: plasmids(:one)
+      plas = assigns(:plasmid)
+
+      params_hash = model_to_hash(plas)
+
+      params_hash[:carb] = "0"
+
+      put :update, id: plasmids(:one), plasmid: params_hash
+
+      assigns(:plasmid)[:antibiotic].should eq "kan, gent"
+
+
+    end
+
+    it "should calculate antibiotics correctly on create" do
+
+      plas_new = plasmids(:one)
+      params_hash = model_to_hash(plas_new)
+      params_hash[:antibiotic] = ""
+      params_hash[:kan] = "1"
+      [:carb, :chlor, :gent, :strep, :tet].each { |a| params_hash[a] = "0" }
+
+      post :create, plasmid: params_hash
+
+      assigns(:plasmid)[:antibiotic].should eq "kan"
+
+    end
+
+  end
+
 end
