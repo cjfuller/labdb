@@ -61,7 +61,8 @@ class Plasmid < ActiveRecord::Base
   end
   
   def calculate_size
-    self.plasmidsize= self.sequence.chomp.length
+    self.plasmidsize= self.sequence.gsub(/\W/, "").length
+    self.save
   end
   
   def get_linked(property_name)

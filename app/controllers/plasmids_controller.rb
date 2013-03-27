@@ -61,6 +61,7 @@ class PlasmidsController < ApplicationController
   
   def preprocess_model_object(model_obj)
     model_obj.parse_antibiotics
+    model_obj.calculate_size
   end
 
   def antibiotic_params_from_form_for_create

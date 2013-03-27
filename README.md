@@ -6,7 +6,7 @@ Labdb is a laboratory database system for simply and cleanly tracking objects li
 
 #Installation / Configuration
 
-Prerequisites: postgresql (installation will depend on your platform; the user running the application must be able to create and edit databases), a ruby interpreter supporting ruby 2.0 (e.g. [http://ruby-lang.org](http://ruby-lang.org)).
+Prerequisites: postgresql (installation will depend on your platform; the user running the application must be able to create and edit databases), a ruby interpreter supporting ruby >= 1.9 (e.g. [http://ruby-lang.org](http://ruby-lang.org)).
 
 First, clone the repository.  You will need to add some configuration options before running the program.
 
