@@ -55,13 +55,19 @@ describe PlasmidsController do
 
     it "should display antibiotics correctly" do
 
-      get :show, id: plasmids(:one)
+      actions = [:show, :edit]
 
-      assigns(:plasmid)[:antibiotic].should eq "carb,kan,gent"
-      assigns(:plasmid)[:carb].should eq "1"
-      assigns(:plasmid)[:kan].should eq "1"
-      assigns(:plasmid)[:gent].should eq "1"
-      assigns(:plasmid)[:chlor].should eq "0"
+      actions.each do |act|
+
+        get act, id: plasmids(:one)
+
+        assigns(:plasmid).send(:antibiotic).should eq "carb,kan,gent"
+        assigns(:plasmid).send(:carb).should eq "1"
+        assigns(:plasmid).send(:kan).should eq "1"
+        assigns(:plasmid).send(:gent).should eq "1"
+        assigns(:plasmid).send(:chlor).should eq "0"
+
+      end
 
     end
 
@@ -72,11 +78,14 @@ describe PlasmidsController do
 
       params_hash = model_to_hash(plas)
 
-      params_hash[:carb] = "0"
+      params_hash[:kan] = "1"
+      params_hash[:gent] = "1"
 
-      put :update, id: plasmids(:one), plasmid: params_hash
+      [:carb, :chlor, :strep, :tet].each { |a| params_hash[a] = "0" }
+      
+      put :update, id: plas, plasmid: params_hash
 
-      assigns(:plasmid)[:antibiotic].should eq "kan, gent"
+      assigns(:plasmid).send(:antibiotic).should eq "kan,gent"
 
 
     end
@@ -91,7 +100,7 @@ describe PlasmidsController do
 
       post :create, plasmid: params_hash
 
-      assigns(:plasmid)[:antibiotic].should eq "kan"
+      assigns(:plasmid).send(:antibiotic).should eq "kan"
 
     end
 

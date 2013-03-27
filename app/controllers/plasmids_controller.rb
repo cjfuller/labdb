@@ -19,6 +19,9 @@ require 'object_naming'
 
 class PlasmidsController < ApplicationController
 
+  before_filter :antibiotic_params_from_form_for_create, only: [:create]
+  before_filter :antibiotic_params_from_form, only: [:update]
+
   OBJ_TAG = Naming.name_for(Plasmid)
 
   def obj_tag
@@ -56,7 +59,29 @@ class PlasmidsController < ApplicationController
 
   end
   
-  
+  def preprocess_model_object(model_obj)
+    model_obj.parse_antibiotics
+  end
+
+  def antibiotic_params_from_form_for_create
+
+    return nil if params[:plasmid][:antibiotic] and params[:plasmid][:antibiotic].size > 0
+
+    antibiotic_params_from_form
+
+  end
+
+  def antibiotic_params_from_form
+
+    antibiotic_string = generate_antibiotics_string(params[:plasmid])
+
+    params[:plasmid] = fix_antibiotic_params(params[:plasmid])
+
+    params[:plasmid][:antibiotic] = antibiotic_string
+
+  end
+
+
   def fix_antibiotic_params(param_hash)
     
     abs = Plasmid.get_antibiotics

@@ -65,6 +65,9 @@ def generate_standard_controller_actions(controller, model_class_in, text_in)
 
 		def show
 			@obj = model_class.find(params[:id])
+
+			preprocess_model_object(@obj)
+
 			instance_variable_set("@" + type, @obj)
 
 			define_ui_variables(status_text: "#{obj_tag} #{@obj.number_field}", context_specific_buttons: "shared/top_editing_buttons", obj: @obj, readonly: true)
@@ -99,6 +102,9 @@ def generate_standard_controller_actions(controller, model_class_in, text_in)
 
 		def edit
 			@obj = model_class.find(params[:id])
+
+			preprocess_model_object(@obj)
+
 			instance_variable_set("@" + type, @obj)
 
 			define_ui_variables(status_text: "Editing #{obj_tag} #{@obj.number_field}", context_specific_buttons: "shared/top_editing_buttons", obj: @obj, readonly: false, submit_text: "Update #{self.class.text.downcase}")
