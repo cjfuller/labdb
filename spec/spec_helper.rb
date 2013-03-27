@@ -36,3 +36,16 @@ RSpec.configure do |config|
   #     --seed 1234
   config.order = "random"
 end
+
+def model_to_hash(mod_obj)
+  params_hash = {}
+
+  mod_obj.exportable_fields.each do |f|
+    params_hash[f] = mod_obj.send f
+  end
+
+  params_hash
+end
+
+
+

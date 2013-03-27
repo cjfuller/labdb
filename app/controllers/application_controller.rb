@@ -227,5 +227,8 @@ class ApplicationController < ActionController::Base
 
   end
 
+  def preprocess_model_object(model_obj)
+  end
+
 
 end
