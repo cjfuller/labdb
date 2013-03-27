@@ -64,16 +64,6 @@ describe PlasmidsController do
 
     end
 
-    it "should calculate the correct size when creating" do 
-
-      fields_hash = model_to_hash(plasmids(:one))
-
-      post :create, plasmid: fields_hash
-
-      assigns(:plasmid).plasmidsize.should eq assigns(:plasmid).sequence.length
-
-    end
-
    end
 
    describe "antibiotic handling" do 
