@@ -17,18 +17,19 @@
 
 %li.divider-vertical
 - if readonly? then
-	%li= link_to 'Export YAML', polymorphic_path(@obj, action: "export", exportformat: :yml)
+	%li.dropdown
+		%a.dropdown-toggle{'data-toggle' => "dropdown", href: '#'}
+			Other Actions
+			%span.caret
+		%ul.dropdown-menu{role: "menu", 'aria-labelledby' => "dLabel"}
+
+			%li= link_to 'Export YAML', polymorphic_path(@obj, action: "export", exportformat: :yml)
+			- if @obj.respond_to? :has_sequence? and @obj.has_sequence? then
+				%li= link_to 'Export FASTA', polymorphic_path(@obj, action: "export", exportformat: :fasta)
+
+			%li= link_to 'Edit', edit_polymorphic_path(@obj)
 	%li.divider-vertical
-
-	- if @obj.respond_to? :has_sequence? and @obj.has_sequence? then
-		%li= link_to 'Export FASTA', polymorphic_path(@obj, action: "export", exportformat: :fasta)
-		%li.divider-vertical
-
 	%li= link_to 'Duplicate', polymorphic_path(@obj, action: "new", id: @obj.id)
-	%li.divider-vertical
-	%li= link_to 'Edit', edit_polymorphic_path(@obj)
-
-
 - else
 	%li= link_to 'Cancel', @obj
 
