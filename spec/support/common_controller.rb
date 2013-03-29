@@ -42,6 +42,8 @@ module CommonControllerSpecs
 
 			export_tests model_class, ["yml"]
 
+			navigation model_class
+
 		end
 
 	end
@@ -233,6 +235,41 @@ module CommonControllerSpecs
 			end
 
 		end
+
+	end
+
+	def navigation(model_class)
+
+		obj_varname = "@" + model_class.to_s.downcase
+		plural_type = model_class.to_s.downcase.pluralize
+
+		before :each do
+
+			@obj = instance_variable_get(obj_varname)
+
+		end
+
+		describe "previous / next navigation" do 
+
+			it "should get the correct item for the next action" do
+
+				get :next, { id: @obj }
+
+				response.should redirect_to self.send(plural_type, :two)
+
+			end
+
+
+			it "should get the correct item for the previous action" do
+
+				get :previous, { id: self.send(plural_type, :two) }
+
+				response.should redirect_to @obj
+
+			end
+
+		end
+
 
 	end
 
