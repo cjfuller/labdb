@@ -36,6 +36,8 @@ Straightlabdb::Application.routes.draw do
     end
     member do
       get 'export'
+      get 'next'
+      get 'previous'
     end
   end
 
@@ -46,6 +48,8 @@ Straightlabdb::Application.routes.draw do
     end
     member do
       get 'export'
+      get 'next'
+      get 'previous'
     end
   end
 
@@ -56,6 +60,8 @@ Straightlabdb::Application.routes.draw do
     end
     member do
       get 'export'
+      get 'next'
+      get 'previous'
     end
   end
 
@@ -66,6 +72,8 @@ Straightlabdb::Application.routes.draw do
     end
     member do
       get 'export'
+      get 'next'
+      get 'previous'
     end
   end
 
@@ -76,6 +84,8 @@ Straightlabdb::Application.routes.draw do
     end
     member do
       get 'export'
+      get 'next'
+      get 'previous'
     end
   end
 

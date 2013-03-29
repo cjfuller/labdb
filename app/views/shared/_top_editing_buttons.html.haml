@@ -28,8 +28,13 @@
 				%li= link_to 'Export FASTA', polymorphic_path(@obj, action: "export", exportformat: :fasta)
 
 			%li= link_to 'Edit', edit_polymorphic_path(@obj)
+			%li= link_to 'Duplicate', polymorphic_path(@obj, action: "new", id: @obj.id)
+	
 	%li.divider-vertical
-	%li= link_to 'Duplicate', polymorphic_path(@obj, action: "new", id: @obj.id)
+	%li= link_to '&larr; Previous'.html_safe, polymorphic_path(@obj, action: "previous", id: @obj.id)
+	%li.divider-vertical
+	%li= link_to 'Next &rarr;'.html_safe, polymorphic_path(@obj, action: "next", id: @obj.id)
+	%li.divider-vertical
 - else
 	%li= link_to 'Cancel', @obj
 

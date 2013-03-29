@@ -175,6 +175,28 @@ def generate_standard_controller_actions(controller, model_class_in, text_in)
 
 		end
 
+		def next
+			obj = model_class.find(params[:id])
+			num = obj.number_field.to_i
+			next_objs = model_class.all.select { |e| e.number_field.to_i == num + 1 }
+			if next_objs.size > 0 then
+				redirect_to next_objs[0]
+			else
+				redirect_to obj
+			end
+		end
+
+		def previous
+			obj = model_class.find(params[:id])
+			num = obj.number_field.to_i
+			next_objs = model_class.all.select { |e| e.number_field.to_i == num - 1 }
+			if next_objs.size > 0 then
+				redirect_to next_objs[0]
+			else
+				redirect_to obj
+			end
+		end
+
 	end
 
 end
