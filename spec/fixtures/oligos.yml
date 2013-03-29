@@ -12,7 +12,7 @@ one:
   purpose: cloning
 
 two:
-  oligo_number: 1
+  oligo_number: 2
   oligoalias: forward
   date_entered: 2013-02-07
   entered_by: Colin

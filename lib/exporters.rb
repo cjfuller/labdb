@@ -79,7 +79,7 @@ module Exportable
 	end
 
 	def has_sequence?
-		self.respond_to? :sequence
+		self.respond_to? :sequence and not self.sequence.nil?
 	end
 
 	def wrap_string(str, length)

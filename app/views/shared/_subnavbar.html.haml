@@ -23,8 +23,6 @@
           %li
             %a.brand= @status_text
           %li.divider-vertical
-          %li= link_to 'Show all', polymorphic_path(@model_class)
-          %li.divider-vertical
           %li= link_to 'Search', @search_path
           %li.divider-vertical
           %li= link_to 'New', new_polymorphic_path(@model_class)
@@ -32,3 +30,4 @@
       %nav
         %ul{class: "nav pull-right"}
           = render partial: @context_specific_buttons if @context_specific_buttons
+
