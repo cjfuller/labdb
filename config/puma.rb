@@ -5,9 +5,6 @@ proj_base = File.expand_path("../..", __FILE__)
 key_path = ""
 cert_path = ""
 
-puts proj_base
-
-
 # Set the environment in which the rack's app will run.
 #
 # The default is “development”.
@@ -40,8 +37,8 @@ state_path File.expand_path('tmp/pids/puma.state', proj_base)
 
 # Bind the server to “url”. “tcp://”, “unix://” and “ssl://” are the only
 
-bind 'tcp://127.0.0.1:3000'
-#ssl_bind '127.0.0.1', '3000', { key: key_path, cert: cert_path }
+#bind 'tcp://127.0.0.1:3000'
+ssl_bind '127.0.0.1', '3000', { key: key_path, cert: cert_path }
 
 # Command to use to restart puma. This should be just how to
 # load puma itself (ie. 'ruby -Ilib bin/puma'), not the arguments
