@@ -37,3 +37,5 @@ gem 'omniauth-openid'
 gem 'sass'
 
 gem 'kaminari'
+
+gem 'puma'

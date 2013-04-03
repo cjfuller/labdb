@@ -21,9 +21,6 @@
 require 'rails/commands/server'
 require 'rack'
 
-require 'webrick'
-
-require 'webrick/https'
 
 module Rails
 
@@ -31,12 +28,8 @@ module Rails
 
 		def default_options
 
-			super.merge(Port: 3000,
-									SSLEnable:true,
-									SSLVerifyClient: OpenSSL::SSL::VERIFY_NONE, #only verification we really need is of the openid provider, which is handled in the openid initializer
-                  SSLPrivateKey: OpenSSL::PKey::RSA.new(File.open(File.expand_path('--insert private key path here--', ".")).read),
-                  SSLCertificate: OpenSSL::X509::Certificate.new(File.open(File.expand_path('--insert certificate path here--', ".")).read),
-                 	SSLCertName:[["CN", WEBrick::Utils::getservername]])
+			super
+
 		end
 
 	end
