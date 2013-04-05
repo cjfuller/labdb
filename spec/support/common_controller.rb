@@ -212,6 +212,85 @@ module CommonControllerSpecs
 
 		end
 
+		describe "navigation within search" do 
+
+			context "valid search provided" do
+
+				before :each do 
+
+					get :index, type => {search_field => count_1_regexp}
+					@s = assigns(:search_id)
+					@search_obj = assigns(plural_type)[0]
+
+				end
+
+				it "should limit previous navigation to within the search results" do
+					get :previous, id: @search_obj.id, search_id: @s
+					response.should redirect_to(action: :show, id: @search_obj.id, search_id: @s)
+				end
+
+				it "should limit next navigation to within the search results" do
+					get :next, id: @search_obj.id, search_id: @s
+					response.should redirect_to(action: :show, id: @search_obj.id, search_id: @s)
+				end
+
+			end
+
+			context "invalid search provided" do
+
+				before :each do 
+
+					get :index, type => {self.send(plural_type, :one).number_field_name => 1.to_s}
+					@s = assigns(:search_id)
+					@search_obj = assigns(plural_type)[0]
+
+				end
+
+				context "expired search" do
+
+					before :each do 
+						s = Search.find(@s)
+						s.expires = (Time.now - 10).to_date
+						s.save
+					end
+
+					it "should limit previous/next navigation to within the search results when at the first object" do
+						puts "about to get previous"
+						get :previous, id: @search_obj.id, search_id: @s
+						response.should redirect_to(action: :show, id: @search_obj.id)
+					end
+
+					it "should not limit previous/next navigation to within the search results" do
+						get :next, id: @search_obj.id, search_id: @s
+						response.should redirect_to(action: :show, id: self.send(plural_type, :two).id)
+					end
+
+					it "should be an invalid search if the search time has expired" do
+						get :show, id: @search_obj.id, search_id: @s
+						controller.valid_search_requested?.should_not be_true
+					end
+
+				end
+
+				context "not recent search" do
+
+					before :each do 
+						get :index, type => {self.send(plural_type, :one).number_field_name => 2.to_s}
+						@s_2 = assigns(:search_id)
+						@search_obj_2 = assigns(plural_type)[0]
+					end
+
+					it "should be an invalid search if it's not the last search a user performed" do 
+						get :show, id: @search_obj_2.id, search_id: @s
+						controller.valid_search_requested?.should_not be_true
+					end
+
+				end
+
+			end
+
+		end
+
 	end
 
 	def export_tests(model_class, formats)

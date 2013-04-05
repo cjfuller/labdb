@@ -21,7 +21,6 @@
 require 'rails/commands/server'
 require 'rack'
 
-
 module Rails
 
 	class Server < ::Rack::Server

@@ -44,6 +44,12 @@ def generate_standard_controller_actions(controller, model_class_in, text_in)
 			if params.has_key?(type) then
 				@objs = process_search_query(params[type], model_class)
 				page_size = @objs.size
+				@search_id = find_current_search.id
+				#redirect_to polymorphic_path(model_class, search_id: find_current_search.id, page: params[:page]), status: 302 and return
+			elsif valid_search_requested? then
+				@search_id = find_current_search.id
+				@objs = find_current_search.loaded_result
+				page_size = @objs.size
 			else
 				@objs = model_class.all
 			end
@@ -65,6 +71,7 @@ def generate_standard_controller_actions(controller, model_class_in, text_in)
 
 		def show
 			@obj = model_class.find(params[:id])
+			@search_id = params[:search_id]
 
 			preprocess_model_object(@obj)
 
@@ -175,26 +182,52 @@ def generate_standard_controller_actions(controller, model_class_in, text_in)
 
 		end
 
+		def handle_next_previous_redirection(next_obj, obj)
+
+			params_hash = {}
+
+			params_hash[:search_id] = params[:search_id] if valid_search_requested?
+
+			if next_obj then
+				redirect_to polymorphic_path(next_obj, params_hash)
+			else
+				redirect_to polymorphic_path(obj, params_hash)
+			end
+
+		end
+
 		def next
 			obj = model_class.find(params[:id])
 			num = obj.number_field.to_i
-			next_objs = model_class.all.select { |e| e.number_field.to_i == num + 1 }
-			if next_objs.size > 0 then
-				redirect_to next_objs[0]
+
+			next_obj = nil
+
+			if valid_search_requested? then
+				objs = find_current_search.loaded_result
+				next_obj = objs.select { |e| e.number_field.to_i > num }.first
 			else
-				redirect_to obj
+				next_obj = model_class.all.select { |e| e.number_field.to_i > num }.first
 			end
+
+			handle_next_previous_redirection(next_obj, obj)
+			
 		end
 
 		def previous
 			obj = model_class.find(params[:id])
 			num = obj.number_field.to_i
-			next_objs = model_class.all.select { |e| e.number_field.to_i == num - 1 }
-			if next_objs.size > 0 then
-				redirect_to next_objs[0]
+
+			next_obj = nil
+
+			if valid_search_requested? then
+				objs = find_current_search.loaded_result
+				next_obj = objs.select { |e| e.number_field.to_i < num }.last
 			else
-				redirect_to obj
+				next_obj = model_class.all.select { |e| e.number_field.to_i < num }.last
 			end
+
+			handle_next_previous_redirection(next_obj, obj)
+
 		end
 
 	end
