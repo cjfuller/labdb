@@ -18,6 +18,8 @@
 class User < ActiveRecord::Base
 
   attr_protected :name, :provider, :uid, :email
+
+  has_one :search
   
   def self.create_with_omniauth(auth)
     user = User.new

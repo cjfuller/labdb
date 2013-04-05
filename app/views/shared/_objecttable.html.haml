@@ -31,7 +31,7 @@
         - @table_columns.each do |tc|
           %td= obj.send(tc)
         
-        %td= link_to 'Show', obj, class: "btn btn-mini btn-info"
+        %td= link_to 'Show', polymorphic_path(obj, search_id: @search_id), class: "btn btn-mini btn-info"
         %td= link_to 'Edit', edit_polymorphic_path(obj), class: "btn btn-mini btn-info"
         %td= link_to 'Destroy', obj, confirm: 'Delete this entry?  Are you sure?', method: :delete, class: "btn btn-mini btn-danger"
 = paginate @table_objects

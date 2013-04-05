@@ -19,28 +19,23 @@ require 'psych'
 require 'number_assignment'
 require 'object_naming'
 require 'controller_generation'
-
+require 'searching'
+require 'authorization'
 
 class ApplicationController < ActionController::Base
+
+  include Searching
+  include Authorization
 
   protect_from_forgery
 
   DATABASE_SYSTEM_NAME = Naming.name_for("database_full")
   DATABASE_SYSTEM_SHORT_NAME = Naming.name_for("database_short")
 
-  ALLOWED_LABEL = "allowedusers"
-  NAME_TAG = "name"
-  EMAIL_TAG = "email"
-
   def redirect_https
     redirect_to :protocol => "https://" unless request.protocol == "https://"
   end
 
-  def denied
-    render :text => "Access denied."
-  end
-
-  before_filter :require_authorization
   prepend_before_filter :redirect_https
   around_filter :clear_temporary_number_assignments
 
@@ -58,23 +53,6 @@ class ApplicationController < ActionController::Base
 
   end
 
-  def require_authorization
-
-    unless authorized? then
-
-      redirect_to "/", notice: "Access denied."
-
-    end
-
-  end
-
-  def load_auth
-
-    @user_data = Rails.configuration.user_data
-
-    @users_loaded = true
-
-  end
 
   def curr_username
 
@@ -85,6 +63,18 @@ class ApplicationController < ActionController::Base
     curr_user = User.find_by_uid(curr_uid)
 
     curr_user.name
+
+  end
+
+  def curr_user_id
+
+    curr_uid = session[:user_id]
+
+    return false if curr_uid.nil?
+
+    curr_user = User.find_by_uid(curr_uid)
+
+    curr_user.id.to_i
 
   end
 
@@ -102,33 +92,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
-
-  def authorized?
-
-    curr_uid = session[:user_id]
-
-    return false if curr_uid.nil?
-
-    curr_user = User.find_by_uid(curr_uid)
-
-    return false if curr_user.nil?
-
-    load_auth unless @users_loaded
-
-    allowed_users = @user_data[ALLOWED_LABEL]
-
-    allowed_users.each do |u|
-
-      if curr_user.email == u[EMAIL_TAG] and curr_user.name == u[NAME_TAG] then
-        return true
-      end
-
-    end
-
-    false
-
-  end
-
+  
   def define_ui_variables(opts_hash)
 
     opts_hash.each do |k, v|
@@ -148,73 +112,7 @@ class ApplicationController < ActionController::Base
     end
 
   end
-
-  def process_search_query(search_params, search_class)
-
-    preprocessed_conditions = preprocess_search_query(search_params)
-
-    conditions = Hash.new
-    regex_conditions = Hash.new
-    regex_detection_regex = /\A\/.*\/(i?)\Z/
-    search_params.each_key do |k|
-      if search_params[k] and search_params[k] != "" and k != "verified" then #TODO: is there a better way to deal with the verified field?
-
-        matched = regex_detection_regex.match(search_params[k])
-
-        if matched then
-
-          case_insensitive = (matched[1].length > 0)
-
-          end_of_regex_offset = 1
-
-          if case_insensitive then
-            end_of_regex_offset = 2
-          end
-          
-          regex_conditions[k] = Regexp.new(search_params[k][1...(search_params[k].length-end_of_regex_offset)], case_insensitive)
-        
-        else
-          #if a regex has not been entered:
-          #substitute * for .* to turn the old filemaker-style glob syntax into a regex
-          search_params[k].gsub!("*", ".*")
-          #add start and end of string matchers to avoid, e.g., matching all plasmids with a 1 when searching for #1
-          search_params[k]= '\A' + search_params[k] + '\Z'
-          #also make it case-insensitive since there's no way to specify one or the other here
-          regex_conditions[k] = Regexp.new(search_params[k], true)
-        end
-      end
-    end
-
-    preprocessed_conditions.each do |k,v|
-      regex_conditions[k] = Regexp.new(v)
-    end
-
-    preliminary_list = search_class.where(conditions)
-
-    final_list = Array.new
-
-    preliminary_list.each do |p|
-      include_obj = true
-      regex_conditions.each_key do |k|
-        val = p.send(k.to_s).to_s
-        unless regex_conditions[k].match(val) then
-          include_obj = false
-          break
-        end
-      end
-      if include_obj then
-        final_list << p
-      end
-    end
-
-    final_list
-
-  end
-
-  def preprocess_search_query(search_params)
-    {}
-  end
-
+  
   def generate_object_number(klass, number_field_name)
 
     NumberAssignment.assignment_for_class(klass, number_field_name, session)
