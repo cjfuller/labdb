@@ -17,126 +17,136 @@
 
 module Searching
 
+	REGEX_DETECTION_REGEX = /\A\/.*\/(i?)\Z/
+
 	def delete_old_searches
 
-    all_searches = Search.all
+		all_searches = Search.all
 
-    unless all_searches.nil? then
-      all_searches.each { |s| s.destroy if s.expired? }
-    end
+		unless all_searches.nil? then
+			all_searches.each { |s| s.destroy if s.expired? }
+		end
 
-    searches = Search.find_all_by_user_id(curr_user_id)
+		searches = Search.find_all_by_user_id(curr_user_id)
 
-    unless searches.nil? then
-      searches.each { |s| s.destroy }
-    end
+		unless searches.nil? then
+			searches.each { |s| s.destroy }
+		end
 
-  end
+	end
 
 
-  def generate_search_object(search_params, result)
+	def generate_search_object(search_params, result)
 
-    delete_old_searches
+		delete_old_searches
 
-    sec_per_day = 60*60*24
+		sec_per_day = 60*60*24
 
-    exp_time = Time.now + 1.5*sec_per_day
+		exp_time = Time.now + 1.5*sec_per_day
 
-    s = Search.new(expires: exp_time, result: Psych.dump(result), searchparams: search_params, user_id: curr_user_id)
+		s = Search.new(expires: exp_time, result: Psych.dump(result), searchparams: search_params, user_id: curr_user_id)
 
-    s.save
+		s.save
 
-  end
+	end
 
-  def valid_search_requested?
+	def valid_search_requested?
 
-    current_search = find_current_search
+		current_search = find_current_search
 
-    params.has_key?(:search_id) and current_search and current_search.id == params[:search_id].to_i
-    
-  end
+		params.has_key?(:search_id) and current_search and current_search.id == params[:search_id].to_i
+		
+	end
 
-  def find_current_search
+	def find_current_search
 
-    s = Search.find_by_user_id(curr_user_id)
+		s = Search.find_by_user_id(curr_user_id)
 
-    return nil if s.nil? or s.expired?
+		return nil if s.nil? or s.expired?
 
-    s.loaded_result = Psych.load(s.result) unless s.loaded_result
+		s.loaded_result = Psych.load(s.result) unless s.loaded_result
 
-    s
+		s
 
-  end
+	end
 
-  def process_search_query(search_params, search_class)
+	def glob_style_search_to_regex(search_params, key)
 
-    preprocessed_conditions = preprocess_search_query(search_params)
+		search_params[key].gsub!("*", ".*")
+		#add start and end of string matchers to avoid, e.g., matching all plasmids with a 1 when searching for #1
+		search_params[key]= '\A' + search_params[key] + '\Z'
 
-    conditions = Hash.new
-    regex_conditions = Hash.new
-    regex_detection_regex = /\A\/.*\/(i?)\Z/
-    search_params.each_key do |k|
-      if search_params[k] and search_params[k] != "" and k != "verified" then #TODO: is there a better way to deal with the verified field?
+		Regexp.new(search_params[key], true) #always case insensitive since there's no way to specify
+	end
 
-        matched = regex_detection_regex.match(search_params[k])
+	def parse_search_regex(search_param)
 
-        if matched then
+		matched = REGEX_DETECTION_REGEX.match(search_param)
+		end_of_regex_offset = 1
 
-          case_insensitive = (matched[1].length > 0)
+		case_insensitive = (matched[1].length > 0)
 
-          end_of_regex_offset = 1
+		if case_insensitive then
+			end_of_regex_offset = 2
+		end
 
-          if case_insensitive then
-            end_of_regex_offset = 2
-          end
-          
-          regex_conditions[k] = Regexp.new(search_params[k][1...(search_params[k].length-end_of_regex_offset)], case_insensitive)
-        
-        else
-          #if a regex has not been entered:
-          #substitute * for .* to turn the old filemaker-style glob syntax into a regex
-          search_params[k].gsub!("*", ".*")
-          #add start and end of string matchers to avoid, e.g., matching all plasmids with a 1 when searching for #1
-          search_params[k]= '\A' + search_params[k] + '\Z'
-          #also make it case-insensitive since there's no way to specify one or the other here
-          regex_conditions[k] = Regexp.new(search_params[k], true)
-        end
-      end
-    end
+		Regexp.new(search_param[1...(search_param.length-end_of_regex_offset)], case_insensitive)
 
-    preprocessed_conditions.each do |k,v|
-      regex_conditions[k] = Regexp.new(v)
-    end
+	end
 
-    preliminary_list = search_class.where(conditions)
+	def generate_regex_conditions(search_params)
 
-    final_list = Array.new
+		regex_conditions = {}
+		
+		search_params.each_key do |k|
 
-    preliminary_list.each do |p|
-      include_obj = true
-      regex_conditions.each_key do |k|
-        val = p.send(k.to_s).to_s
-        unless regex_conditions[k].match(val) then
-          include_obj = false
-          break
-        end
-      end
-      if include_obj then
-        final_list << p
-      end
-    end
+			if search_params[k] and search_params[k] != "" and k != "verified" then #TODO: is there a better way to deal with the verified field?
 
-    final_list.sort! { |e0, e1| e0.number_field.to_i <=> e1.number_field.to_i }
+				matched = REGEX_DETECTION_REGEX.match(search_params[k])
 
-    generate_search_object(search_params, final_list)
+				if matched then
+					regex_conditions[k] = parse_search_regex(search_params[k])
+				else
+					regex_conditions[k] = glob_style_search_to_regex(search_params, k)
+				end
 
-    final_list
+			end
+		end
 
-  end
+		regex_conditions
 
-  def preprocess_search_query(search_params)
-    {}
-  end
+	end
+	
+	def process_search_query(search_params, search_class)
+
+		preprocessed_conditions = preprocess_search_query(search_params)
+
+		regex_conditions = generate_regex_conditions(search_params)
+
+		preprocessed_conditions.each do |k,v|
+			regex_conditions[k] = Regexp.new(v)
+		end
+
+		preliminary_list = search_class.all
+
+		final_list = preliminary_list.select do |p|
+			regex_conditions.all? do |k, r|
+				val = p.send(k.to_s).to_s
+				r.match(val)
+			end
+		end
+
+		final_list.sort! { |e0, e1| e0.number_field.to_i <=> e1.number_field.to_i }
+
+		generate_search_object(search_params, final_list)
+
+		final_list
+
+	end
+
+	def preprocess_search_query(search_params)
+		{}
+	end
 
 
 end
