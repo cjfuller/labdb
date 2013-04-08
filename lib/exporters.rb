@@ -32,11 +32,10 @@ module Exportable
 
 		exp_params[:filename] = name_str + "." + format.to_s
 
-		if format.to_s == "fasta" then
-			exp_params[:type] = "text/plain"
-		end
+		exp_params[:type] = "text/plain"
 
 		exp_params
+		
 	end
 
 	def export_to(format)
