@@ -23,6 +23,7 @@
     %tr
       - @table_columns.each do |tc|
         %th= @controller.get_heading(tc)
+      %th= ""
 
   %tbody
     - @table_objects.each do |obj|
