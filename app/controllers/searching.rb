@@ -64,7 +64,11 @@ module Searching
 
 		return nil if s.nil? or s.expired?
 
-		s.loaded_result = Psych.load(s.result) unless s.loaded_result
+		begin
+			s.loaded_result = Psych.load(s.result) unless s.loaded_result
+		rescue ArgumentError => e
+			logger.warn("Exception encountered while loading stored search result.  Likely a development mode lazy-loading issue: #{e.message}")
+		end
 
 		s
 
