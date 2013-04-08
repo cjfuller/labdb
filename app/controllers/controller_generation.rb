@@ -48,13 +48,11 @@ def generate_standard_controller_actions(controller, model_class_in, text_in)
 				#redirect_to polymorphic_path(model_class, search_id: find_current_search.id, page: params[:page]), status: 302 and return
 			elsif valid_search_requested? then
 				@search_id = find_current_search.id
-				@objs = find_current_search.loaded_result
+				@objs = model_class.find(find_current_search.loaded_result.keys).order(model_class.number_field_name)
 				page_size = @objs.size
 			else
-				@objs = model_class.all
+				@objs = model_class.order(model_class.number_field_name)
 			end
-
-			@objs.sort! { |e0, e1| e0.number_field.to_i <=> e1.number_field.to_i }
 
 			@objs = Kaminari.paginate_array(@objs).page(params[:page]).per(page_size)
 
@@ -197,6 +195,7 @@ def generate_standard_controller_actions(controller, model_class_in, text_in)
 		end
 
 		def next
+
 			obj = model_class.find(params[:id])
 			num = obj.number_field.to_i
 
@@ -204,16 +203,18 @@ def generate_standard_controller_actions(controller, model_class_in, text_in)
 
 			if valid_search_requested? then
 				objs = find_current_search.loaded_result
-				next_obj = objs.select { |e| e.number_field.to_i > num }.first
+				next_id = objs.keys.select { |k| objs[k].to_i > num }.first
+				next_obj = model_class.find(next_id) unless next_id.nil?
 			else
-				next_obj = model_class.all.select { |e| e.number_field.to_i > num }.first
+				next_obj = model_class.where("#{obj.number_field_name.to_s} > ?", obj.number_field).order("#{obj.number_field_name.to_s} ASC").limit(1).first
 			end
 
 			handle_next_previous_redirection(next_obj, obj)
-			
+
 		end
 
 		def previous
+
 			obj = model_class.find(params[:id])
 			num = obj.number_field.to_i
 
@@ -221,9 +222,10 @@ def generate_standard_controller_actions(controller, model_class_in, text_in)
 
 			if valid_search_requested? then
 				objs = find_current_search.loaded_result
-				next_obj = objs.select { |e| e.number_field.to_i < num }.last
+				next_id = objs.keys.select { |k| objs[k].to_i < num }.last
+				next_obj = model_class.find(next_id) unless next_id.nil?
 			else
-				next_obj = model_class.all.select { |e| e.number_field.to_i < num }.last
+				next_obj = model_class.where("#{obj.number_field_name.to_s} < ?", obj.number_field).order("#{obj.number_field_name.to_s} DESC").limit(1).first
 			end
 
 			handle_next_previous_redirection(next_obj, obj)

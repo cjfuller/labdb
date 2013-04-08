@@ -16,6 +16,8 @@
 #++
 
 require 'exporters'
+require 'numbered'
+require 'described'
 
 class Yeaststrain < ActiveRecord::Base
 
@@ -25,6 +27,8 @@ class Yeaststrain < ActiveRecord::Base
 
 	include Exportable
 	include LinkableModel
+	include Numbered
+  include Described
 
 	def get_linked(property_name)
 		return nil unless property_name == :plasmidnumber
@@ -38,19 +42,11 @@ class Yeaststrain < ActiveRecord::Base
 		Fields
 	end
 
-	def number_field
-		self.send(number_field_name)
-	end
-
-	def number_field_name
+	def self.number_field_name
 		:strain_number
 	end
 
-	def info_field
-		self.send(info_field_name)
-	end
-
-	def info_field_name
+	def self.info_field_name
 		:strainalias
 	end
 

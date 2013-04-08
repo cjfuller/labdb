@@ -44,7 +44,9 @@ module Searching
 
 		exp_time = Time.now + 1.5*sec_per_day
 
-		s = Search.new(expires: exp_time, result: Psych.dump(result), searchparams: search_params, user_id: curr_user_id)
+		res_hash = result.inject({}) { |h, e| h[e.id]= e.number_field; h }
+
+		s = Search.new(expires: exp_time, result: Psych.dump(res_hash), searchparams: search_params, user_id: curr_user_id)
 
 		s.save
 
@@ -52,10 +54,12 @@ module Searching
 
 	def valid_search_requested?
 
+		return false unless params.has_key?(:search_id)
+
 		current_search = find_current_search
 
-		params.has_key?(:search_id) and current_search and current_search.id == params[:search_id].to_i
-		
+		current_search and current_search.id == params[:search_id].to_i
+
 	end
 
 	def find_current_search
@@ -131,7 +135,7 @@ module Searching
 			regex_conditions[k] = Regexp.new(v)
 		end
 
-		preliminary_list = search_class.all
+		preliminary_list = search_class.order(search_class.number_field_name)
 
 		final_list = preliminary_list.select do |p|
 			regex_conditions.all? do |k, r|
@@ -139,8 +143,6 @@ module Searching
 				r.match(val)
 			end
 		end
-
-		final_list.sort! { |e0, e1| e0.number_field.to_i <=> e1.number_field.to_i }
 
 		generate_search_object(search_params, final_list)
 

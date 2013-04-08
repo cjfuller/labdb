@@ -16,7 +16,8 @@
 #++
 
 require 'exporters'
-
+require 'numbered'
+require 'described'
 
 class Bacterium < ActiveRecord::Base
   Fields = [:comments, :date_entered, :entered_by, :genotype, :notebook, :plasmid_number, :species_bkg, :strain_number, :sequence, :strainalias]
@@ -25,6 +26,8 @@ class Bacterium < ActiveRecord::Base
 
   include Exportable
   include LinkableModel
+  include Numbered
+  include Described
 
   def get_linked(property_name)
   	return nil unless property_name == :plasmid_number
@@ -38,19 +41,11 @@ class Bacterium < ActiveRecord::Base
 		Fields
 	end
 
-  def number_field
-    self.send(number_field_name)
-  end
-
-  def number_field_name
+  def self.number_field_name
     :strain_number
   end
 
-  def info_field
-    self.send(info_field_name)
-  end
-
-  def info_field_name
+  def self.info_field_name
     :strainalias
   end
 
