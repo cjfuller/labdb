@@ -16,11 +16,15 @@
 #++
 
 require 'exporters'
+require 'numbered'
+require 'described'
 
 class Plasmid < ActiveRecord::Base
 
   include Exportable
   include LinkableModel
+  include Numbered
+  include Described
 
   Fields = :antibiotic, :concentration, :date_entered, :description, :enteredby, :notebook, :plasmidalias, :plasmidmap, :plasmidnumber, :plasmidsize, :sequence, :strainnumbers, :vector, :verified
 
@@ -77,19 +81,11 @@ class Plasmid < ActiveRecord::Base
     Fields.reject { |e| e == :plasmidmap }
   end
 
-  def number_field
-    self.send(number_field_name)
-  end
-
-  def number_field_name
+  def self.number_field_name
     :plasmidnumber
   end
 
-  def info_field
-    self.send(info_field_name)
-  end
-
-  def info_field_name
+  def self.info_field_name
     :plasmidalias
   end
 

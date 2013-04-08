@@ -15,34 +15,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-require 'exporters'
-require 'numbered'
-require 'described'
+module Numbered
 
-class Antibody < ActiveRecord::Base
-
-	include Exportable
-	include Numbered
-	include Described
-
-	Fields = [:ab_number, :alias, :box, :comments, :entered_by, :fluorophore, :good_for_if, :good_for_western, :host, :label, :vendor, :date_entered]
-
-	attr_accessible *Fields
-
-  def get_linked(propertyname)
-  	nil
-  end
-
-	def exportable_fields
-		Fields
+	def number_field
+		send(number_field_name)
 	end
 
-	def self.number_field_name
-		:ab_number
-	end
-
-	def self.info_field_name
-		:alias
+	def number_field_name
+		self.class.number_field_name
 	end
 
 end
+

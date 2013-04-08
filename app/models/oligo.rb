@@ -16,11 +16,15 @@
 #++
 
 require 'exporters'
+require 'numbered'
+require 'described'
 
 
 class Oligo < ActiveRecord::Base
 
 	include Exportable
+	include Numbered
+  include Described
 
   Fields = [:oligoalias, :date_entered, :entered_by, :notebook, :oligo_number, :organism, :purpose, :sequence, :vendor]
 
@@ -34,19 +38,11 @@ class Oligo < ActiveRecord::Base
 		Fields
 	end
 
-	def number_field
-		self.send(number_field_name)
-	end
-
-	def number_field_name
+	def self.number_field_name
 		:oligo_number
 	end
 
-	def info_field
-		self.send(info_field_name)
-	end
-
-	def info_field_name
+	def self.info_field_name
 		:oligoalias
 	end
 
