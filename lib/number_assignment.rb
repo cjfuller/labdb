@@ -19,6 +19,8 @@ class NumberAssignment
 
 	@assignment_mutex = Mutex.new
 	@temporary_assignments = {}
+	@session_log = {}
+	EXPIRY_TIME_S = 60*60
 
 	def self.clear_unused_temporaries(session_id)
 
@@ -27,6 +29,7 @@ class NumberAssignment
 			@temporary_assignments.each_value do |v|
 
 				v.delete_if { |kk,vv| vv == session_id}
+				v.delete_if { |kk,vv| Time.now - @session_log[vv] > EXPIRY_TIME_S }
 
 			end
 
@@ -44,6 +47,8 @@ class NumberAssignment
 		end
 
 		@temporary_assignments[klass][next_index]= requesting_session[:session_id]
+
+		@session_log[requesting_session[:session_id]] = Time.now
 
 		next_index
 
