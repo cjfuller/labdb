@@ -21,10 +21,10 @@
 		%a.dropdown-toggle{'data-toggle' => "dropdown", href: '#'}
 			%span.caret
 			Actions
-		%ul.dropdown-menu{role: "menu", 'aria-labelledby' => "dropdownMenu"}
-
-			%li= link_to 'Edit', edit_polymorphic_path(@obj)
-			%li= link_to 'Duplicate', polymorphic_path(@obj, action: "new", id: @obj.id)
+		%ul.dropdown-menu
+			- if @auth_is_rw then
+				%li= link_to 'Edit', edit_polymorphic_path(@obj)
+				%li= link_to 'Duplicate', polymorphic_path(@obj, action: "new", id: @obj.id)
 			%li= link_to 'Show neighboring', polymorphic_path(@model_class, id_for_page: @obj.id)
 			%li.divider
 			%li.dropdown-submenu

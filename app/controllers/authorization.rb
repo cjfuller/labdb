@@ -18,26 +18,29 @@
 module Authorization
 
   ALLOWED_LABEL = "allowedusers"
+  READONLY_LABEL = "readonlyusers"
   NAME_TAG = "name"
   EMAIL_TAG = "email"
 
-	def self.included(base)
-		base.class_exec do 
-			before_filter :require_authorization
-		end
-	end
+  def self.included(base)
+    base.class_exec do 
+      before_filter :require_authorization
+    end
+  end
 
-	def denied
+  def denied
     render :text => "Access denied."
   end
 
   def require_authorization
 
-    unless authorized? then
+    unless auth_full? or (auth_readonly? and request.get?) then
 
       redirect_to "/", notice: "Access denied."
 
     end
+
+    @auth_is_rw = auth_full?
 
   end
 
@@ -49,7 +52,7 @@ module Authorization
 
   end
 
-  def authorized?
+  def auth?(auth_type_key)
 
     curr_uid = session[:user_id]
 
@@ -61,7 +64,7 @@ module Authorization
 
     load_auth unless @users_loaded
 
-    allowed_users = @user_data[ALLOWED_LABEL]
+    allowed_users = @user_data[auth_type_key]
 
     allowed_users.each do |u|
 
@@ -75,6 +78,16 @@ module Authorization
 
   end
 
+  def auth_readonly?
+
+    auth?(READONLY_LABEL)
+
+  end
+
+  def auth_full?
+
+    auth?(ALLOWED_LABEL)
+
+  end
 
 end
-
