@@ -17,7 +17,7 @@
 
 .navbar
   .navbar-inner
-    .container
+    %div{class: 'container pull-left'}
       %nav
         %ul{class: "nav pull-left"}
           %li
@@ -27,7 +27,8 @@
           %li.divider-vertical
           %li= link_to 'New', new_polymorphic_path(@model_class)
           %li.divider-vertical
+    %div{class: 'container pull-right rightalign'}
       %nav
-        %ul{class: "nav pull-right"}
+        %ul{class: "nav pull-left"}
           = render partial: @context_specific_buttons if @context_specific_buttons
 

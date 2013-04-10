@@ -97,8 +97,8 @@ class AntibodiesController < ApplicationController
 
   def define_table_view_vars
 
-    @table_columns = [:ab_number, :date_entered, :entered_by, :alias, :host]
-    @controller = AntibodiesController
+    @table_columns = {sort: :ab_number, others: [:date_entered, :entered_by, :alias, :host]}
+    @controller = self.class
     @table_objects = @antibodies
 
   end

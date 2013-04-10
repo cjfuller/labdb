@@ -135,7 +135,7 @@ module Searching
 			regex_conditions[k] = Regexp.new(v)
 		end
 
-		preliminary_list = search_class.order(search_class.number_field_name)
+		preliminary_list = search_class.order(index_order)
 
 		final_list = preliminary_list.select do |p|
 			regex_conditions.all? do |k, r|
