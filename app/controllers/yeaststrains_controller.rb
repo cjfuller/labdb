@@ -49,8 +49,8 @@ class YeaststrainsController < ApplicationController
 
   def define_table_view_vars
 
-    @table_columns = [:strain_number, :date_entered, :entered_by, :species, :strainalias]
-    @controller = YeaststrainsController
+    @table_columns = {sort: :strain_number, others: [:date_entered, :entered_by, :species, :strainalias]}
+    @controller = self.class
     @table_objects = @yeaststrains
 
   end

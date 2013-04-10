@@ -47,8 +47,8 @@ class OligosController < ApplicationController
 
   def define_table_view_vars
 
-    @table_columns = [:oligo_number, :date_entered, :entered_by, :oligoalias]
-    @controller = OligosController
+    @table_columns = {sort: :oligo_number, others: [:date_entered, :entered_by, :oligoalias]}
+    @controller = self.class
     @table_objects = @oligos
 
   end

@@ -28,10 +28,10 @@ class PlasmidsController < ApplicationController
     OBJ_TAG
   end
 
-  @@headings = {:plasmidnumber => "#{OBJ_TAG} Number", :date_entered => "Date entered",
+  @@headings = {:plasmidnumber => "#{OBJ_TAG} Number", :date_entered => "Date",
     :enteredby => "Entered by", :notebook => "Notebook", :verified => "Sequence verified?",
     :plasmidalias => "Alias", :antibiotic => "Antibiotic resistances", :plasmidsize => "Size",
-    :concentration => "Concentration (ug/mL)", :strainnumbers => "#{Naming.name_for(Bacterium)} numbers",
+    :concentration => "Concentration (ug/mL)", :strainnumbers => "#{Naming.name_for(Bacterium)}",
     :description => "Description", :sequence => "Sequence", :vector => "Vector",
     :mapreference => "Map"}
   
@@ -53,8 +53,8 @@ class PlasmidsController < ApplicationController
 
   def define_table_view_vars
     
-    @table_columns = [:plasmidnumber, :date_entered, :enteredby, :plasmidalias, :plasmidsize, :strainnumbers]
-    @controller = PlasmidsController
+    @table_columns = {sort: :plasmidnumber, others: [:date_entered, :enteredby, :plasmidalias, :strainnumbers]}
+    @controller = self.class
     @table_objects = @plasmids
 
   end

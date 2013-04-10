@@ -18,22 +18,37 @@
 = page_entries_info @table_objects
 = paginate @table_objects
 
+
 %table{class: "table table-striped table-condensed table-hover table-bordered"}
   %thead
     %tr
-      - @table_columns.each do |tc|
-        %th= @controller.get_heading(tc)
+      %th
+        - header = @controller.get_heading(@table_columns[:sort]).gsub(" ", "&nbsp;").html_safe
+        %div{class: @reverse_sorted ? 'dropup' : 'dropdown'}><
+          .nowrap
+            .nowrap-row
+              .nowrap-cell= header
+              .nowrap-cell
+                .btn-group><
+                  %a{class: "btn btn-link dropdown-toggle btn-mini", href: url_for(params.merge(sort_order: @reverse_sorted ? 'ASC' : 'DESC'))}
+                    %span.caret
+
+      - @table_columns[:others].each do |tc|
+        %th= @controller.get_heading(tc).gsub(" ", "&nbsp;").html_safe
       %th= ""
 
   %tbody
     - @table_objects.each do |obj|
       %tr
-        
-        - @table_columns.each do |tc|
-          %td= obj.send(tc)
-        
-        %td= link_to 'Show', polymorphic_path(obj, search_id: @search_id), class: "btn btn-mini btn-info"
-        %td= link_to 'Edit', edit_polymorphic_path(obj), class: "btn btn-mini btn-info"
-        %td= link_to 'Destroy', obj, confirm: "Delete #{Naming.name_for(obj.class)}#{obj.number_field}?  Are you sure?", method: :delete, class: "btn btn-mini btn-danger"
+        %td= obj.send(@table_columns[:sort])
+        - @table_columns[:others].each do |tc|
+          %td= obj.send(tc)        
+        %td
+          .nowrap-row
+            .nowrap-cell= link_to 'Show', polymorphic_path(obj, search_id: @search_id), class: "btn btn-mini btn-info"
+            .nowrap-cell= "&nbsp;".html_safe
+            .nowrap-cell= link_to 'Edit', edit_polymorphic_path(obj), class: "btn btn-mini btn-info"
+            .nowrap-cell= "&nbsp;".html_safe         
+            .nowrap-cell= link_to 'Destroy', obj, confirm: "Delete #{Naming.name_for(obj.class)}#{obj.number_field}?  Are you sure?", method: :delete, class: "btn btn-mini btn-danger"
 = paginate @table_objects
 

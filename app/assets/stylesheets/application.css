@@ -11,6 +11,8 @@
  *= require_self
  *= require_tree .
  *= require bootstrap.css
+ *= require navbar_extra.css
+ *= require tableview.css
 */
 
 body {

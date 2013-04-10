@@ -34,31 +34,55 @@ def generate_standard_controller_actions(controller, model_class_in, text_in)
 			self.class.model_class
 		end
 
+		def define_sort_direction
+			@reverse_sorted = (sort_order == "DESC")
+		end
+
+		def sort_order
+			order = "DESC"
+			if params[:sort_order] == "ASC" then
+				order = "ASC"
+			end
+			order
+		end
+
+		def index_order
+			"#{model_class.number_field_name} #{sort_order}"
+		end
+
+		def index_page_number_for_id(id, page_size)
+			objs = model_class.order(index_order)
+			ind = objs.find_index { |obj| obj.id.to_i == id.to_i }
+			ind/page_size + 1
+		end
+
+
 		def index
 
 			define_ui_variables(status_text: self.class.text.pluralize, context_specific_buttons: "shared/top_pagination_buttons")
 
-			page_size = 250
-			params[:page] = 1 unless params[:page]
+			page_size = 100
+			page = params[:page] or 1
 
 			if params.has_key?(type) then
 				@objs = process_search_query(params[type], model_class)
-				page_size = @objs.size
+				@objs = Kaminari.paginate_array(@objs).page(page).per(page_size)
 				@search_id = find_current_search.id
-				#redirect_to polymorphic_path(model_class, search_id: find_current_search.id, page: params[:page]), status: 302 and return
 			elsif valid_search_requested? then
 				@search_id = find_current_search.id
-				@objs = model_class.find(find_current_search.loaded_result.keys).order(model_class.number_field_name)
-				page_size = @objs.size
+				@objs = model_class.find(find_current_search.loaded_result.keys).order(index_order).page(page).per(page_size)
 			else
-				@objs = model_class.order(model_class.number_field_name)
+				if params[:id_for_page] and not params[:page] then
+					page = index_page_number_for_id(params[:id_for_page], page_size)
+				end
+				@objs = model_class.order(index_order).page(page).per(page_size)
 			end
 
-			@objs = Kaminari.paginate_array(@objs).page(params[:page]).per(page_size)
 
 			instance_variable_set("@" + type.pluralize, @objs)
 
 			define_table_view_vars
+			define_sort_direction
 
 			respond_to do |format|
 				format.html

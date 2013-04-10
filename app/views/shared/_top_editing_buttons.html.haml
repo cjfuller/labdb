@@ -17,18 +17,24 @@
 
 %li.divider-vertical
 - if readonly? then
-	%li.dropdown
+	%li{class: "dropdown"}
 		%a.dropdown-toggle{'data-toggle' => "dropdown", href: '#'}
-			Actions
 			%span.caret
-		%ul.dropdown-menu{role: "menu", 'aria-labelledby' => "dLabel"}
-
-			%li= link_to 'Export YAML', polymorphic_path(@obj, action: "export", exportformat: :yml)
-			- if @obj.respond_to? :has_sequence? and @obj.has_sequence? then
-				%li= link_to 'Export FASTA', polymorphic_path(@obj, action: "export", exportformat: :fasta)
+			Actions
+		%ul.dropdown-menu{role: "menu", 'aria-labelledby' => "dropdownMenu"}
 
 			%li= link_to 'Edit', edit_polymorphic_path(@obj)
 			%li= link_to 'Duplicate', polymorphic_path(@obj, action: "new", id: @obj.id)
+			%li= link_to 'Show neighboring', polymorphic_path(@model_class, id_for_page: @obj.id)
+			%li.divider
+			%li.dropdown-submenu
+				%a Export
+				%ul.dropdown-menu
+					%li= link_to 'Export YAML', polymorphic_path(@obj, action: "export", exportformat: :yml)
+					- if @obj.respond_to? :has_sequence? and @obj.has_sequence? then
+						%li= link_to 'Export FASTA', polymorphic_path(@obj, action: "export", exportformat: :fasta)
+
+		
 	
 	%li.divider-vertical
 	%li= link_to '&larr; Previous'.html_safe, polymorphic_path(@obj, action: "previous", id: @obj.id, search_id: @search_id)

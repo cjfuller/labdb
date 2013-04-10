@@ -1,0 +1,15 @@
+  
+  .nowrap {
+  	white-space: nowrap;
+    display: inline-table;
+  }
+
+  .nowrap-row {
+  	white-space: nowrap;
+    display: table-row;
+  }
+
+  .nowrap-cell {
+  	white-space: nowrap;
+    display: table-cell;
+  }
