@@ -34,8 +34,12 @@ def generate_standard_controller_actions(controller, model_class_in, text_in)
 			self.class.model_class
 		end
 
+		def reverse_sorted?
+			(sort_order == "DESC")
+		end
+
 		def define_sort_direction
-			@reverse_sorted = (sort_order == "DESC")
+			@reverse_sorted = reverse_sorted?
 		end
 
 		def sort_order
@@ -70,7 +74,9 @@ def generate_standard_controller_actions(controller, model_class_in, text_in)
 				@search_id = find_current_search.id
 			elsif valid_search_requested? then
 				@search_id = find_current_search.id
-				@objs = model_class.find(find_current_search.loaded_result.keys).order(index_order).page(page).per(page_size)
+				@objs = model_class.find(find_current_search.loaded_result.keys)
+				@objs.reverse! if reverse_sorted?
+				@objs = Kaminari.paginate_array(@objs).page(page).per(page_size)
 			else
 				if params[:id_for_page] and not params[:page] then
 					page = index_page_number_for_id(params[:id_for_page], page_size)
