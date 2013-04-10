@@ -46,9 +46,10 @@
         %td
           .nowrap-row
             .nowrap-cell= link_to 'Show', polymorphic_path(obj, search_id: @search_id), class: "btn btn-mini btn-info"
-            .nowrap-cell= "&nbsp;".html_safe
-            .nowrap-cell= link_to 'Edit', edit_polymorphic_path(obj), class: "btn btn-mini btn-info"
-            .nowrap-cell= "&nbsp;".html_safe         
-            .nowrap-cell= link_to 'Destroy', obj, confirm: "Delete #{Naming.name_for(obj.class)}#{obj.number_field}?  Are you sure?", method: :delete, class: "btn btn-mini btn-danger"
+            -if @auth_is_rw then
+              .nowrap-cell= "&nbsp;".html_safe
+              .nowrap-cell= link_to 'Edit', edit_polymorphic_path(obj), class: "btn btn-mini btn-info"
+              .nowrap-cell= "&nbsp;".html_safe         
+              .nowrap-cell= link_to 'Destroy', obj, confirm: "Delete #{Naming.name_for(obj.class)}#{obj.number_field}?  Are you sure?", method: :delete, class: "btn btn-mini btn-danger"
 = paginate @table_objects
 

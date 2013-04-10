@@ -25,8 +25,9 @@
           %li.divider-vertical
           %li= link_to 'Search', @search_path
           %li.divider-vertical
-          %li= link_to 'New', new_polymorphic_path(@model_class)
-          %li.divider-vertical
+          - if @auth_is_rw then
+            %li= link_to 'New', new_polymorphic_path(@model_class)
+            %li.divider-vertical
     %div{class: 'container pull-right rightalign'}
       %nav
         %ul{class: "nav pull-left"}

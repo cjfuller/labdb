@@ -15,8 +15,8 @@
 -# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -#++
 
-- prev_button = link_to_previous_page @table_objects, 'Previous page', params
-- next_button = link_to_next_page @table_objects, 'Next page', params
+- prev_button = link_to_previous_page @table_objects, 'Previous page', params: {search_id: @search_id}
+- next_button = link_to_next_page @table_objects, 'Next page', params: {search_id: @search_id}
 
 - if prev_button then
 	%li.divider-vertical
