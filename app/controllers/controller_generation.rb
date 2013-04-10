@@ -70,16 +70,17 @@ def generate_standard_controller_actions(controller, model_class_in, text_in)
 
 			if params.has_key?(type) then
 				@objs = process_search_query(params[type], model_class)
-				@objs = Kaminari.paginate_array(@objs).page(page).per(page_size)
+				@objs = Kaminari.paginate_array(@objs).page(page).per(@objs.size)
 				@search_id = find_current_search.id
 			elsif valid_search_requested? then
 				@search_id = find_current_search.id
-				@objs = model_class.find(find_current_search.loaded_result.keys)
+				result = find_current_search.loaded_result
+				@objs = model_class.find(result.keys).sort { |e1, e2| result[e1.id].to_i <=> result[e2.id].to_i }
 				@objs.reverse! if reverse_sorted?
 				@objs = Kaminari.paginate_array(@objs).page(page).per(page_size)
 			else
 				if params[:id_for_page] and not params[:page] then
-					page = index_page_number_for_id(params[:id_for_page], page_size)
+					page = index_page_number_for_id(params[:id_for_page], @objs.size)
 				end
 				@objs = model_class.order(index_order).page(page).per(page_size)
 			end
@@ -233,7 +234,7 @@ def generate_standard_controller_actions(controller, model_class_in, text_in)
 
 			if valid_search_requested? then
 				objs = find_current_search.loaded_result
-				next_id = objs.keys.select { |k| objs[k].to_i > num }.first
+				next_id = objs.keys.select { |k| objs[k].to_i > num }.sort { |e1, e2| objs[e1].to_i <=> objs[e2].to_i }.first
 				next_obj = model_class.find(next_id) unless next_id.nil?
 			else
 				next_obj = model_class.where("#{obj.number_field_name.to_s} > ?", obj.number_field).order("#{obj.number_field_name.to_s} ASC").limit(1).first
@@ -252,7 +253,8 @@ def generate_standard_controller_actions(controller, model_class_in, text_in)
 
 			if valid_search_requested? then
 				objs = find_current_search.loaded_result
-				next_id = objs.keys.select { |k| objs[k].to_i < num }.last
+				next_id = objs.keys.select { |k| objs[k].to_i < num }.sort { |e1, e2| objs[e1].to_i <=> objs[e2].to_i }.last
+				puts next_id
 				next_obj = model_class.find(next_id) unless next_id.nil?
 			else
 				next_obj = model_class.where("#{obj.number_field_name.to_s} < ?", obj.number_field).order("#{obj.number_field_name.to_s} DESC").limit(1).first
