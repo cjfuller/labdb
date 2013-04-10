@@ -70,7 +70,7 @@ def generate_standard_controller_actions(controller, model_class_in, text_in)
 
 			if params.has_key?(type) then
 				@objs = process_search_query(params[type], model_class)
-				@objs = Kaminari.paginate_array(@objs).page(page).per(@objs.size)
+				@objs = Kaminari.paginate_array(@objs).page(page).per(page_size)
 				@search_id = find_current_search.id
 			elsif valid_search_requested? then
 				@search_id = find_current_search.id
