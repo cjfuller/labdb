@@ -51,6 +51,26 @@ module StandardActions
 		ind/page_size + 1
 	end
 
+	def index_with_new_search(page_size, page)
+		@objs = process_search_query(params[type], model_class)
+		@objs = Kaminari.paginate_array(@objs).page(page).per(page_size)
+		@search_id = find_current_search.id
+	end
+
+	def index_with_stored_search(page_size, page)
+		@search_id = find_current_search.id
+		result = find_current_search.loaded_result
+		@objs = model_class.find(result.keys).sort { |e1, e2| result[e1.id].to_i <=> result[e2.id].to_i }
+		@objs.reverse! if reverse_sorted?
+		@objs = Kaminari.paginate_array(@objs).page(page).per(page_size)
+	end
+
+	def index_all(page_size, page)
+		if params[:id_for_page] and not params[:page] then
+			page = index_page_number_for_id(params[:id_for_page], page_size)
+		end
+		@objs = model_class.order(index_order).page(page).per(page_size)
+	end
 
 	def index
 
@@ -60,22 +80,12 @@ module StandardActions
 		page = params[:page] or 1
 
 		if params.has_key?(type) then
-			@objs = process_search_query(params[type], model_class)
-			@objs = Kaminari.paginate_array(@objs).page(page).per(page_size)
-			@search_id = find_current_search.id
+			index_with_new_search(page_size, page)
 		elsif valid_search_requested? then
-			@search_id = find_current_search.id
-			result = find_current_search.loaded_result
-			@objs = model_class.find(result.keys).sort { |e1, e2| result[e1.id].to_i <=> result[e2.id].to_i }
-			@objs.reverse! if reverse_sorted?
-			@objs = Kaminari.paginate_array(@objs).page(page).per(page_size)
+			index_with_stored_search(page_size, page)
 		else
-			if params[:id_for_page] and not params[:page] then
-				page = index_page_number_for_id(params[:id_for_page], page_size)
-			end
-			@objs = model_class.order(index_order).page(page).per(page_size)
+			index_all(page_size, page)
 		end
-
 
 		instance_variable_set("@" + type.pluralize, @objs)
 
@@ -105,6 +115,12 @@ module StandardActions
 		end
 	end
 
+	def auto_fill_generated_fields
+		generate_date(@obj)
+		generate_name(@obj)
+		@obj.send(@obj.number_field_name.to_s + "=", generate_object_number(model_class, @obj.number_field_name))
+	end
+
 	def new
 
 		if params[:id] then
@@ -117,9 +133,7 @@ module StandardActions
 
 		define_ui_variables(status_text: "New #{self.class.text.downcase}", readonly: false, submit_text: "Create #{self.class.text.downcase}")
 
-		generate_date(@obj)
-		generate_name(@obj)
-		@obj.send(@obj.number_field_name.to_s + "=", generate_object_number(model_class, @obj.number_field_name))
+		auto_fill_generated_fields
 
 		respond_to do |format|
 			format.html
