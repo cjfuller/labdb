@@ -71,7 +71,7 @@ module StandardActions
 			@objs = Kaminari.paginate_array(@objs).page(page).per(page_size)
 		else
 			if params[:id_for_page] and not params[:page] then
-				page = index_page_number_for_id(params[:id_for_page], @objs.size)
+				page = index_page_number_for_id(params[:id_for_page], page_size)
 			end
 			@objs = model_class.order(index_order).page(page).per(page_size)
 		end
