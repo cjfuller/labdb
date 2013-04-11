@@ -15,9 +15,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-require 'object_naming'
-
 class AntibodiesController < ApplicationController
+
+  include StandardActions
 
   OBJ_TAG = Naming.name_for(Antibody)
 
@@ -36,6 +36,14 @@ class AntibodiesController < ApplicationController
 
   def self.get_heading(var_name)
     @@headings[var_name]
+  end
+
+  def self.model_class
+    Antibody
+  end
+
+  def self.text
+    "Antibody"
   end
 
   def search_path
@@ -102,7 +110,5 @@ class AntibodiesController < ApplicationController
     @table_objects = @antibodies
 
   end
-
-  generate_standard_controller_actions(self, Antibody, "Antibody")
 
 end

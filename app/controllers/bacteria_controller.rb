@@ -15,9 +15,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-require 'object_naming'
-
 class BacteriaController < ApplicationController
+
+  include StandardActions
 
   OBJ_TAG = Naming.name_for(Bacterium)
 
@@ -30,6 +30,14 @@ class BacteriaController < ApplicationController
 
   def self.get_heading(var_name)
     @@headings[var_name]
+  end
+
+  def self.model_class
+    Bacterium
+  end
+
+  def self.text
+    "Bacterial strain"
   end
 
   def search_path
@@ -53,6 +61,6 @@ class BacteriaController < ApplicationController
 
   end
 
-  generate_standard_controller_actions(self, Bacterium, "Bacterial strain")
+
 
 end

@@ -15,9 +15,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-require 'object_naming'
-
 class OligosController < ApplicationController
+
+  include StandardActions
 
   OBJ_TAG = Naming.name_for(Oligo)
 
@@ -30,6 +30,14 @@ class OligosController < ApplicationController
 
   def self.get_heading(var_name)
     @@headings[var_name]
+  end
+
+  def self.model_class
+    Oligo
+  end
+
+  def self.text
+    "Oligo"
   end
 
   def search_path
@@ -52,7 +60,5 @@ class OligosController < ApplicationController
     @table_objects = @oligos
 
   end
-
-  generate_standard_controller_actions(self, Oligo, "Oligo")
 
 end
