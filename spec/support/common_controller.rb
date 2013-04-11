@@ -255,7 +255,6 @@ module CommonControllerSpecs
 					end
 
 					it "should limit previous/next navigation to within the search results when at the first object" do
-						puts "about to get previous"
 						get :previous, id: @search_obj.id, search_id: @s
 						response.should redirect_to(action: :show, id: @search_obj.id)
 					end
