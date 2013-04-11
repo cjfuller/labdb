@@ -15,10 +15,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-require 'object_naming'
-
 class YeaststrainsController < ApplicationController
   
+  include StandardActions
+
   OBJ_TAG = Naming.name_for(Yeaststrain)
 
   def obj_tag
@@ -32,6 +32,14 @@ class YeaststrainsController < ApplicationController
 
   def self.get_heading(var_name)
     @@headings[var_name]
+  end
+
+  def self.model_class
+    Yeaststrain
+  end
+
+  def self.text
+    "Yeast strain"
   end
 
   def search_path
@@ -54,8 +62,6 @@ class YeaststrainsController < ApplicationController
     @table_objects = @yeaststrains
 
   end
-
-  generate_standard_controller_actions(self, Yeaststrain, "Yeast strain")
 
 end
 

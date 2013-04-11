@@ -15,9 +15,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-require 'object_naming'
-
 class PlasmidsController < ApplicationController
+
+  include StandardActions
 
   before_filter :antibiotic_params_from_form_for_create, only: [:create]
   before_filter :antibiotic_params_from_form, only: [:update]
@@ -39,6 +39,14 @@ class PlasmidsController < ApplicationController
   
   def self.get_heading(var_name)
     @@headings[var_name]
+  end
+
+  def self.model_class
+    Plasmid
+  end
+
+  def self.text
+    "Plasmid"
   end
 
   def search_path
@@ -136,9 +144,7 @@ class PlasmidsController < ApplicationController
     conditions
 
   end
-  
-  generate_standard_controller_actions(self, Plasmid, "Plasmid")
-  
+    
   def upload
   end
     
