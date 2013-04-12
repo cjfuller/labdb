@@ -229,7 +229,11 @@ module StandardActions
 
 	end
 
-	def next
+	def find_next_or_previous_obj(direction)
+
+		num_comparators = {next: :>, previous: :<}
+		sort_direction = {next: "ASC", previous: "DESC"}
+
 
 		obj = model_class.find(params[:id])
 		num = obj.number_field.to_i
@@ -238,33 +242,27 @@ module StandardActions
 
 		if valid_search_requested? then
 			objs = find_current_search.loaded_result
-			next_id = objs.keys.select { |k| objs[k].to_i > num }.sort { |e1, e2| objs[e1].to_i <=> objs[e2].to_i }.first
+			ids = objs.keys.select { |k| objs[k].to_i.send(num_comparators[direction], num) }.sort { |e1, e2| objs[e1].to_i <=> objs[e2].to_i }
+			ids.reverse! if direction == :previous
+			next_id = ids.first
 			next_obj = model_class.find(next_id) unless next_id.nil?
 		else
-			next_obj = model_class.where("#{obj.number_field_name.to_s} > ?", obj.number_field).order("#{obj.number_field_name.to_s} ASC").limit(1).first
+			next_obj = model_class.where("#{obj.number_field_name.to_s} #{num_comparators[direction]} ?", obj.number_field).order("#{obj.number_field_name.to_s} #{sort_direction[direction]}").limit(1).first
 		end
 
 		handle_next_previous_redirection(next_obj, obj)
 
 	end
 
+	def next
+
+		find_next_or_previous_obj(:next)
+
+	end
+
 	def previous
 
-		obj = model_class.find(params[:id])
-		num = obj.number_field.to_i
-
-		next_obj = nil
-
-		if valid_search_requested? then
-			objs = find_current_search.loaded_result
-			next_id = objs.keys.select { |k| objs[k].to_i < num }.sort { |e1, e2| objs[e1].to_i <=> objs[e2].to_i }.last
-			puts next_id
-			next_obj = model_class.find(next_id) unless next_id.nil?
-		else
-			next_obj = model_class.where("#{obj.number_field_name.to_s} < ?", obj.number_field).order("#{obj.number_field_name.to_s} DESC").limit(1).first
-		end
-
-		handle_next_previous_redirection(next_obj, obj)
+		find_next_or_previous_obj(:previous)
 
 	end
 
