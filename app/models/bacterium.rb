@@ -29,13 +29,14 @@ class Bacterium < ActiveRecord::Base
   include Numbered
   include Described
 
-  def get_linked(property_name)
-  	return nil unless property_name == :plasmid_number
-  	 return nil if self.plasmid_number.nil?
-  	numbers = self.plasmid_number.split(",").map! { |e| e.strip }
-  	get_linked_plasmids(numbers)
+  def linked_property
+    :plasmid_number
   end
 
+  def get_linked(property_name)
+    numbers = get_linked_number_fields(property_name)
+    get_linked_plasmids(numbers) unless numbers.nil?
+  end
   	
 	def exportable_fields
 		Fields

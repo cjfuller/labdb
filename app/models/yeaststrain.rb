@@ -28,16 +28,17 @@ class Yeaststrain < ActiveRecord::Base
 	include Exportable
 	include LinkableModel
 	include Numbered
-  include Described
+	include Described
 
-	def get_linked(property_name)
-		return nil unless property_name == :plasmidnumber
-		return nil if self.plasmidnumber.nil?
-		numbers = self.plasmidnumber.split(",").map! { |e| e.strip }
-		get_linked_plasmids(numbers)
+	def linked_property
+		:plasmidnumber
 	end
 
-		
+	def get_linked(property_name)
+		numbers = get_linked_number_fields(property_name)
+		get_linked_plasmids(numbers) unless numbers.nil?
+	end
+
 	def exportable_fields
 		Fields
 	end
