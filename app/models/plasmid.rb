@@ -69,13 +69,14 @@ class Plasmid < ActiveRecord::Base
     self.save
   end
   
-  def get_linked(property_name)
-    return nil unless property_name == :strainnumbers
-    return nil if self.strainnumbers.nil?
-    numbers = self.strainnumbers.split(",").map! { |e| e.strip }
-    get_linked_bacterial_strains(numbers)
+  def linked_property
+    :strainnumbers
   end
 
+  def get_linked(property_name)
+    numbers = get_linked_number_fields(property_name)
+    get_linked_bacterial_strains(numbers) unless numbers.nil?
+  end
 
   def exportable_fields
     Fields.reject { |e| e == :plasmidmap }

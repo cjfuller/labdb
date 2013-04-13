@@ -125,6 +125,9 @@ module StandardActions
 
 		if params[:id] then
 			@obj = model_class.find(params[:id]).dup
+			if @obj.respond_to?(:linkable?) and @obj.linkable? then
+				@obj.clear_linked
+			end
 		else
 			@obj = model_class.new()
 		end
