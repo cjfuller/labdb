@@ -74,6 +74,7 @@ Straightlabdb::Application.routes.draw do
       get 'export'
       get 'next'
       get 'previous'
+      post 'create_from_plasmid'
     end
   end
 

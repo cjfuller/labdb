@@ -49,9 +49,9 @@ describe PlasmidsController do
 
     end
 
-   end
+  end
 
-   describe "size calculation" do 
+  describe "size calculation" do 
 
     it "should calculate the correct size when showing or editing" do
 
@@ -64,9 +64,9 @@ describe PlasmidsController do
 
     end
 
-   end
+  end
 
-   describe "antibiotic handling" do 
+  describe "antibiotic handling" do 
 
     it "should display antibiotics correctly" do
 

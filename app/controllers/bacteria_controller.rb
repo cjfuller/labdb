@@ -61,6 +61,49 @@ class BacteriaController < ApplicationController
 
   end
 
+  def append_strain_number(strain, plasmid)
+
+    if /\d+/.match(plasmid.strainnumbers) then
+      plasmid.strainnumbers = plasmid.strainnumbers + ",#{strain.strain_number}"
+    else
+      plasmid.strainnumbers = strain.strain_number
+    end
+
+    plasmid.save
+
+  end
+
+  def copy_fields_from_plasmid(strain, plasmid)
+    strain.strainalias = plasmid.plasmidalias
+    strain.entered_by = plasmid.enteredby
+    strain.notebook = plasmid.notebook
+    strain.comments = plasmid.description
+    strain.plasmid_number = plasmid.plasmidnumber
+  end
+
+  def create_from_plasmid
+
+    plas_id = params[:plasmid_id]
+
+    if plas_id.nil?
+      redirect_to controller: 'bacteria', action: :new and return
+    end
+
+    plas = Plasmid.find(plas_id)
+
+    @obj = Bacterium.new
+
+    auto_fill_generated_fields
+
+    copy_fields_from_plasmid(@obj, plas)
+
+    append_strain_number(@obj, plas)
+
+    @obj.save
+
+    redirect_to polymorphic_path(@obj, action: :edit)
+
+  end
 
 
 end
