@@ -21,11 +21,15 @@
 = f.row([3,3,3,3], keys, SamplesController.headings_for(keys), {}, readonly_for(keys), {}) 
 
 
-- keys = [:entered_by, :notebook, :linked_items, :storage_type]
-= f.row([3,3,3,3], keys, SamplesController.headings_for(keys), {}, readonly_for(keys), {})
+- keys = [:entered_by, :notebook, :storage_type]
+= f.row([3,3,6], keys, SamplesController.headings_for(keys), {}, readonly_for(keys), {})
 
-- keys = [:depleted]
-= f.row([3,3,3,3], keys, SamplesController.headings_for(keys), {}, readonly_for(keys), {depleted: true})
+- if readonly?
+  - keys = [:depleted, :plasmid_numbers, :strain_numbers, :linked_sample_numbers]
+  = f.row([3,3,3,3], keys, SamplesController.headings_for(keys), {}, readonly_for(keys), {depleted: true})
+- else
+  - keys = [:depleted, :linked_items]
+  = f.row([3,3,3,3], keys, SamplesController.headings_for(keys), {}, readonly_for(keys), {depleted: true})
 
 .row-fluid#description-row
   .span12
