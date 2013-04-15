@@ -34,14 +34,20 @@ module LinkableModel
     get_linked_items(Bacterium, :strain_number, strain_numbers)
   end
 
+  def get_linked_samples(sample_numbers)
+    get_linked_items(Sample, :sample_number, sample_numbers)
+  end
+
   def get_linked_number_fields(property_name)
-    return nil unless property_name == linked_property
+    return nil unless linked_properties.include? property_name
     return nil if self.send(property_name).nil?
     self.send(property_name).split(",").map! { |e| e.strip }
   end
 
   def clear_linked
-    self.send(linked_property.to_s + "=", nil)
+    linked_properties.each do |linked_property|
+      self.send(linked_property.to_s + "=", nil)
+    end
   end
 
   def linkable?

@@ -15,19 +15,17 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-class YeaststrainsController < ApplicationController
+class SamplesController < ApplicationController
   
   include StandardActions
 
-  OBJ_TAG = Naming.name_for(Yeaststrain)
+  OBJ_TAG = Naming.name_for(Sample)
 
   def obj_tag
     OBJ_TAG
   end
 
-  @@headings = {strain_number: "#{OBJ_TAG} Number", date_entered: "Date entered",
-                entered_by: "Entered by", notebook: "Notebook", 
-                comments: "Description", plasmidnumber: "#{Naming.name_for(Plasmid)} Number", strain_bkg: "Strain background", genotype: "Genotype", antibiotic: "Antibiotics", location: "Location in freezer", sequence: "Sequence", species: "Species", strainalias: "Alias"}
+  @@headings = {date_entered: "Date entered", depleted: "Sample depleted?", description: "Description", entered_by: "Entered by", linked_items: "Linked to", notebook: "Notebook", sample_alias: "Alias", sample_number: "#{OBJ_TAG} number", sample_type: "Sample type", storage_type: "Storage type"}
 
 
   def self.get_heading(var_name)
@@ -35,24 +33,23 @@ class YeaststrainsController < ApplicationController
   end
 
   def self.model_class
-    Yeaststrain
+    Sample
   end
 
   def self.text
-    "Yeast strain"
+    "Sample"
   end
 
   def search_path
-    "/yeaststrains/search"
+    "/samples/search"
   end
 
   def define_table_view_vars
 
-    @table_columns = {sort: :strain_number, others: [:date_entered, :entered_by, :species, :strainalias]}
+    @table_columns = {sort: :sample_number, others: [:date_entered, :entered_by, :sample_alias, :sample_type]}
     @controller = self.class
-    @table_objects = @yeaststrains
+    @table_objects = @samples
 
   end
 
 end
-

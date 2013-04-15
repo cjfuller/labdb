@@ -19,9 +19,9 @@ require 'exporters'
 require 'numbered'
 require 'described'
 
-class Yeaststrain < ActiveRecord::Base
+class Line < ActiveRecord::Base
 
-	Fields = :antibiotic, :comments, :date_entered, :entered_by, :genotype, :location, :plasmidnumber, :sequence, :species, :strain_bkg, :strain_number, :strainalias, :notebook
+  Fields = [:current_stock_counts, :date_entered, :description, :entered_by, :line_alias, :line_number, :locations, :notebook, :parent_line, :plasmid_numbers, :selectable_markers, :sequence, :species, :genotype]
 
 	attr_accessible *Fields
 
@@ -31,24 +31,49 @@ class Yeaststrain < ActiveRecord::Base
 	include Described
 
 	def linked_properties
-		[:plasmidnumber]
+		[:plasmid_numbers]
 	end
 
 	def get_linked(property_name)
 		numbers = get_linked_number_fields(property_name)
 		get_linked_plasmids(numbers) unless numbers.nil?
 	end
-
+		
 	def exportable_fields
 		Fields
 	end
 
 	def self.number_field_name
-		:strain_number
+		:line_number
 	end
 
 	def self.info_field_name
-		:strainalias
+		:line_alias
+	end
+
+	def inventory
+
+		inv = {}
+
+		locs = self.locations.split(",")
+		counts = self.current_stock_counts.split(",")
+
+		locs.each_with_index do |l, i|
+			inv[l] = counts[i].to_i
+		end
+
+		inv
+
+	end
+
+	def update_inventory(inv)
+
+		locs = inv.keys.sort
+		counts = locs.map { |l| inv[l].to_s }
+
+		self.locations = locs.join(",")
+		self.current_stock_counts = counts.join(",")
+
 	end
 
 end

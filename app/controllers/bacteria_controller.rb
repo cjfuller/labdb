@@ -44,15 +44,6 @@ class BacteriaController < ApplicationController
     "/bacteria/search"
   end
 
-  def define_ui_variables(params)
-
-    params[:model_class]= Bacterium
-    params[:search_path]= search_path
-
-    super(params)
-
-  end
-
   def define_table_view_vars
 
     @table_columns = {sort: :strain_number, others: [:date_entered, :entered_by, :strainalias, :plasmid_number]}

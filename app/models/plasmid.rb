@@ -69,8 +69,8 @@ class Plasmid < ActiveRecord::Base
     self.save
   end
   
-  def linked_property
-    :strainnumbers
+  def linked_properties
+    [:strainnumbers]
   end
 
   def get_linked(property_name)

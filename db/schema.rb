@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130408201658) do
+ActiveRecord::Schema.define(:version => 20130414232510) do
 
   create_table "antibodies", :force => true do |t|
     t.integer  "ab_number"
@@ -43,6 +43,25 @@ ActiveRecord::Schema.define(:version => 20130408201658) do
     t.datetime "updated_at",     :null => false
     t.text     "sequence"
     t.string   "strainalias"
+  end
+
+  create_table "lines", :force => true do |t|
+    t.integer  "line_number"
+    t.string   "line_alias"
+    t.date     "date_entered"
+    t.string   "entered_by"
+    t.integer  "notebook"
+    t.string   "species"
+    t.text     "parent_line"
+    t.text     "sequence"
+    t.text     "description"
+    t.string   "plasmid_numbers"
+    t.string   "selectable_markers"
+    t.string   "locations"
+    t.text     "current_stock_counts"
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
+    t.text     "genotype"
   end
 
   create_table "oligos", :force => true do |t|
@@ -79,6 +98,21 @@ ActiveRecord::Schema.define(:version => 20130408201658) do
     t.integer  "plasmidmap_file_size"
     t.datetime "plasmidmap_updated_at"
     t.integer  "plasmidnumber"
+  end
+
+  create_table "samples", :force => true do |t|
+    t.integer  "sample_number"
+    t.string   "sample_alias"
+    t.string   "storage_type"
+    t.date     "date_entered"
+    t.string   "entered_by"
+    t.integer  "notebook"
+    t.string   "sample_type"
+    t.boolean  "depleted"
+    t.text     "description"
+    t.text     "linked_items"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
   create_table "searches", :force => true do |t|

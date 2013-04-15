@@ -10,7 +10,7 @@ describe Plasmid do
 
 	end
 
-	it "should have the number field set to the strain number" do
+	it "should have the number field set to the plasmid number" do
 
 		plasmids(:one).number_field.to_i.should eq 1
 

@@ -29,8 +29,8 @@ class Bacterium < ActiveRecord::Base
   include Numbered
   include Described
 
-  def linked_property
-    :plasmid_number
+  def linked_properties
+    [:plasmid_number]
   end
 
   def get_linked(property_name)

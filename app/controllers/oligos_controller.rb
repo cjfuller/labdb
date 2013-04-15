@@ -44,15 +44,6 @@ class OligosController < ApplicationController
     "/oligos/search"
   end
 
-  def define_ui_variables(params)
-
-    params[:model_class]= Oligo
-    params[:search_path]= search_path
-
-    super(params)
-
-  end
-
   def define_table_view_vars
 
     @table_columns = {sort: :oligo_number, others: [:date_entered, :entered_by, :oligoalias]}

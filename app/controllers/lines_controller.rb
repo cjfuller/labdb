@@ -15,19 +15,17 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-class YeaststrainsController < ApplicationController
-  
+class LinesController < ApplicationController
+
   include StandardActions
 
-  OBJ_TAG = Naming.name_for(Yeaststrain)
+  OBJ_TAG = Naming.name_for(Line)
 
   def obj_tag
     OBJ_TAG
   end
 
-  @@headings = {strain_number: "#{OBJ_TAG} Number", date_entered: "Date entered",
-                entered_by: "Entered by", notebook: "Notebook", 
-                comments: "Description", plasmidnumber: "#{Naming.name_for(Plasmid)} Number", strain_bkg: "Strain background", genotype: "Genotype", antibiotic: "Antibiotics", location: "Location in freezer", sequence: "Sequence", species: "Species", strainalias: "Alias"}
+  @@headings = {current_stock_counts: "Stock counts", date_entered: "Date entered", description: "Description", entered_by: "Entered by", line_alias: "Alias", line_number: "#{OBJ_TAG} number", locations: "Locations", notebook: "Notebook", parent_line: "Parent line", plasmid_numbers: "#{Naming.name_for(Plasmid)} numbers", selectable_markers: "Selectable markers", sequence: "Associated sequence", species: "Species"}
 
 
   def self.get_heading(var_name)
@@ -35,24 +33,45 @@ class YeaststrainsController < ApplicationController
   end
 
   def self.model_class
-    Yeaststrain
+    Line
   end
 
   def self.text
-    "Yeast strain"
+    "Cell line"
   end
 
   def search_path
-    "/yeaststrains/search"
+    "/lines/search"
   end
 
   def define_table_view_vars
 
-    @table_columns = {sort: :strain_number, others: [:date_entered, :entered_by, :species, :strainalias]}
+    @table_columns = {sort: :line_number, others: [:date_entered, :entered_by, :line_alias, :species]}
     @controller = self.class
-    @table_objects = @yeaststrains
+    @table_objects = @lines
+
+  end
+
+  def update_number
+
+    @obj = Line.find(params[:id])
+    loc = params[:location]
+    inc = params[:inc].to_i
+
+    inv = @obj.inventory
+
+    inv[loc] += inc
+
+    if inv[loc] <= 0 then
+      inv.delete(loc)
+    end
+
+    @obj.update_inventory(inv)
+
+    @obj.save
+
+    redirect_to @obj
 
   end
 
 end
-
