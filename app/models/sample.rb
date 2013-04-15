@@ -18,10 +18,11 @@
 require 'exporters'
 require 'numbered'
 require 'described'
+require 'object_naming'
 
-class Yeaststrain < ActiveRecord::Base
+class Sample < ActiveRecord::Base
 
-	Fields = :antibiotic, :comments, :date_entered, :entered_by, :genotype, :location, :plasmidnumber, :sequence, :species, :strain_bkg, :strain_number, :strainalias, :notebook
+	Fields = [:date_entered, :depleted, :description, :entered_by, :linked_items, :notebook, :sample_alias, :sample_number, :sample_type, :storage_type]
 
 	attr_accessible *Fields
 
@@ -30,25 +31,54 @@ class Yeaststrain < ActiveRecord::Base
 	include Numbered
 	include Described
 
+	LINK_METHODS = {plasmid_numbers: :get_linked_plasmids, strain_numbers: :get_linked_bacterial_strains, linked_sample_numbers: :get_linked_samples}
+
 	def linked_properties
-		[:plasmidnumber]
+		[:plasmid_numbers, :strain_numbers, :linked_sample_numbers]
+	end
+
+	def parse_numbers(name)
+		return nil if self.linked_items.nil?
+		match_exp = /#{name}\s*(\d+)/
+		all_items = self.linked_items.split(",")
+		matching_numbers = []
+		all_items.each do |item|
+			matchobj = match_exp.match(item)
+			matching_numbers << matchobj[1] if matchobj
+		end
+		matching_numbers.join(",")
+	end
+
+	def plasmid_numbers
+		name = Naming.name_for(Plasmid)
+		parse_numbers(name)
+	end
+
+	def strain_numbers
+		name = Naming.name_for(Bacterium)
+		parse_numbers(name)
+	end
+
+	def linked_sample_numbers
+		name = Naming.name_for(Sample)
+		parse_numbers(name)
 	end
 
 	def get_linked(property_name)
 		numbers = get_linked_number_fields(property_name)
-		get_linked_plasmids(numbers) unless numbers.nil?
+		self.send(LINK_METHODS[property_name], numbers) unless numbers.nil?
 	end
-
+		
 	def exportable_fields
 		Fields
 	end
 
 	def self.number_field_name
-		:strain_number
+		:sample_number
 	end
 
 	def self.info_field_name
-		:strainalias
+		:sample_alias
 	end
 
 end

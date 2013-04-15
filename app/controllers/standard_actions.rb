@@ -25,6 +25,15 @@ module StandardActions
 		self.class.model_class
 	end
 
+	def define_ui_variables(params)
+
+    params[:model_class]= model_class
+    params[:search_path]= search_path
+
+    super(params)
+
+  end
+
 	def reverse_sorted?
 		(sort_order == "DESC")
 	end

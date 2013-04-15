@@ -1,0 +1,73 @@
+-#--
+-# Copyright (C) 2013  Colin J. Fuller
+-#
+-# This program is free software: you can redistribute it and/or modify
+-# it under the terms of the GNU Affero General Public License as published by
+-# the Free Software Foundation, either version 3 of the License, or
+-# (at your option) any later version.
+-#
+-# This program is distributed in the hope that it will be useful,
+-# but WITHOUT ANY WARRANTY; without even the implied warranty of
+-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-# GNU Affero General Public License for more details.
+-#
+-# You should have received a copy of the GNU Affero General Public License
+-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-#++
+
+=  render :partial => "shared/subnavbar"
+
+- keys = [:line_number, :line_alias, :species, :date_entered]
+= f.row([3,3,3,3], keys, LinesController.headings_for(keys), {}, readonly_for(keys), {}) 
+
+
+- keys = [:entered_by, :notebook, :plasmid_numbers]
+= f.row([3,3,3,3], keys, LinesController.headings_for(keys), {}, readonly_for(keys), {})
+
+- keys = [:genotype, :selectable_markers]
+= f.row([6,6], keys, LinesController.headings_for(keys), {}, readonly_for(keys), {})
+
+.row-fluid#description-row
+  .span12
+    .control-group
+      = f.label(:description, LinesController.get_heading(:description), class: "label control-label label-info")
+      .controls
+        = f.text_area(:description, readonly: readonly?, rows: 3, class: "input-xxlarge")
+
+.row-fluid#sequence-row
+  .span12
+    .control-group
+      = f.label(:sequence, LinesController.get_heading(:sequence), class: "label control-label label-info")
+      .controls
+        = f.text_area(:sequence, readonly: readonly?, rows: 3, class: "input-xxlarge")
+
+
+- if readonly? then
+  .row-fluid
+    .span6
+      %table{class: "table table-striped table-condensed table-bordered"}
+        %tr
+          %th= LinesController.get_heading(:locations)
+          %th= LinesController.get_heading(:current_stock_counts)
+          %th= ""
+
+        - @obj.inventory.keys.sort.each do |loc|
+          %tr
+            %td= loc
+            %td= @obj.inventory[loc]
+            %td= link_to("Remove one stock", url_for(controller: 'lines', action: :update_number, id: @obj.id, location: loc, inc:"-1"), method: "put",  class: "btn btn-warning btn-mini")
+        - if @obj.inventory.empty?
+          %tr
+            %td= "No stocks found."
+            %td
+            %td
+
+- else
+
+  - keys = [:locations, :current_stock_counts]
+  = f.row([3,3,3,3], keys, LinesController.headings_for(keys), {}, readonly_for(keys), {})
+
+
+
+= render :partial=>'shared/bottom_buttons'
+

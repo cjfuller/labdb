@@ -53,12 +53,6 @@ class PlasmidsController < ApplicationController
     "/plasmids/search"
   end
 
-  def define_ui_variables(params)
-    params[:search_path] = search_path
-    params[:model_class] = Plasmid
-    super(params)
-  end
-
   def define_table_view_vars
     
     @table_columns = {sort: :plasmidnumber, others: [:date_entered, :enteredby, :plasmidalias, :strainnumbers]}

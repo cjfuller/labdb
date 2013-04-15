@@ -93,16 +93,6 @@ class AntibodiesController < ApplicationController
 
   end
 
-  def define_ui_variables(params)
-
-    params[:model_class]= Antibody
-    params[:search_path]= search_path
-
-    super(params)
-
-  end
-
-
   def define_table_view_vars
 
     @table_columns = {sort: :ab_number, others: [:date_entered, :entered_by, :alias, :host]}
