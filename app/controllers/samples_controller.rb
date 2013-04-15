@@ -25,7 +25,7 @@ class SamplesController < ApplicationController
     OBJ_TAG
   end
 
-  @@headings = {date_entered: "Date entered", depleted: "Sample depleted?", description: "Description", entered_by: "Entered by", linked_items: "Linked to", notebook: "Notebook", sample_alias: "Alias", sample_number: "#{OBJ_TAG} number", sample_type: "Sample type", storage_type: "Storage type"}
+  @@headings = {date_entered: "Date entered", depleted: "Sample depleted?", description: "Description", entered_by: "Entered by", linked_items: "Linked to", notebook: "Notebook", sample_alias: "Alias", sample_number: "#{OBJ_TAG} number", sample_type: "Sample type", storage_type: "Storage location"}
 
 
   def self.get_heading(var_name)
