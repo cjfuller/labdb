@@ -41,7 +41,6 @@ The server runs by default on port 3000 and is accessible only through https, so
 
 Labdb is distributed under the GNU Affero General Public License, version 3.  See the file LICENSE for the full license text.
 
-The distribution also contains an unmodified copy of the bootstrap framework, which is copyright by Twitter, Inc., and distributed under the Apache License.  See the file bootstrap-license for the full text of bootstrap's license.
 
 
 

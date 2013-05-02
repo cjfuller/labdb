@@ -210,7 +210,7 @@ module StandardActions
 		@obj = model_class.new
 		instance_variable_set("@" + type, @obj)
 
-		define_ui_variables(status_text: "Searching #{self.class.text.downcase.pluralize}", obj: @obj, readonly: false, submit_text: "Search")
+		define_ui_variables(status_text: "Searching #{self.class.text.downcase.pluralize}", obj: @obj, readonly: false, submit_text: "Search", context_specific_buttons: "shared/search_reference")
 
 		respond_to do |format|
 			format.html

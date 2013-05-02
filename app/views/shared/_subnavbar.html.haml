@@ -21,7 +21,8 @@
       %nav
         %ul{class: "nav pull-left"}
           %li
-            %a.brand= @status_text
+            .brand
+              = @status_text
           %li.divider-vertical
           %li= link_to 'Search', @search_path
           %li.divider-vertical
@@ -30,6 +31,5 @@
             %li.divider-vertical
     %div{class: 'container pull-right rightalign'}
       %nav
-        %ul{class: "nav pull-left"}
-          = render partial: @context_specific_buttons if @context_specific_buttons
+        = render partial: @context_specific_buttons if @context_specific_buttons
 
