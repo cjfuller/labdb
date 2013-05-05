@@ -18,10 +18,13 @@
 require 'exporters'
 require 'numbered'
 require 'described'
+require 'json'
 
 class Line < ActiveRecord::Base
 
-  Fields = [:current_stock_counts, :date_entered, :description, :entered_by, :line_alias, :line_number, :locations, :notebook, :parent_line, :plasmid_numbers, :selectable_markers, :sequence, :species, :genotype]
+  Fields = [:current_stock_counts, :date_entered, :description, :entered_by, :line_alias, :line_number, :locations, :notebook, :parent_line, :plasmid_numbers, :selectable_markers, :sequence, :species, :genotype, :stock_person, :stock_date]
+
+  InvFields = [:current_stock_counts, :locations, :stock_person, :stock_date]
 
 	attr_accessible *Fields
 
@@ -29,6 +32,34 @@ class Line < ActiveRecord::Base
 	include LinkableModel
 	include Numbered
 	include Described
+
+	class InventoryItem
+
+		Fields = [:location, :count, :person, :date, :clone]
+
+		attr_accessor *Fields
+
+		def json
+			{location: self.location, count: self.count, person: self.person, date: self.date, clone: self.clone}.to_json
+		end
+
+		def self.from_hash(hash)
+			ii = InventoryItem.new
+			hash.each { |k,v| ii.send(k.to_s + "=", v) }
+			ii.date = Date.parse(ii.date.to_s) if ii.date.to_s.size > 0
+			ii
+		end
+
+		def self.from_json(str)
+			fields = JSON.parse(str)
+			from_hash(fields)
+		end
+
+		def ==(other)
+			Fields.all? { |f| self.send(f) == other.send(f) }
+		end
+
+	end
 
 	def linked_properties
 		[:plasmid_numbers]
@@ -53,26 +84,71 @@ class Line < ActiveRecord::Base
 
 	def inventory
 
-		inv = {}
+		inv = []
+
+		return inv unless self.locations
 
 		locs = self.locations.split(",")
 		counts = self.current_stock_counts.split(",")
 
-		locs.each_with_index do |l, i|
-			inv[l] = counts[i].to_i
+		self.stock_person ||= ","*(self.locations.count(","))
+		self.stock_date ||= ","*(self.locations.count(","))
+
+		people = self.stock_person.split(",")
+		dates = self.stock_date.split(",")
+		clones = counts.map { "" }
+
+		counts.each.with_index do |c,i|
+			if /\s*\d+\s*\(\s*clone\s*\d+\)/.match(c) then
+				matchobj = /\s*(\d+)\s*\(\s*clone\s*(\d+)\s*\)/.match(c)
+				counts[i] = matchobj[1]
+				clones[i] = matchobj[2]
+			end
 		end
 
-		inv
+		locs.each_index do |i|
+			inv_item = InventoryItem.new
+			inv_item.location = locs[i]
+			inv_item.count = counts[i].to_i
+			inv_item.clone = clones[i]
+			inv_item.person = people[i]
+			inv_item.date = ((not dates[i].nil?) and dates[i].size > 0) ? Date.parse(dates[i]) : ""
+			inv << inv_item
+		end
+
+		inv= inv.sort { |e1, e2| e1.date <=> e2.date or 0 }
 
 	end
 
 	def update_inventory(inv)
 
-		locs = inv.keys.sort
-		counts = locs.map { |l| inv[l].to_s }
+		inv= inv.sort { |e1, e2| e1.date <=> e2.date or 0 }
+
+		counts = inv.map { |e| e.count }
+		locs = inv.map { |e| e.location }
+		clones = inv.map { |e| e.clone }
+		people = inv.map { |e| e.person }
+		date = inv.map do |e|
+			begin
+				Date.parse(e.date.to_s).to_s
+			rescue
+				""
+			end
+		end
+
 
 		self.locations = locs.join(",")
-		self.current_stock_counts = counts.join(",")
+		self.current_stock_counts = counts.map.with_index do |e, i| 
+			clone_string = ""
+			if clones[i].length > 0 then
+				clone_string = "(clone #{clones[i]})"
+			end
+			e.to_s + clone_string
+		end
+		self.current_stock_counts = self.current_stock_counts.join(",")
+
+		self.stock_person = people.join(",")
+		self.stock_date = date.join(",")
 
 	end
 

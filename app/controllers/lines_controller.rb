@@ -19,13 +19,15 @@ class LinesController < ApplicationController
 
   include StandardActions
 
+  before_filter :generate_location_params, only: [:create, :update]
+
   OBJ_TAG = Naming.name_for(Line)
 
   def obj_tag
     OBJ_TAG
   end
 
-  @@headings = {current_stock_counts: "Stock counts", date_entered: "Date entered", description: "Description", entered_by: "Entered by", line_alias: "Alias", line_number: "#{OBJ_TAG} number", locations: "Locations", notebook: "Notebook", parent_line: "Parent line", plasmid_numbers: "#{Naming.name_for(Plasmid)} numbers", selectable_markers: "Selectable markers", sequence: "Associated sequence", species: "Species"}
+  @@headings = {current_stock_counts: "Stock counts", date_entered: "Date entered", description: "Description", entered_by: "Entered by", line_alias: "Alias", line_number: "#{OBJ_TAG} number", locations: "Locations", notebook: "Notebook", parent_line: "Parent line", plasmid_numbers: "#{Naming.name_for(Plasmid)} numbers", selectable_markers: "Selectable markers", sequence: "Associated sequence", species: "Species", stock_person: "Person", stock_date: "Date", stock_clone: "Clone"}
 
 
   def self.get_heading(var_name)
@@ -55,15 +57,21 @@ class LinesController < ApplicationController
   def update_number
 
     @obj = Line.find(params[:id])
-    loc = params[:location]
+    loc = Line::InventoryItem.from_json(params[:location])
     inc = params[:inc].to_i
 
     inv = @obj.inventory
 
-    inv[loc] += inc
+    puts inv.map { |e| e.inspect }.join(",")
 
-    if inv[loc] <= 0 then
-      inv.delete(loc)
+    puts loc.inspect
+
+    upd_item = inv.find { |e| e == loc }
+
+    upd_item.count += inc
+
+    if upd_item.count <= 0 then
+      inv.delete(upd_item)
     end
 
     @obj.update_inventory(inv)
@@ -71,6 +79,42 @@ class LinesController < ApplicationController
     @obj.save
 
     redirect_to @obj
+
+  end
+
+  def generate_location_params
+
+    table_params =  [:location, :count, :clone, :person, :date]
+    table_index_sep = "_"
+
+    return unless params.keys.include?(table_params[0].to_s + table_index_sep + "0")
+
+    inv = []
+
+    i = -1
+
+    while i+= 1 and params.keys.include?(table_params[0].to_s + table_index_sep + i.to_s) do
+      next unless params[table_params[0].to_s + table_index_sep + i.to_s].size > 0
+      h = {}
+      table_params.each { |p| h[p] = params[p.to_s + table_index_sep + i.to_s]}
+      inv << Line::InventoryItem.from_hash(h)
+    end
+
+    obj = nil
+
+    if params.has_key?(:id) then
+      obj = Line.find(params[:id]) 
+    else
+      obj = Line.new
+    end
+    
+    obj.update_inventory(inv)
+
+    obj.class::InvFields.each do |f|
+
+      params[type][f]= obj.send(f)
+
+    end
 
   end
 

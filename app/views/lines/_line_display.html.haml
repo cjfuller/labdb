@@ -41,31 +41,7 @@
       .controls
         = f.text_area(:sequence, readonly: readonly?, rows: 3, class: "input-xxlarge")
 
-
-- if readonly? then
-  .row-fluid
-    .span6
-      %table{class: "table table-striped table-condensed table-bordered"}
-        %tr
-          %th= LinesController.get_heading(:locations)
-          %th= LinesController.get_heading(:current_stock_counts)
-          %th= ""
-
-        - @obj.inventory.keys.sort.each do |loc|
-          %tr
-            %td= loc
-            %td= @obj.inventory[loc]
-            %td= link_to("Remove one stock", url_for(controller: 'lines', action: :update_number, id: @obj.id, location: loc, inc:"-1"), method: "put",  class: "btn btn-warning btn-mini")
-        - if @obj.inventory.empty?
-          %tr
-            %td= "No stocks found."
-            %td
-            %td
-
-- else
-
-  - keys = [:locations, :current_stock_counts]
-  = f.row([3,3,3,3], keys, LinesController.headings_for(keys), {}, readonly_for(keys), {})
+= render :partial=>'line_location_table'
 
 = render :partial=>'shared/bottom_buttons'
 
