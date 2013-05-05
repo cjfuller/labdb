@@ -180,7 +180,8 @@ module StandardActions
 	end
 
 	def update
-		@obj = model_class.find(params[:id])
+ 
+ 		@obj = model_class.find(params[:id]) unless @obj
 		instance_variable_set("@" + type, @obj)
 
 		respond_to do |format|

@@ -1,5 +1,7 @@
 one:
-  current_stock_counts: "1,3"
+  current_stock_counts: "1 (clone 2),3 (clone 7)"
+  stock_person: "Colin Fuller, Colin Fuller"
+  stock_date: "20130415, 20130416"
   date_entered: 2013-04-15
   description: "N-terminal GFP-CENP-A HeLa constitutive expressing"
   entered_by: Colin Fuller
