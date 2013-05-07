@@ -137,6 +137,7 @@ module StandardActions
 			if @obj.respond_to?(:linkable?) and @obj.linkable? then
 				@obj.clear_linked
 			end
+			preprocess_model_object(@obj)
 		else
 			@obj = model_class.new()
 		end

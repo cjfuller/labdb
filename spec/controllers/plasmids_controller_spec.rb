@@ -119,6 +119,13 @@ describe PlasmidsController do
 
     end
 
+    it "should correctly fill antibiotics on duplicate" do 
+
+      get :new, id: plasmids(:one)
+      assigns(:plasmid).carb.should eq "1"
+
+    end
+
   end
 
 end
