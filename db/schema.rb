@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130502172750) do
+ActiveRecord::Schema.define(:version => 20130513202919) do
 
   create_table "antibodies", :force => true do |t|
     t.integer  "ab_number"
@@ -35,7 +35,7 @@ ActiveRecord::Schema.define(:version => 20130502172750) do
     t.string   "species_bkg"
     t.date     "date_entered"
     t.string   "entered_by"
-    t.integer  "notebook"
+    t.string   "notebook"
     t.text     "genotype"
     t.text     "comments"
     t.string   "plasmid_number"
@@ -50,7 +50,7 @@ ActiveRecord::Schema.define(:version => 20130502172750) do
     t.string   "line_alias"
     t.date     "date_entered"
     t.string   "entered_by"
-    t.integer  "notebook"
+    t.string   "notebook"
     t.string   "species"
     t.text     "parent_line"
     t.text     "sequence"
@@ -71,7 +71,7 @@ ActiveRecord::Schema.define(:version => 20130502172750) do
     t.string   "oligoalias"
     t.date     "date_entered"
     t.string   "entered_by"
-    t.integer  "notebook"
+    t.string   "notebook"
     t.string   "vendor"
     t.string   "organism"
     t.text     "sequence"
@@ -83,7 +83,7 @@ ActiveRecord::Schema.define(:version => 20130502172750) do
   create_table "plasmids", :force => true do |t|
     t.date     "date_entered"
     t.string   "enteredby"
-    t.integer  "notebook"
+    t.string   "notebook"
     t.boolean  "verified"
     t.string   "plasmidalias"
     t.string   "antibiotic"
@@ -108,7 +108,7 @@ ActiveRecord::Schema.define(:version => 20130502172750) do
     t.string   "storage_type"
     t.date     "date_entered"
     t.string   "entered_by"
-    t.integer  "notebook"
+    t.string   "notebook"
     t.string   "sample_type"
     t.boolean  "depleted"
     t.text     "description"
@@ -150,7 +150,7 @@ ActiveRecord::Schema.define(:version => 20130502172750) do
     t.string   "species"
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
-    t.integer  "notebook"
+    t.string   "notebook"
   end
 
 end
