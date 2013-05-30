@@ -41,4 +41,7 @@ gem 'bootstrap-sass', '~> 2.3.1.0'
 
 gem 'kaminari'
 
-gem 'puma'
+gem 'puma', '~> 1.6.3'
+
+gem 'facets', require: false
+

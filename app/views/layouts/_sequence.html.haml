@@ -15,4 +15,16 @@
 -# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -#++
 
-= render 'antibody_display'
+.inline
+	.label.label-inverse
+		= "Sequence"
+	= "(#{@obj.sequence_size} bp)"
+	- if @obj.respond_to? :verified
+		.pull-right
+			= "verified: "
+			- if @obj.verified
+				%i.icon-ok
+			- else
+				%i.icon-remove
+.well
+	.sequence-block= @obj.formatted_sequence

@@ -25,4 +25,4 @@
         - @yeaststrain.errors.full_messages.each do |msg|
           %li= msg
 
-  = render partial: 'strain_display', locals: {f: f, obj: @yeaststrain}
+  = render partial: 'strain_editing', locals: {f: f, obj: @yeaststrain}

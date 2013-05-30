@@ -1,3 +1,4 @@
+# encoding: utf-8
 #--
 # Copyright (C) 2013  Colin J. Fuller
 #
@@ -18,6 +19,10 @@
 require 'exporters'
 require 'numbered'
 require 'described'
+require 'headings'
+require 'dna_sequence'
+
+require 'facets/string/word_wrap'
 
 class Plasmid < ActiveRecord::Base
 
@@ -25,23 +30,33 @@ class Plasmid < ActiveRecord::Base
   include LinkableModel
   include Numbered
   include Described
+  include Headings
+  include DNASequence
 
   Fields = :antibiotic, :concentration, :date_entered, :description, :enteredby, :notebook, :plasmidalias, :plasmidmap, :plasmidnumber, :plasmidsize, :sequence, :strainnumbers, :vector, :verified
 
+  @headings = {:plasmidnumber => "#{obj_tag} Number", :date_entered => "Date",
+    :enteredby => "Entered by", :notebook => "Notebook", :verified => "Sequence verified?",
+    :plasmidalias => "Alias", :antibiotic => "Antibiotic resistances", :plasmidsize => "Size",
+    :concentration => "Concentration (μg/mL)", :strainnumbers => "#{Naming.name_for(Bacterium)}",
+    :description => "Description", :sequence => "Sequence", :vector => "Vector",
+    :mapreference => "Map"}
+
   attr_accessible *Fields
 
+  
+  
   has_attached_file :plasmidmap, :styles => { :thumb => ["256x256", "png"]}
   validates_attachment :plasmidmap, :content_type => {:content_type=>/image/}
 
   attr_accessor :antibiotics
-
 
   @@Antibiotics = {"carbenicillin" => "carb", "kanamycin"=>"kan", "chloramphenicol"=>"chlor", "gentamycin"=>"gent", "tetracycline"=>"tet", "streptomycin"=>"strep"}
 
   def self.get_antibiotics
     return @@Antibiotics
   end
-  
+
   self.get_antibiotics.each_value do |v|
     attr_accessor v.to_sym
   end
@@ -90,4 +105,23 @@ class Plasmid < ActiveRecord::Base
     :plasmidalias
   end
 
+  def description_field_name
+    :description
+  end
+
+  def core_alt_field
+    numbers = get_linked_number_fields(:strainnumbers)
+    numbers.map { |n| "#{Naming.name_for(Bacterium) + " " + n.to_s}" }
+  end
+
+  def core_alt_link
+    links = get_linked(:strainnumbers)
+    get_linked_number_fields(:strainnumbers).map { |n| links[n] }
+  end
+  
+  def groups
+    {sidebar: [:enteredby, :date_entered, :notebook, :concentration],
+      "Vector information" => [:vector, :antibiotic]}
+  end
+  
 end

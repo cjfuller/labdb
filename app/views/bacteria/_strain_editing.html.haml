@@ -28,7 +28,7 @@
 .row-fluid#description-row
   .span12
     .control-group
-      = f.label(:genotype, BacteriaController.get_heading(:genotype), class: "label control-label label-info")
+      = f.label(:genotype, BacteriaController.get_heading(:genotype), class: "label control-label label-inverse")
       .controls
         = f.text_area(:genotype, readonly: readonly?, rows: 3, class: "input-xxlarge")
 
@@ -36,7 +36,7 @@
 .row-fluid#sequence-row
   .span12
     .control-group
-      = f.label(:comments, BacteriaController.get_heading(:comments), class: "label control-label label-info")
+      = f.label(:comments, BacteriaController.get_heading(:comments), class: "label control-label label-inverse")
       .controls
         = f.text_area(:comments, readonly: readonly?, rows: 3, class: "input-xxlarge")
 
@@ -44,7 +44,7 @@
   .row-fluid#sequence-row
     .span12
       .control-group
-        = f.label(:sequence, BacteriaController.get_heading(:sequence), class: "label control-label label-info")
+        = f.label(:sequence, BacteriaController.get_heading(:sequence), class: "label control-label label-inverse")
         .controls
           = f.text_area(:sequence, readonly: true, rows: 6, class: "input-xxlarge")
 

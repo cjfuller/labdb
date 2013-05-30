@@ -18,16 +18,23 @@
 require 'exporters'
 require 'numbered'
 require 'described'
+require 'headings'
+require 'dna_sequence'
 
 class Bacterium < ActiveRecord::Base
-  Fields = [:comments, :date_entered, :entered_by, :genotype, :notebook, :plasmid_number, :species_bkg, :strain_number, :sequence, :strainalias]
-
-  attr_accessible *Fields
 
   include Exportable
   include LinkableModel
   include Numbered
   include Described
+  include Headings
+  include DNASequence
+
+  Fields = [:comments, :date_entered, :entered_by, :genotype, :notebook, :plasmid_number, :species_bkg, :strain_number, :sequence, :strainalias]
+
+  attr_accessible *Fields
+
+  @headings = {strain_number: "#{obj_tag} Number", date_entered: "Date entered", entered_by: "Entered by", notebook: "Notebook", comments: "Description", plasmid_number: "#{Naming.name_for(Plasmid)} Number", species_bkg: "Species and background", genotype: "Genotype", sequence: "Sequence", strainalias: "Alias"}
 
   def linked_properties
     [:plasmid_number]
@@ -48,6 +55,25 @@ class Bacterium < ActiveRecord::Base
 
   def self.info_field_name
     :strainalias
+  end
+
+  def description_field_name
+    :comments
+  end
+
+  def core_alt_field
+    numbers = get_linked_number_fields(:plasmid_number)
+    numbers.map { |n| "#{Naming.name_for(Plasmid) + " " + n.to_s}" }
+  end
+
+  def core_alt_link
+    links = get_linked(:plasmid_number)
+    get_linked_number_fields(:plasmid_number).map { |n| links[n] }
+  end
+  
+  def groups
+    {sidebar: [:entered_by, :date_entered, :notebook],
+      "Strain information" => [:species_bkg, :genotype]}
   end
 
 end

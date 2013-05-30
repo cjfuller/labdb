@@ -25,5 +25,5 @@
         - @sample.errors.full_messages.each do |msg|
           %li= msg
 
-  = render partial: 'sample_display', locals: {f: f, obj: @sample}
+  = render partial: 'sample_editing', locals: {f: f, obj: @sample}
 

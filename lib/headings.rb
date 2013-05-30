@@ -15,36 +15,26 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-class SamplesController < ApplicationController
-  
-  include StandardActions
+module Headings
+
+  def self.included(base)
+    base.class_eval do
+      def self.get_heading(var_name)
+        @headings[var_name]
+      end
+
+      def self.obj_tag
+        Naming.name_for(self)
+      end
+    end
+  end
+
+  def get_heading(var_name)
+    self.class.get_heading(var_name)
+  end
 
   def obj_tag
-    self.class.model_class.obj_tag
-  end
-
-  def self.get_heading(var_name)
-    model_class.get_heading(var_name)
-  end
-
-  def self.model_class
-    Sample
-  end
-
-  def self.text
-    "Sample"
-  end
-
-  def search_path
-    "/samples/search"
-  end
-
-  def define_table_view_vars
-
-    @table_columns = {sort: :sample_number, others: [:date_entered, :entered_by, :sample_alias, :sample_type]}
-    @controller = self.class
-    @table_objects = @samples
-
+    Naming.name_for(self.class)
   end
 
 end

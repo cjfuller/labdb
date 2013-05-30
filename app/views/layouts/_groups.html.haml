@@ -15,4 +15,16 @@
 -# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -#++
 
-= render 'antibody_display'
+- @obj.groups.each do |g, fields|
+	- next if g == :sidebar
+
+	.label.label-inverse
+		= g.to_s
+	.well
+		- fields.each do |f|
+			%b= @obj.get_heading(f) + ": "
+			= @obj.send(f)
+			%br
+
+
+

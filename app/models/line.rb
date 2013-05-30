@@ -18,6 +18,9 @@
 require 'exporters'
 require 'numbered'
 require 'described'
+require 'headings'
+require 'dna_sequence'
+
 require 'json'
 
 class Line < ActiveRecord::Base
@@ -32,6 +35,12 @@ class Line < ActiveRecord::Base
 	include LinkableModel
 	include Numbered
 	include Described
+	include Headings
+	include DNASequence
+
+	@headings = {current_stock_counts: "Stock counts", date_entered: "Date entered", description: "Description", entered_by: "Entered by", line_alias: "Alias", line_number: "#{obj_tag} number", locations: "Locations", notebook: "Notebook", parent_line: "Parent line", plasmid_numbers: "#{Naming.name_for(Plasmid)} numbers", selectable_markers: "Selectable markers", sequence: "Associated sequence", species: "Species", genotype: "Genotype", stock_person: "Person", stock_date: "Date", stock_clone: "Clone"}
+
+
 
 	class InventoryItem
 
@@ -81,6 +90,25 @@ class Line < ActiveRecord::Base
 	def self.info_field_name
 		:line_alias
 	end
+
+	def description_field_name
+    :description
+  end
+
+  def core_alt_field
+    numbers = get_linked_number_fields(:plasmid_numbers)
+    numbers.map { |n| "#{Naming.name_for(Plasmid) + " " + n.to_s}" }
+  end
+
+  def core_alt_link
+    links = get_linked(:plasmid_numbers)
+    get_linked_number_fields(:plasmid_numbers).map { |n| links[n] }
+  end
+
+  def groups
+    {sidebar: [:entered_by, :date_entered, :notebook],
+      "Line information" => [:species, :genotype, :selectable_markers, :parent_line]}
+  end
 
 	def inventory
 

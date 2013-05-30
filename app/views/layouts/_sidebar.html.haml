@@ -15,4 +15,13 @@
 -# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -#++
 
-= render 'antibody_display'
+.well.well-small
+  - first_field = true
+  - @obj.groups[:sidebar] and @obj.groups[:sidebar].each do |field_name|
+    - unless first_field then
+      %br
+      %br
+    - first_field = false
+    %b= @obj.get_heading(field_name) + ": "
+    %br
+    = @obj.send(field_name)

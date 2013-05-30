@@ -15,4 +15,12 @@
 -# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -#++
 
-= render 'antibody_display'
+.label.label-inverse
+  = "Linked items"
+.well
+  - @obj.sample_links.each do |lnk|
+    %b= link_to(lnk[:link_text], lnk[:link_obj])
+    = ": " + lnk[:link_desc]
+    %br
+
+

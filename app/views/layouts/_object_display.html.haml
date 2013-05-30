@@ -15,4 +15,19 @@
 -# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -#++
 
-= render 'antibody_display'
+=  render :partial => "shared/subnavbar"
+
+.container-fluid
+  .row-fluid
+    = render partial: "layouts/core_info"
+  .row-fluid
+    .span10
+      .info-block
+        = render partial: "layouts/groups"
+        = render partial: "layouts/description"
+        - if @obj.respond_to? :sequence
+          = render partial: "layouts/sequence"
+    .span2
+      = render partial: "layouts/sidebar"
+
+      

@@ -15,4 +15,16 @@
 -# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -#++
 
-= render 'antibody_display'
+.label.label-inverse
+  = "Uses"
+.well
+  - use_fields = [:good_for_if, :good_for_western]
+  - use_fields.each do |f|
+    .inline
+      %b= @obj.get_heading(f)
+      - if @obj.send(f)
+        %i.icon-ok
+      - else
+        %i.icon-remove
+
+

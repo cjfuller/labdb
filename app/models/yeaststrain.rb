@@ -18,6 +18,8 @@
 require 'exporters'
 require 'numbered'
 require 'described'
+require 'headings'
+require 'dna_sequence'
 
 class Yeaststrain < ActiveRecord::Base
 
@@ -29,6 +31,12 @@ class Yeaststrain < ActiveRecord::Base
 	include LinkableModel
 	include Numbered
 	include Described
+	include Headings
+  include DNASequence
+
+  @headings = {strain_number: "#{obj_tag} Number", date_entered: "Date entered",
+  entered_by: "Entered by", notebook: "Notebook", 
+  comments: "Description", plasmidnumber: "#{Naming.name_for(Plasmid)} Number", strain_bkg: "Strain background", genotype: "Genotype", antibiotic: "Antibiotics", location: "Location in freezer", sequence: "Sequence", species: "Species", strainalias: "Alias"}
 
 	def linked_properties
 		[:plasmidnumber]
@@ -50,5 +58,24 @@ class Yeaststrain < ActiveRecord::Base
 	def self.info_field_name
 		:strainalias
 	end
+
+	def description_field_name
+    :comments
+  end
+
+  def core_alt_field
+    numbers = get_linked_number_fields(:plasmidnumber)
+    numbers.map { |n| "#{Naming.name_for(Plasmid) + " " + n.to_s}" }
+  end
+
+  def core_alt_link
+    links = get_linked(:plasmidnumber)
+    get_linked_number_fields(:plasmidnumber).map { |n| links[n] }
+  end
+  
+  def groups
+    {sidebar: [:entered_by, :date_entered, :notebook, :location],
+      "Strain information" => [:species, :strain_bkg, :genotype, :antibiotic]}
+  end
 
 end

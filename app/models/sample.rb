@@ -19,6 +19,7 @@ require 'exporters'
 require 'numbered'
 require 'described'
 require 'object_naming'
+require 'headings'
 
 class Sample < ActiveRecord::Base
 
@@ -30,6 +31,9 @@ class Sample < ActiveRecord::Base
 	include LinkableModel
 	include Numbered
 	include Described
+	include Headings
+
+	@headings = {date_entered: "Date entered", depleted: "Sample depleted?", description: "Description", entered_by: "Entered by", linked_items: "Linked to", notebook: "Notebook", sample_alias: "Alias", sample_number: "#{obj_tag} number", sample_type: "Sample type", storage_type: "Storage location", plasmid_numbers: "Linked plasmids", strain_numbers: "Linked strains", linked_sample_numbers: "Linked samples"}
 
 	LINK_METHODS = {plasmid_numbers: :get_linked_plasmids, strain_numbers: :get_linked_bacterial_strains, linked_sample_numbers: :get_linked_samples}
 
@@ -80,5 +84,30 @@ class Sample < ActiveRecord::Base
 	def self.info_field_name
 		:sample_alias
 	end
+
+	def description_field_name
+    :description
+  end
+ 
+  def core_alt_field
+    self.depleted ? "Depleted" : nil
+  end
+
+  def sample_links
+  	links = []
+  	LINK_METHODS.each_key do |k|
+    	k_links = get_linked(k)
+    	k_links.each do |lnk_num, lnk|
+    		next unless lnk
+    		links << {link_text: Naming.name_for(lnk.class) + " " + lnk_num, link_obj: lnk, link_desc: lnk.info_field }
+    	end
+    end
+    links
+  end
+
+  def groups
+    {sidebar: [:entered_by, :date_entered, :notebook],
+    	"Sample storage" => [:sample_type, :storage_type]}
+  end
 
 end

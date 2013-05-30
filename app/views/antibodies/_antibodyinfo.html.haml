@@ -24,4 +24,4 @@
         - antibody.errors.full_messages.each do |msg|
           %li= msg
 
-  = render partial: 'antibody_display', locals:{f: f, obj: @antibody}
+  = render partial: 'antibody_editing', locals:{f: f, obj: @antibody}

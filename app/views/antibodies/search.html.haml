@@ -17,6 +17,6 @@
 
 = form_for(@antibody, html: {multipart: true}, method: 'get', builder: BootstrapFormBuilder) do |f| 
 
-  = render partial: 'antibody_display', locals: {f: f}
+  = render partial: 'antibody_editing', locals: {f: f}
 
 
