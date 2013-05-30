@@ -19,24 +19,15 @@ class AntibodiesController < ApplicationController
 
   include StandardActions
 
-  OBJ_TAG = Naming.name_for(Antibody)
+  def self.get_heading(var_name)
+    model_class.get_heading(var_name)
+  end
 
   def obj_tag
-    OBJ_TAG
+    model_class.obj_tag
   end
-
-  @@headings = {:ab_number => "#{OBJ_TAG} Number", :date_entered => "Date entered", :label => "Label",
-                :entered_by => "Entered by", :alias => "Alias", :comments => "Description", :host => "Host",
-                :vendor => "Vendor", :good_for_if => "Good for IF?", :good_for_western => "Good for westerns?",
-                :fluorophores => "Fluorophores", :box => "Box"}
-
 
   GOOD_FOR_PARAMS = ["good_for_if", "good_for_western"]
-
-
-  def self.get_heading(var_name)
-    @@headings[var_name]
-  end
 
   def self.model_class
     Antibody

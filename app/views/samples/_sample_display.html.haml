@@ -17,26 +17,15 @@
 
 =  render :partial => "shared/subnavbar"
 
-- keys = [:sample_number, :sample_alias, :sample_type, :date_entered]
-= f.row([3,3,3,3], keys, SamplesController.headings_for(keys), {}, readonly_for(keys), {}) 
+.container-fluid
+  .row-fluid
+    = render partial: "layouts/core_info"
+  .row-fluid
+    .span10
+      .info-block
+        = render partial: "layouts/groups"
+        = render partial: "layouts/description"
+        = render partial: "sample_links"
+    .span2
+      = render partial: "layouts/sidebar"
 
-
-- keys = [:entered_by, :notebook, :storage_type]
-= f.row([3,3,6], keys, SamplesController.headings_for(keys), {}, readonly_for(keys), {})
-
-- if readonly?
-  - keys = [:depleted, :plasmid_numbers, :strain_numbers, :linked_sample_numbers]
-  = f.row([3,3,3,3], keys, SamplesController.headings_for(keys), {}, readonly_for(keys), {depleted: true})
-- else
-  - keys = [:depleted, :linked_items]
-  = f.row([3,3,3,3], keys, SamplesController.headings_for(keys), {}, readonly_for(keys), {depleted: true})
-
-.row-fluid#description-row
-  .span12
-    .control-group
-      = f.label(:description, SamplesController.get_heading(:description), class: "label control-label label-info")
-      .controls
-        = f.text_area(:description, readonly: readonly?, rows: 3, class: "input-xxlarge")
-
-
-= render :partial=>'shared/bottom_buttons'

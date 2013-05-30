@@ -18,6 +18,8 @@
 require 'exporters'
 require 'numbered'
 require 'described'
+require 'headings'
+require 'dna_sequence'
 
 
 class Oligo < ActiveRecord::Base
@@ -25,10 +27,14 @@ class Oligo < ActiveRecord::Base
 	include Exportable
 	include Numbered
   include Described
+  include Headings
+  include DNASequence
 
   Fields = [:oligoalias, :date_entered, :entered_by, :notebook, :oligo_number, :organism, :purpose, :sequence, :vendor]
 
   attr_accessible *Fields
+
+  @headings = {:oligo_number => "#{obj_tag} Number", :date_entered => "Date entered", :entered_by => "Entered by", :notebook => "Notebook", :oligoalias => "Alias", :purpose => "Description", :sequence => "Sequence", :organism => "Organism", :vendor => "Vendor"}
 
   def get_linked(propertyname)
   	nil
@@ -45,5 +51,14 @@ class Oligo < ActiveRecord::Base
 	def self.info_field_name
 		:oligoalias
 	end
+
+	def description_field_name
+    :purpose
+  end
+ 
+  def groups
+    {sidebar: [:entered_by, :date_entered, :notebook, :organism, :vendor]}
+  end
+
 
 end

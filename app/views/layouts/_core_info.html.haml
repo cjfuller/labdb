@@ -1,0 +1,33 @@
+/
+  Copyright (C) 2013  Colin J. Fuller
+  
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Affero General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU Affero General Public License for more details.
+  
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  
+.span10
+  .row-fluid
+    .span9
+      %h3.core-info-number
+        = @obj.named_number_string
+      %h4.core-info-alias
+        = @obj.info_field
+    .span3
+      - if @obj.respond_to? :core_alt_field and @obj.core_alt_field and @obj.core_alt_field.size > 0 then
+        %h3.core-info-number
+        %br
+        - if @obj.respond_to? :core_alt_link and @obj.core_alt_link then
+          %h4.core-info-alt= "(#{@obj.core_alt_link.map.with_index { |e, i| link_to @obj.core_alt_field[i], e }.join(", ")})".html_safe
+        - else
+          %h4.core-info-alt= "(#{@obj.core_alt_field})"
+
+

@@ -21,17 +21,12 @@ class LinesController < ApplicationController
 
   before_filter :generate_location_params, only: [:create, :update]
 
-  OBJ_TAG = Naming.name_for(Line)
-
   def obj_tag
-    OBJ_TAG
+    self.class.model_class.obj_tag
   end
-
-  @@headings = {current_stock_counts: "Stock counts", date_entered: "Date entered", description: "Description", entered_by: "Entered by", line_alias: "Alias", line_number: "#{OBJ_TAG} number", locations: "Locations", notebook: "Notebook", parent_line: "Parent line", plasmid_numbers: "#{Naming.name_for(Plasmid)} numbers", selectable_markers: "Selectable markers", sequence: "Associated sequence", species: "Species", stock_person: "Person", stock_date: "Date", stock_clone: "Clone"}
-
-
+  
   def self.get_heading(var_name)
-    @@headings[var_name]
+    model_class.get_heading(var_name)
   end
 
   def self.model_class

@@ -25,5 +25,5 @@
         - @line.errors.full_messages.each do |msg|
           %li= msg
 
-  = render partial: 'line_display', locals: {f: f, obj: @line}
+  = render partial: 'line_editing', locals: {f: f, obj: @line}
 

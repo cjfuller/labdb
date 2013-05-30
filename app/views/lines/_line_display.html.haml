@@ -17,31 +17,17 @@
 
 =  render :partial => "shared/subnavbar"
 
-- keys = [:line_number, :line_alias, :species, :date_entered]
-= f.row([3,3,3,3], keys, LinesController.headings_for(keys), {}, readonly_for(keys), {}) 
+.container-fluid
+  .row-fluid
+    = render partial: "layouts/core_info"
+  .row-fluid
+    .span10
+      .info-block
+        = render partial: "layouts/groups"
+        = render partial: "layouts/description"
+        = render partial: "layouts/sequence"
+        = render partial: "line_location_table"
+    .span2
+      = render partial: "layouts/sidebar"
 
-
-- keys = [:entered_by, :notebook, :plasmid_numbers]
-= f.row([3,3,3,3], keys, LinesController.headings_for(keys), {}, readonly_for(keys), {})
-
-- keys = [:genotype, :selectable_markers]
-= f.row([6,6], keys, LinesController.headings_for(keys), {}, readonly_for(keys), {})
-
-.row-fluid#description-row
-  .span12
-    .control-group
-      = f.label(:description, LinesController.get_heading(:description), class: "label control-label label-info")
-      .controls
-        = f.text_area(:description, readonly: readonly?, rows: 3, class: "input-xxlarge")
-
-.row-fluid#sequence-row
-  .span12
-    .control-group
-      = f.label(:sequence, LinesController.get_heading(:sequence), class: "label control-label label-info")
-      .controls
-        = f.text_area(:sequence, readonly: readonly?, rows: 3, class: "input-xxlarge")
-
-= render :partial=>'line_location_table'
-
-= render :partial=>'shared/bottom_buttons'
 

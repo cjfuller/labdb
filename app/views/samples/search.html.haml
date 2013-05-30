@@ -17,5 +17,5 @@
 
 = form_for(@sample, html: {multipart: true}, method: 'get', builder: BootstrapFormBuilder) do |f|
 
-  = render partial: 'sample_display', :locals=>{f: f}
+  = render partial: 'sample_editing', :locals=>{f: f}
 

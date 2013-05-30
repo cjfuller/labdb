@@ -15,36 +15,21 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-class SamplesController < ApplicationController
-  
-  include StandardActions
+module DNASequence
 
-  def obj_tag
-    self.class.model_class.obj_tag
+	SEQ_CHARS_LOWER = "atgcrymkswhbvdn"
+	VALID_SEQ_CHARS = SEQ_CHARS_LOWER + SEQ_CHARS_LOWER.upcase
+
+	def formatted_sequence
+    self.sequence and self.sequence.gsub(/[^#{VALID_SEQ_CHARS}]/, "").gsub(/\s/, "") #.word_wrap(80)
   end
 
-  def self.get_heading(var_name)
-    model_class.get_heading(var_name)
-  end
-
-  def self.model_class
-    Sample
-  end
-
-  def self.text
-    "Sample"
-  end
-
-  def search_path
-    "/samples/search"
-  end
-
-  def define_table_view_vars
-
-    @table_columns = {sort: :sample_number, others: [:date_entered, :entered_by, :sample_alias, :sample_type]}
-    @controller = self.class
-    @table_objects = @samples
-
+  def sequence_size
+  	if formatted_sequence then
+  		formatted_sequence.size
+  	else
+  		0
+  	end
   end
 
 end

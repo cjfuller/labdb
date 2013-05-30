@@ -15,4 +15,8 @@
 -# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -#++
 
-= render 'antibody_display'
+.label.label-inverse
+  = @obj.get_heading(@obj.description_field_name)
+.well
+  = @obj.send(@obj.description_field_name)
+

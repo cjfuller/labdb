@@ -21,24 +21,15 @@ class PlasmidsController < ApplicationController
 
   before_filter :antibiotic_params_from_form_for_create, only: [:create]
   before_filter :antibiotic_params_from_form, only: [:update]
-
-  OBJ_TAG = Naming.name_for(Plasmid)
-
-  def obj_tag
-    OBJ_TAG
-  end
-
-  @@headings = {:plasmidnumber => "#{OBJ_TAG} Number", :date_entered => "Date",
-    :enteredby => "Entered by", :notebook => "Notebook", :verified => "Sequence verified?",
-    :plasmidalias => "Alias", :antibiotic => "Antibiotic resistances", :plasmidsize => "Size",
-    :concentration => "Concentration (ug/mL)", :strainnumbers => "#{Naming.name_for(Bacterium)}",
-    :description => "Description", :sequence => "Sequence", :vector => "Vector",
-    :mapreference => "Map"}
   
   @@plasmid_number_mutex = Mutex.new
   
+  def obj_tag
+    Plasmid.obj_tag
+  end
+
   def self.get_heading(var_name)
-    @@headings[var_name]
+    Plasmid.get_heading(var_name)
   end
 
   def self.model_class

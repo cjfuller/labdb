@@ -19,17 +19,12 @@ class OligosController < ApplicationController
 
   include StandardActions
 
-  OBJ_TAG = Naming.name_for(Oligo)
-
-  def obj_tag
-    OBJ_TAG
+  def self.get_heading(var_name)
+    model_class.get_heading(var_name)
   end
 
-  @@headings = {:oligo_number => "#{OBJ_TAG} Number", :date_entered => "Date entered", :entered_by => "Entered by", :notebook => "Notebook", :oligoalias => "Alias", :purpose => "Description", :sequence => "Sequence", :organism => "Organism", :vendor => "Vendor"}
-
-
-  def self.get_heading(var_name)
-    @@headings[var_name]
+  def obj_tag
+    model_class.obj_tag
   end
 
   def self.model_class

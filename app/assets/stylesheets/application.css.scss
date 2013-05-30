@@ -17,18 +17,58 @@
 @import "bootstrap";
 
 body {
-	padding-top: 60px;
-	font: sans-serif;
-	font-size: small;
+    padding-top: 60px;
+    font: sans-serif;
+    font-size: small;
 }
 
 .tiny {
-	font-size: xx-small;
+    font-size: xx-small;
 }
 
 .container.help_text {
-	font-size: xx-small;
-	padding-left: 5px;
-	padding-right: 5px;
+    font-size: xx-small;
+    padding-left: 5px;
+    padding-right: 5px;
+}
 
+.align-left {
+    text-align: left;
+}
+
+.core-info {
+    @extend .align-left;
+}
+
+.core-info-number {
+    @extend .core-info;
+    line-height: 70%;
+}
+
+.core-info-alt {
+    @extend .core-info;
+    text-align: right;
+}
+
+.core-info-alias {
+    @extend .core-info;
+}
+
+.info-block {
+    position: relative;
+    padding: 19px 19px 19px 19px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+.sequence-block {
+    font-family: monospace;
+    word-wrap: break-word;
+}
+
+td.td-center {
+    text-align: center;
 }

@@ -18,16 +18,22 @@
 require 'exporters'
 require 'numbered'
 require 'described'
-
+require 'headings'
 class Antibody < ActiveRecord::Base
 
 	include Exportable
 	include Numbered
 	include Described
+  include Headings
 
 	Fields = [:ab_number, :alias, :box, :comments, :entered_by, :fluorophore, :good_for_if, :good_for_western, :host, :label, :vendor, :date_entered]
 
 	attr_accessible *Fields
+
+	@headings = {:ab_number => "#{obj_tag} Number", :date_entered => "Date entered", :label => "Label",
+                :entered_by => "Entered by", :alias => "Alias", :comments => "Description", :host => "Host",
+                :vendor => "Vendor", :good_for_if => "Good for IF?", :good_for_western => "Good for westerns?",
+                :fluorophore => "Fluorophores", :box => "Box"}
 
   def get_linked(propertyname)
   	nil
@@ -44,5 +50,15 @@ class Antibody < ActiveRecord::Base
 	def self.info_field_name
 		:alias
 	end
+
+	def description_field_name
+    :comments
+  end
+ 
+  def groups
+    {sidebar: [:entered_by, :date_entered, :vendor],
+    	"Antibody information" => [:host, :fluorophore],
+    	"Location information" => [:box, :label] }
+  end
 
 end

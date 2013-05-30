@@ -19,19 +19,12 @@ class YeaststrainsController < ApplicationController
   
   include StandardActions
 
-  OBJ_TAG = Naming.name_for(Yeaststrain)
-
   def obj_tag
-    OBJ_TAG
+    model_class.obj_tag
   end
 
-  @@headings = {strain_number: "#{OBJ_TAG} Number", date_entered: "Date entered",
-                entered_by: "Entered by", notebook: "Notebook", 
-                comments: "Description", plasmidnumber: "#{Naming.name_for(Plasmid)} Number", strain_bkg: "Strain background", genotype: "Genotype", antibiotic: "Antibiotics", location: "Location in freezer", sequence: "Sequence", species: "Species", strainalias: "Alias"}
-
-
   def self.get_heading(var_name)
-    @@headings[var_name]
+    model_class.get_heading(var_name)
   end
 
   def self.model_class

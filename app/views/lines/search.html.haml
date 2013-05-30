@@ -17,4 +17,4 @@
 
 = form_for(@line, html: {multipart: true}, method: 'get', builder: BootstrapFormBuilder) do |f|
 
-  = render partial: 'line_display', :locals=>{f: f}
+  = render partial: 'line_editing', :locals=>{f: f}

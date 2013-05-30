@@ -28,7 +28,7 @@
 .row-fluid#description-row
   .span12
     .control-group
-      = f.label(:purpose, OligosController.get_heading(:purpose), class: "label control-label label-info")
+      = f.label(:purpose, OligosController.get_heading(:purpose), class: "label control-label label-inverse")
       .controls
         = f.text_area(:purpose, readonly: readonly?, rows: 12, class: "input-xxlarge")
 
@@ -38,7 +38,7 @@
 .row-fluid#sequence-row
   .span12
     .control-group
-      = f.label(:sequence, OligosController.get_heading(:sequence), class: "label control-label label-info")
+      = f.label(:sequence, OligosController.get_heading(:sequence), class: "label control-label label-inverse")
       .controls
         = f.text_area(:sequence, readonly: readonly?, rows: 4, class: "input-xxlarge")
 .row-fluid

@@ -17,4 +17,4 @@
 
 = form_for(@bacterium, html: {multipart: true}, method: 'get', builder: BootstrapFormBuilder) do |f|
 
-  = render partial: 'strain_display', :locals=>{f: f}
+  = render partial: 'strain_editing', :locals=>{f: f}

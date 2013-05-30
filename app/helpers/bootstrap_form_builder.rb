@@ -67,15 +67,11 @@ class BootstrapFormBuilder < ActionView::Helpers::FormBuilder
   end
   
   
-  def text_field_with_label(html, propertyname, displayname, span_size, emph_label_color=false, readonly=false)
+  def text_field_with_label(html, propertyname, displayname, span_size, emph_label_color=true, readonly=false)
 
     html << '<div class="control-group">'
     
-    class_string = "label control-label"
-    
-    if emph_label_color then
-      class_string << " label-info"
-    end
+    class_string = "label control-label label-inverse"
     
     html << label(propertyname, displayname, :class=> class_string)
     html << tag("br")
@@ -111,15 +107,11 @@ class BootstrapFormBuilder < ActionView::Helpers::FormBuilder
     
   end
   
-  def checkbox_with_label(html, propertyname, displayname, span_size, emph_label_color=false, readonly=false)
+  def checkbox_with_label(html, propertyname, displayname, span_size, emph_label_color=true, readonly=false)
     
     html << '<div class="control-group">'
     
-    class_string = "label control-label"
-    
-    if emph_label_color then
-      class_string << " label-info"
-    end
+    class_string = "label control-label label-inverse"
     
     html << label(propertyname, displayname, :class=> class_string)
 

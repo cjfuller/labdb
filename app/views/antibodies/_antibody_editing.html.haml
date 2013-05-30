@@ -1,0 +1,39 @@
+-#--
+-# Copyright (C) 2013  Colin J. Fuller
+-#
+-# This program is free software: you can redistribute it and/or modify
+-# it under the terms of the GNU Affero General Public License as published by
+-# the Free Software Foundation, either version 3 of the License, or
+-# (at your option) any later version.
+-#
+-# This program is distributed in the hope that it will be useful,
+-# but WITHOUT ANY WARRANTY; without even the implied warranty of
+-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-# GNU Affero General Public License for more details.
+-#
+-# You should have received a copy of the GNU Affero General Public License
+-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-#++
+
+= render :partial => "shared/subnavbar"
+
+- keys = [:ab_number, :alias, :label, :date_entered ]
+= f.row([3,3,3,3], keys, AntibodiesController.headings_for(keys), {}, readonly_for(keys), {})
+
+
+- keys = [:entered_by, :box, :vendor, :host]
+= f.row([3,3,3,3], keys, AntibodiesController.headings_for(keys), {}, readonly_for(keys), {})
+
+- keys = [:fluorophore, :good_for_if, :good_for_western]
+= f.row([3,3,3], keys, AntibodiesController.headings_for(keys), {}, readonly_for(keys), {good_for_if: true, good_for_western: true})
+
+.row-fluid#description-row
+	.span12
+		.control-group
+			= f.label(:comments, AntibodiesController.get_heading(:comments), :class=> "label control-label label-inverse")
+			.controls= f.text_area(:comments, :readonly=>readonly?, :rows=>12, :class=>"input-xxlarge")
+
+
+= render :partial=>'shared/bottom_buttons'
+
+
