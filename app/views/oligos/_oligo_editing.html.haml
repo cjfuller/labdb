@@ -25,12 +25,7 @@
 = f.row([3,3,3,3], keys, OligosController.headings_for(keys), {}, readonly_for(keys), {})
 
 
-.row-fluid#description-row
-  .span12
-    .control-group
-      = f.label(:purpose, OligosController.get_heading(:purpose), class: "label control-label label-inverse")
-      .controls
-        = f.text_area(:purpose, readonly: readonly?, rows: 12, class: "input-xxlarge")
+= render partial: "shared/editing_description", locals: {f: f}
 
 - size = 0
 - size = f.object.sequence.size if f.object and f.object.sequence

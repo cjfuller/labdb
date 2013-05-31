@@ -44,12 +44,7 @@
 
   = f.span_series([3,3], keys, PlasmidsController.headings_for(keys), {}, {concentration: readonly?, plasmidsize: true}, {})
 
-.row-fluid#description-row
-  .span12
-    .control-group
-      = f.label(:description, PlasmidsController.get_heading(:description), class: "label control-label label-inverse")
-      .controls= f.text_area(:description, readonly: readonly?, rows:12, class:"input-xxlarge")
-
+= render partial: "shared/editing_description", locals: {f: f}
 
 .row-fluid#sequence-row
   .span12

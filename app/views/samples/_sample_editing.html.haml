@@ -31,12 +31,7 @@
   - keys = [:depleted, :linked_items]
   = f.row([3,3,3,3], keys, SamplesController.headings_for(keys), {}, readonly_for(keys), {depleted: true})
 
-.row-fluid#description-row
-  .span12
-    .control-group
-      = f.label(:description, SamplesController.get_heading(:description), class: "label control-label label-inverse")
-      .controls
-        = f.text_area(:description, readonly: readonly?, rows: 3, class: "input-xxlarge")
+= render partial: "shared/editing_description", locals: {f: f}
 
 
 = render :partial=>'shared/bottom_buttons'
