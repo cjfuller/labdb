@@ -4,4 +4,4 @@
 
 require File.expand_path('../config/application', __FILE__)
 
-Straightlabdb::Application.load_tasks
+Labdb::Application.load_tasks

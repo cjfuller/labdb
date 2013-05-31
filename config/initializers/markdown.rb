@@ -15,10 +15,5 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-# Be sure to restart your server when you modify this file.
+Labdb::Application::MARKDOWN = Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true, space_after_headers: true, strikethrough: true, no_intra_emphasis: true)
 
-# Your secret key for verifying the integrity of signed cookies.
-# If you change this key, all old signed cookies will become invalid!
-# Make sure the secret is at least 30 characters and all random,
-# no regular words or you'll be exposed to dictionary attacks.
-Labdb::Application.config.secret_token = 'change this before running the application; generate a token using rake secret'

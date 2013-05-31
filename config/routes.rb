@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-Straightlabdb::Application.routes.draw do
+Labdb::Application.routes.draw do
 
 
   get '/login', :to => redirect('/auth/google'), :as => :login

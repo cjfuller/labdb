@@ -57,9 +57,9 @@ class LinesController < ApplicationController
 
     inv = @obj.inventory
 
-    puts inv.map { |e| e.inspect }.join(",")
+    #puts inv.map { |e| e.inspect }.join(",")
 
-    puts loc.inspect
+    #puts loc.inspect
 
     upd_item = inv.find { |e| e == loc }
 

@@ -27,12 +27,7 @@
 - keys = [:genotype, :selectable_markers]
 = f.row([6,6], keys, LinesController.headings_for(keys), {}, readonly_for(keys), {})
 
-.row-fluid#description-row
-  .span12
-    .control-group
-      = f.label(:description, LinesController.get_heading(:description), class: "label control-label label-inverse")
-      .controls
-        = f.text_area(:description, readonly: readonly?, rows: 3, class: "input-xxlarge")
+= render partial: "shared/editing_description", locals: {f: f}
 
 .row-fluid#sequence-row
   .span12

@@ -21,6 +21,7 @@ require 'object_naming'
 require 'standard_actions'
 require 'searching'
 require 'authorization'
+require 'helptext'
 
 class ApplicationController < ActionController::Base
 
