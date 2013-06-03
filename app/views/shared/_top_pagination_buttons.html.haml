@@ -16,8 +16,8 @@
 -#++
 
 %ul{class: "nav pull-left"}
-	- prev_button = link_to_previous_page @table_objects, 'Previous page', params: {search_id: @search_id}
-	- next_button = link_to_next_page @table_objects, 'Next page', params: {search_id: @search_id}
+	- prev_button = link_to_previous_page @table_objects, 'Previous page', params: {search_id: @search_id}, class: "prev-button"
+	- next_button = link_to_next_page @table_objects, 'Next page', params: {search_id: @search_id}, class: "next-button"
 
 	- if prev_button then
 		%li.divider-vertical

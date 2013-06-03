@@ -27,6 +27,7 @@ group :development, :test do
 end
 
 gem 'jquery-rails'
+gem 'jquery-hotkeys-rails'
 
 gem 'paperclip', '~> 3.0'
 
