@@ -26,7 +26,7 @@ desc "Import plasmids."
 task :import_plasmids => :environment do
 
 
-  doc = Nokogiri::XML(File.new("/db/db_imports/plasmid_database.xml"))
+  doc = Nokogiri::XML(File.new("db/db_imports/plasmid_database.xml"))
 
   doc.remove_namespaces!
 
@@ -117,7 +117,7 @@ task :import_plasmids => :environment do
                 plasmidsize: seq.length,
                 strainnumbers: asbs,
                 vector: vector,
-                verified: verified}
+                verified: (/Yes/i.match(verified) and true)}
 
     p = Plasmid.new(options)
 
