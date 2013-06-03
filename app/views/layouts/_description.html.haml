@@ -15,9 +15,11 @@
 -# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -#++
 
-.label.label-inverse
-  = @obj.get_heading(@obj.description_field_name)
+.selectiongroup
+  .label.label-inverse.focuslabel{tabindex: autotab}
+    = @obj.get_heading(@obj.description_field_name)
+  
 
-.well
-  = Labdb::Application::MARKDOWN.render(@obj.send(@obj.description_field_name)).html_safe
+  .well
+    .selectable= Labdb::Application::MARKDOWN.render(@obj.send(@obj.description_field_name)).html_safe
 
