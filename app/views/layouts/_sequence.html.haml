@@ -14,17 +14,17 @@
 -# You should have received a copy of the GNU Affero General Public License
 -# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -#++
-
-.inline
-	.label.label-inverse
-		= "Sequence"
-	= "(#{@obj.sequence_size} bp)"
-	- if @obj.respond_to? :verified
-		.pull-right
-			= "verified: "
-			- if @obj.verified
-				%i.icon-ok
-			- else
-				%i.icon-remove
-.well
-	.sequence-block= @obj.formatted_sequence
+.selectiongroup
+  .inline
+    .label.label-inverse.focuslabel{tabindex: autotab}
+      = "Sequence"
+    = "(#{@obj.sequence_size} bp)"
+    - if @obj.respond_to? :verified
+      .pull-right
+        = "verified: "
+        - if @obj.verified
+          %i.icon-ok
+        - else
+          %i.icon-remove
+  .well
+    .sequence-block.selectable= @obj.formatted_sequence
