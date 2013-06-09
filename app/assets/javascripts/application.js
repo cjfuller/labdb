@@ -16,6 +16,7 @@
 //= require bootstrap
 //= require bootstrap-tooltip
 //= require bootstrap-popover
+//= require d3
 //= require_tree .
 
 $('.pop').popover({html : true})
