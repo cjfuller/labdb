@@ -44,11 +44,6 @@ class Plasmid < ActiveRecord::Base
 
   attr_accessible *Fields
 
-  
-  
-  has_attached_file :plasmidmap, :styles => { :thumb => ["256x256", "png"]}
-  validates_attachment :plasmidmap, :content_type => {:content_type=>/image/}
-
   attr_accessor :antibiotics
 
   @@Antibiotics = {"carbenicillin" => "carb", "kanamycin"=>"kan", "chloramphenicol"=>"chlor", "gentamycin"=>"gent", "tetracycline"=>"tet", "streptomycin"=>"strep"}

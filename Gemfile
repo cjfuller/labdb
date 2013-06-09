@@ -28,8 +28,7 @@ end
 
 gem 'jquery-rails'
 gem 'jquery-hotkeys-rails'
-
-gem 'paperclip', '~> 3.0'
+gem 'd3-rails'
 
 gem 'bcrypt-ruby', '~> 3.0.0'
 
