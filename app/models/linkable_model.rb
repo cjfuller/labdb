@@ -46,7 +46,8 @@ module LinkableModel
 
   def clear_linked
     linked_properties.each do |linked_property|
-      self.send(linked_property.to_s + "=", nil)
+      setter_name = linked_property.to_s + "="
+      self.send(linked_property.to_s + "=", nil) if self.respond_to?(setter_name)
     end
   end
 
