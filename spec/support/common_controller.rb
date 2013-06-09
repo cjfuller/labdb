@@ -36,7 +36,7 @@ module CommonControllerSpecs
 				instance_variable_set(inst_var_name, self.send(plural_class_sym, :one))
 			end
 
-			basic_tests
+			basic_tests model_class
 
 			object_tests model_class
 
@@ -48,10 +48,16 @@ module CommonControllerSpecs
 
 	end
 
-	def basic_tests
+	def basic_tests(model_class)
 
 		it "should get a new item" do
 			get :new
+			response.should be_success
+		end
+
+		it "should get a new item with duplicate" do
+			@obj = instance_variable_get(obj_varname = "@" + model_class.to_s.downcase)
+			get :new, id: @obj
 			response.should be_success
 		end
 
