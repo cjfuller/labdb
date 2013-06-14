@@ -35,6 +35,7 @@ gem 'bcrypt-ruby', '~> 3.0.0'
 gem 'omniauth'
 
 gem 'omniauth-openid'
+gem 'omniauth-browserid'
 
 gem 'sass-rails', '~> 3.2'
 gem 'bootstrap-sass', '~> 2.3.1.0'

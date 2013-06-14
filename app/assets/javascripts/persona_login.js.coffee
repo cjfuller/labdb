@@ -1,3 +1,4 @@
+###
 #--
 # Copyright (C) 2013  Colin J. Fuller
 #
@@ -14,16 +15,20 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
+###
 
-require 'omniauth-openid'
+persona_login = ->
+  navigator.id.get((assertion) ->
+    if assertion
+      $('input[name=assertion]').val(assertion)
+      $('#browser_id_form').submit()
+    else
+      window.location = "#{failure_path}""
+  )
 
-require 'openid/fetchers'
-
-Rails.application.config.middleware.use Rack::Session::Cookie
-
-OpenID.fetcher.ca_file = Rails.root.join("config/cacert.pem").to_s
-
-Rails.application.config.middleware.use OmniAuth::Builder do
-  provider :openid, name: 'google', identifier: 'https://www.google.com/accounts/o8/id'
-  provider :browser_id, name: 'persona', verify_url: 'https://verifier.login.persona.org/verify'
-end
+$(->
+  $('#browser_id_form_button').click(->
+    persona_login()
+    false
+  )
+)
