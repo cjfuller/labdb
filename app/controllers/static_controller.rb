@@ -21,6 +21,7 @@ class StaticController < ApplicationController
 
   def index
     @logged_in = (not (session[:user_id].nil?))
+    @login_status = login_status
   end
 
 end

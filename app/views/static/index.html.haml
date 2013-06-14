@@ -18,9 +18,12 @@
 - user = User.find_by_uid(session[:user_id])
 
 - if (not @logged_in) or user.nil? then
-	%h4 Log in with Google
-	= link_to 'Log in', '/login', class: "btn btn-success"
+  %h4 Log in with Google
+  = link_to 'Log in', '/login', class: "btn btn-success"
+  %h4 Log in with Persona
+  %form{id: 'persona_form', action:'/auth/persona/callback'}
+    %input{type: 'hidden', name: 'assertion'}
+    %button{class: 'btn btn-success', type: 'submit', id: 'persona_button'} Log in
 -else 
-	%h4= "Logged in as: #{user.name} <#{user.email}>"
-	= link_to 'Log out', '/logout', class: 'btn btn-primary'
-
+  %h4= @login_status
+  = link_to 'Log out', '/logout', class: 'btn btn-primary'

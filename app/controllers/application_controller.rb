@@ -59,13 +59,26 @@ class ApplicationController < ActionController::Base
 
     curr_uid = session[:user_id]
 
-    return false if curr_uid.nil?
+    return nil if curr_uid.nil?
 
     curr_user = User.find_by_uid(curr_uid)
 
-    curr_user.name
+    return curr_user.name 
 
   end
+
+  def curr_email
+
+    curr_uid = session[:user_id]
+
+    return nil if curr_uid.nil?
+
+    curr_user = User.find_by_uid(curr_uid)
+
+    return curr_user.email
+
+  end
+
 
   def curr_user_id
 
@@ -127,6 +140,10 @@ class ApplicationController < ActionController::Base
   end
 
   def preprocess_model_object(model_obj)
+  end
+
+  def login_status
+    "Logged in as: #{curr_username} <#{curr_email}>"
   end
 
 

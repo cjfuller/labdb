@@ -21,13 +21,13 @@ persona_login = ->
   navigator.id.get((assertion) ->
     if assertion
       $('input[name=assertion]').val(assertion)
-      $('#browser_id_form').submit()
+      $('#persona_form').submit()
     else
-      window.location = "#{failure_path}""
+      window.location = "#{failure_path}"
   )
 
 $(->
-  $('#browser_id_form_button').click(->
+  $('#persona_button').click(->
     persona_login()
     false
   )

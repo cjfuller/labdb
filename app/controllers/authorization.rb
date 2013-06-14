@@ -44,6 +44,17 @@ module Authorization
 
   end
 
+  def name_for_auth_rw_user_email(email)
+    load_auth unless @users_loaded
+    allowed_users = @user_data[ALLOWED_LABEL]
+    allowed_users.each do |u|
+      if email == u[EMAIL_TAG] then
+        return u[NAME_TAG]
+      end
+    end
+    return nil
+  end
+
   def load_auth
 
     @user_data = Rails.configuration.user_data
@@ -68,7 +79,7 @@ module Authorization
 
     allowed_users.each do |u|
 
-      if curr_user.email == u[EMAIL_TAG] and curr_user.name == u[NAME_TAG] then
+      if curr_user.email == u[EMAIL_TAG] then
         return true
       end
 

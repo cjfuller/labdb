@@ -15,25 +15,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-class User < ActiveRecord::Base
+module ServerInfo
 
-  attr_protected :name, :provider, :uid, :email
-
-  has_one :search
-  
-  def self.create_with_omniauth(auth)
-    user = User.new
-    user.provider = auth['provider']
-    user.uid = auth['uid']
-    user.email = auth['info']['email']
-    user.name = auth['info']['name']
-    if user.name == user.email then
-      user.name = ''
-    end
-    user.save
-    user
+  def self.server_url
+    "https://vinculum.org.nz"
   end
 
-
-
 end
+
+
