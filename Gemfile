@@ -24,6 +24,7 @@ end
 group :development, :test do
 	gem 'rspec'
 	gem 'rspec-rails'
+  gem 'konacha'
 end
 
 gem 'jquery-rails'
