@@ -1,9 +1,13 @@
 #!/usr/bin/env puma
 
-proj_base = File.expand_path("../..", __FILE__)
+require 'fileutils'
 
-key_path = ""
-cert_path = ""
+proj_base = File.expand_path("../..", __FILE__)
+pid_path = File.expand_path("tmp/pids", proj_base)
+key_path = File.expand_path('config/gen_key.pem', proj_base)
+cert_path = File.expand_path('config/gen_cert.pem', proj_base)
+
+FileUtils.mkdir_p(pid_path)
 
 # Set the environment in which the rack's app will run.
 #
@@ -21,12 +25,12 @@ cert_path = ""
 
 # Store the pid of the server in the file at “path”.
 #
-pidfile File.expand_path('tmp/pids/puma.pid', proj_base)
+pidfile File.expand_path('puma.pid', pid_path)
 
 # Use “path” as the file to store the server info state. This is
 # used by “pumactl” to query and control the server.
 #
-state_path File.expand_path('tmp/pids/puma.state', proj_base)
+state_path File.expand_path('puma.state', pid_path)
 
 # Redirect STDOUT and STDERR to files specified. The 3rd parameter
 # (“append”) specifies whether the output is appended, the default is

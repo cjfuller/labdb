@@ -513,5 +513,20 @@ do_map = ->
   map = new PlasmidMap()
   map.render_drawing()
 
+define_names = ->
+  root = exports ? window
+  root.plmp = 
+    RestrictionEnzymeData : RestrictionEnzymeData
+    FeatureData : FeatureData
+    Alignments : Alignments
+    Plasmid : Plasmid
+    Feature : Feature
+    PointFeature : PointFeature
+    RegionalFeature : RegionalFeature 
+    PlasmidMap : PlasmidMap
 
 $("#show-map-button").on("click", do_map)
+
+define_names()
+
+
