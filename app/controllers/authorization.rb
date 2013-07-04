@@ -66,6 +66,8 @@ module Authorization
 
     allowed_users = @user_data[auth_type_key]
 
+    return false if allowed_users.nil?
+
     allowed_users.each do |u|
 
       if curr_user.email == u[EMAIL_TAG] and curr_user.name == u[NAME_TAG] then
