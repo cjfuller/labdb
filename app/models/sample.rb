@@ -38,7 +38,7 @@ class Sample < ActiveRecord::Base
 	LINK_METHODS = {plasmid_numbers: :get_linked_plasmids, strain_numbers: :get_linked_bacterial_strains, linked_sample_numbers: :get_linked_samples}
 
 	def linked_properties
-		[:plasmid_numbers, :strain_numbers, :linked_sample_numbers, :linked_items]
+		[:plasmid_numbers, :strain_numbers, :linked_sample_numbers]
 	end
 
 	def parse_numbers(name)
