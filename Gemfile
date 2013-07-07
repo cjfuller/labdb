@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails'
+gem 'rails', '~> 3.2'
 gem 'haml'
 
 gem 'pg'
@@ -36,13 +36,14 @@ gem 'bcrypt-ruby', '~> 3.0.0'
 gem 'omniauth'
 
 gem 'omniauth-openid'
+gem 'omniauth-browserid'
 
 gem 'sass-rails', '~> 3.2'
 gem 'bootstrap-sass', '~> 2.3.1.0'
 
 gem 'kaminari'
 
-gem 'puma', '~> 1.6.3'
+gem 'puma', '~> 1.6'
 
 gem 'facets', require: false
 

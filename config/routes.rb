@@ -18,8 +18,9 @@
 Labdb::Application.routes.draw do
 
 
-  get '/login', :to => redirect('/auth/google'), :as => :login
-  get '/logout', :to => 'sessions#destroy', :as => :logout
+  get '/google_login', to: redirect('/auth/google'), as: :login
+  get '/persona_login', to: redirect('/auth/persona'), as: :login
+  get '/logout', to: 'sessions#destroy', as: :logout
 
   match '/auth/:provider/callback', :to => 'sessions#create'
   match '/auth/failure', :to => 'sessions#failure'
