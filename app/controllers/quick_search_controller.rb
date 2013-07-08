@@ -40,15 +40,15 @@ class QuickSearchController < ApplicationController
     redirect_to failure_location and return unless params[:database] and controller
     model = controller.classify.constantize
     search_obj = nil
-    if not params[:number].empty? then
+
+    if params[:number] and not params[:number].empty? then
       search_obj = {model.to_s.downcase.to_sym => {model.number_field_name => params[:number]}}
-    elsif not params[:alias].empty? then
+    elsif params[:alias] and not params[:alias].empty? then
       search_obj = {model.to_s.downcase.to_sym => {model.info_field_name => params[:alias]}}
     end
 
     if search_obj then
-      params.merge!(search_obj)
-      redirect_to params.merge({controller: controller, action: :index, method: :get}) and return
+      redirect_to search_obj.merge({controller: controller, action: :index}) and return
     end
 
     redirect_to failure_location
