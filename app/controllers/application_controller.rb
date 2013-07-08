@@ -122,5 +122,4 @@ class ApplicationController < ActionController::Base
   def preprocess_model_object(model_obj)
   end
 
-
 end

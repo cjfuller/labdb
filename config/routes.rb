@@ -25,6 +25,8 @@ Labdb::Application.routes.draw do
   match '/auth/:provider/callback', :to => 'sessions#create'
   match '/auth/failure', :to => 'sessions#failure'
 
+  get '/quick_search', to: 'quick_search#do_quick_search'
+
   common_actions = Proc.new do
     collection do
       get 'search'

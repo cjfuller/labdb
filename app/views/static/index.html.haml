@@ -20,7 +20,4 @@
     = render partial: 'static/login'
   - else
     = render partial: 'static/quickstart'
-
-    / .info-block
-    /   %h4= "Logged in as: #{@user_name} <#{@user_email}>"
-    /   = link_to 'Log out', '/logout', class: 'btn btn-small btn-inverse'
+    
