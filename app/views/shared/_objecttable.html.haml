@@ -39,17 +39,21 @@
 
   %tbody
     - @table_objects.each do |obj|
-      %tr
-        %td= obj.send(@table_columns[:sort])
-        - @table_columns[:others].each do |tc|
-          %td= obj.send(tc)        
+      %tr.table_link{obj_url: url_for(polymorphic_path(obj, search_id: @search_id))}
         %td
-          .nowrap-row
-            .nowrap-cell= link_to 'Show', polymorphic_path(obj, search_id: @search_id), class: "btn btn-mini btn-info"
-            -if @auth_is_rw then
+          = obj.send(@table_columns[:sort])
+        - @table_columns[:others].each do |tc|
+          %td= obj.send(tc) 
+        -if @auth_is_rw then
+          %td.noclick.button-cell-shrink
+            .nowrap-row
+              .nowrap-cell
+                = link_to edit_polymorphic_path(obj), class: "noclick" do
+                  %i.icon-pencil.noclick
               .nowrap-cell= "&nbsp;".html_safe
-              .nowrap-cell= link_to 'Edit', edit_polymorphic_path(obj), class: "btn btn-mini btn-info"
-              .nowrap-cell= "&nbsp;".html_safe         
-              .nowrap-cell= link_to 'Destroy', obj, confirm: "Delete #{Naming.name_for(obj.class)}#{obj.number_field}?  Are you sure?", method: :delete, class: "btn btn-mini btn-danger"
+              .nowrap-cell
+                = link_to obj, confirm: "Delete #{Naming.name_for(obj.class)}#{obj.number_field}?  Are you sure?", method: :delete, class: "noclick" do
+                  %i.icon-remove.noclick
+
 = paginate @table_objects
 

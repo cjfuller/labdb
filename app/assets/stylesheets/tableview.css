@@ -13,3 +13,7 @@
   	white-space: nowrap;
     display: table-cell;
   }
+
+  .button-cell-shrink {
+    width: 0px;
+  }
