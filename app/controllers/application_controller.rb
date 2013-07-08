@@ -37,6 +37,7 @@ class ApplicationController < ActionController::Base
     redirect_to :protocol => "https://" unless request.protocol == "https://"
   end
 
+  prepend_before_filter :get_user
   prepend_before_filter :redirect_https
   around_filter :clear_temporary_number_assignments
 
@@ -54,29 +55,31 @@ class ApplicationController < ActionController::Base
 
   end
 
+  def get_user
+    @user_name ||= curr_username
+    @user_email ||= curr_user_email
+    @logged_in = (@user_name and @user_email)
+  end
 
   def curr_username
-
     curr_uid = session[:user_id]
-
-    return false if curr_uid.nil?
-
+    return nil if curr_uid.nil?
     curr_user = User.find_by_uid(curr_uid)
-
     curr_user.name
-
   end
 
   def curr_user_id
-
     curr_uid = session[:user_id]
-
-    return false if curr_uid.nil?
-
+    return nil if curr_uid.nil?
     curr_user = User.find_by_uid(curr_uid)
-
     curr_user.id.to_i
+  end
 
+  def curr_user_email
+    curr_uid = session[:user_id]
+    return nil if curr_uid.nil?
+    curr_user = User.find_by_uid(curr_uid)
+    curr_user.email
   end
 
   def generate_date(an_obj)
@@ -95,35 +98,25 @@ class ApplicationController < ActionController::Base
 
   
   def define_ui_variables(opts_hash)
-
     opts_hash.each do |k, v|
-
       instance_variable_set("@#{k}", v)
-
     end
-
   end
 
 
   def self.headings_for(headings_list)
-
     headings_list.inject({}) do |a, e|
       a[e]= get_heading(e)
       a
     end
-
   end
   
   def generate_object_number(klass, number_field_name)
-
     NumberAssignment.assignment_for_class(klass, number_field_name, session)
-
   end
 
   def do_export(obj)
-
     send_data(obj.export_to(params["exportformat"].to_sym), obj.get_export_params(params["exportformat"].to_sym))
-
   end
 
   def preprocess_model_object(model_obj)

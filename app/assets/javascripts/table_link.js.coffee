@@ -15,17 +15,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-require 'omniauth-openid'
 
-require 'openid/fetchers'
+$(".table_link").click( (event) ->
+  no_link_class_name = /noclick/
+  unless no_link_class_name.test(event.target.className)
+    document.location.href = this.getAttribute("obj_url");
+)
 
-Rails.application.config.middleware.use Rack::Session::Cookie
-
-OmniAuth.config.full_host = "https://localhost:3000"
-
-OpenID.fetcher.ca_file = Rails.root.join("config/cacert.pem").to_s
-
-Rails.application.config.middleware.use OmniAuth::Builder do
-  provider :openid, name: 'google', identifier: 'https://www.google.com/accounts/o8/id'
-  provider :browser_id, name: 'persona', verify_url: 'https://login.persona.org/verify'
-end
