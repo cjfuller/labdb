@@ -1,0 +1,12 @@
+
+.form-horizontal .control-label.label-shift-left {
+  width: 150px;
+}
+
+.form-horizontal .controls.field-shift-left {
+  margin-left: 160px;
+}
+
+.info-block.with-bottom-padding {
+  padding: 19px 19px 39px 19px;
+}

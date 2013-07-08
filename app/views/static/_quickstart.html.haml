@@ -1,0 +1,36 @@
+
+.row-fluid
+  .span6
+    .label.label-success Quick search
+    .info-block.with-bottom-padding
+      = form_tag "/quick_search", method: :get, class: "form form-horizontal" do
+        .well
+          .control-group
+            .control-label.label-shift-left
+              Database
+            .controls.field-shift-left
+              %select{id: "database", name: "database"}
+                %option Plasmids
+                %option Oligonucleotides
+                %option Bacterial Strains
+                %option Samples
+                %option Antibodies
+                %option TC
+                %option Yeast
+        .well
+          .control-group
+            .control-label.label-shift-left{'for' => "number"}
+              Search by number
+            .controls.field-shift-left
+              %input{type: "text", id: "number", name: "number"}
+          .control-group.shift-left
+            .control-label.label-shift-left
+              %b or
+          .control-group.shift-left
+            .control-label.label-shift-left{'for' => "alias"}
+              Search by alias
+            .controls.field-shift-left
+              %input{type: "text", id: "alias", name: "alias"}
+
+        .pull-right 
+          = submit_tag("Search", class: "btn btn-small btn-success")
