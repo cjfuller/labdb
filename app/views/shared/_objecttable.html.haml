@@ -35,7 +35,8 @@
 
       - @table_columns[:others].each do |tc|
         %th= @controller.get_heading(tc).gsub(" ", "&nbsp;").html_safe
-      %th= ""
+      - if @auth_is_rw then
+        %th= ""
 
   %tbody
     - @table_objects.each do |obj|

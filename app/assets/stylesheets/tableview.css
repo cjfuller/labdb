@@ -17,3 +17,8 @@
   .button-cell-shrink {
     width: 0px;
   }
+
+  .pagination li.all-borders .page {
+    border-width: 1px 1px 1px 1px;
+    border-collapse: collapse;
+  }
