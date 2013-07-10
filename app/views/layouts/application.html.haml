@@ -23,14 +23,12 @@
     = csrf_meta_tags
 
   %body
-
-    %header{class: "navbar navbar-fixed-top navbar-inverse"}
-
+    .navbar.navbar-fixed-top.navbar-inverse
       .navbar-inner
         .container
-          = link_to ApplicationController::DATABASE_SYSTEM_SHORT_NAME, "/", id:"logo"
+          = link_to ApplicationController::DATABASE_SYSTEM_SHORT_NAME, "/", id:"logo", class: 'brand'
           %nav
-            %ul{class: "nav pull-left"}
+            %ul.nav
               %li.divider-vertical
               %li= link_to 'Plasmids', '/plasmids'
               %li= link_to 'Oligos', '/oligos'
@@ -43,8 +41,11 @@
                 %li{class: "dropdown"}
                   %a.dropdown-toggle{'data-toggle' => "dropdown", href: '#'}
                     %i.icon-user.icon-white
-                    = "#{@user_name} <#{@user_email}>"
+                    = "#{@user_name}"
                   %ul.dropdown-menu
+                    %li.disabled
+                      %a{href: "#"}= "#{@user_email}"
+                    %li.divider
                     %li= link_to 'Log out', '/logout'
 
     .container= yield

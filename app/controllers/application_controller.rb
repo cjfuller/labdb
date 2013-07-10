@@ -65,6 +65,7 @@ class ApplicationController < ActionController::Base
     curr_uid = session[:user_id]
     return nil if curr_uid.nil?
     curr_user = User.find_by_uid(curr_uid)
+    return nil unless curr_user
     curr_user.name
   end
 
@@ -72,6 +73,7 @@ class ApplicationController < ActionController::Base
     curr_uid = session[:user_id]
     return nil if curr_uid.nil?
     curr_user = User.find_by_uid(curr_uid)
+    return nil unless curr_user
     curr_user.id.to_i
   end
 
@@ -79,6 +81,7 @@ class ApplicationController < ActionController::Base
     curr_uid = session[:user_id]
     return nil if curr_uid.nil?
     curr_user = User.find_by_uid(curr_uid)
+    return nil unless curr_user
     curr_user.email
   end
 
