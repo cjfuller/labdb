@@ -23,17 +23,28 @@ module CommonControllerSpecs
 
 			include Rails.application.routes.url_helpers
 
-			classname = described_class.name.gsub("Controller", "").classify
-			plural_class_sym = classname.downcase.pluralize.to_sym
-			model_class = classname.constantize
-			inst_var_name = "@" + classname.downcase
+			def self.classname
+				described_class.name.gsub("Controller", "").classify
+			end
+
+			def self.plural_class_sym
+				classname.downcase.pluralize.to_sym
+			end
+
+			def self.model_class
+				classname.constantize
+			end
+
+			def self.inst_var_name
+				"@" + classname.downcase
+			end
 
 			fixtures :users, plural_class_sym
 
 			before :each do
 				request.env['HTTPS'] = 'on'
 				log_in(request.session)
-				instance_variable_set(inst_var_name, self.send(plural_class_sym, :one))
+				instance_variable_set(base.inst_var_name, self.send(base.plural_class_sym, :one))
 			end
 
 			basic_tests model_class
@@ -66,6 +77,11 @@ module CommonControllerSpecs
 			response.should be_success
 		end
 
+		it "url_for should match the correct resource" do
+			plural_class = self.class.plural_class_sym.to_s
+			@obj = instance_variable_get(obj_varname = "@" + model_class.to_s.downcase)
+			url_for(controller: plural_class, host: "test.host", action: :show, id: @obj.id, protocol: 'https').should eq "https://test.host/#{plural_class}/#{@obj.id}"
+		end
 	end
 
 

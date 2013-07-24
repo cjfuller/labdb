@@ -17,13 +17,12 @@
 
 Labdb::Application.routes.draw do
 
+  root to: "static#index"
 
-  get '/google_login', to: redirect('/auth/google'), as: :login
-  get '/persona_login', to: redirect('/auth/persona'), as: :login
   get '/logout', to: 'sessions#destroy', as: :logout
 
-  match '/auth/:provider/callback', :to => 'sessions#create'
-  match '/auth/failure', :to => 'sessions#failure'
+  match '/auth/:provider/callback', to: 'sessions#create'
+  match '/auth/failure', to: 'sessions#failure'
 
   get '/quick_search', to: 'quick_search#do_quick_search'
 
@@ -39,6 +38,14 @@ Labdb::Application.routes.draw do
     end
   end
 
+  resources :users, except: [:show] do
+    member do
+      put 'toggle_auth_read'
+      put 'toggle_auth_write'
+      put 'toggle_auth_admin'
+    end
+  end
+
   resources :plasmids, &common_actions
 
   resources :oligos, &common_actions
@@ -49,12 +56,12 @@ Labdb::Application.routes.draw do
     collection do
       get 'search'
       post 'search'
+      post 'create_from_plasmid'
     end
     member do
       get 'export'
       get 'next'
       get 'previous'
-      post 'create_from_plasmid'
     end
   end
 
@@ -62,7 +69,7 @@ Labdb::Application.routes.draw do
 
   resources :samples, &common_actions
 
-  resources :lines do 
+  resources :lines do
     collection do
       get 'search'
       post 'search'
@@ -75,7 +82,6 @@ Labdb::Application.routes.draw do
     end
   end
 
-  root :to => "static#index"
     
 
 end

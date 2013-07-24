@@ -61,28 +61,25 @@ class ApplicationController < ActionController::Base
     @logged_in = (@user_name and @user_email)
   end
 
-  def curr_username
+  def curr_user_obj
     curr_uid = session[:user_id]
     return nil if curr_uid.nil?
-    curr_user = User.find_by_uid(curr_uid)
-    return nil unless curr_user
-    curr_user.name
+    User.find_by_email(curr_uid)
+  end
+
+  def curr_username
+    return nil unless curr_user_obj
+    curr_user_obj.name
   end
 
   def curr_user_id
-    curr_uid = session[:user_id]
-    return nil if curr_uid.nil?
-    curr_user = User.find_by_uid(curr_uid)
-    return nil unless curr_user
-    curr_user.id.to_i
+    return nil unless curr_user_obj
+    curr_user_obj.id.to_i
   end
 
   def curr_user_email
-    curr_uid = session[:user_id]
-    return nil if curr_uid.nil?
-    curr_user = User.find_by_uid(curr_uid)
-    return nil unless curr_user
-    curr_user.email
+    return nil unless curr_user_obj
+    curr_user_obj.email
   end
 
   def generate_date(an_obj)

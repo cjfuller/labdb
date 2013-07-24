@@ -15,31 +15,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-class User < ActiveRecord::Base
-
-  attr_protected :email, :auth_read, :auth_write, :auth_admin
-
-  attr_accessible :name, :email, :notes
-
-  has_one :search
-
-  def toggle_auth_field!(auth_type)
-    self.send(auth_type.to_s + "=", (not self.send(auth_type)))
-    self.save
-  end
-
-  def auth_admin!(should_auth)
-    self.auth_admin = should_auth
-    self.save
-  end
-
-  def auth_read!(should_auth)
-    self.auth_read = should_auth
-    self.save
-  end
-
-  def auth_write!(should_auth)
-    self.auth_write = should_auth
-    self.save
+module UsersHelper
+  def badge_class_for_boolean(bool)
+    if bool then
+      "badge badge-success noclick"
+    else
+      "badge badge-important noclick"
+    end
   end
 end

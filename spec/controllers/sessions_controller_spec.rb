@@ -32,7 +32,7 @@ describe SessionsController do
 
   it "should get create" do
     request.env['omniauth.auth']= {provider: 'google', uid: '0001', 'info' => {'email' => 'example@gmail.com', 'name' => 'First Last'}}
-    get :create
+    get :create, provider: "google"
     response.should redirect_to "/"
   end
 

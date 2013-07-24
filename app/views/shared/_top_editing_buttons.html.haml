@@ -23,7 +23,7 @@
 				%span.caret
 				Actions
 			%ul.dropdown-menu
-				- if @auth_is_rw then
+				- if auth? :auth_write then
 					%li= link_to 'Edit', edit_polymorphic_path(@obj)
 					%li= link_to 'Duplicate', polymorphic_path(@obj, action: "new", id: @obj.id)
 					- if @obj.is_a? Plasmid then
