@@ -1,13 +1,29 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 one:
-  provider: google
-  uid: "0001"
-  name: First Last
-  email: example@gmail.com
+  name: Admin User
+  email: admin@labdb
+  auth_read: true
+  auth_write: true
+  auth_admin: true
 
 two:
-  provider: google
-  uid: "0002"
-  name: Not Auth
-  email: not_auth@gmail.com
+  name: RW User
+  email: rw@labdb
+  auth_read: true
+  auth_write: true
+  auth_admin: false
+
+three:
+  name: RO User
+  email: ro@labdb
+  auth_read: true
+  auth_write: false
+  auth_admin: false
+
+four:
+  name: Unauthorized User
+  email: unauthorized@labdb
+  auth_read: false
+  auth_write: false
+  auth_admin: false

@@ -25,54 +25,33 @@ module Authorization
   def self.included(base)
     base.class_exec do 
       before_filter :require_authorization
+      helper_method :auth?
     end
   end
 
   def denied
-    render :text => "Access denied."
+    redirect_to "/", notice: "Access denied."
+  end
+
+  def require_admin
+    denied unless auth? :auth_admin
+    auth? :auth_admin
   end
 
   def require_authorization
-    unless auth_full? or (auth_readonly? and request.get?) then
-      redirect_to "/", notice: "Access denied."
+    unless auth? :auth_write or (auth? :auth_read and request.get?) then
+      denied
     end
-
-    @auth_is_rw = auth_full?
-  end
-
-  def load_auth
-    @user_data = Rails.configuration.user_data
-    @users_loaded = true
   end
 
   def auth?(auth_type_key)
     curr_uid = session[:user_id]
     return false if curr_uid.nil?
 
-    curr_user = User.find_by_uid(curr_uid)
+    curr_user = User.find_by_email(curr_uid)
     return false if curr_user.nil?
 
-    load_auth unless @users_loaded
-    allowed_users = @user_data[auth_type_key]
-    return false if allowed_users.nil?
-
-    allowed_users.each do |u|
-      if curr_user.email == u[EMAIL_TAG]
-        update_name_from_auth_file(curr_user, u)
-        return true
-      end
-    end
-
-    false
-
-  end
-
-  def auth_readonly?
-    auth?(READONLY_LABEL)
-  end
-
-  def auth_full?
-    auth?(ALLOWED_LABEL)
+    curr_user.respond_to?(auth_type_key) and curr_user.send(auth_type_key)
   end
 
   def update_name_from_auth_file(curr_user, u)

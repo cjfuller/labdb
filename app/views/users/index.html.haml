@@ -1,0 +1,40 @@
+
+%table{class: "table table-striped table-condensed table-hover table-bordered"}
+  %thead
+    %tr
+      %th Name
+      %th E-mail
+      %th Notes
+      %th Permissions
+      %th
+  %tbody
+    - @users.each do |user|
+      %tr.table_link{obj_url: edit_user_path(user)}
+        %td= user.name
+        %td= user.email
+        %td= user.notes
+        %td.button-cell-shrink.noclick
+          .nowrap-row
+            .nowrap-cell
+              %a
+                = link_to [:toggle_auth_read, user], method: :put do 
+                  %span{class: badge_class_for_boolean(user.auth_read)}
+                    %i.icon-book.icon-white
+            .nowrap-cell= "&nbsp;".html_safe
+            .nowrap-cell
+              %a
+                = link_to [:toggle_auth_write, user], method: :put do 
+                  %span{class: badge_class_for_boolean(user.auth_write)}
+                    %i.icon-pencil.icon-white
+            .nowrap-cell= "&nbsp;".html_safe
+            .nowrap-cell
+              %a
+                = link_to [:toggle_auth_admin, user], method: :put do 
+                  %span{class: badge_class_for_boolean(user.auth_admin)}
+                    %i.icon-wrench.icon-white
+        %td.button-cell-shrink.noclick
+          .nowrap-row
+          .nowrap-cell
+            = link_to user, confirm: "Delete user #{user.name} <#{user.email}>?  Are you sure?", method: :delete, class: "noclick" do
+              %i.icon-remove.noclick
+

@@ -15,31 +15,28 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-class User < ActiveRecord::Base
+describe User do 
 
-  attr_protected :email, :auth_read, :auth_write, :auth_admin
-
-  attr_accessible :name, :email, :notes
-
-  has_one :search
-
-  def toggle_auth_field!(auth_type)
-    self.send(auth_type.to_s + "=", (not self.send(auth_type)))
-    self.save
+  before :each do
+    @u = User.new
+    @perms = [:auth_read, :auth_write, :auth_admin]
   end
 
-  def auth_admin!(should_auth)
-    self.auth_admin = should_auth
-    self.save
+  it "should have no permissions by default" do
+    @perms.each do |perm|
+      @u.send(perm).should_not be_true
+    end
   end
 
-  def auth_read!(should_auth)
-    self.auth_read = should_auth
-    self.save
+  it "should toggle permissions correctly" do
+    @perms.each do |perm|
+      @u.toggle_auth_field!(perm)
+      @u.send(perm).should be_true
+    end
+    @perms.each do |perm|
+      @u.toggle_auth_field!(perm)
+      @u.send(perm).should be_false
+    end
   end
 
-  def auth_write!(should_auth)
-    self.auth_write = should_auth
-    self.save
-  end
 end

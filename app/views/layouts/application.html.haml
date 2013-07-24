@@ -43,7 +43,8 @@
                     = "#{@user_name}"
                   %ul.dropdown-menu
                     %li.disabled
-                      %a{href: "#"}= "#{@user_email}"
+                      %a{href: "#"}= "#{@user_email}"  
+                    = render partial: 'shared/admin_menu'
                     %li.divider
                     %li= link_to 'Log out', '/logout'
 

@@ -45,7 +45,7 @@
           = obj.send(@table_columns[:sort])
         - @table_columns[:others].each do |tc|
           %td= obj.send(tc) 
-        -if @auth_is_rw then
+        -if auth? :auth_write then
           %td.noclick.button-cell-shrink
             .nowrap-row
               .nowrap-cell
