@@ -142,6 +142,19 @@ module CommonControllerSpecs
     type = model_class.to_s.downcase.to_sym
     plural_type = model_class.to_s.pluralize.downcase.to_sym
 
+
+    describe "search redirection" do
+      it "should redirect to an object if it's the only one found" do
+        get :index, type => {search_field => count_1_regexp}
+        response.should redirect_to assigns(plural_type)[0]
+      end
+
+      it "should not redirect to an object if multiple are found" do
+        get :index, type => {search_field => count_2_regexp}
+        response.should be_success
+      end
+    end
+    
     describe "regexp search" do
 
       it "should get all entries matching a given regexp" do

@@ -94,6 +94,10 @@ module StandardActions
 
     instance_variable_set("@" + type.pluralize, @objs)
 
+    if @objs.size == 1 then
+      redirect_to @objs[0] and return
+    end
+    
     define_table_view_vars
     define_sort_direction
 
