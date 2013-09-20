@@ -5,7 +5,8 @@ rvm:
   - rbx-19mode
 branches:
   only:
-    - testing
+    - develop
+    - master
 before_script:
   - psql -c 'create database test;' -U postgres
   - rake db:reset
