@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'rails', '~> 3.2'
-gem 'haml', '~> 3.1'
+gem 'haml', '~> 4.0'
 
 gem 'pg'
 
