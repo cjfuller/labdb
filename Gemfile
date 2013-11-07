@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'rails', '~> 3.2'
-gem 'haml'
+gem 'haml', '~> 3.1'
 
 gem 'pg'
 
@@ -46,4 +46,8 @@ gem 'kaminari'
 gem 'puma', '~> 1.6'
 
 gem 'facets', require: false
+
+gem 'rubysl'
+
+gem 'racc'
 
