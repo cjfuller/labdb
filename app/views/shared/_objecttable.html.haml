@@ -19,16 +19,16 @@
 = paginate @table_objects
 
 
-%table{class: "table table-striped table-condensed table-hover table-bordered"}
+%table{class: "objecttable"}
   %thead
     %tr
       %th
         - header = @controller.get_heading(@table_columns[:sort]).gsub(" ", "&nbsp;").html_safe
         %div{class: @reverse_sorted ? 'dropup' : 'dropdown'}><
-          .nowrap
-            .nowrap-row
-              .nowrap-cell= header
-              .nowrap-cell
+          .sortable-header
+            .sortable-header-group
+              .sortable-header-text= header
+              .sortable-header-button-container
                 .btn-group><
                   %a{class: "btn btn-link dropdown-toggle btn-mini", href: url_for(params.merge(sort_order: @reverse_sorted ? 'ASC' : 'DESC'))}
                     %span.caret
@@ -46,13 +46,13 @@
         - @table_columns[:others].each do |tc|
           %td= obj.send(tc) 
         -if auth? :auth_write then
-          %td.noclick.button-cell-shrink
-            .nowrap-row
-              .nowrap-cell
+          %td.noclick.write-button-table-cell
+            .write-button-group
+              .write-button-cell
                 = link_to edit_polymorphic_path(obj), class: "noclick" do
                   %i.icon-pencil.noclick
-              .nowrap-cell= "&nbsp;".html_safe
-              .nowrap-cell
+              .write-button-cell= "&nbsp;".html_safe
+              .write-button-cell
                 = link_to obj, confirm: "Delete #{Naming.name_for(obj.class)}#{obj.number_field}?  Are you sure?", method: :delete, class: "noclick" do
                   %i.icon-remove.noclick
 
