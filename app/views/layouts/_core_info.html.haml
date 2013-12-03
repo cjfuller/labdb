@@ -20,7 +20,7 @@
       %h3.core-info-number
         = @obj.named_number_string
       %h4.core-info-alias
-        = @obj.info_field
+        = @obj.info_field.labdb_auto_link.html_safe
     .span3
       - if @obj.respond_to? :core_alt_field and @obj.core_alt_field and @obj.core_alt_field.size > 0 then
         %h3.core-info-number

@@ -21,5 +21,5 @@
   
 
   .well
-    .selectable= Labdb::Application::MARKDOWN.render(@obj.send(@obj.description_field_name)).html_safe
+    .selectable= Labdb::Application::MARKDOWN.render(@obj.send(@obj.description_field_name)).labdb_auto_link.html_safe
 

@@ -30,7 +30,7 @@
               .sortable-header-text= header
               .sortable-header-button-container
                 .btn-group><
-                  %a{class: "btn btn-link dropdown-toggle btn-mini", href: url_for(params.merge(sort_order: @reverse_sorted ? 'ASC' : 'DESC'))}
+                  %a{class: "sort-button", href: url_for(params.merge(sort_order: @reverse_sorted ? 'ASC' : 'DESC'))}
                     %span.caret
 
       - @table_columns[:others].each do |tc|

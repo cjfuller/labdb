@@ -22,6 +22,7 @@ require 'standard_actions'
 require 'searching'
 require 'authorization'
 require 'helptext'
+require 'auto_linked'
 
 class ApplicationController < ActionController::Base
 
