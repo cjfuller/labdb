@@ -42,7 +42,7 @@ describe Yeaststrain do
 
 	it "should correctly export to YAML" do
 
-		yaml_str = "---\nYeaststrain:\n  antibiotic: ''\n  comments: ''\n  date_entered: '2013-03-02'\n  entered_by: Colin\n  genotype: leu1- ura4-\n  location: -80 S2R2\n  plasmidnumber: '2'\n  sequence: AATAAGAGAGC\n  species: pombe\n  strain_bkg: 972 h-\n  strain_number: '1'\n  strainalias: leu-/ura- h-\n  notebook: ''\n"
+		yaml_str = "---\nYeaststrain:\n  antibiotic: ''\n  comments: ''\n  date_entered: '2013-03-02'\n  entered_by: Colin\n  genotype: leu1- ura4-\n  location: \"-80 S2R2\"\n  plasmidnumber: '2'\n  sequence: AATAAGAGAGC\n  species: pombe\n  strain_bkg: 972 h-\n  strain_number: '1'\n  strainalias: leu-/ura- h-\n  notebook: ''\n"
 
 		yeaststrains(:one).export_to_yaml.should eq yaml_str
 
