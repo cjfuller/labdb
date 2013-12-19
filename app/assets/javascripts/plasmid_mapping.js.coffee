@@ -17,124 +17,20 @@
 #++
 ###
 
-
-class RestrictionEnzymeData
-
-  @re_data_id = "#enzyme-data"
-  @re_data_attr = "enz_data"
-  @default_re_attr = "default_enz"
-
-  @enzymes: () ->
-    (n for n, info of @data)
-
-  @default_enzymes: () ->
-    @defaults
-
-  @read_data: (json_data) ->
-    @data = JSON.parse(json_data)
-
-  @get: (name) ->
-    return @data[name] || null
-
-  @cuts_before: (name) ->
-    return this.get(name) && @data[name]["cut_bef"]
-
-  @seq: (name) ->
-    return this.get(name) && @data[name]["rec_seq"]
-
-  @read_from_page: () ->
-    @read_data($(@re_data_id).attr(@re_data_attr))
-
-  @read_defaults_from_page: () ->
-    @defaults = JSON.parse($(@re_data_id).attr(@default_re_attr))
-
-  @node_load_re_data: () ->
-    fs = require 'fs'
-    this.read_data(fs.readFileSync('../resources/restriction_enzymes.json'))
-
-
-class FeatureData
-
-  @feature_id = "#regional-features"
-
-  @feature_attr = "feature_data"
-
-  @read_data: (json_data) ->
-    @data = JSON.parse(json_data)
-
-  @get: (name) =>
-    return @data[name] || null
-
-  @feature_type: (name) =>
-    return this.get(name) && @data[name]["type"]
-
-  @display: (name) => 
-    return this.get(name) && @data[name]["display"]
-
-  @sequence: (name) =>
-    return this.get(name) && @data[name]["sequence"]
-
-  @exact: (name) =>
-    return this.get(name) && @data[name]["exact"]
-
-  @read_from_page: () =>
-    @read_data($(@feature_id).attr(@feature_attr))
-
-class Alignments
-
-  @find_exact_matches: (seq_to_match, seq_in_which_to_match) ->
-    match_indices = []
-    exp = new RegExp(seq_to_match, "g")
-    while (match = exp.exec(seq_in_which_to_match))
-      match_indices.push(match.index)
-    match_indices
-
 class Plasmid
 
-  @degenerate_sequence_translations = {
-    "r" : "[ag]",
-    "k" : "[gt]",
-    "y" : "[ct]",
-    "s" : "[cg]",
-    "m" : "[ac]",
-    "w" : "[at]",
-    "n" : "[acgt]",
-    "h" : "[act]",
-    "v" : "[acg]",
-    "b" : "[cgt]",
-    "d" : "[agt]"
-  }
-
-  @codon_table = {"aaa":"K","aat":"N","aag":"K","aac":"N","ata":"I","att":"I","atg":"M","atc":"I","aga":"R","agt":"S","agg":"R","agc":"S","aca":"T","act":"T","acg":"T","acc":"T","taa":"*","tat":"Y","tag":"*","tac":"Y","tta":"L","ttt":"F","ttg":"L","ttc":"F","tga":"*","tgt":"C","tgg":"W","tgc":"C","tca":"S","tct":"S","tcg":"S","tcc":"S","gaa":"E","gat":"D","gag":"E","gac":"D","gta":"V","gtt":"V","gtg":"V","gtc":"V","gga":"G","ggt":"G","ggg":"G","ggc":"G","gca":"A","gct":"A","gcg":"A","gcc":"A","caa":"Q","cat":"H","cag":"Q","cac":"H","cta":"L","ctt":"L","ctg":"L","ctc":"L","cga":"R","cgt":"R","cgg":"R","cgc":"R","cca":"P","cct":"P","ccg":"P","ccc":"P"}
-
-  @sub_degenerate_sequences: (seq) ->
-    seq = seq.toLowerCase()
-    for degen, repl of @degenerate_sequence_translations
-      seq = seq.replace(new RegExp(degen, "g"), repl)
-    seq
-
-  @translate: (seq) ->
-    seq = seq.toLowerCase()
-    trans = ""
-    codon_re = /.../g
-    while (match = codon_re.exec(seq))
-      trans+= @codon_table[match[0]] || "?"
-      codon_re.lastIndex=(trans.length*3)
-    trans
-
-  constructor: (@name, @sequence) ->
+  constructor: (@name, @size) ->
 
     @point_features = []
     @regional_features = []
-    @sequence = @sequence.toLowerCase()
 
   pl_size: () ->
-    @sequence.length
+    @size
 
   add_point_feature: (feature) ->
-    existing = @point_features.filter((el, ind, arr) -> 
+    existing = @point_features.filter((el, ind, arr) ->
       el.name == feature.name && el.pos == feature.pos )
-    if existing.length == 0 && feature.loc() <= @sequence.length
+    if existing.length == 0 && feature.loc() <= this.pl_size()
       @point_features.push(feature)
 
   remove_point_features: (name) ->
@@ -148,52 +44,15 @@ class Plasmid
       n_removals += 1
 
 
-  add_regional_feature: (feature) ->
-    existing = @regional_features.filter((el, ind, arr) -> 
-      el.name == feature.name && el.start == feature.start && el.end == feature.end )
-    if existing.length == 0 && feature.start <= @sequence.length
+  add_regional_feature: (feature) =>
+    existing = @regional_features.filter((el, ind, arr) ->
+      el.name == feature.name && el.start == feature.start && el.end == feature.end)
+    if existing.length == 0 && feature.start <= this.pl_size()
       @regional_features.push(feature)
-
-  translate: (frame) -> #frame is 0, 1, or 2
-    Plasmid.translate(@sequence.substr(frame) + @sequence)
-
-  find_regional_features: (feature_table) ->
-
-    frames = [this.translate(0), this.translate(1), this.translate(2)]
-
-    for name, info of feature_table.data
-      unless feature_table.feature_type(name) == "protein"
-        continue
-      for i in [0...frames.length]
-        fr = frames[i]
-        matches = Alignments.find_exact_matches(feature_table.sequence(name), fr)
-        for match in matches
-          info["display"] = info["display"] || {"color" : "black"}
-          this.add_regional_feature(new RegionalFeature(name, info["display"], (match*3 + i) % @sequence.length, ((match + info["sequence"].length)*3 + 2 + i) % @sequence.length ))
-
-  find_cut_sites: (enz_seq, cut_pos) ->
-    unless enz_seq && cut_pos
-      return []
-    double_seq = @sequence + @sequence
-    seq_size = @sequence.length
-    enz_seq = Plasmid.sub_degenerate_sequences(enz_seq)
-    enz_re = new RegExp(enz_seq, "g")
-    matches = Alignments.find_exact_matches(enz_seq, double_seq)
-    matches.filter((el, ind, arr) -> matches.indexOf(el - seq_size) < 0)
-
-  map_restriction_enzymes: (enzyme_data, enzyme_list_to_map, unique_only=false) ->
-
-    for enz in enzyme_list_to_map
-      sites = this.find_cut_sites(enzyme_data.seq(enz), enzyme_data.cuts_before(enz))
-      if unique_only && sites.length > 1
-        continue
-      for s in sites
-        this.add_point_feature(new PointFeature(enz, {"color" : "red"}, s))
-
 
 class Feature
 
-  constructor: (@name, @display) -> 
+  constructor: (@name, @display) ->
 
   loc: () ->
     0
@@ -218,16 +77,26 @@ class RegionalFeature extends Feature
 
   text: () ->
     @name + " (#{@start} - #{@end})"
-    
 
 class PlasmidMap
 
+  @initially_displayed_enzymes = ["AscI", "PacI", "EcoRI", "BamHI"]
+
   @plas_map_div_id = "#plasmid-map"
-  @seq_attr = "sequence"
-  @name_attr = "name"
+  @data_attr = "data"
+  @size_attr = "pl_size"
+  @name_attr = "pl_name"
+  @point_attr = "point_features"
+  @regional_attr = "regional_features"
   @dyn_enz_field = "#enzyme"
   @enz_remove_btn = "#hide_enzyme"
   @enz_add_btn = "#show_enzyme"
+
+  @f_text = "text"
+  @f_color = "color"
+  @f_start = "start"
+  @f_length = "length"
+  @f_pos = "at"
 
   @clear_maps: () ->
     d3.select(".chart").remove()
@@ -239,7 +108,7 @@ class PlasmidMap
     .style("height", "#{@height}px")
     .append("svg")
       .attr("width", @width).attr("height", @height)
-    .append("g").attr("transform", "translate(#{@width/2},#{@height/2})")
+    .append("g").attr("transform", "translate(#{@width/2 + @map_offset_x},#{@height/2 + @map_offset_y})")
 
   reinit_svg: () =>
     PlasmidMap.clear_maps()
@@ -248,26 +117,35 @@ class PlasmidMap
   constructor: () ->
 
     @width = 500
-    @height = 400
+    @height = 500
     @map_radius = @width / 4
     @map_cx = 0
     @map_cy = 0
+    @map_offset_x = 0
+    @map_offset_y = -100
     @arc_width = @width / 96
     @spacer_width = 10
     @arc_outer_rad = @map_radius + @arc_width
     @arc_inner_rad = @map_radius - @arc_width
     @min_angular_dist = Math.PI/16
-    @max_label_in_place_char_count = 25
+    @max_label_in_place_char_count = 14
 
-    RestrictionEnzymeData.read_from_page()
-    RestrictionEnzymeData.read_defaults_from_page()
-    FeatureData.read_from_page()
+    @data = JSON.parse($(PlasmidMap.plas_map_div_id).attr(PlasmidMap.data_attr))
 
-    @plas = new Plasmid($(PlasmidMap.plas_map_div_id).attr(PlasmidMap.name_attr), $(PlasmidMap.plas_map_div_id).attr(PlasmidMap.seq_attr))
-    @plas.map_restriction_enzymes(RestrictionEnzymeData, RestrictionEnzymeData.default_enzymes(), true)
-    @plas.find_regional_features(FeatureData)
+    @plas = new Plasmid(@data[PlasmidMap.name_attr], @data[PlasmidMap.size_attr])
+    
+    for name, f_list of @data['point_features']
+      if f_list.length == 1 or name in PlasmidMap.initially_displayed_enzymes
+        for f in f_list
+          @plas.add_point_feature(
+            new PointFeature(f['text'], {'color' : f['color']}, f['at']))
 
-    $(PlasmidMap.enz_remove_btn).click(this.remove_enzyme_with_field) #TODO: check if this ends up bound to the correct object
+    for name, f_list of @data['regional_features']
+      for f in f_list
+        @plas.add_regional_feature(
+          new RegionalFeature(f['text'], {'color' : f['color']}, f['start'], f['start'] + f['length'] - 1))
+
+    $(PlasmidMap.enz_remove_btn).click(this.remove_enzyme_with_field)
     $(PlasmidMap.enz_add_btn).click(this.add_enzyme_with_field)
 
     @arc_templ = d3.svg.arc().outerRadius(@arc_outer_rad).innerRadius(@arc_inner_rad).startAngle(this.start_angle).endAngle(this.end_angle)
@@ -284,9 +162,11 @@ class PlasmidMap
     this.remove_enzyme($(PlasmidMap.dyn_enz_field).val())
 
   add_enzyme: (enz) =>
-    @plas.map_restriction_enzymes(RestrictionEnzymeData, [enz], false)
-    this.reinit_svg()
-    this.render_drawing()
+    unless (@data['point_features'][enz] == undefined)
+      for f in @data['point_features'][enz]
+        @plas.add_point_feature(new PointFeature(f['text'], {'color' : f['color']}, f['at']))
+      this.reinit_svg()
+      this.render_drawing()
 
   remove_enzyme: (enz) =>
     @plas.remove_point_features(enz)
@@ -370,9 +250,30 @@ class PlasmidMap
     (this.feature_angle(d, 0) for d in features)
 
   add_large_feature_group: (text) =>
-    index = @large_feature_groups.length
-    @large_feature_groups.push({text: text, index: index})
-    @large_feature_groups.length - 1
+    index = 0
+    if @large_feature_groups.length > 0
+      index = @large_feature_groups[@large_feature_groups.length-1]['group_index'] + 1
+    new_offset = 0
+    if index > 0
+      new_offset = @large_feature_groups.length
+    parts = text.split(", ")
+    chunks = []
+    max_num_per_chunk = 5
+    if parts.length > max_num_per_chunk
+      i = 0
+      while i < parts.length
+        chunks.push(parts[i...(i+max_num_per_chunk)].join(", "))
+        i += max_num_per_chunk
+    else
+      chunks.push(text)
+    
+    for c,i in chunks
+      if i == 0
+        @large_feature_groups.push({text: c, index: index, group_index: index})
+      else
+        @large_feature_groups.push({text: c, index: -1, group_index: index})
+
+    index
 
   clear_large_feature_groups: () =>
     @large_feature_groups = []
@@ -473,22 +374,34 @@ class PlasmidMap
       .attr("d", @marker_templ)
       .style("stroke", (d,i) -> d[0].display["color"] )
 
+  large_feature_group_label_offset_y: (d,i) =>
+    @height/2 - @spacer_width*(@large_feature_groups.length - i) - @map_offset_y
+
+  large_feature_group_label_offset_x: (d,i) =>
+    extra_offset = 0
+    if d['index'] == -1
+      extra_offset = 15
+    @spacer_width - @width/2 - @map_offset_x + extra_offset
+
+
+  large_group_label_text: (d,i) ->
+    t = ""
+    if d['index'] == -1
+      t = "#{d['text']}"
+    else
+      t = "[#{d['index']+1}] #{d['text']}"
+    t
+
+
   draw_large_group_labels: =>
-    all_large = @large_feature_groups
-    all_large = all_large.sort((a,b) -> 
-      if a['index'] < b['index']
-        return -1
-      if a['index'] > b['index']
-        return 1
-      return 0
-    )
     label_group = @svg.append("g")
+
     label_group.selectAll(".cluster-label")
-      .data(all_large).enter().append("text")
+      .data(@large_feature_groups).enter().append("text")
       .attr("class", "cluster-label")
-      .attr("x", @spacer_width - @width/2)
-      .attr("y", (d, i) => @height/2 - @spacer_width*(all_large.length - i))
-      .text((d, i) -> "[#{d['index']+1}]: #{d['text']}")
+      .attr("x", this.large_feature_group_label_offset_x)
+      .attr("y", this.large_feature_group_label_offset_y)
+      .text(this.large_group_label_text)
       .attr("text-anchor", "start")
 
 
@@ -516,9 +429,6 @@ do_map = ->
 define_names = ->
   root = exports ? window
   root.plmp = 
-    RestrictionEnzymeData : RestrictionEnzymeData
-    FeatureData : FeatureData
-    Alignments : Alignments
     Plasmid : Plasmid
     Feature : Feature
     PointFeature : PointFeature

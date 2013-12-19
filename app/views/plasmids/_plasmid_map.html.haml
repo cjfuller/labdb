@@ -23,12 +23,9 @@
     %h4
       = "Mapping #{@obj.named_number_string}"
   .modal-body
-    #plasmid-map{name: @obj.named_number_string, sequence: @obj.sequence }
+    #plasmid-map{data: @obj.map}
   .modal-footer
     .form-horizontal
       %input{type: "text", id: "enzyme", class: "span2"}
       %button{class: "btn btn-mini", id: "show_enzyme"} Show enzyme
       %button{class: "btn btn-mini btn-inverse", id: "hide_enzyme"} Hide enzyme
-
-#enzyme-data{enz_data: File.read("lib/assets/restriction_enzymes.json"), default_enz: File.read("lib/assets/default_enzymes.json")}
-#regional-features{feature_data: File.read("lib/assets/known_features.json")}

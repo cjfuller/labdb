@@ -1,0 +1,577 @@
+---
+AatII:
+  cut_bef: 5
+  rec_seq: GACGTC
+AccI:
+  cut_bef: 2
+  rec_seq: GTMKAC
+Acc65I:
+  cut_bef: 1
+  rec_seq: GGTACC
+AclI:
+  cut_bef: 2
+  rec_seq: AACGTT
+AfeI:
+  cut_bef: 3
+  rec_seq: AGCGCT
+AflII:
+  cut_bef: 1
+  rec_seq: CTTAAG
+AflIII:
+  cut_bef: 1
+  rec_seq: ACRYGT
+AgeI:
+  cut_bef: 1
+  rec_seq: ACCGGT
+AhdI:
+  cut_bef: 6
+  rec_seq: GACNNNNNGTC
+AleI:
+  cut_bef: 5
+  rec_seq: CACNNNNGTG
+AluI:
+  cut_bef: 2
+  rec_seq: AGCT
+AlwNI:
+  cut_bef: 6
+  rec_seq: CAGNNNCTG
+AoxI:
+  cut_bef: 0
+  rec_seq: GGCC
+ApaI:
+  cut_bef: 5
+  rec_seq: GGGCCC
+ApaBI:
+  cut_bef: 8
+  rec_seq: GCANNNNNTGC
+ApaLI:
+  cut_bef: 1
+  rec_seq: GTGCAC
+ApoI:
+  cut_bef: 1
+  rec_seq: RAATTY
+AscI:
+  cut_bef: 2
+  rec_seq: GGCGCGCC
+AseI:
+  cut_bef: 2
+  rec_seq: ATTAAT
+Asi256I:
+  cut_bef: 1
+  rec_seq: GATC
+AsiSI:
+  cut_bef: 5
+  rec_seq: GCGATCGC
+AvaI:
+  cut_bef: 1
+  rec_seq: CYCGRG
+AvaII:
+  cut_bef: 1
+  rec_seq: GGWCC
+AvrII:
+  cut_bef: 1
+  rec_seq: CCTAGG
+BaeGI:
+  cut_bef: 5
+  rec_seq: GKGCMC
+BamHI:
+  cut_bef: 1
+  rec_seq: GGATCC
+BanI:
+  cut_bef: 1
+  rec_seq: GGYRCC
+BanII:
+  cut_bef: 5
+  rec_seq: GRGCYC
+BclI:
+  cut_bef: 1
+  rec_seq: TGATCA
+BfaI:
+  cut_bef: 1
+  rec_seq: CTAG
+BglI:
+  cut_bef: 7
+  rec_seq: GCCNNNNNGGC
+BglII:
+  cut_bef: 1
+  rec_seq: AGATCT
+BlpI:
+  cut_bef: 2
+  rec_seq: GCTNAGC
+BmtI:
+  cut_bef: 5
+  rec_seq: GCTAGC
+BsaAI:
+  cut_bef: 3
+  rec_seq: YACGTR
+BsaBI:
+  cut_bef: 5
+  rec_seq: GATNNNNATC
+BsaHI:
+  cut_bef: 2
+  rec_seq: GRCGYC
+BsaJI:
+  cut_bef: 1
+  rec_seq: CCNNGG
+BsaWI:
+  cut_bef: 1
+  rec_seq: WCCGGW
+BsiEI:
+  cut_bef: 4
+  rec_seq: CGRYCG
+BsiHKAI:
+  cut_bef: 5
+  rec_seq: GWGCWC
+BsiWI:
+  cut_bef: 1
+  rec_seq: CGTACG
+BslI:
+  cut_bef: 7
+  rec_seq: CCNNNNNNNGG
+Bsp1286I:
+  cut_bef: 5
+  rec_seq: GDGCHC
+BspEI:
+  cut_bef: 1
+  rec_seq: TCCGGA
+BspHI:
+  cut_bef: 1
+  rec_seq: TCATGA
+BsrFI:
+  cut_bef: 1
+  rec_seq: RCCGGY
+BsrGI:
+  cut_bef: 1
+  rec_seq: TGTACA
+BssHII:
+  cut_bef: 1
+  rec_seq: GCGCGC
+BstAPI:
+  cut_bef: 7
+  rec_seq: GCANNNNNTGC
+BstBI:
+  cut_bef: 2
+  rec_seq: TTCGAA
+BstEII:
+  cut_bef: 1
+  rec_seq: GGTNACC
+BstNI:
+  cut_bef: 2
+  rec_seq: CCWGG
+BstUI:
+  cut_bef: 2
+  rec_seq: CGCG
+BstXI:
+  cut_bef: 8
+  rec_seq: CCANNNNNNTGG
+BstYI:
+  cut_bef: 1
+  rec_seq: RGATCY
+BstZ17I:
+  cut_bef: 3
+  rec_seq: GTATAC
+Bsu36I:
+  cut_bef: 2
+  rec_seq: CCTNAGG
+BtgI:
+  cut_bef: 1
+  rec_seq: CCRYGG
+BthCI:
+  cut_bef: 4
+  rec_seq: GCNGC
+Cac8I:
+  cut_bef: 3
+  rec_seq: GCNNGC
+ChaI:
+  cut_bef: 4
+  rec_seq: GATC
+ClaI:
+  cut_bef: 2
+  rec_seq: ATCGAT
+CviAII:
+  cut_bef: 1
+  rec_seq: CATG
+CviKI:
+  cut_bef: 2
+  rec_seq: RGCY
+CviQI:
+  cut_bef: 1
+  rec_seq: GTAC
+DdeI:
+  cut_bef: 1
+  rec_seq: CTNAG
+DpnI:
+  cut_bef: 2
+  rec_seq: GATC
+DraI:
+  cut_bef: 3
+  rec_seq: TTTAAA
+DraIII:
+  cut_bef: 6
+  rec_seq: CACNNNGTG
+DrdI:
+  cut_bef: 7
+  rec_seq: GACNNNNNNGTC
+EaeI:
+  cut_bef: 1
+  rec_seq: YGGCCR
+EagI:
+  cut_bef: 1
+  rec_seq: CGGCCG
+EcoHI:
+  cut_bef: 0
+  rec_seq: CCSGG
+EcoNI:
+  cut_bef: 5
+  rec_seq: CCTNNNNNAGG
+EcoO109I:
+  cut_bef: 2
+  rec_seq: RGGNCCY
+EcoRI:
+  cut_bef: 1
+  rec_seq: GAATTC
+EcoRV:
+  cut_bef: 3
+  rec_seq: GATATC
+Eco53kI:
+  cut_bef: 3
+  rec_seq: GAGCTC
+EsaBC3I:
+  cut_bef: 2
+  rec_seq: TCGA
+FatI:
+  cut_bef: 0
+  rec_seq: CATG
+FmuI:
+  cut_bef: 4
+  rec_seq: GGNCC
+Fnu4HI:
+  cut_bef: 2
+  rec_seq: GCNGC
+FseI:
+  cut_bef: 6
+  rec_seq: GGCCGGCC
+FspI:
+  cut_bef: 3
+  rec_seq: TGCGCA
+HaeI:
+  cut_bef: 3
+  rec_seq: WGGCCW
+HaeII:
+  cut_bef: 5
+  rec_seq: RGCGCY
+HaeIII:
+  cut_bef: 2
+  rec_seq: GGCC
+HauII:
+  cut_bef: 17
+  rec_seq: TGGCCANNNNNNNNNNN
+HhaI:
+  cut_bef: 3
+  rec_seq: GCGC
+HinP1I:
+  cut_bef: 1
+  rec_seq: GCGC
+HincII:
+  cut_bef: 3
+  rec_seq: GTYRAC
+HindIII:
+  cut_bef: 1
+  rec_seq: AAGCTT
+HinfI:
+  cut_bef: 1
+  rec_seq: GANTC
+HpaI:
+  cut_bef: 3
+  rec_seq: GTTAAC
+HpaII:
+  cut_bef: 1
+  rec_seq: CCGG
+Hpy99I:
+  cut_bef: 5
+  rec_seq: CGWCG
+Hpy166II:
+  cut_bef: 3
+  rec_seq: GTNNAC
+Hpy188I:
+  cut_bef: 3
+  rec_seq: TCNGA
+Hpy188III:
+  cut_bef: 2
+  rec_seq: TCNNGA
+HpyCH4III:
+  cut_bef: 3
+  rec_seq: ACNGT
+HpyCH4IV:
+  cut_bef: 1
+  rec_seq: ACGT
+HpyCH4V:
+  cut_bef: 2
+  rec_seq: TGCA
+KasI:
+  cut_bef: 1
+  rec_seq: GGCGCC
+KpnI:
+  cut_bef: 5
+  rec_seq: GGTACC
+LpnI:
+  cut_bef: 3
+  rec_seq: RGCGCY
+MboI:
+  cut_bef: 0
+  rec_seq: GATC
+McaTI:
+  cut_bef: 4
+  rec_seq: GCGCGC
+MfeI:
+  cut_bef: 1
+  rec_seq: CAATTG
+MluI:
+  cut_bef: 1
+  rec_seq: ACGCGT
+MluCI:
+  cut_bef: 0
+  rec_seq: AATT
+MscI:
+  cut_bef: 3
+  rec_seq: TGGCCA
+MseI:
+  cut_bef: 1
+  rec_seq: TTAA
+MslI:
+  cut_bef: 5
+  rec_seq: CAYNNNNRTG
+MspA1I:
+  cut_bef: 3
+  rec_seq: CMGCKG
+MwoI:
+  cut_bef: 7
+  rec_seq: GCNNNNNNNGC
+NaeI:
+  cut_bef: 3
+  rec_seq: GCCGGC
+NarI:
+  cut_bef: 2
+  rec_seq: GGCGCC
+NciI:
+  cut_bef: 2
+  rec_seq: CCSGG
+NcoI:
+  cut_bef: 1
+  rec_seq: CCATGG
+NdeI:
+  cut_bef: 2
+  rec_seq: CATATG
+NgoMIV:
+  cut_bef: 1
+  rec_seq: GCCGGC
+NheI:
+  cut_bef: 1
+  rec_seq: GCTAGC
+NlaIII:
+  cut_bef: 4
+  rec_seq: CATG
+NlaIV:
+  cut_bef: 3
+  rec_seq: GGNNCC
+Nli3877I:
+  cut_bef: 5
+  rec_seq: CYCGRG
+NotI:
+  cut_bef: 2
+  rec_seq: GCGGCCGC
+NruI:
+  cut_bef: 3
+  rec_seq: TCGCGA
+NsiI:
+  cut_bef: 5
+  rec_seq: ATGCAT
+NspI:
+  cut_bef: 5
+  rec_seq: RCATGY
+PabI:
+  cut_bef: 3
+  rec_seq: GTAC
+PacI:
+  cut_bef: 5
+  rec_seq: TTAATTAA
+PciI:
+  cut_bef: 1
+  rec_seq: ACATGT
+PflMI:
+  cut_bef: 7
+  rec_seq: CCANNNNNTGG
+PluTI:
+  cut_bef: 5
+  rec_seq: GGCGCC
+PmeI:
+  cut_bef: 4
+  rec_seq: GTTTAAAC
+PmlI:
+  cut_bef: 3
+  rec_seq: CACGTG
+Ppu10I:
+  cut_bef: 1
+  rec_seq: ATGCAT
+PpuMI:
+  cut_bef: 2
+  rec_seq: RGGWCCY
+PshAI:
+  cut_bef: 5
+  rec_seq: GACNNNNGTC
+PsiI:
+  cut_bef: 3
+  rec_seq: TTATAA
+Psp03I:
+  cut_bef: 4
+  rec_seq: GGWCC
+PspGI:
+  cut_bef: 0
+  rec_seq: CCWGG
+PspOMI:
+  cut_bef: 1
+  rec_seq: GGGCCC
+PspXI:
+  cut_bef: 2
+  rec_seq: VCTCGAGB
+PssI:
+  cut_bef: 5
+  rec_seq: RGGNCCY
+PstI:
+  cut_bef: 5
+  rec_seq: CTGCAG
+PvuI:
+  cut_bef: 4
+  rec_seq: CGATCG
+PvuII:
+  cut_bef: 3
+  rec_seq: CAGCTG
+RsaI:
+  cut_bef: 2
+  rec_seq: GTAC
+RsrII:
+  cut_bef: 2
+  rec_seq: CGGWCCG
+SacI:
+  cut_bef: 5
+  rec_seq: GAGCTC
+SacII:
+  cut_bef: 4
+  rec_seq: CCGCGG
+SalI:
+  cut_bef: 1
+  rec_seq: GTCGAC
+Sau96I:
+  cut_bef: 1
+  rec_seq: GGNCC
+SbfI:
+  cut_bef: 6
+  rec_seq: CCTGCAGG
+ScaI:
+  cut_bef: 3
+  rec_seq: AGTACT
+SciI:
+  cut_bef: 3
+  rec_seq: CTCGAG
+ScrFI:
+  cut_bef: 2
+  rec_seq: CCNGG
+SelI:
+  cut_bef: 0
+  rec_seq: CGCG
+SexAI:
+  cut_bef: 1
+  rec_seq: ACCWGGT
+SfcI:
+  cut_bef: 1
+  rec_seq: CTRYAG
+SfiI:
+  cut_bef: 8
+  rec_seq: GGCCNNNNNGGCC
+SfoI:
+  cut_bef: 3
+  rec_seq: GGCGCC
+SgrAI:
+  cut_bef: 2
+  rec_seq: CRCCGGYG
+SmaI:
+  cut_bef: 3
+  rec_seq: CCCGGG
+SmlI:
+  cut_bef: 1
+  rec_seq: CTYRAG
+SnaBI:
+  cut_bef: 3
+  rec_seq: TACGTA
+SpeI:
+  cut_bef: 1
+  rec_seq: ACTAGT
+SphI:
+  cut_bef: 5
+  rec_seq: GCATGC
+SrfI:
+  cut_bef: 4
+  rec_seq: GCCCGGGC
+Sse8647I:
+  cut_bef: 2
+  rec_seq: AGGWCCT
+SspI:
+  cut_bef: 3
+  rec_seq: AATATT
+Sth302II:
+  cut_bef: 2
+  rec_seq: CCGG
+StuI:
+  cut_bef: 3
+  rec_seq: AGGCCT
+StyI:
+  cut_bef: 1
+  rec_seq: CCWWGG
+StyD4I:
+  cut_bef: 0
+  rec_seq: CCNGG
+SwaI:
+  cut_bef: 4
+  rec_seq: ATTTAAAT
+TaqI:
+  cut_bef: 1
+  rec_seq: TCGA
+TfiI:
+  cut_bef: 1
+  rec_seq: GAWTC
+TseI:
+  cut_bef: 1
+  rec_seq: GCWGC
+Tsp45I:
+  cut_bef: 0
+  rec_seq: GTSAC
+TspRI:
+  cut_bef: 7
+  rec_seq: CASTGNN
+Tth111I:
+  cut_bef: 4
+  rec_seq: GACNNNGTC
+UnbI:
+  cut_bef: 0
+  rec_seq: GGNCC
+VpaK11AI:
+  cut_bef: 0
+  rec_seq: GGWCC
+XbaI:
+  cut_bef: 1
+  rec_seq: TCTAGA
+XcmI:
+  cut_bef: 8
+  rec_seq: CCANNNNNNNNNTGG
+XhoI:
+  cut_bef: 1
+  rec_seq: CTCGAG
+XmaI:
+  cut_bef: 1
+  rec_seq: CCCGGG
+XmnI:
+  cut_bef: 5
+  rec_seq: GAANNNNTTC
+ZraI:
+  cut_bef: 3
+  rec_seq: GACGTC

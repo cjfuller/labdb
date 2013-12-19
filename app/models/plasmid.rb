@@ -21,6 +21,7 @@ require 'numbered'
 require 'described'
 require 'headings'
 require 'dna_sequence'
+require 'plasmid_mapping'
 
 require 'facets/string/word_wrap'
 
@@ -117,6 +118,10 @@ class Plasmid < ActiveRecord::Base
   def groups
     {sidebar: [:enteredby, :date_entered, :notebook, :concentration],
       "Vector information" => [:vector, :antibiotic]}
+  end
+
+  def map
+    @map or (@map = PlasmidMapping.map_for_plasmid(self).plasmidmap_json)
   end
   
 end
