@@ -43,7 +43,7 @@ gem 'bootstrap-sass', '~> 2.3.1.0'
 
 gem 'kaminari'
 
-gem 'puma', '~> 2.6', path: '/home/cfuller/git/puma'
+gem 'puma', '~> 2.7'
 
 gem 'facets', require: false
 
