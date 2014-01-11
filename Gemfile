@@ -43,11 +43,15 @@ gem 'bootstrap-sass', '~> 2.3.1.0'
 
 gem 'kaminari'
 
-gem 'puma', '~> 1.6'
+gem 'puma', '~> 2.6', path: '/home/cfuller/git/puma'
 
 gem 'facets', require: false
 
 gem 'rubysl'
 
 gem 'racc'
+
+gem 'pry'
+
+gem 'bio'
 
