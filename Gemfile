@@ -55,3 +55,5 @@ gem 'pry'
 
 gem 'bio'
 
+gem 'psych'
+
