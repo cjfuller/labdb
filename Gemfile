@@ -47,13 +47,9 @@ gem 'puma', '~> 2.7'
 
 gem 'facets', require: false
 
-gem 'rubysl'
-
 gem 'racc'
 
 gem 'pry'
 
 gem 'bio'
-
-gem 'psych'
 
