@@ -20,7 +20,7 @@
 .marker-label {
   text-align: center;
   font-family: sans-serif;
-  font-size: xx-small;
+  font-size: xx-large;
 }
 
 .cluster-label {
@@ -55,3 +55,47 @@
   max-height: 500px;
 }
 
+.regional-feature {
+  .feature-selected {
+    fill: yellow;
+    stroke: black;
+  }
+}
+
+.feature-affinity-tag {
+  fill: red;
+  stroke: red;
+}
+
+.feature-fp-green {
+  fill: #0f0;
+  stroke: #0f0;
+}
+
+.feature-antibiotic {
+  fill: orange;
+  stroke: orange;
+}
+
+.feature-protease {
+  fill: blue;
+  stroke: blue;
+}
+
+.feature-point-group {
+  fill: black;
+  stroke: black;
+}
+
+.feature-point-feature {
+  stroke: black;
+
+  .feature-selected {
+    fill: yellow;
+    stroke: black;
+  }
+}
+
+#plasmid-map > .alert {
+  color: black;
+}

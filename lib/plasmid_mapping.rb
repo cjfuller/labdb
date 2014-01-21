@@ -68,16 +68,17 @@ module PlasmidMapping
       pos = Regexp.last_match.offset(0)[0] + offset + 1
       sites << pos unless pos > seq.length or sites.include? pos - seq.length/2
     end
+    sites.map! { |s| s > seq.length/2 ? s-seq.length/2 : s }
     sites
   end
 
   def self.map_restriction_enzymes(map, seq)
     @known_enzymes.each do |name, info|
-      sites = find_features(seq, info['rec_seq'], info['cut_bef'])
+      sites = find_features(seq + seq, info['rec_seq'], info['cut_bef'])
       sites.each do |s|
         map.add_point_feature(
           PointFeature.new(name: name, pos: s,
-            color: "red", total_count: sites.size))
+            feature_class: 'restriction', total_count: sites.size))
       end
     end
   end
@@ -109,7 +110,7 @@ module PlasmidMapping
                   name: f, 
                   start_pos: (p-1)*3 + tr_i + 1, 
                   length: info['size']*3, 
-                  color: (info['display']['color'] or "gray")))
+                  feature_class: (info['display']['feature_class'] or "affinity-tag")))
             end
           end
         end
@@ -121,7 +122,7 @@ module PlasmidMapping
                 name: f, 
                 start_pos: p, 
                 length: info['size'], 
-                color: (info['display']['color'] or "gray")))
+                color: (info['display']['feature_class'] or "affinity-tag")))
           end
         end
       end
@@ -194,44 +195,34 @@ module PlasmidMapping
 
   class PointFeature
 
-    #def initialize(pos: 0, name: "", color: "red")
-    def initialize(kwargs={})
-      pos = kwargs[:pos]
-      name = kwargs[:name]
-      color = kwargs[:color]
-      total_count = kwargs[:total_count] || 1
+    def initialize(pos: 0, name: "", feature_class: "restriction", total_count: 1)
       @pos = pos
       @name = name
-      @color = color
+      @feature_class = feature_class
       @total_count = total_count
     end
 
-    attr_accessor :pos, :name, :color
+    attr_accessor :pos, :name, :feature_class
 
     def to_h
-      {type: 'point', at: @pos, text: @name, color: @color, count: @total_count}
+      {type: 'point', at: @pos, text: @name, feature_class: @feature_class, count: @total_count}
     end
 
   end
 
   class RegionalFeature
 
-    #def initialize(start_pos: 0, length: 0, name: "", color: "green")
-    def initialize(kwargs={})
-      start_pos = kwargs[:start_pos]
-      length = kwargs[:length]
-      name = kwargs[:name]
-      color = kwargs[:color]
+    def initialize(start_pos: 0, length: 0, name: "", feature_class: "affinity-tag")
       @start = start_pos
       @length = length
       @name = name
-      @color = color
+      @feature_class = feature_class
     end
 
-    attr_accessor :start, :length, :name, :color
+    attr_accessor :start, :length, :name, :feature_class
 
     def to_h
-      {type: 'regional', start: @start, length: @length, text: @name, color: @color}
+      {type: 'regional', start: @start, length: @length, text: @name, feature_class: @feature_class}
     end
 
   end
