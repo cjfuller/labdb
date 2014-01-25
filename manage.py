@@ -213,7 +213,7 @@ def create_backup():
     fn = backup_timestring + suffix
     fn_full = os.path.join(DEFAULT_BACKUP_DIR, fn)
     return ' '.join([   PG_DUMP_PATH,
-                        '-h localhost labdb > {0}'.format(fn),
+                        '-h localhost labdb > {0}'.format(fn_full),
                         '&&',
                         'tar cjf {0}.tar.bz2 -C {1} {2}'.format(fn_full,
                             DEFAULT_BACKUP_DIR, fn),
