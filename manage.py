@@ -30,7 +30,7 @@ REM_NAME = 'origin'
 PROJECT_URL = 'https://github.com/cjfuller/labdb.git'
 DEFAULT_REPO_PATH = '~/labdb'
 DEFAULT_BACKUP_DIR = '~/backups'
-AUTO_MERGE_MESSAGE = 'auto merge by manage.py'
+AUTO_MERGE_MESSAGE = '"auto merge by manage.py"'
 
 #database backend binaries
 PG_DUMP_PATH = '/usr/local/opt/postgresql/bin/pg_dump' #TODO: find this
