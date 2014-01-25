@@ -28,8 +28,9 @@ BR_DEPLOY = 'deploy'
 BR_REMOTE = 'master'
 REM_NAME = 'origin'
 PROJECT_URL = 'https://github.com/cjfuller/labdb.git'
-DEFAULT_REPO_PATH= '~/labdb'
+DEFAULT_REPO_PATH = '~/labdb'
 DEFAULT_BACKUP_DIR = '~/backups'
+AUTO_MERGE_MESSAGE = 'auto merge by manage.py'
 
 #database backend binaries
 PG_DUMP_PATH = '/usr/local/opt/postgresql/bin/pg_dump' #TODO: find this
@@ -173,13 +174,13 @@ def stage_changes():
     failure`.
 
     """
-    return "git checkout {0} && git merge {1}".format(BR_DEPLOY_STAGING,
-                                                      BR_REMOTE)
+    return "git checkout {0} && git merge -m {1} {2}".format(
+        BR_DEPLOY_STAGING, AUTO_MERGE_MESSAGE, BR_REMOTE)
 
 def merge_into_production():
     """Merge changes from staging into production."""
-    return "git checkout {0} && git merge {1}".format(BR_DEPLOY,
-                                                      BR_DEPLOY_STAGING)
+    return "git checkout {0} && git merge -m {1} {2}".format(
+        BR_DEPLOY, AUTO_MERGE_MESSAGE, BR_DEPLOY_STAGING)
 
 def revert_merge_failure():
     """Revert a merge and go back to production in case conflicts arise."""
