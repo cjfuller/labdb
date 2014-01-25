@@ -221,6 +221,10 @@ def create_backup():
                         '&&',
                         'rm -f {0}'.format(fn_full)])
 
+def restart_server():
+    """Restart the webserver."""
+    return "supervisorctl restart labdb"
+
 #other commands not using the shell
 
 def set_hostname():
@@ -263,6 +267,7 @@ def update():
     queue_command(ShellCommand(update_deps_conservative))
     queue_command(ShellCommand(precompile_assets))
     queue_command(ShellCommand(merge_into_production))
+    queue_command(ShellCommand(restart_server))
 
 def backup():
     queue_command(ShellCommand(create_backup))
@@ -281,6 +286,9 @@ def install():
 
 def revert_failure():
     queue_command(ShellCommand(revert_merge_failure))
+
+def restart():
+    queue_command(ShellCommand(restart_server))
 
 def help():
     pass
