@@ -219,7 +219,7 @@ def create_backup():
                         'tar cjf {0}.tar.bz2 -C {1} {2}'.format(fn_full,
                             DEFAULT_BACKUP_DIR, fn),
                         '&&',
-                        'rm -f {0}'.format(fn),])
+                        'rm -f {0}'.format(fn_full)])
 
 #other commands not using the shell
 
