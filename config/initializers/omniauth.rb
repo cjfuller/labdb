@@ -19,9 +19,11 @@ require 'omniauth-openid'
 
 require 'openid/fetchers'
 
+HOSTNAME_FILE = "config/full_hostname.txt"
+
 Rails.application.config.middleware.use Rack::Session::Cookie
 
-OmniAuth.config.full_host = "https://localhost:3000"
+OmniAuth.config.full_host = File.read("config/full_hostname.txt")
 
 OpenID.fetcher.ca_file = Rails.root.join("config/cacert.pem").to_s
 
