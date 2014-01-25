@@ -210,11 +210,13 @@ def create_backup():
     """Backup the postgres database to a file."""
     suffix = "_labdb_backup.dump"
     backup_timestring = datetime.datetime.today().strftime("%Y%m%d_%H%M%S")
-    fn = os.path.join(DEFAULT_BACKUP_DIR, backup_timestring + suffix)
+    fn = backup_timestring + suffix
+    fn_full = os.path.join(DEFAULT_BACKUP_DIR, fn)
     return ' '.join([   PG_DUMP_PATH,
                         '-h localhost labdb > {0}'.format(fn),
                         '&&',
-                        'tar cjf {0}.tar.bz2 {0}'.format(fn),
+                        'tar cjf {0}.tar.bz2 -C {1} {2}'.format(fn_full,
+                            DEFAULT_BACKUP_DIR, fn),
                         '&&',
                         'rm -f {0}'.format(fn),])
 
