@@ -13,6 +13,7 @@ script that could make changes that might break the script itself.
 import argparse
 import datetime
 import os, os.path
+import stat
 import subprocess
 import sys
 import random
@@ -249,6 +250,7 @@ def generate_application_secret():
     secret_string = '{0:x}'.format(s_rng.getrandbits(512))
     with open(SECRET_CFG_FILE, 'w') as f:
         f.write(secret_string)
+        os.fchmod(f, stat.S_IRUSR | stat.S_IWUSR)
 
 
 # task helpers
