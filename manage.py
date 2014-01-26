@@ -261,6 +261,7 @@ def ok():
 # tasks that can be run from the command line
 
 def update():
+    queue_command(ShellCommand(create_backup))
     if ShellCommand(check_for_staging_branch, exit_on_fail=False)() == 0:
         queue_command(ShellCommand(clean_up_staging_branch))
     queue_command(ShellCommand(create_staging_branch))
