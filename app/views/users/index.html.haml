@@ -13,28 +13,28 @@
         %td= user.name
         %td= user.email
         %td= user.notes
-        %td.button-cell-shrink.noclick
-          .nowrap-row
-            .nowrap-cell
+        %td.write-button-table-cell.noclick
+          .write-button-group
+            .write-button-cell
               %a
                 = link_to [:toggle_auth_read, user], method: :put do 
                   %span{class: badge_class_for_boolean(user.auth_read)}
                     %i.icon-book.icon-white
-            .nowrap-cell= "&nbsp;".html_safe
-            .nowrap-cell
+            .write-button-cell= "&nbsp;".html_safe
+            .write-button-cell
               %a
                 = link_to [:toggle_auth_write, user], method: :put do 
                   %span{class: badge_class_for_boolean(user.auth_write)}
                     %i.icon-pencil.icon-white
-            .nowrap-cell= "&nbsp;".html_safe
-            .nowrap-cell
+            .write-button-cell= "&nbsp;".html_safe
+            .write-button-cell
               %a
                 = link_to [:toggle_auth_admin, user], method: :put do 
                   %span{class: badge_class_for_boolean(user.auth_admin)}
                     %i.icon-wrench.icon-white
-        %td.button-cell-shrink.noclick
-          .nowrap-row
-          .nowrap-cell
-            = link_to user, confirm: "Delete user #{user.name} <#{user.email}>?  Are you sure?", method: :delete, class: "noclick" do
-              %i.icon-remove.noclick
+        %td.write-button-table-cell.noclick
+          .write-button-group
+            .write-button-cell
+              = link_to user, confirm: "Delete user #{user.name} <#{user.email}>?  Are you sure?", method: :delete, class: "noclick" do
+                %i.icon-remove.noclick
 
