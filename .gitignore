@@ -20,6 +20,10 @@
 /config/*.key
 /config/*.pem
 
+# Ignore secret token and hostname
+/config/secret_token.txt
+/config/full_hostname.txt
+
 # ignore rubinius files
 /.rbx
 
