@@ -115,14 +115,18 @@ class ShellCommand(object):
     def prepend_login_shell(command):
         return ['/bin/bash', '--login', '-c', command]
 
-    def __init__(self, cmd_fct, requires_sudo=False, exit_on_fail=True):
+    def __init__(self, cmd_fct, args=None, requires_sudo=False, exit_on_fail=True):
         self.cmd_fct = cmd_fct
         self.requires_sudo = requires_sudo
         self.exit_on_fail = exit_on_fail
+        self.args = args
 
     def __call__(self):
         """Run the command using function call notation."""
-        command = self.cmd_fct()
+        if self.args is None:
+            command = self.cmd_fct()
+        else:
+            command = self.cmd_fct(*args)
         print_command(command)
         command = self.prepend_login_shell(command)
         retval = subprocess.call(command)
@@ -228,14 +232,15 @@ def restart_server():
 
 #other commands not using the shell
 
-def set_hostname():
+def set_hostname(hostname=None):
     """
     Prompt for the hostname of the machine and write it to the appropriate
     config file.
 
     """
-    hostname = input('Please enter the full hostname of the machine.\n'
-            '(i.e. the part that would appear after the https:// in a url but before any other slashes): ')
+    if hostname is None:
+        hostname = input('Please enter the full hostname of the machine.\n'
+                '(i.e. the part that would appear including the https:// in a url but before any other slashes): ')
     with open(HOSTNAME_CFG_FILE, 'w') as f:
         f.write(hostname)
 
@@ -281,8 +286,8 @@ def force_update_deps():
 def secret():
     generate_application_secret()
 
-def hostname():
-    set_hostname()
+def hostname(hn=None):
+    set_hostname(hn)
 
 def install():
     queue_command(ShellCommand(create_production_db))
@@ -296,8 +301,11 @@ def restart():
 def help():
     pass
 
-def run_task(t):
-    t()
+def run_task(t, args=None):
+    if args is None:
+        t()
+    else:
+        t(*args)
     run_queued_commands()
     ok()
 
@@ -305,9 +313,12 @@ if __name__=='__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("task", help="the name of the task to run")
     parser.add_argument("--confirm", help="ask for confirmation for any potentially dangerous actions", action='store_true')
+    parser.add_argument("--value", help="an argument to pass to the task")
     args = parser.parse_args()
     if args.confirm:
         SHOULD_CONFIRM = True
-
-    run_task(locals()[args.task])
+    if args.value:
+        run_task(locals()[args.task], [args.value])
+    else:
+        run_task(locals()[args.task])
 

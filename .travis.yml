@@ -7,4 +7,6 @@ branches:
     - master
 before_script:
   - psql -c 'create database test;' -U postgres
+  - python manage.py --value localhost hostname
+  - python manage.py secret
   - rake db:reset
