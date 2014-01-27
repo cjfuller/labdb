@@ -20,6 +20,8 @@ require 'auto_linked'
 
 describe LinkableString do
 
+  fixtures :oligos, :plasmids
+
   it "should identify and link an object reference" do
     ls = LinkableString.new("ASP1")
     ls.sub_labdb_links
