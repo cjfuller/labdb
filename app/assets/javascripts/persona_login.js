@@ -1,18 +1,20 @@
-function loginViaEmail() {
-  navigator.id.get(function(assertion) {
-    if (assertion) {
-      $('input[name=assertion]').val(assertion);
-      $('#persona_form').submit();
-    } else {
-      window.location = "#{failure_path}"
-    }
-  });  
-}
-
 $(function() {
-  $('#persona_form button').click(function() {
-    loginViaEmail();
-    return false;
+  $('#persona-login-button').click(function() {
+    navigator.id.get(verifyAssertion, {
+      backgroundColor: "#095826",
+      siteName: "Labdb"
+    });
   });
-});
 
+  function verifyAssertion(assertion) {
+    $.ajax({
+      type: 'POST',
+      url: '/auth/persona/callback',
+      data: {assertion: assertion},
+      success: function(res, status, xhr) {window.location.reload();},
+      error: function(xhr, status, err) {
+        window.location.reload();
+      }
+    });
+  }
+});

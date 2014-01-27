@@ -43,10 +43,10 @@
                     = "#{@user_name}"
                   %ul.dropdown-menu
                     %li.disabled
-                      %a= "#{@user_email}"  
+                      %a#user-email= "#{@user_email}"  
                     = render partial: 'shared/admin_menu'
                     %li.divider
-                    %li= link_to 'Log out', '/logout'
+                    %li= link_to 'Log out', '/logout', {id: 'logout-button'}
 
     .container= yield
     = javascript_include_tag "https://persona.org/include.js"

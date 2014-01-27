@@ -127,6 +127,12 @@ a.info-popup {
   }
 }
 
+a#logout-button {
+  &:hover {
+    cursor: pointer;
+  }
+}
+
 
 //header
 
