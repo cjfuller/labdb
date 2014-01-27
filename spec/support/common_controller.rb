@@ -54,83 +54,86 @@ module CommonControllerSpecs
   end
 
   def basic_tests(model_class)
+    describe "Basic controller actions" do
+      it "should get a new item" do
+        get :new
+        response.should be_success
+      end
 
-    it "should get a new item" do
-      get :new
-      response.should be_success
-    end
+      it "should get a new item with duplicate" do
+        @obj = instance_variable_get(obj_varname = "@" + model_class.to_s.downcase)
+        get :new, id: @obj
+        response.should be_success
+      end
 
-    it "should get a new item with duplicate" do
-      @obj = instance_variable_get(obj_varname = "@" + model_class.to_s.downcase)
-      get :new, id: @obj
-      response.should be_success
-    end
+      it "should get the search page" do
+        get :search
+        response.should be_success
+      end
 
-    it "should get the search page" do
-      get :search
-      response.should be_success
-    end
-
-    it "url_for should match the correct resource" do
-      plural_class = self.class.plural_class_sym.to_s
-      @obj = instance_variable_get(obj_varname = "@" + model_class.to_s.downcase)
-      url_for(controller: plural_class, host: "test.host", action: :show, id: @obj.id, protocol: 'https').should eq "https://test.host/#{plural_class}/#{@obj.id}"
+      it "url_for should match the correct resource" do
+        plural_class = self.class.plural_class_sym.to_s
+        @obj = instance_variable_get(obj_varname = "@" + model_class.to_s.downcase)
+        url_for(controller: plural_class, host: "test.host", action: :show, id: @obj.id, protocol: 'https').should eq "https://test.host/#{plural_class}/#{@obj.id}"
+      end
     end
   end
 
 
   def object_tests(model_class)
+    describe "Basic object testing" do 
+      obj_varname = "@" + model_class.to_s.downcase
 
-    obj_varname = "@" + model_class.to_s.downcase
+      before :each do
+        @obj = instance_variable_get(obj_varname)
+        @fields_hash = {}
+        @obj.exportable_fields.each { |f| @fields_hash[f] = @obj.send(f) }
+      end
 
-    before :each do
-      @obj = instance_variable_get(obj_varname)
-      @fields_hash = {}
-      @obj.exportable_fields.each { |f| @fields_hash[f] = @obj.send(f) }
-    end
+      model_sym = model_class.to_s.downcase.to_sym
 
-    model_sym = model_class.to_s.downcase.to_sym
+      it "should get the index" do
+        get :index
+        response.should be_success
+        assigns(model_class.to_s.pluralize.downcase.to_sym).should_not be_nil
+      end
 
-    it "should get the index" do
-      get :index
-      response.should be_success
-      assigns(model_class.to_s.pluralize.downcase.to_sym).should_not be_nil
-    end
+      it "should show the #{model_class.to_s.downcase}" do
+        get :show, id: @obj
+        response.should be_success
+      end
 
-    it "should show the #{model_class.to_s.downcase}" do
-      get :show, id: @obj
-      response.should be_success
-    end
+      it "should get the edit page" do
+        get :edit, id: @obj
+        response.should be_success
+      end
 
-    it "should get the edit page" do
-      get :edit, id: @obj
-      response.should be_success
-    end
+      it "should destroy the #{model_class.to_s.downcase}" do
+        lambda { delete :destroy, id: @obj }.should change(model_class, :count).by(-1)
+        response.should redirect_to(polymorphic_path(model_class))
+      end
 
-    it "should destroy the #{model_class.to_s.downcase}" do
-      lambda { delete :destroy, id: @obj }.should change(model_class, :count).by(-1)
-      response.should redirect_to(polymorphic_path(model_class))
-    end
+      it "should create the #{model_class.to_s.downcase}" do
+        lambda { post :create, model_sym => @fields_hash }.should change(model_class, :count)
+        response.should redirect_to(polymorphic_path(assigns(model_sym)))
+      end
 
-    it "should create the #{model_class.to_s.downcase}" do
-      lambda { post :create, model_sym => @fields_hash }.should change(model_class, :count)
-      response.should redirect_to(polymorphic_path(assigns(model_sym)))
-    end
+      it "should create a #{model_class.to_s.downcase} filled with the appropriate fields" do
+        post :create, model_sym => @fields_hash
+        created_obj = assigns(model_class.to_s.downcase.to_sym)
+        @fields_hash.each_key { |k| created_obj.send(k).should eq @fields_hash[k] }
+      end
 
-    it "should create a #{model_class.to_s.downcase} filled with the appropriate fields" do
-      post :create, model_sym => @fields_hash
-      created_obj = assigns(model_class.to_s.downcase.to_sym)
-      @fields_hash.each_key { |k| created_obj.send(k).should eq @fields_hash[k] }
-    end
-
-    it "should update the #{model_class.to_s.downcase}" do
-      put :update, id: @obj, model_sym => @fields_hash
-      response.should redirect_to(polymorphic_path(assigns(model_sym)))
+      it "should update the #{model_class.to_s.downcase}" do
+        put :update, id: @obj, model_sym => @fields_hash
+        response.should redirect_to(polymorphic_path(assigns(model_sym)))
+      end
     end
   end
 
 
   def search_tests(opts)
+
     model_class = opts[:model_class]
     search_field = opts[:search_field]
     count_0_regexp = opts[:count_0_regexp]
@@ -141,7 +144,6 @@ module CommonControllerSpecs
 
     type = model_class.to_s.downcase.to_sym
     plural_type = model_class.to_s.pluralize.downcase.to_sym
-
 
     describe "search redirection" do
       it "should redirect to an object if it's the only one found" do
@@ -272,17 +274,16 @@ module CommonControllerSpecs
   end
 
   def export_tests(model_class, formats)
-
     obj_varname = "@" + model_class.to_s.downcase
+    describe "Export" do
+      formats.each do |f|
+        it "should export to #{f}" do
+          get :export, { exportformat: f, id: instance_variable_get(obj_varname) }
+          response.should be_success
 
-    formats.each do |f|
-
-      it "should export to #{f}" do
-        get :export, { exportformat: f, id: instance_variable_get(obj_varname) }
-        response.should be_success
-
-        if f == "yml" then
-          lambda{ YAML.load(response.body) }.should_not raise_error
+          if f == "yml" then
+            lambda{ YAML.load(response.body) }.should_not raise_error
+          end
         end
       end
     end

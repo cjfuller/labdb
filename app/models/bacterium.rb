@@ -21,6 +21,27 @@ require 'described'
 require 'headings'
 require 'dna_sequence'
 
+module CheckPlasmidSequence
+  # Patches the Bacterium class to check a linked plasmid for a sequence
+  # if there isn't one present.
+  def sequence
+    seq = super
+    if seq and seq.length > 0 then
+      return seq
+    else
+      linked_plas = self.core_alt_link
+      if linked_plas and linked_plas.size > 0 then
+        linked_plas.each do |p|
+          if p and p.sequence and p.sequence.size > 0 then
+            return p.sequence
+          end
+        end
+      end
+    end
+    return seq
+  end
+end
+
 class Bacterium < ActiveRecord::Base
 
   include Exportable
@@ -29,6 +50,7 @@ class Bacterium < ActiveRecord::Base
   include Described
   include Headings
   include DNASequence
+  include CheckPlasmidSequence
 
   Fields = [:comments, :date_entered, :entered_by, :genotype, :notebook, :plasmid_number, :species_bkg, :strain_number, :sequence, :strainalias]
 

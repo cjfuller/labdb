@@ -9,6 +9,7 @@ one:
   genotype: 
   comments: strain 1
   plasmid_number: 2
+  sequence: ""
 
 two:
   strain_number: 2
@@ -19,3 +20,4 @@ two:
   genotype:
   comments: strain 2
   plasmid_number: 1
+  sequence: ""

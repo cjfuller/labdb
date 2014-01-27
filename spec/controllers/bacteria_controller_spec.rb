@@ -18,6 +18,8 @@
 require 'spec_helper'
 
 describe BacteriaController do 
+
+	fixtures :plasmids
 	
 	extend CommonControllerSpecs
 
@@ -27,8 +29,6 @@ describe BacteriaController do
 	describe "creation from plasmid" do
 
 		COPIED_FIELDS = {plasmidnumber: :plasmid_number, enteredby: :entered_by, notebook: :notebook, description: :comments, plasmidalias: :strainalias}
-
-		fixtures :plasmids
 
 		before :each do 
 
