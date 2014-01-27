@@ -121,6 +121,12 @@ h2 {
   font-weight: normal;
 }
 
+a.info-popup {
+  &:hover {
+    cursor: pointer;
+  }
+}
+
 
 //header
 

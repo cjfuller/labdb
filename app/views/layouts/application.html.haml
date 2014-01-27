@@ -38,12 +38,12 @@
               %li= link_to 'Yeast', '/yeaststrains'
               - if @logged_in
                 %li{class: "dropdown"}
-                  %a.dropdown-toggle{'data-toggle' => "dropdown", href: '#'}
+                  %a.dropdown-toggle.info-popup{'data-toggle' => "dropdown"}
                     %i.icon-user.icon-white
                     = "#{@user_name}"
                   %ul.dropdown-menu
                     %li.disabled
-                      %a{href: "#"}= "#{@user_email}"  
+                      %a= "#{@user_email}"  
                     = render partial: 'shared/admin_menu'
                     %li.divider
                     %li= link_to 'Log out', '/logout'
