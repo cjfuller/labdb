@@ -21,6 +21,6 @@
     .control-group
       = f.label(@obj.description_field_name, @obj.get_heading(@obj.description_field_name), :class=> "label control-label label-inverse")
       .pull-right.help-text
-        %a.pop.info-popup{'data-toggle' => 'popover', 'data-placement' => 'right', 'title' => "Description&nbsp;formatting".html_safe, 'data-content' => Helptext.get(:description_formatting).html_safe}
+        %a.pop.info-popup.help-text{'data-toggle' => 'popover', 'data-placement' => 'right', 'title' => "Description&nbsp;formatting".html_safe, 'data-content' => Helptext.get(:description_formatting).html_safe}
           %i{class: "icon-info-sign"}
       .controls= f.text_area(@obj.description_field_name, :readonly=>readonly?, :rows=>12, :class=>"input-xxlarge")

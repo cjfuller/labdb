@@ -52,6 +52,12 @@ body {
     padding-right: 5px;
 }
 
+.helptext-container {
+  p {
+    @extend .help-text;
+  }
+}
+
 .align-left {
     text-align: left;
 }

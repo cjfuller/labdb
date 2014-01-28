@@ -19,12 +19,17 @@
 %a.btn.btn-mini.btn-primary{href: "#plasmidmap-modal", id: "show-map-button", role: "button", "data-toggle" => "modal"} Show Plasmid Map
 .modal.hide.fade#plasmidmap-modal
   .modal-header
-    %button{type: "button", class: "close", "data-dismiss" => "modal"}= "&times;".html_safe
+    %button{type: "button", class: "close", "data-dismiss" => "modal"}
+      %i.icon-remove
     %h4
       = "Mapping #{@obj.named_number_string}"
+
   .modal-body
     #plasmid-map{data: @obj.map}
   .modal-footer
+    .pull-left.help-text
+      %a.pop.info-popup.help-text{'data-toggle' => 'popover', 'data-placement' => 'top', 'title' => "Plasmid&nbsp;mapping&nbsp;help".html_safe, 'data-content' => Helptext.get(:plasmid_map).html_safe}
+        %i{class: "icon-info-sign"}
     .form-horizontal
       %input{type: "text", id: "enzyme", class: "span2"}
       %button{class: "btn btn-mini", id: "show_enzyme"} Show enzyme
