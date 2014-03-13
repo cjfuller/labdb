@@ -57,7 +57,7 @@ Start the application:
 
 The server runs by default on port 3000 and is accessible only through https, so to visit it from the local machine, point your browser at https://localhost:3000.
 
-In production, we manage the server using (supervisord)[http://supervisord.org/].  If you set up supervisord, `manage.py` can automatically update labdb and restart the server using `python manage.py update`.
+In production, we manage the server using [supervisord](http://supervisord.org/).  If you set up supervisord, `manage.py` can automatically update labdb and restart the server using `python manage.py update`.
 
 # License
 
