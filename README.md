@@ -6,10 +6,12 @@ Labdb is a laboratory database system for simply and cleanly tracking objects li
 
 #Installation / Configuration
 
-Prerequisites: 
- - postgresql: installation will depend on your platform; the user running the application must be able to create and edit databases; if you want to run the tests, you will need a database user called 'postgres' as well who can create and edit (this may be done by default).  On Ubuntu, install the packages `postgresql` and `libpq-dev`.  To create a user with the name 'labdb' (you should make this the same name as the account that will run the server): `sudo -u postgres createuser -d -R -S labdb`
- - a ruby interpreter supporting ruby >= 1.9 (e.g. [http://ruby-lang.org](http://ruby-lang.org)).  We recommend and test mostly on [rubinius](http://rubini.us).  To install this via [rvm](http://rvm.io), run `rvm install rbx --1.9`.  (And then to make it the default ruby `rvm use --default rbx`.)
+Prerequisites:
+ - You will probably want to make a dedicated user for running the database.  This user should not have admin privileges.  Unless you have a compelling reason not to, name it "labdb".  The database will run as any user, but the auto-update script assumes this user.
+ - postgresql: installation will depend on your platform; the user running the application must be able to create and edit databases.  If you want to run the tests, you will need a database user called 'postgres' as well who can create and edit (this may be done by default).  On Ubuntu, install the packages `postgresql` and `libpq-dev`.  To create a user with the name 'labdb' (you should make this the same name as the account that will run the server): `sudo -u postgres createuser -d -R -S labdb`
+ - a ruby interpreter supporting ruby >= 1.9 (e.g. [http://ruby-lang.org](http://ruby-lang.org)).  We do most of our usage and testing on ruby 2.1.  To install this via [rvm](http://rvm.io), run `rvm install 2.1`.  (And then to make it the default ruby `rvm use --default 2.1`.)
  - a javascript runtime: [nodejs](http://nodejs.org) is a popular choice.  On Ubuntu, install the `nodejs` package. 
+ - a python interpreter (for server management scripts), version >=2.7.  (Python 3 is ok as well.)
 
 First, clone the repository.  You will need to add some configuration options before running the program.
 
@@ -25,11 +27,11 @@ Next, install dependencies using bundler:
 
 `bundle install`
 
-Geneate an application secret token using:
+Geneate and install an application secret token using:
 
-`rake secret`
+`python manage.py secret`
 
-and edit config/initializers/secret_token.rb and put the secret in the indicated place.
+Set up your hostname (what the server will be called; this might be "localhost" if you don't have a specific hostname configured.  It should be the address you'll access the server at minus the "https://" and the port.)
 
 If you need to generate an ssl certificate, run:
 
@@ -54,6 +56,8 @@ Start the application:
 `bundle exec puma --config config/puma.rb`
 
 The server runs by default on port 3000 and is accessible only through https, so to visit it from the local machine, point your browser at https://localhost:3000.
+
+In production, we manage the server using (supervisord)[http://supervisord.org/].  If you set up supervisord, `manage.py` can automatically update labdb and restart the server using `python manage.py update`.
 
 # License
 
