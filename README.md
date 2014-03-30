@@ -33,6 +33,8 @@ Geneate and install an application secret token using:
 
 Set up your hostname (what the server will be called; this might be "localhost" if you don't have a specific hostname configured.  It should be the address you'll access the server at minus the "https://" and the port.)
 
+`python manage.py hostname <hostname>`
+
 If you need to generate an ssl certificate, run:
 
 `rake gen_cert`
