@@ -33,19 +33,22 @@ Geneate and install an application secret token using:
 
 Set up your hostname (what the server will be called; this might be "localhost" if you don't have a specific hostname configured.  It should be the address you'll access the server at minus the "https://" and the port.)
 
-If you need to generate an ssl certificate, run:
-
-`rake gen_cert`
+`python manage.py hostname --value <hostname>`
 
 This will also ensure that the certificate is in the right place for the server to find it.
 
 If you're using this not just for development or personal use, prepare the server to run in production mode:
  - edit `config/puma.rb` and uncomment the line that says `environment = :production`.
+ - export `RAILS_ENV=production`
  - run `rake assets:precompile`
 
 Generate the database:
 
 `rake db:setup`
+
+If you need to generate an ssl certificate, run:
+
+`rake gen_cert`
 
 Create an initial administration user:
 
