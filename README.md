@@ -35,10 +35,6 @@ Set up your hostname (what the server will be called; this might be "localhost" 
 
 `python manage.py hostname --value <hostname>`
 
-If you need to generate an ssl certificate, run:
-
-`rake gen_cert`
-
 This will also ensure that the certificate is in the right place for the server to find it.
 
 If you're using this not just for development or personal use, prepare the server to run in production mode:
@@ -48,6 +44,10 @@ If you're using this not just for development or personal use, prepare the serve
 Generate the database:
 
 `rake db:setup`
+
+If you need to generate an ssl certificate, run:
+
+`rake gen_cert`
 
 Create an initial administration user:
 
