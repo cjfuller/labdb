@@ -39,6 +39,7 @@ This will also ensure that the certificate is in the right place for the server 
 
 If you're using this not just for development or personal use, prepare the server to run in production mode:
  - edit `config/puma.rb` and uncomment the line that says `environment = :production`.
+ - export `RAILS_ENV=production`
  - run `rake assets:precompile`
 
 Generate the database:
