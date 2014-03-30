@@ -49,7 +49,7 @@ td.write-button-table-cell {
 }
 
 .cell-with-button {
-  @extend .nowrap-cell;
+  @extend .write-button-cell;
 }
 
 .sort-caret {
