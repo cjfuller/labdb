@@ -34,7 +34,7 @@ DEFAULT_BACKUP_DIR = '~/backups'
 AUTO_MERGE_MESSAGE = '"auto merge by manage.py"'
 
 #database backend binaries
-PG_DUMP_PATH = '/usr/local/opt/postgresql/bin/pg_dump' #TODO: find this
+PG_DUMP_PATH = subprocess.check_output(['which', 'pg_dump'])
 
 #paths to various config files
 HOSTNAME_CFG_FILE = 'config/full_hostname.txt'
