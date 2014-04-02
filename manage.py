@@ -230,6 +230,10 @@ def restart_server():
     """Restart the webserver."""
     return "supervisorctl restart labdb"
 
+def run_devserver():
+    """Start puma locally without setting up production env."""
+    return "bundle exec puma --config config/puma.rb"
+
 #other commands not using the shell
 
 def set_hostname(hostname=None):
@@ -298,6 +302,9 @@ def revert_failure():
 def restart():
     queue_command(ShellCommand(restart_server))
 
+def devserver():
+    queue_command(ShellCommand(run_devserver))
+    
 def help():
     pass
 

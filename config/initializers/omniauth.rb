@@ -15,19 +15,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-require 'omniauth-openid'
-
-require 'openid/fetchers'
-
 HOSTNAME_FILE = "config/full_hostname.txt"
-
-Rails.application.config.middleware.use Rack::Session::Cookie
 
 OmniAuth.config.full_host = File.read("config/full_hostname.txt")
 
 OpenID.fetcher.ca_file = Rails.root.join("config/cacert.pem").to_s
 
 Rails.application.config.middleware.use OmniAuth::Builder do
-  provider :openid, name: 'google', identifier: 'https://www.google.com/accounts/o8/id'
   provider :browser_id, name: 'persona', verify_url: 'https://login.persona.org/verify'
 end
