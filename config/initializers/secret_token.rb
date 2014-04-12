@@ -24,3 +24,4 @@ TOKEN_FILE = 'config/secret_token.txt'
 # Make sure the secret is at least 30 characters and all random,
 # no regular words or you'll be exposed to dictionary attacks.
 Labdb::Application.config.secret_token = File.read(TOKEN_FILE)
+Labdb::Application.config.secret_key_base = File.read(TOKEN_FILE)

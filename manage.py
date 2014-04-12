@@ -34,7 +34,7 @@ DEFAULT_BACKUP_DIR = '~/backups'
 AUTO_MERGE_MESSAGE = '"auto merge by manage.py"'
 
 #database backend binaries
-PG_DUMP_PATH = '/usr/local/opt/postgresql/bin/pg_dump' #TODO: find this
+PG_DUMP_PATH = subprocess.check_output(['which', 'pg_dump'])
 
 #paths to various config files
 HOSTNAME_CFG_FILE = 'config/full_hostname.txt'
@@ -230,6 +230,10 @@ def restart_server():
     """Restart the webserver."""
     return "supervisorctl restart labdb"
 
+def run_devserver():
+    """Start puma locally without setting up production env."""
+    return "bundle exec puma --config config/puma.rb"
+
 #other commands not using the shell
 
 def set_hostname(hostname=None):
@@ -298,6 +302,9 @@ def revert_failure():
 def restart():
     queue_command(ShellCommand(restart_server))
 
+def devserver():
+    queue_command(ShellCommand(run_devserver))
+    
 def help():
     pass
 

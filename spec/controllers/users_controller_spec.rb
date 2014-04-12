@@ -68,15 +68,15 @@ describe UsersController do
       }
 
       post :create, user: opts
-      User.find_all_by_email('test@labdb').should_not be_empty
+      User.where(email: 'test@labdb').should_not be_empty
     end
 
     it "should succeed for delete user" do
       email = 'unauthorized@labdb'
-      previous_count = User.find_all_by_email(email).size
+      previous_count = User.where(email: email).size
       previous_count.should_not eq 0
-      delete :destroy, id: User.find_all_by_email(email).first.id
-      User.find_all_by_email(email).size.should eq previous_count - 1
+      delete :destroy, id: User.where(email: email).first.id
+      User.where(email: email).size.should eq previous_count - 1
     end
 
     [:toggle_auth_admin, :toggle_auth_write, :toggle_auth_read].each do |tog|

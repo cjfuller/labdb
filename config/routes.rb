@@ -21,8 +21,8 @@ Labdb::Application.routes.draw do
 
   get '/logout', to: 'sessions#destroy', as: :logout
 
-  match '/auth/:provider/callback', to: 'sessions#create'
-  match '/auth/failure', to: 'sessions#failure'
+  match '/auth/:provider/callback', to: 'sessions#create', via: [:get, :post]
+  match '/auth/failure', to: 'sessions#failure', via: [:get, :post]
 
   get '/quick_search', to: 'quick_search#do_quick_search'
 
@@ -81,7 +81,5 @@ Labdb::Application.routes.draw do
       put 'update_number'
     end
   end
-
-    
 
 end

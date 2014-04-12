@@ -27,7 +27,7 @@ module Searching
 			all_searches.each { |s| s.destroy if s.expired? }
 		end
 
-		searches = Search.find_all_by_user_id(curr_user_id)
+		searches = Search.where(user_id: curr_user_id)
 
 		unless searches.nil? then
 			searches.each { |s| s.destroy }
@@ -46,7 +46,12 @@ module Searching
 
 		res_hash = result.inject({}) { |h, e| h[e.id]= e.number_field; h }
 
-		s = Search.new(expires: exp_time, result: Psych.dump(res_hash), searchparams: search_params, user_id: curr_user_id)
+    params = ActionController::Parameters.new(expires: exp_time,
+                                              result: Psych.dump(res_hash),
+                                              searchparams: search_params,
+                                              user_id: curr_user_id)
+
+		s = Search.new(params.permit(:expires, :result, :searchparams, :user_id))
 
 		s.save
 

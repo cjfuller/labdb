@@ -23,8 +23,6 @@ class LinkableString
 
   include Rails.application.routes.url_helpers
 
-  include ActionView::Helpers::UrlHelper
-
   def controller
     nil
   end
@@ -49,7 +47,11 @@ class LinkableString
       matches = {}
       scan_matchobjs(/#{k}N?\W*(\d+)/) do |m|
         cls = Naming.named_class_for(k).constantize
-        matches[m[0]] = link_to(m[0], cls.where(cls.number_field_name => m[1]).first)
+        matches[m[0]] =
+          "<a href=\"#{url_for(controller: Naming.named_class_for(k).downcase.pluralize,
+                                action: :show,
+                                id: cls.where(cls.number_field_name => m[1]).first,
+                                only_path: true)}\">#{m[0]}</a>"
       end
       matches.each do |k,v|
         @str.gsub!(k,v)
