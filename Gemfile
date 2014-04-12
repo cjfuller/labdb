@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 3.2'
+gem 'rails', '~> 4.0'
 gem 'haml', '~> 4.0'
 
 gem 'pg'
@@ -12,7 +12,7 @@ gem 'redcarpet', '~> 2.2.2'
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'coffee-rails', '~> 3.2'
+  gem 'coffee-rails', '~> 4.0'
 
   gem 'uglifier', '>= 1.0.3'
 end
@@ -38,7 +38,7 @@ gem 'omniauth'
 gem 'omniauth-openid'
 gem 'omniauth-browserid'
 
-gem 'sass-rails', '~> 3.2'
+gem 'sass-rails', '~> 4.0'
 gem 'bootstrap-sass', '~> 2.3.1.0'
 
 gem 'kaminari'
