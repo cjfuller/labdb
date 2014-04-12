@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'rails', '~> 4.0'
+gem 'protected_attributes'
 gem 'haml', '~> 4.0'
 
 gem 'pg'
