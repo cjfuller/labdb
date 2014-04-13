@@ -1,9 +1,23 @@
 $(function() {
+
+  function renderLoginItems() {
+    $('.login-area').show();
+    $('.waiting-area').hide();
+  }
+
+  function renderWaitingSpinner() {
+    $('.login-area').hide();
+    $('.waiting-area').show();
+  }
+
+  $.ready(renderLoginItems());
+
   $('#persona-login-button').click(function() {
     navigator.id.get(verifyAssertion, {
       backgroundColor: "#095826",
       siteName: "Labdb"
     });
+    renderWaitingSpinner();
   });
 
   function verifyAssertion(assertion) {
@@ -17,4 +31,8 @@ $(function() {
       }
     });
   }
+
+  $('#logout-button').click(function() {
+    navigator.id.logout();
+  });
 });

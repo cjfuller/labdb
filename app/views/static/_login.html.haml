@@ -1,4 +1,10 @@
-.span4
-  .info-block
+.span4.login-area
+  .info-block#login-block
     %h4 Log in using Persona
     = render partial: 'static/persona'
+.waiting-area
+  .span8
+    .login-progress-text Logging you in...
+    .progress.progress-striped.progress-success.active#login-progress
+      .bar{style: 'width: 100%;'}
+  .span4
