@@ -36,7 +36,9 @@ describe LinkableString do
     ls.to_s.should match /href="\/oligos\/#{obj_id}"/
   end
 
+  it "should fail gracefully when encountering a nonexistent reference" do
+    ls = LinkableString.new("ASON3444992")
+    expect {ls.sub_labdb_links}.not_to raise_error
+  end
+
 end
-
-
-

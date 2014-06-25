@@ -47,11 +47,15 @@ class LinkableString
       matches = {}
       scan_matchobjs(/#{k}N?\W*(\d+)/) do |m|
         cls = Naming.named_class_for(k).constantize
-        matches[m[0]] =
-          "<a href=\"#{url_for(controller: Naming.named_class_for(k).downcase.pluralize,
+        id = cls.where(cls.number_field_name => m[1]).first
+        if id then
+          matches[m[0]] =
+            "<a href=\"#{url_for(controller: Naming.named_class_for(k).downcase.pluralize,
                                 action: :show,
-                                id: cls.where(cls.number_field_name => m[1]).first,
+                                id: id,
                                 only_path: true)}\">#{m[0]}</a>"
+
+        end
       end
       matches.each do |k,v|
         @str.gsub!(k,v)
@@ -72,5 +76,3 @@ class String
     ls.to_s
   end
 end
-  
-
