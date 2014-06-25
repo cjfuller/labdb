@@ -35,6 +35,8 @@ RSpec.configure do |config|
   # the seed, which is printed after each run.
   #     --seed 1234
   config.order = "random"
+
+  config.infer_spec_type_from_file_location!
 end
 
 def model_to_hash(mod_obj)
@@ -46,6 +48,3 @@ def model_to_hash(mod_obj)
 
   params_hash
 end
-
-
-

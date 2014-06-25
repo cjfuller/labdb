@@ -20,7 +20,7 @@ end
 
 group :development, :test do
 	gem 'rspec'
-	gem 'rspec-rails'
+	gem 'rspec-rails', '~> 3'
   gem 'konacha'
 end
 

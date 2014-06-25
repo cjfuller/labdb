@@ -18,7 +18,7 @@
 module CommonControllerSpecs
 
   def self.extended(base)
-    base.class_exec do 
+    base.class_exec do
       include Rails.application.routes.url_helpers
 
       def self.classname
@@ -252,7 +252,8 @@ module CommonControllerSpecs
 
           it "should be an invalid search if the search time has expired" do
             get :show, id: @search_obj.id, search_id: @s
-            controller.valid_search_requested?.should_not be_true
+            expect(controller.valid_search_requested?).to be_falsey
+#            controller.valid_search_requested?.should_not be_true
           end
         end
 
@@ -266,7 +267,7 @@ module CommonControllerSpecs
 
           it "should be an invalid search if it's not the last search a user performed" do 
             get :show, id: @search_obj_2.id, search_id: @s
-            controller.valid_search_requested?.should_not be_true
+            controller.valid_search_requested?.should be_falsey
           end
         end
       end

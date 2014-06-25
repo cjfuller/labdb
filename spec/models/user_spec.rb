@@ -24,18 +24,18 @@ describe User do
 
   it "should have no permissions by default" do
     @perms.each do |perm|
-      @u.send(perm).should_not be_true
+      @u.send(perm).should be_falsey
     end
   end
 
   it "should toggle permissions correctly" do
     @perms.each do |perm|
       @u.toggle_auth_field!(perm)
-      @u.send(perm).should be_true
+      @u.send(perm).should be true
     end
     @perms.each do |perm|
       @u.toggle_auth_field!(perm)
-      @u.send(perm).should be_false
+      @u.send(perm).should be false
     end
   end
 

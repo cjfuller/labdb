@@ -66,7 +66,7 @@ describe BacteriaController do
 		it "should append the new strain number to the strain numbers for the referring plasmid" do
 			get :edit, id: @new_id
 			bact = assigns(:bacterium)
-			@plas.strainnumbers.match(bact.strain_number.to_s).should be_true
+			@plas.strainnumbers.match(bact.strain_number.to_s).should be_truthy
 		end
 
 	end
