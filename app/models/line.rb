@@ -55,7 +55,12 @@ class Line < ActiveRecord::Base
 		def self.from_hash(hash)
 			ii = InventoryItem.new
 			hash.each { |k,v| ii.send(k.to_s + "=", v) }
-			ii.date = Date.parse(ii.date.to_s) if ii.date.to_s.size > 0
+            begin
+			    ii.date = Date.parse(ii.date.to_s) if ii.date.to_s.size > 0
+            rescue ArgumentError => e
+                puts "Invalid date"
+                ii.date = nil
+            end
 			ii
 		end
 
