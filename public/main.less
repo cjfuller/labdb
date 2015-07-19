@@ -1,0 +1,107 @@
+@navbar-size: 50px;
+@padding: 10px;
+@hamburger-width: 50px;
+
+.navbar-top {
+    width: 100%;
+    position: fixed;
+    background-color: #559955;
+    height: @navbar-size;
+    overflow: hidden;
+    z-index: 19;
+    box-shadow: 0 2px 2px #555;
+}
+
+#labdb {
+    font-size: 170%;
+    padding-top: 0.7*@padding;
+    font-family: "Rokkitt", serif;
+    text-transform: none;
+    padding-left: 2*@padding;
+    padding-right: 4*@padding;
+}
+
+.separator {
+    display: none;
+    margin-top: 1.5*@padding;
+    margin-bottom: 1.5*@padding;
+    border: 1px solid rgba(100, 100, 100, 0.6);
+    width: 0;
+    float: left;
+    height: @navbar-size - 3 * @padding;
+}
+
+.field-name {
+    font-style: bolder;
+}
+
+.field-value {
+
+    &.editable {
+        font-style: underline;
+    }
+    
+}
+
+.linklike {
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.navitem {
+    padding-top: 1.2*@padding;
+    padding-left: @padding;
+    padding-right: @padding;
+    float: left;
+    height: @navbar-size;
+    font-size: 120%;
+    .linklike;
+}
+
+.icon-menu-item {
+    display: inline-block;
+    width: @hamburger-width;
+    height: @navbar-size - 1.5*@padding;
+    .linklike;
+    padding-top: 1.5*@padding;
+}
+
+.search {
+    .icon-menu-item;
+}
+
+.new-item {
+    .icon-menu-item;
+}
+
+.fixactions {
+    float: right;
+    text-align: center;
+    padding-top: 0;
+    height: @navbar-size;
+}
+
+.hamburger {
+    .icon-menu-item;
+    border-left: 1px solid #555;
+    display: inline-block;
+    width: @hamburger-width;
+    .linklike;
+}
+
+
+.container {
+    padding-top: @navbar-size + 2*@padding !important;
+}
+
+.subnav {
+    display: none; //inline-block;
+    margin-top: @navbar-size/3;
+    margin-bottom: @navbar-size/3;
+    padding-left: @padding;
+    height: @navbar-size;
+    width: 100%;
+    background-color: rgba(85, 153, 85, 0.2);
+    box-shadow: 2px 2px 2px #555;
+}

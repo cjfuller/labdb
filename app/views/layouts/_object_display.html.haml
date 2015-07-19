@@ -14,8 +14,13 @@
 -# You should have received a copy of the GNU Affero General Public License
 -# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -#++
-
 =  render :partial => "shared/subnavbar"
+
+-# TODO: replace with an API call
+
+%div#item-data{"data-name" => @obj.named_number_string,
+               "data-short-desc" => @obj.info_field.labdb_auto_link.html_safe}
+%div#item-info
 
 .container-fluid
   .row-fluid

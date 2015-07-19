@@ -35,8 +35,10 @@ gem 'omniauth'
 gem 'omniauth-openid'
 gem 'omniauth-browserid'
 
+
 gem 'sass-rails', '~> 4.0'
-gem 'bootstrap-sass', '~> 2.3.1.0'
+gem 'less-rails', '~> 2.7.0'
+gem 'therubyracer'
 
 gem 'kaminari'
 

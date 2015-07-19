@@ -11,7 +11,6 @@
  *= depend_on tableview.css.scss
 */
 
-@import "bootstrap";
 @import "navbar_extra";
 @import "plasmid_mapping";
 @import "quickstart";
@@ -39,12 +38,6 @@ form {
 
 .login-form {
   margin-bottom: 0px;
-}
-
-body {
-    padding-top: 60px;
-    font: sans-serif;
-    font-size: small;
 }
 
 .tiny {

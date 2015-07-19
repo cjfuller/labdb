@@ -24,6 +24,6 @@
 			%ul
 				- @plasmid.errors.full_messages.each do |msg|
 					%li= msg
-
+    
 	= render partial: 'plasmid_editing', locals: {f: f, obj: @plasmid}
 

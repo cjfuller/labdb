@@ -19,35 +19,45 @@
 %html
   %head
     %title= ApplicationController::DATABASE_SYSTEM_NAME
+    %link{rel: "stylesheet/less", type: "text/css", href:"/main.less"}
+    %script{src: "//cdnjs.cloudflare.com/ajax/libs/less.js/2.5.1/less.min.js"}
     = stylesheet_link_tag "application", media: "all"
-    = csrf_meta_tags
-
+    = stylesheet_link_tag "//fonts.googleapis.com/css?family=Raleway:400,300,600"
+    = stylesheet_link_tag "//fonts.googleapis.com/css?family=Rokkitt:400,300,600"
+    = stylesheet_link_tag "//fonts.googleapis.com/icon?family=Material+Icons"
+    = stylesheet_link_tag "/normalize.css"
+    = stylesheet_link_tag "/skeleton.css"
   %body
-    .navbar.navbar-fixed-top.navbar-inverse
-      .navbar-inner
-        .container
-          = link_to ApplicationController::DATABASE_SYSTEM_SHORT_NAME, "/", id:"logo", class: 'brand'
-          %nav
-            %ul.nav
-              %li= link_to 'Plasmids', '/plasmids'
-              %li= link_to 'Oligos', '/oligos'
-              %li= link_to 'Bacteria', '/bacteria'
-              %li= link_to 'Samples', '/samples'
-              %li= link_to 'Antibodies', '/antibodies'
-              %li= link_to 'TC', '/lines'
-              %li= link_to 'Yeast', '/yeaststrains'
-              - if @logged_in
-                %li{class: "dropdown"}
-                  %a.dropdown-toggle.info-popup{'data-toggle' => "dropdown"}
-                    %i.icon-user.icon-white
-                    = "#{@user_name}"
-                  %ul.dropdown-menu
-                    %li.disabled
-                      %a#user-email= "#{@user_email}"  
-                    = render partial: 'shared/admin_menu'
-                    %li.divider
-                    %li= link_to 'Log out', '/logout', {id: 'logout-button'}
-
+    %div#navbar-top
+    -# .navbar.navbar-fixed-top.navbar-inverse
+    -#   .navbar-inner
+    -#     .container
+    -#       = link_to ApplicationController::DATABASE_SYSTEM_SHORT_NAME, "/", id:"logo", class: 'brand'
+    -#       %nav
+    -#         %ul.nav
+    -#           %li= link_to 'Plasmids', '/plasmids'
+    -#           %li= link_to 'Oligos', '/oligos'
+    -#           %li= link_to 'Bacteria', '/bacteria'
+    -#           %li= link_to 'Samples', '/samples'
+    -#           %li= link_to 'Antibodies', '/antibodies'
+    -#           %li= link_to 'TC', '/lines'
+    -#           %li= link_to 'Yeast', '/yeaststrains'
+    -#           - if @logged_in
+    -#             %li{class: "dropdown"}
+    -#               %a.dropdown-toggle.info-popup{'data-toggle' => "dropdown"}
+    -#                 %i.icon-user.icon-white
+    -#                 = "#{@user_name}"
+    -#               %ul.dropdown-menu
+    -#                 %li.disabled
+    -#                   %a#user-email= "#{@user_email}"
+    -#                 = render partial: 'shared/admin_menu'
+    -#                 %li.divider
+    -#                 %li= link_to 'Log out', '/logout', {id: 'logout-button'}
     .container= yield
     = javascript_include_tag "https://login.persona.org/include.js"
+    = javascript_include_tag "https://fb.me/react-with-addons-0.13.3.js"
+    = javascript_include_tag "https://fb.me/JSXTransformer-0.13.3.js"
+    = javascript_include_tag "https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"
+    %script{src: "/nav.jsx", type: "text/jsx"}
+    %script{src: "/itemview.jsx", type: "text/jsx"}
     = javascript_include_tag "application"

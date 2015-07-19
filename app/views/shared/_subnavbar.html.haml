@@ -15,21 +15,22 @@
 -# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -#++
 
-.navbar
-  .navbar-inner
-    %div{class: 'container pull-left'}
-      %nav
-        %ul{class: "nav pull-left"}
-          %li
-            .brand
-              = @status_text
-          %li.divider-vertical
-          %li= link_to 'Search', @search_path
-          %li.divider-vertical
-          - if auth? :auth_write then
-            %li= link_to 'New', new_polymorphic_path(@model_class)
-            %li.divider-vertical
-    %div{class: 'container pull-right rightalign'}
-      %nav
-        = render partial: @context_specific_buttons if @context_specific_buttons
+%div#subnav
+-# .navbar
+-#   .navbar-inner
+-#     %div{class: 'container pull-left'}
+-#       %nav
+-#         %ul{class: "nav pull-left"}
+-#           %li
+-#             .brand
+-#               = @status_text
+-#           %li.divider-vertical
+-#           %li= link_to 'Search', @search_path
+-#           %li.divider-vertical
+-#           - if auth? :auth_write then
+-#             %li= link_to 'New', new_polymorphic_path(@model_class)
+-#             %li.divider-vertical
+-#     %div{class: 'container pull-right rightalign'}
+-#       %nav
+-#         = render partial: @context_specific_buttons if @context_specific_buttons
 
