@@ -110,4 +110,32 @@ class Sample < ActiveRecord::Base
     	"Sample storage" => [:sample_type, :storage_type]}
   end
 
+  def as_json
+    return JSON.generate({
+      type: "sample",
+      resourceBase: "/samples",
+      name: named_number_string,
+      shortDescHTML: info_field.labdb_auto_link.html_safe,
+      coreInfoSections: [
+        {name: "Sample storage",
+         fields: [
+           {name: "Sample type", value: sample_type},
+           {name: "Storage location", value: storage_type}
+         ]},
+        {name: "Description",
+         preformatted: true,
+         inlineValue: Labdb::Application::MARKDOWN.render(description).labdb_auto_link.html_safe},
+        {name: "Linked items",
+         preformatted: true,
+         inlineValue: sample_links.map{|lnk| lnk[:link_text] + ": " + lnk[:link_desc]}.join("<br />").labdb_auto_link.html_safe}
+      ],
+      supplementalFields: [
+        {name: "Entered by", value: entered_by},
+        {name: "Date", value: date_entered},
+        {name: "Notebook", value: notebook},
+      ],
+    })
+
+  end
+
 end

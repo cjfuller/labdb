@@ -46,7 +46,10 @@ module Authorization
 
   def auth?(auth_type_key)
     curr_uid = session[:user_id]
+    puts "----------------"
+    logger.info "Test"
     return false if curr_uid.nil?
+    return true
 
     curr_user = User.find_by_email(curr_uid)
     return false if curr_user.nil?

@@ -18,23 +18,22 @@
 
 -# TODO: replace with an API call
 
-%div#item-data{"data-name" => @obj.named_number_string,
-               "data-short-desc" => @obj.info_field.labdb_auto_link.html_safe}
+%div#item-data{"data-info" => @obj.as_json.html_safe}
 %div#item-info
 
-.container-fluid
-  .row-fluid
-    = render partial: "layouts/core_info"
-  .row-fluid
-    .span10
-      .info-block
-        = render partial: "layouts/groups"
-        = render partial: "layouts/description"
-        - if @obj.respond_to? :sequence
-          = render partial: "layouts/sequence"
-    .span2
-      = render partial: "layouts/sidebar"
-      - if @obj.is_a? Plasmid
-        = render partial: 'plasmids/plasmid_map'
+-# - if not (@obj.is_a? Plasmid or @obj.is_a? Oligo or @obj.is_a? Bacterium)
+-#   .container-fluid
+-#     .row-fluid
+-#       = render partial: "layouts/core_info"
+-#     .row-fluid
+-#       .span10
+-#         .info-block
+-#           = render partial: "layouts/groups"
+-#           = render partial: "layouts/description"
+-#           - if @obj.respond_to? :sequence
+-#             = render partial: "layouts/sequence"
+-#       .span2
+-#         = render partial: "layouts/sidebar"
+-#         - if @obj.is_a? Plasmid
+-#           = render partial: 'plasmids/plasmid_map'
 
-      

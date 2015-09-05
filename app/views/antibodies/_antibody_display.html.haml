@@ -17,16 +17,19 @@
 
 =  render :partial => "shared/subnavbar"
 
-.container-fluid
-  .row-fluid
-    = render partial: "layouts/core_info"
-  .row-fluid
-    .span10
-      .info-block
-        = render partial: "layouts/groups"
-        = render partial: "uses"
-        = render partial: "layouts/description"
-    .span2
-      = render partial: "layouts/sidebar"
+%div#item-data{"data-info" => @obj.as_json.html_safe}
+%div#item-info
+
+-# .container-fluid
+-#   .row-fluid
+-#     = render partial: "layouts/core_info"
+-#   .row-fluid
+-#     .span10
+-#       .info-block
+-#         = render partial: "layouts/groups"
+-#         = render partial: "uses"
+-#         = render partial: "layouts/description"
+-#     .span2
+-#       = render partial: "layouts/sidebar"
 
 

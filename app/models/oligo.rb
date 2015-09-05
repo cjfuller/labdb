@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
+require 'json'
 
 require 'exporters'
 require 'numbered'
@@ -39,7 +40,7 @@ class Oligo < ActiveRecord::Base
   def get_linked(propertyname)
   	nil
   end
-  	
+
 	def exportable_fields
 		Fields
 	end
@@ -55,10 +56,35 @@ class Oligo < ActiveRecord::Base
 	def description_field_name
     :purpose
   end
- 
+
   def groups
     {sidebar: [:entered_by, :date_entered, :notebook, :organism, :vendor]}
   end
 
+
+  def as_json
+    return JSON.generate({
+      type: "oligo",
+      resourceBase: "/oligos",
+      name: named_number_string,
+      shortDescHTML: info_field.labdb_auto_link.html_safe,
+      coreInfoSections: [
+        {name: "Description",
+         preformatted: true,
+         inlineValue: Labdb::Application::MARKDOWN.render(purpose).labdb_auto_link.html_safe}
+      ],
+      sequenceInfo: {
+        sequence: sequence,
+        verified: nil,
+      },
+      supplementalFields: [
+        {name: "Entered by", value: entered_by},
+        {name: "Date", value: date_entered},
+        {name: "Notebook", value: notebook},
+        {name: "Organism", value: organism},
+        {name: "Vendor", value: vendor}
+      ],
+    })
+  end
 
 end

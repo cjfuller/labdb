@@ -72,10 +72,42 @@ class Yeaststrain < ActiveRecord::Base
     links = get_linked(:plasmidnumber)
     get_linked_number_fields(:plasmidnumber).map { |n| links[n] }
   end
-  
+
   def groups
     {sidebar: [:entered_by, :date_entered, :notebook, :location],
       "Strain information" => [:species, :strain_bkg, :genotype, :antibiotic]}
+  end
+
+  def as_json
+    return JSON.generate({
+      type: "yeaststrain",
+      resourceBase: "/yeaststrain",
+      name: named_number_string,
+      shortDescHTML: info_field.labdb_auto_link.html_safe,
+      coreLinksHTML: core_alt_field.map(&:labdb_auto_link),
+      coreInfoSections: [
+        {name: "Strain information",
+         fields: [
+           {name: "Species", value: species},
+           {name: "Strain background", value: strain_bkg},
+           {name: "Genotype", value: genotype},
+           {name: "Antibiotics", value: antibiotic}
+         ]},
+        {name: "Description",
+         preformatted: true,
+         inlineValue: Labdb::Application::MARKDOWN.render(comments).labdb_auto_link.html_safe}
+      ],
+      sequenceInfo: {
+        sequence: sequence,
+        verified: nil,
+      },
+      supplementalFields: [
+        {name: "Entered by", value: entered_by},
+        {name: "Date", value: date_entered},
+        {name: "Notebook", value: notebook},
+        {name: "Location in freezer", value: location},
+      ],
+    })
   end
 
 end

@@ -16,6 +16,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
+require 'json'
+
 require 'exporters'
 require 'numbered'
 require 'described'
@@ -114,7 +116,7 @@ class Plasmid < ActiveRecord::Base
     links = get_linked(:strainnumbers)
     get_linked_number_fields(:strainnumbers).map { |n| links[n] }
   end
-  
+
   def groups
     {sidebar: [:enteredby, :date_entered, :notebook, :concentration],
       "Vector information" => [:vector, :antibiotic]}
@@ -123,5 +125,34 @@ class Plasmid < ActiveRecord::Base
   def map
     @map or (@map = PlasmidMapping.map_for_plasmid(self).plasmidmap_json)
   end
-  
+
+  def as_json
+    return JSON.generate({
+      type: "plasmid",
+      resourceBase: "/plasmids",
+      name: named_number_string,
+      shortDescHTML: info_field.labdb_auto_link.html_safe,
+      coreLinksHTML: core_alt_field.map(&:labdb_auto_link),
+      coreInfoSections: [
+        {name: "Vector information",
+         fields: [
+           {name: "Vector", value: vector},
+           {name: "Antibiotic resistances", value: antibiotic}
+         ]},
+        {name: "Description",
+         preformatted: true,
+         inlineValue: Labdb::Application::MARKDOWN.render(description).labdb_auto_link.html_safe}
+      ],
+      sequenceInfo: {
+        sequence: sequence,
+        verified: verified,
+      },
+      supplementalFields: [
+        {name: "Entered by", value: enteredby},
+        {name: "Date", value: date_entered},
+        {name: "Notebook", value: notebook},
+        {name: "Concentration", value: concentration},
+      ],
+    })
+  end
 end

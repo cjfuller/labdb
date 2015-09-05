@@ -18,6 +18,7 @@
 = page_entries_info @table_objects
 = paginate @table_objects
 
+%div#table-data{"data-tableentries": nil}
 
 %table{class: "objecttable"}
   %thead
@@ -40,7 +41,7 @@
 
   %tbody
     - @table_objects.each do |obj|
-      %tr.table_link{obj_url: url_for(polymorphic_path(obj, search_id: @search_id))}
+      %tr.itemlist.table_link{obj_url: url_for(polymorphic_path(obj, search_id: @search_id))}
         %td
           = obj.send(@table_columns[:sort])
         - @table_columns[:others].each do |tc|

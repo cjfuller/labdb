@@ -54,11 +54,44 @@ class Antibody < ActiveRecord::Base
 	def description_field_name
     :comments
   end
- 
+
   def groups
     {sidebar: [:entered_by, :date_entered, :vendor],
     	"Antibody information" => [:host, :fluorophore],
     	"Location information" => [:box, :label] }
   end
 
+  def as_json
+    return JSON.generate({
+      type: "antibody",
+      resourceBase: "/antibodies",
+      name: named_number_string,
+      shortDescHTML: info_field.labdb_auto_link.html_safe,
+      coreInfoSections: [
+        {name: "Antibody information",
+         fields: [
+           {name: "Host", value: host},
+           {name: "Fluorophores", value: fluorophore}
+         ]},
+        {name: "Location information",
+         fields: [
+           {name: "Box", value: box},
+           {name: "Label", value: label}
+         ]},
+        {name: "Uses",
+         fields: [
+           {name: "Good for IF", value: good_for_if, type: :boolean},
+           {name: "Good for westerns", value: good_for_western, type: :boolean}
+         ]},
+        {name: "Description",
+         preformatted: true,
+         inlineValue: Labdb::Application::MARKDOWN.render(comments).labdb_auto_link.html_safe}
+      ],
+      supplementalFields: [
+        {name: "Entered by", value: entered_by},
+        {name: "Date", value: date_entered},
+        {name: "Vendor", value: vendor},
+      ],
+    })
+  end
 end

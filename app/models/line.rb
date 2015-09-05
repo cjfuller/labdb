@@ -115,6 +115,38 @@ class Line < ActiveRecord::Base
       "Line information" => [:species, :genotype, :selectable_markers, :parent_line]}
   end
 
+  def as_json
+    return JSON.generate({
+      type: "line",
+      resourceBase: "/lines",
+      name: named_number_string,
+      shortDescHTML: info_field.labdb_auto_link.html_safe,
+      coreInfoSections: [
+        {name: "Line information",
+         fields: [
+           {name: "Species", value: species},
+           {name: "Genotype", value: genotype},
+           {name: "Selectable markers", value: selectable_markers},
+           {name: "Parent line", value: parent_line},
+         ]},
+        {name: "Description",
+         preformatted: true,
+         inlineValue: Labdb::Application::MARKDOWN.render(description).labdb_auto_link.html_safe}
+      ],
+      sequenceInfo: {
+        sequence: sequence,
+        verified: nil,
+      },
+      supplementalFields: [
+        {name: "Entered by", value: entered_by},
+        {name: "Date", value: date_entered},
+        {name: "Notebook", value: notebook}
+      ],
+      inventory: inventory,
+    })
+  end
+
+
 	def inventory
 
 		inv = []

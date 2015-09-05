@@ -18,39 +18,62 @@ var NavItem = React.createClass({
 });
 
 var NavLogo = React.createClass({
+    goHome: function () {
+        window.location.pathname = "/";
+    },
     render: function () {
-        return <div className="navitem" id="labdb">
+        return <div className="navlogo" id="labdb" onClick={this.goHome}>
             {this.props.text}
         </div>;
     },
 });
 
-var Separator = React.createClass({
-    render: function () {
-        return <div className="separator" />;
+var CtxActions = React.createClass({
+    render: function() {
+        return null;
     },
 });
 
-var Hamburger = React.createClass({
+var Actions = React.createClass({
     // TODO: prop for whether to display new
     // TODO: correct path for search
 
     newItem: function () {
+        // TODO: real implementation
         window.location.pathname += "/new";
     },
 
     doSearch: function () {
+        // TODO: real implementation
         window.location.pathname += "/search";
+    },
+
+    doNext: function() {
+        // TODO: ugh, fix this.
+        var item_id = window.location.pathname.split("/")[-1];
+        window.location.pathname += "/next." + item_id;
+    },
+
+    doPrevious: function() {
+        // TODO: ugh, fix this.
+        var item_id = window.location.pathname.split("/")[-1];
+        window.location.pathname += "/previous." + item_id;
     },
 
     render: function () {
         return (
             <div className="fixactions">
-                <div className="search">
-                    <i className="material-icons" onClick={this.doSearch}>search</i>
+                <div className="previous-item" onClick={this.doPrevious}>
+                    <i className="material-icons">arrow_back</i>
+                </div>
+                <div className="next-item" onClick={this.doNext}>
+                    <i className="material-icons">arrow_forward</i>
+                </div>
+                <div className="search" onClick={this.doSearch}>
+                    <i className="material-icons">search</i>
                 </div>
                 <div className="new-item" onClick={this.newItem}>
-                    <i className="material-icons">add</i>
+                   <i className="material-icons">add</i>
                 </div>
                 <div className="hamburger">
                     <i className="material-icons">menu</i>
@@ -84,15 +107,13 @@ var Navbar = React.createClass({
 
     render: function() {
         return <div className="navbar-top">
+            <div className="navbar-variable">
             <NavLogo text={"LabDB2.\u03b2"} />
-            <Separator />
             {_.map(this.props.navitems, function (n, i) {
-                return <div>
-                <NavItem name={n} addr={this.props.navlinks[n]}/>
-                {i < this.props.navitems.length - 1 ? <Separator /> : null}
-                </div>;
+                return <NavItem name={n} addr={this.props.navlinks[n]}/>;
             }.bind(this))}
-            <Hamburger />
+            </div>
+            <Actions />
         </div>;
     },
 });
@@ -107,10 +128,12 @@ var Subnav = React.createClass({
 
 });
 
-React.render(
-    <Navbar />,
-    document.getElementById("navbar-top"));
+var navbar = document.getElementById("navbar-top");
+if (navbar){
+    React.render(<Navbar />, navbar);
+}
 
-React.render(
-    <Subnav />,
-    document.getElementById("subnav"));
+var subnav = document.getElementById("subnav");
+if (subnav) {
+    React.render(<Subnav />, subnav);
+}
