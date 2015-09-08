@@ -19,7 +19,7 @@
 %html
   %head
     %title= ApplicationController::DATABASE_SYSTEM_NAME
-    %link{rel: "stylesheet/less", type: "text/css", href:"/main.less"}
+    %link{rel: "stylesheet/less", type: "text/css", href:"/_s/main.less"}
     %script{src: "//cdnjs.cloudflare.com/ajax/libs/less.js/2.5.1/less.min.js"}
     = stylesheet_link_tag "application", media: "all"
     = stylesheet_link_tag "//fonts.googleapis.com/css?family=Raleway:400,300,600,800"
@@ -27,8 +27,8 @@
     = stylesheet_link_tag "//fonts.googleapis.com/css?family=Source+Code+Pro"
     = stylesheet_link_tag "//fonts.googleapis.com/icon?family=Material+Icons"
     = stylesheet_link_tag "//fonts.googleapis.com/icon?family=Varela:300,400"
-    = stylesheet_link_tag "/normalize.css"
-    = stylesheet_link_tag "/skeleton.css"
+    = stylesheet_link_tag "/_s/normalize.css"
+    = stylesheet_link_tag "/_s/skeleton.css"
   %body
     %div#navbar-top
     -# .navbar.navbar-fixed-top.navbar-inverse
@@ -60,6 +60,6 @@
     = javascript_include_tag "https://fb.me/react-with-addons-0.13.3.js"
     = javascript_include_tag "https://fb.me/JSXTransformer-0.13.3.js"
     = javascript_include_tag "https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"
-    %script{src: "/nav.jsx", type: "text/jsx"}
-    %script{src: "/itemview.jsx", type: "text/jsx"}
+    %script{src: "/_s/nav.jsx", type: "text/jsx"}
+    %script{src: "/_s/itemview.jsx", type: "text/jsx"}
     = javascript_include_tag "application"

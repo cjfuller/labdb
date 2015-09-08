@@ -5,7 +5,22 @@
 @light-background: #f5f5f5;
 @corner-radius: 3px;
 @monospace: Source Code Pro, monospace;
+@base-font: Open Sans, sans;
+@content-font: Open Sans, sans;
+@contrast-font: Montserrat, sans;
+@base-font-weight: 400;
+@emph-font-weight: 600;
 @navbar-color: #559955;
+@shadow-color: #555;
+@shadow-size: 2px;
+
+body {
+    & > #navbar-top,
+    & > .container {
+        font-family: @base-font;
+        font-weight: @base-font-weight;
+    }
+}
 
 tr.itemlist {
     height: 1em;
@@ -21,7 +36,7 @@ tr.itemlist {
     background-color: @navbar-color;
     height: @navbar-size;
     z-index: 5;
-    box-shadow: 0 2px 2px #555;
+    box-shadow: 0 @shadow-size @shadow-size @shadow-color;
 }
 
 .navbar-variable {
@@ -62,6 +77,7 @@ tr.itemlist {
 
 .item-id {
     font-size: 4rem;
+    font-family: @contrast-font;
 }
 
 .info-section {
@@ -71,7 +87,7 @@ tr.itemlist {
 }
 
 .info-section-label {
-    font-weight: bold;
+    font-weight: @emph-font-weight;
     margin-bottom: 0;
 
     &.seq {
@@ -149,7 +165,7 @@ p {
 }
 
 .item-alias {
-    font-weight: bold;
+    font-weight: @emph-font-weight;
     font-size: 2rem;
     font-family: @monospace;
 }
@@ -177,7 +193,7 @@ p {
 
 .field-name {
     display: inline-block;
-    font-weight: 800;
+    font-weight: @emph-font-weight;
     margin-right: @padding;
 
     &.suppl {
@@ -195,7 +211,7 @@ p {
         font-style: underline;
     }
     height: 100%;
-    font-family: Varela, sans;
+    font-family: @content-font;
 }
 
 .linklike {
@@ -210,7 +226,7 @@ p {
     padding-right: @padding;
     display: inline-block;
     height: @navbar-size;
-    font-size: 120%;
+    font-size: 110%;
     .linklike;
 }
 
@@ -230,7 +246,7 @@ p {
     width: @hamburger-width;
     height: @navbar-size - 1.5*@padding;
     .linklike;
-    padding-top: 1.5*@padding;
+    padding-top: 1.4*@padding;
 }
 
 .search {

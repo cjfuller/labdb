@@ -23,7 +23,7 @@ $(function() {
   function verifyAssertion(assertion) {
     $.ajax({
       type: 'POST',
-      url: '/auth/persona/callback',
+      url: '/_i/persona/verify_assertion',
       data: {assertion: assertion},
       success: function(res, status, xhr) {window.location.reload();},
       error: function(xhr, status, err) {

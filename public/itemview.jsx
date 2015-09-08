@@ -1,6 +1,4 @@
-console.log(document.getElementById("item-data").dataset);
-
-var ItemData = JSON.parse(document.getElementById("item-data").dataset.info);
+var ItemData = window._labdbPrefetch;//JSON.parse(document.getElementById("item-data").dataset.info);
 
 console.log(ItemData);
 console.log(ItemData.coreLinksHTML);
@@ -63,9 +61,9 @@ var InventoryWidget = React.createClass({
 
 var MegaBar = React.createClass({
     getCoreLinks: function() {
-        if (ItemData.coreLinksHTML) {
+        if (ItemData.coreLinks) {
             return <div className="core-links">
-                {_.map(ItemData.coreLinksHTML, function(clh) {
+                {_.map(ItemData.coreLinks, function(clh) {
                     return (
                         <div className="core-link">
                         <div className="field-value"
@@ -85,7 +83,7 @@ var MegaBar = React.createClass({
         <div className="nine columns">
         <div className="alias-field">
         <div className="field-value">
-            <div className="item-alias" dangerouslySetInnerHTML={{__html: ItemData.shortDescHTML}} />
+            <div className="item-alias" dangerouslySetInnerHTML={{__html: ItemData.shortDesc}} />
         </div>
         </div>
         <div className="linked-items">

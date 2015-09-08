@@ -11,7 +11,49 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130723230151) do
+#ActiveRecord::Schema.define(:version => 20130723230151) do
+
+class Array
+
+  def integer(name, opts=nil)
+    self.push "  (#{name} :type integer :nullp t)"
+  end
+
+  def string(name, opts=nil)
+    self.push "  (#{name} :type varchar :nullp t)"
+  end
+
+  def text(name, opts=nil)
+    self.push "  (#{name} :type text :nullp t)"
+  end
+
+  def boolean(name, opts=nil)
+    self.push "  (#{name} :type boolean :nullp t)"
+  end
+
+  def datetime(name, opts=nil)
+    self.push "  (#{name} :type timestamp :nullp t)"
+  end
+
+  def date(name, opts=nil)
+    self.push "  (#{name} :type datetime :nullp t)"
+  end
+
+  def float(name, opts=nil)
+    self.push "  (#{name} :type double :nullp t)"
+  end
+
+end
+
+
+def create_table(name, opts, &block)
+  lines = ["(deftable #{name} (entity)"]
+  yield lines
+  lines.push ")"
+  puts lines.join("\n")
+  puts ""
+end
+
 
   create_table "antibodies", :force => true do |t|
     t.integer  "ab_number"
@@ -155,4 +197,4 @@ ActiveRecord::Schema.define(:version => 20130723230151) do
     t.string   "notebook"
   end
 
-end
+#end

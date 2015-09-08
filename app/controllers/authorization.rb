@@ -23,7 +23,7 @@ module Authorization
   EMAIL_TAG = "email"
 
   def self.included(base)
-    base.class_exec do 
+    base.class_exec do
       before_filter :require_authorization
       helper_method :auth?
     end
@@ -45,11 +45,9 @@ module Authorization
   end
 
   def auth?(auth_type_key)
+    return request.query_parameters["reauth"] != "1"
     curr_uid = session[:user_id]
-    puts "----------------"
-    logger.info "Test"
     return false if curr_uid.nil?
-    return true
 
     curr_user = User.find_by_email(curr_uid)
     return false if curr_user.nil?
