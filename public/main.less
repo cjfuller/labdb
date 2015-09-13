@@ -3,30 +3,59 @@
 @hamburger-width: 50px;
 @border-color: #ccc;
 @light-background: #f5f5f5;
+@medium-background: #e0e0e0;
 @corner-radius: 3px;
 @monospace: Source Code Pro, monospace;
 @base-font: Open Sans, sans;
 @content-font: Open Sans, sans;
 @contrast-font: Montserrat, sans;
+@small-font-size: 12px;
 @base-font-weight: 400;
 @emph-font-weight: 600;
 @navbar-color: #559955;
 @shadow-color: #555;
 @shadow-size: 2px;
+@table-border: 1px solid #E1E1E1;
 
-body {
-    & > #navbar-top,
-    & > .container {
-        font-family: @base-font;
-        font-weight: @base-font-weight;
-    }
+.navbar-top,
+.container {
+    font-family: @base-font;
+    font-weight: @base-font-weight;
 }
+
 
 tr.itemlist {
     height: 1em;
     line-height: 1em;
     &:nth-of-type(even) {
         background-color: @light-background;
+    }
+
+    &:hover {
+        background-color: @medium-background;
+        cursor: pointer;
+    }
+
+    & > td {
+        border-top: none;
+        border-bottom: none;
+        font-size: @small-font-size;
+        min-width: 50px;
+        overflow: hidden;
+        padding-top: 0.5em;
+        padding-bottom: 0.5em;
+        text-overflow: clip;
+        white-space: nowrap;
+
+        &:first-of-type {
+            //border-left: @table-border;
+            padding-left: 0.5em;
+        }
+
+        &:last-of-type {
+            //border-right: @table-border;
+            padding-right: 0.5em;
+        }
     }
 }
 
@@ -45,7 +74,7 @@ tr.itemlist {
     position: fixed;
 }
 
-.fixactions {
+.actions {
     position: fixed;
     top: 0;
     text-align: center;
@@ -189,6 +218,8 @@ p {
 
 .supplemental-item {
     margin-bottom: @padding;
+    text-overflow: clip;
+    word-wrap: break-word;
 }
 
 .field-name {
@@ -271,6 +302,18 @@ p {
     display: inline-block;
     width: @hamburger-width;
     .linklike;
+}
+
+.icon-menu-section {
+    display: inline-block;
+}
+
+.fixactions {
+    .icon-menu-section;
+}
+
+.ctxactions {
+    .icon-menu-section;
 }
 
 a {

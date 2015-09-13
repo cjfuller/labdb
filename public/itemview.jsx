@@ -1,9 +1,3 @@
-var ItemData = window._labdbPrefetch;//JSON.parse(document.getElementById("item-data").dataset.info);
-
-console.log(ItemData);
-console.log(ItemData.coreLinksHTML);
-
-
 var DecrementButton = React.createClass({
     render: function() {
         return <div className="decrement-button"
@@ -61,9 +55,9 @@ var InventoryWidget = React.createClass({
 
 var MegaBar = React.createClass({
     getCoreLinks: function() {
-        if (ItemData.coreLinks) {
+        if (this.props.data.coreLinks) {
             return <div className="core-links">
-                {_.map(ItemData.coreLinks, function(clh) {
+                {_.map(this.props.data.coreLinks, function(clh) {
                     return (
                         <div className="core-link">
                         <div className="field-value"
@@ -77,13 +71,13 @@ var MegaBar = React.createClass({
     render: function() {
         return <div className="item-megabar">
         <div className="item-id">
-        {ItemData.name}
+        {this.props.data.name}
         </div>
         <div className="row">
         <div className="nine columns">
         <div className="alias-field">
         <div className="field-value">
-            <div className="item-alias" dangerouslySetInnerHTML={{__html: ItemData.shortDesc}} />
+            <div className="item-alias" dangerouslySetInnerHTML={{__html: this.props.data.shortDesc}} />
         </div>
         </div>
         <div className="linked-items">
@@ -190,20 +184,27 @@ var CoreInfo = React.createClass({
 
     render: function() {
         return <div className="core-info nine columns">
-            {_.map(ItemData.coreInfoSections, function(s) {
+            {_.map(this.props.data.coreInfoSections, function(s) {
                 return <InfoSection key={s.name} name={s.name} contents={s} />;
             })}
-            <SequenceSection sequence={ItemData.sequenceInfo}/>
-            <InventoryWidget inventory={ItemData.inventory}/>
+            <SequenceSection sequence={this.props.data.sequenceInfo}/>
+            <InventoryWidget inventory={this.props.data.inventory}/>
         </div>;
     },
 });
 
 var SupplementalInfo = React.createClass({
+
+    getInitialState: function() {
+        return {
+            plasmidModalOpen: false,
+        };
+    },
+
     render: function() {
         return <div className="three columns">
             <div className="supplemental-info">
-            {_.map(ItemData.supplementalFields, function(f) {
+            {_.map(this.props.data.supplementalFields, function(f) {
                 var labelRef = "label-" + f.name;
                 return <div key={f.name} className="supplemental-item">
                     <div className="field-name suppl" ref={labelRef} key={labelRef}>
@@ -216,7 +217,7 @@ var SupplementalInfo = React.createClass({
                 </div>;
             }.bind(this))}
             </div>
-            {(ItemData.type === "plasmid") ?
+            {(this.props.data.type === "plasmid") ?
                 <input value="Plasmid map" type="button" className="plasmap-button"/> :
                 null}
         </div>;
@@ -224,16 +225,14 @@ var SupplementalInfo = React.createClass({
 });
 
 
-var ItemInfoView = React.createClass({
+window.ItemInfoView = React.createClass({
     render: function() {
         return <div className="item-info-view">
-        <MegaBar />
+        <MegaBar data={this.props.data} />
         <div className="row info-row">
-        <CoreInfo />
-        <SupplementalInfo />
+        <CoreInfo data={this.props.data} />
+        <SupplementalInfo data={this.props.data} />
         </div>
         </div>;
     },
 });
-
-React.render(<ItemInfoView />, document.getElementById("item-info"));

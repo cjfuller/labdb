@@ -29,8 +29,45 @@ var NavLogo = React.createClass({
 });
 
 var CtxActions = React.createClass({
+    doNext: function() {
+        var apiBase = this.props.data.dynamicResourceBase;
+        var resource = this.props.data.resource;
+        var itemType = this.props.data.type;
+        var itemId = this.props.data.id;
+        $.ajax({
+            url: `${apiBase}${resource}/next`,
+            method: "GET",
+            success: (resp) => window._store.updateDataFromURL(
+                `${resp}`),
+        });
+    },
+
+    doPrevious: function() {
+        var apiBase = this.props.data.dynamicResourceBase;
+        var resource = this.props.data.resource;
+        var itemType = this.props.data.type;
+        var itemId = this.props.data.id;
+        $.ajax({
+            url: `${apiBase}${resource}/previous`,
+            method: "GET",
+            success: (resp) => window._store.updateDataFromURL(
+                `${resp}`),
+        });
+    },
+
     render: function() {
-        return null;
+        if (_.isArray(window._labdbPrefetch)) {
+            return null;
+        }
+
+        return <div className="ctxactions">
+            <div className="previous-item" onClick={this.doPrevious}>
+                <i className="material-icons">arrow_back</i>
+            </div>
+            <div className="next-item" onClick={this.doNext}>
+                <i className="material-icons">arrow_forward</i>
+            </div>
+        </div>;
     },
 });
 
@@ -48,27 +85,10 @@ var Actions = React.createClass({
         window.location.pathname += "/search";
     },
 
-    doNext: function() {
-        // TODO: ugh, fix this.
-        var item_id = window.location.pathname.split("/")[-1];
-        window.location.pathname += "/next." + item_id;
-    },
-
-    doPrevious: function() {
-        // TODO: ugh, fix this.
-        var item_id = window.location.pathname.split("/")[-1];
-        window.location.pathname += "/previous." + item_id;
-    },
-
     render: function () {
-        return (
+        return <div className="actions">
+            <CtxActions data={this.props.data} />
             <div className="fixactions">
-                <div className="previous-item" onClick={this.doPrevious}>
-                    <i className="material-icons">arrow_back</i>
-                </div>
-                <div className="next-item" onClick={this.doNext}>
-                    <i className="material-icons">arrow_forward</i>
-                </div>
                 <div className="search" onClick={this.doSearch}>
                     <i className="material-icons">search</i>
                 </div>
@@ -78,12 +98,13 @@ var Actions = React.createClass({
                 <div className="hamburger">
                     <i className="material-icons">menu</i>
                 </div>
-            </div>);
+            </div>
+        </div>;
     },
 });
 
 
-var Navbar = React.createClass({
+window.Navbar = React.createClass({
 
     getDefaultProps: function() {
         return {
@@ -113,27 +134,7 @@ var Navbar = React.createClass({
                 return <NavItem name={n} addr={this.props.navlinks[n]}/>;
             }.bind(this))}
             </div>
-            <Actions />
+            <Actions data={this.props.data}/>
         </div>;
     },
 });
-
-var Subnav = React.createClass({
-    render: function() {
-        return <div className="subnav">
-        <NavItem name="Iteminfo here." />
-
-        </div>;
-    },
-
-});
-
-var navbar = document.getElementById("navbar-top");
-if (navbar){
-    React.render(<Navbar />, navbar);
-}
-
-var subnav = document.getElementById("subnav");
-if (subnav) {
-    React.render(<Subnav />, subnav);
-}

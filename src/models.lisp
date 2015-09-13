@@ -2,7 +2,8 @@
 
 (defpackage :labdb.models
   (:use :cl :col :crane :split-sequence)
-  (:export :db-test :get-by-id :get-json-by-id)
+  (:import-from :alexandria :rcurry)
+  (:export :get-json-by-id :do-db-setup :get-partial-list :get-next-uri :get-previous-uri :item-count)
   ; TODO: fix shadowing by renaming table
   (:shadow :vector :sequence :search))
 
@@ -10,16 +11,18 @@
 
 (enable-reader-exts)
 
-(setup
- :migrations-directory
- (asdf:system-relative-pathname :labdb #P"migrations/")
- :databases
- `(:production
-   (:type :postgres
-    :name "labdb"
-    :user "cfuller"
-    :pass ,(uiop:getenv "POSTGRES_PW"))))
+(defun do-db-setup ()
+  (setup
+   :migrations-directory
+   (asdf:system-relative-pathname :labdb #P"migrations/")
+   :databases
+   `(:production
+     (:type :postgres
+      :name "labdb"
+      :user "cfuller"
+      :pass ,(uiop:getenv "POSTGRES_PW")))))
 
+(do-db-setup)
 (connect)
 
 ;; Define a boolean type...
@@ -60,6 +63,9 @@
         :format
         '(:year "-" (:month 2) "-" (:day 2)))))
 
+(defun query-result-as-object (qres cls-name)
+  (plist->object (model-kw->class-sym cls-name) qres))
+
 (defun get-by-id (model-name id)
   (-> (query
          (select :*
@@ -69,6 +75,56 @@
       fix-nulls
       add-model-data-hash))
 
+(defun get-previous-uri (model-name-input id)
+  (let ((model-name (find-table-name model-name-input)))
+    (-> (query
+         (select :*
+                 (from (model-name->keyword model-name))
+                 (where (:< :id id))
+                 (order-by (:desc :id))
+                 (limit 1)))
+        car
+        (query-result-as-object model-name)
+        canonical-uri)))
+
+(defun get-next-uri (model-name-input id)
+  (let ((model-name (find-table-name model-name-input)))
+    (-> (query
+         (select :*
+                 (from (model-name->keyword model-name))
+                 (where (:> :id id))
+                 (order-by (:asc :id))
+                 (limit 1)))
+        car
+        (query-result-as-object model-name)
+        canonical-uri)))
+
+(defgeneric find-table-name (model-name)
+  (:documentation "find the correct db table name given an identifier"))
+
+(defmethod find-table-name ((model-name string))
+  (let ((maybe-class (find-class (intern (string-upcase model-name) :labdb.models))))
+    (if maybe-class
+        (crane.meta:table-name maybe-class)
+        (model-name->keyword model-name))))
+
+(defmethod find-table-name ((model-name keyword))
+  (find-table-name (symbol-name model-name)))
+
+(defun model-name->keyword (model-name)
+  (intern (string-upcase model-name) :keyword))
+(defun model-kw->class-sym (model-name)
+  (intern (string-upcase (symbol-name model-name)) :labdb.models))
+
+(defun get-partial-list (model-name-input &key (limit 100) (start 0))
+  (let ((model-name (find-table-name model-name-input)))
+    (-> (query
+         (select :*
+                 (from model-name)
+                 (order-by (:desc :id))
+                 (limit limit)))
+        (rmapcar (rcurry #'query-result-as-object model-name))
+        (rmapcar #'model->resource-def))))
 
 (defun db-test ()
   (let ((q (fix-nulls (car (query
@@ -77,12 +133,18 @@
                     (where (:= :id 1))))))))
     (cl-json:encode-json-plist-to-string q)))
 
-(defun get-json-by-id (model-name id)
-  (model->json
-    (single
-     (intern (string-upcase (symbol-name model-name)) :labdb.models)
-     (:= :id id))))
+(defun get-json-by-id (model-name-input id)
+  (let ((model-name (find-table-name model-name-input)))
+    (model->json
+     (single
+      (model-kw->class-sym model-name)
+      (:= :id id)))))
 
+(defun item-count (model-name-input)
+  (let ((model-name (find-table-name model-name-input)))
+    (cadar (query
+            (select ((:as (:count :*) :item-count))
+                    (from model-name))))))
 
 (defclass entity () ())
 
@@ -103,7 +165,7 @@
   (:documentation "Fetch the name + number designator for a model object (e.g. ASP792)"))
 
 (defgeneric core-info-spec (obj)
-  (:documentation "Fetch a plist of core info sections"))
+  (:documentation "Fetch a list of core info sections"))
 
 (defgeneric sequence-info (obj)
   (:documentation "Fetch the sequence information, if any."))
@@ -113,6 +175,12 @@
 
 (defgeneric model->json (obj)
   (:documentation "Fetch the json representation of a model object."))
+
+(defgeneric model->resource-def (obj)
+  (:documentation "Fetch the resource information of a model object."))
+
+(defgeneric canonical-uri (obj)
+  (:documentation "Fetch the canonical resource location for a model object"))
 
 ;; Entities
 
@@ -135,17 +203,29 @@
   (string-downcase (symbol-name (type-of obj))))
 
 (defmethod model->json ((obj entity))
-  (json:encode-json-plist-to-string
-   (list
-    :type (type-string obj)
-    :resource-base (<> "/" (type-string obj))
-    :name (designator obj)
-    :short-desc (mget obj (info-field obj))
-    :core-links (core-links obj)
-    :core-info-sections (core-info-spec obj)
-    :sequence-info (sequence-info obj)
-    :supplemental-fields (supplemental-info-spec obj))))
+  (json:encode-json-plist-to-string (model->resource-def obj)))
 
+(defmethod model->resource-def ((obj entity))
+  (list
+   :type (type-string obj)
+   :id (id obj)
+   :dynamic-resource-base #?"${labdb.config:api-base}${labdb.config:model-base}"
+   :resource (canonical-uri obj)
+   :name (designator obj)
+   :short-desc (mget obj (info-field obj))
+   :core-links (core-links obj)
+   :core-info-sections (core-info-spec obj)
+   :sequence-info (sequence-info obj)
+   :supplemental-fields (supplemental-info-spec obj)))
+
+(defmethod canonical-uri ((obj entity))
+  (let ((typename
+          (-> obj
+              class-of
+              crane.meta:table-name
+              symbol-name
+              string-downcase)))
+    #?"/${typename}/${(id obj)}"))
 
 ;; Model definitions
 
@@ -293,6 +373,7 @@
   (notebook :type varchar :nullp t))
 
 
+
 ;; Plasmid methods
 
 ;; the table is named plasmids for historical reasons
@@ -312,8 +393,9 @@
 (defvar bact-prefix "ASBS")
 
 (defmethod core-links ((obj plasmid))
-  (mapcar (lambda (link) (<> bact-prefix link))
-          (split-sequence #\, (mget obj 'strainnumbers))))
+  (when (> (length (mget obj 'strainnumbers)) 0)
+    (mapcar (lambda (link) (<> bact-prefix link))
+            (split-sequence #\, (mget obj 'strainnumbers)))))
 
 (defmethod core-info-spec ((obj plasmid))
   (list
@@ -342,8 +424,10 @@
           :value (ts->date (date_entered obj)))
    (alist :name "Notebook"
           :value (notebook obj))
-   (alist :name "Concentration"
+   (alist :name "Concentration (μg/mL)"
           :value (concentration obj))))
+
+
 
 ;; Antibody methods
 
@@ -385,8 +469,10 @@
 (defmethod supplemental-info-spec ((obj antibody))
   (list
    (alist :name "Entered by" :value (entered_by obj))
-   (alist :name "Date" :value (date_entered obj))
+   (alist :name "Date" :value (ts->date (date_entered obj)))
    (alist :name "Vendor" :value (vendor obj))))
+
+
 
 ;; Bacterial strain methods
 (defmethod crane.meta:table-name ((cls (eql (find-class 'bacterialstrain))))
@@ -426,17 +512,123 @@
 (defmethod supplemental-info-spec ((obj bacterialstrain))
   (list
    (alist :name "Entered by" :value (entered_by obj))
-   (alist :name "Date" :value (date_entered obj))
+   (alist :name "Date" :value (ts->date (date_entered obj)))
    (alist :name "Notebook" :value (notebook obj))))
+
+
+
+;; Line methods
 
 (defmethod crane.meta:table-name ((cls (eql (find-class 'line))))
   :lines)
 
+(defmethod name-abbrev ((obj line))
+  "ASTC")
+
+(defmethod number-field ((obj line))
+  'line_number)
+
+(defmethod info-field ((obj line))
+  'line_alias)
+
+(defmethod core-links ((obj line))
+  nil) ; TODO
+
+(defmethod core-info-spec ((obj line))
+  (list
+   (alist :name "Line information"
+          :fields (list
+                   (alist :name "Species" :value (species obj))
+                   (alist :name "Genotype" :value (genotype obj))
+                   (alist :name "Selectable markers" :value (selectable_markers obj))
+                   (alist :name "Parent line" :value (parent_line obj))))
+   (alist :name "Description"
+          :preformatted t
+          :inline-value (description obj))
+   (alist :name "Inventory"
+          :preformatted t
+          :inline-value "TODO")))
+
+(defmethod sequence-info ((obj line))
+  (alist :sequence (sequence obj)
+         :verified nil))
+
+(defmethod supplemental-info-spec ((obj line))
+  (list
+   (alist :name "Entered by" :value (entered_by obj))
+   (alist :name "Date" :value (ts->date (date_entered obj)))
+   (alist :name "Notebook" :value (notebook obj))))
+
+
+
+;; Oligo methods
+
 (defmethod crane.meta:table-name ((cls (eql (find-class 'oligo))))
   :oligos)
 
+(defmethod name-abbrev ((obj oligo))
+  "ASO")
+
+(defmethod number-field ((obj oligo))
+  'oligo_number)
+
+(defmethod info-field ((obj oligo))
+  'oligoalias)
+
+(defmethod core-info-spec ((obj oligo))
+  (list
+   (alist :name "Description"
+          :preformatted t
+          :inline-value (purpose obj))))
+
+(defmethod sequence-info ((obj oligo))
+  (alist :sequence (sequence obj)
+         :verified nil))
+
+(defmethod supplemental-info-spec ((obj oligo))
+  (list
+   (alist :name "Entered by" :value (entered_by obj))
+   (alist :name "Date" :value (ts->date (date_entered obj)))
+   (alist :name "Notebook" :value (notebook obj))
+   (alist :name "Organism" :value (organism obj))
+   (alist :name "Vendor" :value (vendor obj))))
+
+
+
+;; Sample methods
 (defmethod crane.meta:table-name ((cls (eql (find-class 'sample))))
   :samples)
+
+(defmethod name-abbrev ((obj sample))
+  "SLS")
+
+(defmethod number-field ((obj sample))
+  'sample_number)
+
+(defmethod info-field ((obj sample))
+  'sample_alias)
+
+(defmethod core-info-spec ((obj sample))
+  (list
+   (alist :name "Sample storage"
+          :fields (list
+                   (alist :name "Sample type" :value (sample_type obj))
+                   (alist :name "Storage location" :value (storage_type obj))
+                   (alist :name "Depleted" :value (depleted obj) :type :boolean)))
+   (alist :name "Description"
+          :preformatted t
+          :inline-value (description obj))
+   (alist :name "Linked items"
+          :preformatted t
+          :inline-value "TODO")))
+
+(defmethod supplemental-info-spec ((obj sample))
+  (list
+   (alist :name "Entered by" :value (entered_by obj))
+   (alist :name "Date" :value (ts->date (date_entered obj)))
+   (alist :name "Notebook" :value (notebook obj))))
+
+
 
 (defmethod crane.meta:table-name ((cls (eql (find-class 'search))))
   :searches)
@@ -444,8 +636,52 @@
 (defmethod crane.meta:table-name ((cls (eql (find-class 'user))))
   :users)
 
+
+
+;; Yeaststrain methods
+
 (defmethod crane.meta:table-name ((cls (eql (find-class 'yeaststrain))))
   :yeaststrains)
+
+(defmethod name-abbrev ((obj yeaststrain))
+  "ASYS")
+
+(defmethod number-field ((obj yeaststrain))
+  'strain_number)
+
+(defmethod info-field ((obj yeaststrain))
+  'strainalias)
+
+(defmethod core-links ((obj yeaststrain))
+  (loop for link in (split-sequence #\, (mget obj 'plasmidnumber))
+        when (and link (parse-integer link :junk-allowed t))
+          collect (<> (plas-prefix) link)))
+
+(defmethod core-info-spec ((obj yeaststrain))
+  (list
+   (alist :name "Strain information"
+          :fields
+          (list
+           (alist :name "Species" :value (species obj))
+           (alist :name "Strain background" :value (strain_bkg obj))
+           (alist :name "Genotype" :value (genotype obj))
+           (alist :name "Antibiotics" :value (antibiotic obj))))
+   (alist :name "Description"
+          :preformatted t
+          :inline-value (comments obj))))
+
+(defmethod sequence-info ((obj yeaststrain))
+  (alist :sequence (sequence obj)
+         :verified nil))
+
+(defmethod supplemental-info-spec ((obj yeaststrain))
+  (list
+   (alist :name "Entered by" :value (entered_by obj))
+   (alist :name "Date" :value (ts->date (date_entered obj)))
+   (alist :name "Notebook" :value (date_entered obj))
+   (alist :name "Location in freezer" :value (location obj))))
+
+
 
 (setf (find-class 'plasmids) (find-class 'plasmid))
 (setf (find-class 'antibodies) (find-class 'antibody))

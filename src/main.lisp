@@ -1,10 +1,12 @@
 (in-package :cl-user)
 
 (defpackage labdb.main
-  (:use :cl :col :ningle :labdb.auth)
-  (:export :*app* :start :reload))
+  (:use :cl :col :ningle :labdb.auth :labdb.config)
+  (:export :*app* :*app-with-middleware* :start :reload))
 
 (in-package :labdb.main)
+
+(enable-reader-exts)
 
 (defparameter *app* (make-instance 'ningle:<app>))
 (defvar handler nil)
@@ -44,17 +46,30 @@
              (let ((item-json
                      (labdb.models:get-json-by-id (intern (mget params :model) :keyword)
                                                   (parse-integer (mget params :idx)))))
-               (println item-json)
                (render-template
-                "object_display.html"
-                :item-json
-                item-json
-                ))))
+                "index.html"
+                :content-json
+                item-json))))
 
 (authroute *app* "/:model" :method :GET
            (lambda (params)
-             (println (assoc "model" params :test #'equal))
-             (forward params)))
+             (let ((items
+                     (-> (mget params :model)
+                         (labdb.models:get-partial-list :limit 100 :start 0)
+                         (rmapcar #'plist->alist))))
+               (render-template
+                "index.html"
+                :content-json
+                (json:encode-json-plist-to-string
+                 (list
+                  :type :collection
+                  :items
+                  items
+                  :start 0
+                  :end (+ 0 (length items))
+                  :count
+                  (labdb.models:item-count (mget params :model))
+                  :resource #?"/${(mget params :model)}"))))))
 
 (authroute *app* "/bacteria"
            (lambda (params)
@@ -63,21 +78,11 @@
 (setf (route *app* "/.*" :regexp t)
       #'forward)
 
-(defun start ()
-  (setf
-   handler
-   (let ((*app*
-           (lack:builder
-            :accesslog
-            :session
-            (:static :path "/_s/" :root (asdf:system-relative-pathname :labdb #P"public/"))
-            #'labdb.cond:http-condition-middleware
-            (:mount "/api/v1" labdb.api:*app*)
-            *app*)))
-     (clack:clackup *app* :silent nil :use-thread nil))))
-
-(defun reload ()
-  (clack:stop handler)
-  (crane:disconnect)
-  (ql:quickload :labdb)
-  (start))
+(defparameter *app-with-middleware*
+  (lack:builder
+   :accesslog
+   :session
+   (:static :path "/_s/" :root (asdf:system-relative-pathname :labdb #P"public/"))
+   #'labdb.cond:http-condition-middleware
+   (:mount api-base labdb.api:*app*)
+   *app*))
