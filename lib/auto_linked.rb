@@ -58,7 +58,7 @@ class LinkableString
         end
       end
       matches.each do |k,v|
-        @str.gsub!(k,v)
+        @str = @str.gsub(k,v)
       end
     end
   end

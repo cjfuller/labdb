@@ -27,3 +27,15 @@
 # ignore rubinius files
 /.rbx
 
+# generated js files
+public/application.js
+node_modules
+npm-debug.log
+public/*.js
+public/*.css
+public/*.map
+jscssdeps
+public/_s
+
+# Eventually may want to commit this.
+Gemfile.lock

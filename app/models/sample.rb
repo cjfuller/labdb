@@ -20,6 +20,7 @@ require 'numbered'
 require 'described'
 require 'object_naming'
 require 'headings'
+require 'resource_helpers'
 
 class Sample < ActiveRecord::Base
 
@@ -32,8 +33,9 @@ class Sample < ActiveRecord::Base
 	include Numbered
 	include Described
 	include Headings
+  include ResourceHelpers
 
-	@headings = {date_entered: "Date entered", depleted: "Sample depleted?", description: "Description", entered_by: "Entered by", linked_items: "Linked to", notebook: "Notebook", sample_alias: "Alias", sample_number: "#{obj_tag} number", sample_type: "Sample type", storage_type: "Storage location", plasmid_numbers: "Linked plasmids", strain_numbers: "Linked strains", linked_sample_numbers: "Linked samples"}
+	@headings = {date_entered: "Date", depleted: "Sample depleted?", description: "Description", entered_by: "Entered by", linked_items: "Linked to", notebook: "Notebook", sample_alias: "Alias", sample_number: "#{obj_tag} number", sample_type: "Sample type", storage_type: "Storage location", plasmid_numbers: "Linked plasmids", strain_numbers: "Linked strains", linked_sample_numbers: "Linked samples"}
 
 	LINK_METHODS = {plasmid_numbers: :get_linked_plasmids, strain_numbers: :get_linked_bacterial_strains, linked_sample_numbers: :get_linked_samples}
 
@@ -72,7 +74,7 @@ class Sample < ActiveRecord::Base
 		numbers = get_linked_number_fields(property_name)
 		self.send(LINK_METHODS[property_name], numbers) unless numbers.nil?
 	end
-		
+
 	def exportable_fields
 		Fields
 	end
@@ -88,9 +90,16 @@ class Sample < ActiveRecord::Base
 	def description_field_name
     :description
   end
- 
+
   def core_alt_field
-    self.depleted ? "Depleted" : nil
+    self.depleted ? ["Depleted"] : []
+  end
+
+  def core_alt_field_name
+    :depleted
+  end
+
+  def core_alt_field_type
   end
 
   def sample_links
@@ -110,32 +119,28 @@ class Sample < ActiveRecord::Base
     	"Sample storage" => [:sample_type, :storage_type]}
   end
 
-  def as_json
-    return JSON.generate({
-      type: "sample",
-      resourceBase: "/samples",
-      name: named_number_string,
-      shortDescHTML: info_field.labdb_auto_link.html_safe,
-      coreInfoSections: [
+  def core_info
+      [
         {name: "Sample storage",
-         fields: [
-           {name: "Sample type", value: sample_type},
-           {name: "Storage location", value: storage_type}
-         ]},
+         fields: fields([:sample_type, :storage_type])},
         {name: "Description",
          preformatted: true,
+         lookup: :description,
+         single: true,
          inlineValue: Labdb::Application::MARKDOWN.render(description).labdb_auto_link.html_safe},
         {name: "Linked items",
          preformatted: true,
+         lookup: :linked_items,
          inlineValue: sample_links.map{|lnk| lnk[:link_text] + ": " + lnk[:link_desc]}.join("<br />").labdb_auto_link.html_safe}
-      ],
-      supplementalFields: [
-        {name: "Entered by", value: entered_by},
-        {name: "Date", value: date_entered},
-        {name: "Notebook", value: notebook},
-      ],
-    })
+      ]
+  end
 
+  def sequence_info
+    nil
+  end
+
+  def supplemental_info
+    fields [:entered_by, :date_entered, :notebook]
   end
 
 end

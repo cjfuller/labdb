@@ -42,7 +42,7 @@ state_path File.expand_path('puma.state', pid_path)
 # Bind the server to “url”. “tcp://”, “unix://” and “ssl://” are the only
 
 #bind 'tcp://127.0.0.1:3000'
-ssl_bind '127.0.0.1', '3000', { key: key_path, cert: cert_path }
+ssl_bind '127.0.0.1', '3003', { key: key_path, cert: cert_path }
 
 # Command to use to restart puma. This should be just how to
 # load puma itself (ie. 'ruby -Ilib bin/puma'), not the arguments

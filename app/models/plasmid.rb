@@ -24,6 +24,7 @@ require 'described'
 require 'headings'
 require 'dna_sequence'
 require 'plasmid_mapping'
+require 'resource_helpers'
 
 require 'facets/string/word_wrap'
 
@@ -35,17 +36,18 @@ class Plasmid < ActiveRecord::Base
   include Described
   include Headings
   include DNASequence
+  include ResourceHelpers
 
-  Fields = :antibiotic, :concentration, :date_entered, :description, :enteredby, :notebook, :plasmidalias, :plasmidmap, :plasmidnumber, :plasmidsize, :sequence, :strainnumbers, :vector, :verified
+  Fields = :antibiotic, :concentration, :date_entered, :description, :enteredby, :notebook, :plasmidalias, :plasmidnumber, :plasmidsize, :sequence, :strainnumbers, :vector, :verified
 
   @headings = {:plasmidnumber => "#{obj_tag} Number", :date_entered => "Date",
     :enteredby => "Entered by", :notebook => "Notebook", :verified => "Sequence verified?",
     :plasmidalias => "Alias", :antibiotic => "Antibiotic resistances", :plasmidsize => "Size",
-    :concentration => "Concentration (μg/mL)", :strainnumbers => "#{Naming.name_for(Bacterium)}",
+    :concentration => "Concentration (μg/mL)", :strainnumbers => "#{Naming.name_for(Bacterium)} numbers",
     :description => "Description", :sequence => "Sequence", :vector => "Vector",
     :mapreference => "Map"}
 
-  attr_accessible *Fields
+  attr_accessible(*Fields)
 
   attr_accessor :antibiotics
 
@@ -58,30 +60,29 @@ class Plasmid < ActiveRecord::Base
   self.get_antibiotics.each_value do |v|
     attr_accessor v.to_sym
   end
-  
+
   attr_accessor :search_by_regex
 
   def parse_antibiotics
     @@Antibiotics.each_value do |v|
       self.send((v + "=").to_sym, "0")
     end
-    
+
     if not self.antibiotic or self.antibiotic.length == 0 then
       return
     end
-    
+
     self.antibiotic.split(",").each do |ab|
       if self.respond_to?(ab.to_sym) then
         self.send((ab+"=").to_sym, "1")
       end
     end
   end
-  
+
   def calculate_size
     self.plasmidsize= self.sequence.gsub(/\W/, "").length
-    self.save
   end
-  
+
   def linked_properties
     [:strainnumbers]
   end
@@ -107,15 +108,19 @@ class Plasmid < ActiveRecord::Base
     :description
   end
 
+  def core_alt_field_name
+    :strainnumbers
+  end
+
   def core_alt_field
-    numbers = get_linked_number_fields(:strainnumbers)
+    numbers = get_linked_number_fields(core_alt_field_name) || []
     numbers.map { |n| "#{Naming.name_for(Bacterium) + " " + n.to_s}" }
   end
 
-  def core_alt_link
-    links = get_linked(:strainnumbers)
-    get_linked_number_fields(:strainnumbers).map { |n| links[n] }
-  end
+  # def core_alt_link
+  #   links = get_linked(core_alt_field_name)
+  #   get_linked_number_fields(core_alt_field_name).map { |n| links[n] }
+  # end
 
   def groups
     {sidebar: [:enteredby, :date_entered, :notebook, :concentration],
@@ -126,33 +131,35 @@ class Plasmid < ActiveRecord::Base
     @map or (@map = PlasmidMapping.map_for_plasmid(self).plasmidmap_json)
   end
 
-  def as_json
-    return JSON.generate({
-      type: "plasmid",
-      resourceBase: "/plasmids",
-      name: named_number_string,
-      shortDescHTML: info_field.labdb_auto_link.html_safe,
-      coreLinksHTML: core_alt_field.map(&:labdb_auto_link),
-      coreInfoSections: [
-        {name: "Vector information",
-         fields: [
-           {name: "Vector", value: vector},
-           {name: "Antibiotic resistances", value: antibiotic}
-         ]},
-        {name: "Description",
-         preformatted: true,
-         inlineValue: Labdb::Application::MARKDOWN.render(description).labdb_auto_link.html_safe}
-      ],
-      sequenceInfo: {
-        sequence: sequence,
-        verified: verified,
-      },
-      supplementalFields: [
-        {name: "Entered by", value: enteredby},
-        {name: "Date", value: date_entered},
-        {name: "Notebook", value: notebook},
-        {name: "Concentration", value: concentration},
-      ],
-    })
+  def core_info
+    [
+      {name: "Vector information",
+       fields: [
+         field(:vector),
+         field(:antibiotic)
+       ]},
+      {name: "Description",
+       preformatted: true,
+       lookup: :description,
+       single: true,
+       inlineValue: Labdb::Application::MARKDOWN.render(description).labdb_auto_link.html_safe}
+    ]
   end
+
+  def sequence_info
+    {
+      sequence: {lookup: :sequence},
+      verified: {lookup: :verified},
+    }
+  end
+
+  def supplemental_info
+    [
+      field(:enteredby),
+      field(:date_entered),
+      field(:notebook),
+      field(:concentration)
+    ]
+  end
+
 end

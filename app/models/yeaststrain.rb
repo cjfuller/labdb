@@ -20,6 +20,7 @@ require 'numbered'
 require 'described'
 require 'headings'
 require 'dna_sequence'
+require 'resource_helpers'
 
 class Yeaststrain < ActiveRecord::Base
 
@@ -33,10 +34,15 @@ class Yeaststrain < ActiveRecord::Base
 	include Described
 	include Headings
   include DNASequence
+  include ResourceHelpers
 
   @headings = {strain_number: "#{obj_tag} Number", date_entered: "Date entered",
-  entered_by: "Entered by", notebook: "Notebook", 
-  comments: "Description", plasmidnumber: "#{Naming.name_for(Plasmid)} Number", strain_bkg: "Strain background", genotype: "Genotype", antibiotic: "Antibiotics", location: "Location in freezer", sequence: "Sequence", species: "Species", strainalias: "Alias"}
+               entered_by: "Entered by", notebook: "Notebook",
+               comments: "Description", plasmidnumber: "#{Naming.name_for(Plasmid)} Number",
+               strain_bkg: "Strain background", genotype: "Genotype",
+               antibiotic: "Antibiotics", location: "Location in freezer",
+               sequence: "Sequence", species: "Species",
+               strainalias: "Alias"}
 
 	def linked_properties
 		[:plasmidnumber]
@@ -63,14 +69,18 @@ class Yeaststrain < ActiveRecord::Base
     :comments
   end
 
+  def core_alt_field_name
+    :plasmidnumber
+  end
+
   def core_alt_field
-    numbers = get_linked_number_fields(:plasmidnumber)
+    numbers = get_linked_number_fields(core_alt_field_name)
     numbers.map { |n| "#{Naming.name_for(Plasmid) + " " + n.to_s}" }
   end
 
   def core_alt_link
-    links = get_linked(:plasmidnumber)
-    get_linked_number_fields(:plasmidnumber).map { |n| links[n] }
+    links = get_linked(core_alt_field_name)
+    get_linked_number_fields(core_alt_field_name).map { |n| links[n] }
   end
 
   def groups
@@ -78,36 +88,25 @@ class Yeaststrain < ActiveRecord::Base
       "Strain information" => [:species, :strain_bkg, :genotype, :antibiotic]}
   end
 
-  def as_json
-    return JSON.generate({
-      type: "yeaststrain",
-      resourceBase: "/yeaststrain",
-      name: named_number_string,
-      shortDescHTML: info_field.labdb_auto_link.html_safe,
-      coreLinksHTML: core_alt_field.map(&:labdb_auto_link),
-      coreInfoSections: [
-        {name: "Strain information",
-         fields: [
-           {name: "Species", value: species},
-           {name: "Strain background", value: strain_bkg},
-           {name: "Genotype", value: genotype},
-           {name: "Antibiotics", value: antibiotic}
-         ]},
-        {name: "Description",
-         preformatted: true,
-         inlineValue: Labdb::Application::MARKDOWN.render(comments).labdb_auto_link.html_safe}
-      ],
-      sequenceInfo: {
-        sequence: sequence,
-        verified: nil,
-      },
-      supplementalFields: [
-        {name: "Entered by", value: entered_by},
-        {name: "Date", value: date_entered},
-        {name: "Notebook", value: notebook},
-        {name: "Location in freezer", value: location},
-      ],
-    })
+  def core_info
+    [
+      {name: "Strain information",
+       fields: fields([:species, :strain_bkg, :genotype, :antibiotic])},
+      {name: "Description",
+       preformatted: true,
+       lookup: :comments,
+       single: true,
+       inlineValue: Labdb::Application::MARKDOWN.render(comments).labdb_auto_link.html_safe}
+    ]
+  end
+
+  def sequence_info
+    {sequence: {lookup: :sequence},
+     verified: nil}
+  end
+
+  def supplemental_info
+    fields [:entered_by, :date_entered, :notebook, :location]
   end
 
 end

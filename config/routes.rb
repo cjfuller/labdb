@@ -46,7 +46,7 @@ Labdb::Application.routes.draw do
     end
   end
 
-  resources :plasmids, &common_actions
+  resources :plasmids, as: 'plasmid', &common_actions
 
   resources :oligos, &common_actions
 
@@ -80,6 +80,11 @@ Labdb::Application.routes.draw do
       get 'previous'
       put 'update_number'
     end
+  end
+
+  scope '/api/v1/m' do
+    get '/:model/:id', to: "api#fetch"
+    put '/:model/:id', to: "api#update"
   end
 
 end

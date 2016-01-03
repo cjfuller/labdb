@@ -1,0 +1,42 @@
+module ResourceHelpers
+  def field(sym, type: :value)
+    {name: get_heading(sym), lookup: sym, type: type}
+  end
+
+  def fields(lst)
+    lst.map { |f| field(f) }
+  end
+
+  def as_json
+    JSON.generate(as_resource_def)
+  end
+
+  def core_alt_field_type
+    :value
+  end
+
+  def as_resource_def
+    field_data = {}
+    exportable_fields.each { |f| field_data[f] = self.send f }
+    field_data[:id] = id
+    core_links = if self.respond_to? :core_alt_field then
+                   {lookup: core_alt_field_name,
+                    name: self.get_heading(core_alt_field_name),
+                    inlineValue: core_alt_field.map(&:labdb_auto_link).map(&:html_safe)}
+                 else
+                   nil
+                 end
+    return {
+      type: self.class.name.demodulize.downcase,
+      id: id,
+      fieldData: field_data,
+      resourcePath: "/#{self.class.name.demodulize.pluralize.downcase}/#{id}",
+      name: named_number_string,
+      shortDesc: {lookup: info_field_name, inlineValue: info_field.labdb_auto_link.html_safe, name: "Alias"},
+      coreLinks: core_links,
+      coreInfoSections: core_info,
+      sequenceInfo: sequence_info,
+      supplementalFields: supplemental_info,
+    }
+  end
+end

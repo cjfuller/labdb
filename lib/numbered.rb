@@ -16,7 +16,6 @@
 #++
 
 module Numbered
-  
 	def number_field
 		send(number_field_name)
 	end
@@ -25,9 +24,8 @@ module Numbered
 		self.class.number_field_name
 	end
 
-        def named_number_string
-          "#{Naming.name_for(self.class)} #{self.number_field}"
-        end
-        
+    def named_number_string
+      "#{Naming.name_for(self.class)} #{self.number_field}"
+    end
 end
 

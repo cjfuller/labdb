@@ -19,17 +19,13 @@
 %html
   %head
     %title= ApplicationController::DATABASE_SYSTEM_NAME
-    %link{rel: "stylesheet/less", type: "text/css", href:"/_s/main.less"}
-    %script{src: "//cdnjs.cloudflare.com/ajax/libs/less.js/2.5.1/less.min.js"}
-    = stylesheet_link_tag "application", media: "all"
-    = stylesheet_link_tag "//fonts.googleapis.com/css?family=Raleway:400,300,600,800"
-    = stylesheet_link_tag "//fonts.googleapis.com/css?family=Rokkitt:400,300,600"
+    = stylesheet_link_tag "//fonts.googleapis.com/css?family=Montserrat:400"
+    = stylesheet_link_tag "//fonts.googleapis.com/css?family=Rokkitt:400"
     = stylesheet_link_tag "//fonts.googleapis.com/css?family=Source+Code+Pro"
     = stylesheet_link_tag "//fonts.googleapis.com/icon?family=Material+Icons"
-    = stylesheet_link_tag "//fonts.googleapis.com/icon?family=Varela:300,400"
-    = stylesheet_link_tag "/_s/normalize.css"
-    = stylesheet_link_tag "/_s/skeleton.css"
-  %body
+    = stylesheet_link_tag "//fonts.googleapis.com/icon?family=Open+Sans:400,600"
+    = stylesheet_link_tag "/_s/app.css"
+  %body#body
     %div#navbar-top
     -# .navbar.navbar-fixed-top.navbar-inverse
     -#   .navbar-inner
@@ -55,11 +51,8 @@
     -#                 = render partial: 'shared/admin_menu'
     -#                 %li.divider
     -#                 %li= link_to 'Log out', '/logout', {id: 'logout-button'}
-    .container= yield
-    = javascript_include_tag "https://login.persona.org/include.js"
-    = javascript_include_tag "https://fb.me/react-with-addons-0.13.3.js"
-    = javascript_include_tag "https://fb.me/JSXTransformer-0.13.3.js"
-    = javascript_include_tag "https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"
-    %script{src: "/_s/nav.jsx", type: "text/jsx"}
-    %script{src: "/_s/itemview.jsx", type: "text/jsx"}
-    = javascript_include_tag "application"
+    .container
+      %script{type: "text/javascript"}
+        = "window._labdbPrefetch = #{@content_json}".html_safe
+    = javascript_include_tag "/_s/third_party.js"
+    = javascript_include_tag "/_s/app.js"

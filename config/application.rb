@@ -65,7 +65,7 @@ module Labdb
     config.active_record.whitelist_attributes = true
 
     # Enable the asset pipeline
-    config.assets.enabled = true
+    config.assets.enabled = false
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
@@ -73,5 +73,6 @@ module Labdb
     #require https communication
     config.force_ssl = true
 
+    config.middleware.use Rack::Static, urls: ["/_s"], root: "public"
   end
 end

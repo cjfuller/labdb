@@ -20,6 +20,7 @@ require 'numbered'
 require 'described'
 require 'headings'
 require 'dna_sequence'
+require 'resource_helpers'
 
 require 'json'
 
@@ -37,6 +38,7 @@ class Line < ActiveRecord::Base
 	include Described
 	include Headings
 	include DNASequence
+  include ResourceHelpers
 
 	@headings = {current_stock_counts: "Stock counts", date_entered: "Date entered", description: "Description", entered_by: "Entered by", line_alias: "Alias", line_number: "#{obj_tag} number", locations: "Locations", notebook: "Notebook", parent_line: "Parent line", plasmid_numbers: "#{Naming.name_for(Plasmid)} numbers", selectable_markers: "Selectable markers", sequence: "Associated sequence", species: "Species", genotype: "Genotype", stock_person: "Person", stock_date: "Date", stock_clone: "Clone"}
 
@@ -83,7 +85,7 @@ class Line < ActiveRecord::Base
 		numbers = get_linked_number_fields(property_name)
 		get_linked_plasmids(numbers) unless numbers.nil?
 	end
-		
+
 	def exportable_fields
 		Fields
 	end
@@ -98,6 +100,10 @@ class Line < ActiveRecord::Base
 
 	def description_field_name
     :description
+  end
+
+  def core_alt_field_name
+    :plasmid_numbers
   end
 
   def core_alt_field
@@ -115,37 +121,26 @@ class Line < ActiveRecord::Base
       "Line information" => [:species, :genotype, :selectable_markers, :parent_line]}
   end
 
-  def as_json
-    return JSON.generate({
-      type: "line",
-      resourceBase: "/lines",
-      name: named_number_string,
-      shortDescHTML: info_field.labdb_auto_link.html_safe,
-      coreInfoSections: [
-        {name: "Line information",
-         fields: [
-           {name: "Species", value: species},
-           {name: "Genotype", value: genotype},
-           {name: "Selectable markers", value: selectable_markers},
-           {name: "Parent line", value: parent_line},
-         ]},
-        {name: "Description",
-         preformatted: true,
-         inlineValue: Labdb::Application::MARKDOWN.render(description).labdb_auto_link.html_safe}
-      ],
-      sequenceInfo: {
-        sequence: sequence,
-        verified: nil,
-      },
-      supplementalFields: [
-        {name: "Entered by", value: entered_by},
-        {name: "Date", value: date_entered},
-        {name: "Notebook", value: notebook}
-      ],
-      inventory: inventory,
-    })
+  def core_info
+    [
+      {name: "Line information",
+       fields: fields([:species, :genotype, :selectable_markers, :parent_line])},
+      {name: "Description",
+       preformatted: true,
+       single: true,
+       lookup: :description,
+       inlineValue: Labdb::Application::MARKDOWN.render(description).labdb_auto_link.html_safe}
+    ]
   end
 
+  def sequence_info
+    {sequence: {lookup: :sequence},
+     verified: nil}
+  end
+
+  def supplemental_info
+    fields([:entered_by, :date_entered, :notebook])
+  end
 
 	def inventory
 
@@ -203,7 +198,7 @@ class Line < ActiveRecord::Base
 
 
 		self.locations = locs.join(",")
-		self.current_stock_counts = counts.map.with_index do |e, i| 
+		self.current_stock_counts = counts.map.with_index do |e, i|
 			clone_string = ""
 			if clones[i].length > 0 then
 				clone_string = "(clone #{clones[i]})"

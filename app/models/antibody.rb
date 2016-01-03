@@ -19,12 +19,15 @@ require 'exporters'
 require 'numbered'
 require 'described'
 require 'headings'
+require 'resource_helpers'
+
 class Antibody < ActiveRecord::Base
 
 	include Exportable
 	include Numbered
 	include Described
   include Headings
+  include ResourceHelpers
 
 	Fields = [:ab_number, :alias, :box, :comments, :entered_by, :fluorophore, :good_for_if, :good_for_western, :host, :label, :vendor, :date_entered]
 
@@ -32,7 +35,7 @@ class Antibody < ActiveRecord::Base
 
 	@headings = {:ab_number => "#{obj_tag} Number", :date_entered => "Date entered", :label => "Label",
                 :entered_by => "Entered by", :alias => "Alias", :comments => "Description", :host => "Host",
-                :vendor => "Vendor", :good_for_if => "Good for IF?", :good_for_western => "Good for westerns?",
+                :vendor => "Vendor", :good_for_if => "Good for IF", :good_for_western => "Good for westerns",
                 :fluorophore => "Fluorophores", :box => "Box"}
 
   def get_linked(propertyname)
@@ -61,37 +64,31 @@ class Antibody < ActiveRecord::Base
     	"Location information" => [:box, :label] }
   end
 
-  def as_json
-    return JSON.generate({
-      type: "antibody",
-      resourceBase: "/antibodies",
-      name: named_number_string,
-      shortDescHTML: info_field.labdb_auto_link.html_safe,
-      coreInfoSections: [
-        {name: "Antibody information",
-         fields: [
-           {name: "Host", value: host},
-           {name: "Fluorophores", value: fluorophore}
-         ]},
-        {name: "Location information",
-         fields: [
-           {name: "Box", value: box},
-           {name: "Label", value: label}
-         ]},
-        {name: "Uses",
-         fields: [
-           {name: "Good for IF", value: good_for_if, type: :boolean},
-           {name: "Good for westerns", value: good_for_western, type: :boolean}
-         ]},
-        {name: "Description",
-         preformatted: true,
-         inlineValue: Labdb::Application::MARKDOWN.render(comments).labdb_auto_link.html_safe}
-      ],
-      supplementalFields: [
-        {name: "Entered by", value: entered_by},
-        {name: "Date", value: date_entered},
-        {name: "Vendor", value: vendor},
-      ],
-    })
+  def core_info
+    [
+      {name: "Antibody information",
+       fields: fields([:host, :fluorophore])},
+      {name: "Location information",
+       fields: fields([:box, :label])},
+      {name: "Uses",
+       fields: [
+         field(:good_for_if, type: :boolean),
+         field(:good_for_western, type: :boolean)
+       ]},
+      {name: "Description",
+       preformatted: true,
+       lookup: :comments,
+       single: true,
+       inlineValue: Labdb::Application::MARKDOWN.render(comments).labdb_auto_link.html_safe}
+    ]
   end
+
+  def sequence_info
+    nil
+  end
+
+  def supplemental_info
+    fields [:entered_by, :date_entered, :vendor]
+  end
+
 end

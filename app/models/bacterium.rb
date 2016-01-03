@@ -20,6 +20,7 @@ require 'numbered'
 require 'described'
 require 'headings'
 require 'dna_sequence'
+require 'resource_helpers'
 
 module CheckPlasmidSequence
   # Patches the Bacterium class to check a linked plasmid for a sequence
@@ -51,12 +52,13 @@ class Bacterium < ActiveRecord::Base
   include Headings
   include DNASequence
   include CheckPlasmidSequence
+  include ResourceHelpers
 
   Fields = [:comments, :date_entered, :entered_by, :genotype, :notebook, :plasmid_number, :species_bkg, :strain_number, :sequence, :strainalias]
 
   attr_accessible *Fields
 
-  @headings = {strain_number: "#{obj_tag} Number", date_entered: "Date entered", entered_by: "Entered by", notebook: "Notebook", comments: "Description", plasmid_number: "#{Naming.name_for(Plasmid)} Number", species_bkg: "Species and background", genotype: "Genotype", sequence: "Sequence", strainalias: "Alias"}
+  @headings = {strain_number: "#{obj_tag} Number", date_entered: "Date", entered_by: "Entered by", notebook: "Notebook", comments: "Description", plasmid_number: "#{Naming.name_for(Plasmid)} Number", species_bkg: "Species and background", genotype: "Genotype", sequence: "Sequence", strainalias: "Alias"}
 
   def linked_properties
     [:plasmid_number]
@@ -66,7 +68,7 @@ class Bacterium < ActiveRecord::Base
     numbers = get_linked_number_fields(property_name)
     get_linked_plasmids(numbers) unless numbers.nil?
   end
-  	
+
 	def exportable_fields
 		Fields
 	end
@@ -83,14 +85,18 @@ class Bacterium < ActiveRecord::Base
     :comments
   end
 
+  def core_alt_field_name
+    :plasmid_number
+  end
+
   def core_alt_field
-    numbers = get_linked_number_fields(:plasmid_number)
+    numbers = get_linked_number_fields(core_alt_field_name)
     numbers.map { |n| "#{Naming.name_for(Plasmid) + " " + n.to_s}" }
   end
 
   def core_alt_link
-    links = get_linked(:plasmid_number)
-    get_linked_number_fields(:plasmid_number).map { |n| links[n] }
+    links = get_linked(core_alt_field_name)
+    get_linked_number_fields(core_alt_field_name).map { |n| links[n] }
   end
 
   def groups
@@ -98,34 +104,27 @@ class Bacterium < ActiveRecord::Base
       "Strain information" => [:species_bkg, :genotype]}
   end
 
-  def as_json
-    return JSON.generate({
-      type: "bacterium",
-      resourceBase: "/bacteria",
-      name: named_number_string,
-      shortDescHTML: info_field.labdb_auto_link.html_safe,
-      coreLinksHTML: core_alt_field.map(&:labdb_auto_link),
-      coreInfoSections: [
-        {name: "Strain information",
-         fields: [
-           {name: "Species and background", value: species_bkg},
-           {name: "Genotype", value: genotype}
-         ]},
-        {name: "Description",
-         preformatted: true,
-         inlineValue: Labdb::Application::MARKDOWN.render(comments).labdb_auto_link.html_safe}
-      ],
-      sequenceInfo: {
-        sequence: sequence,
-        verified: nil,
-      },
-      supplementalFields: [
-        {name: "Entered by", value: entered_by},
-        {name: "Date", value: date_entered},
-        {name: "Notebook", value: notebook},
-      ],
-    })
+  def core_info
+    [
+      {name: "Strain information",
+       fields: fields([:species_bkg, :genotype])},
+      {name: "Description",
+       preformatted: true,
+       lookup: :comments,
+       single: true,
+       inlineValue: Labdb::Application::MARKDOWN.render(comments).labdb_auto_link.html_safe}
+    ]
   end
 
+  def sequence_info
+    {
+      sequence: {lookup: :sequence},
+      verified: nil
+    }
+  end
+
+  def supplemental_info
+    fields [:entered_by, :date_entered, :notebook]
+  end
 
 end

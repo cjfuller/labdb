@@ -72,18 +72,15 @@ module StandardActions
   end
 
   def index_all(page_size, page)
-    if params[:id_for_page] and not params[:page] then
-      page = index_page_number_for_id(params[:id_for_page], page_size)
-    end
     @objs = model_class.order(index_order).page(page).per(page_size)
   end
 
   def index
-    define_ui_variables(status_text: self.class.text.pluralize, context_specific_buttons: "shared/top_pagination_buttons")
-
     page_size = 100
-    page = params[:page] or 1
-
+    page = (params[:page] or 1).to_i
+    if params[:id_for_page] and not params[:page] then
+      page = index_page_number_for_id(params[:id_for_page], page_size)
+    end
     if params.has_key?(type) then
       index_with_new_search(page_size, page)
     elsif valid_search_requested? then
@@ -97,115 +94,35 @@ module StandardActions
     if @objs.size == 1 then
       redirect_to @objs[0] and return
     end
-    
     define_table_view_vars
     define_sort_direction
 
-    respond_to do |format|
-      format.html
-      format.json { render json: @objs }
-    end
-
+    @content_json = JSON.generate({
+            type: "collection",
+            resourcePath: "/" + type.pluralize.downcase,
+            items: @objs.map(&:as_resource_def),
+            numberFieldName: @objs[0].number_field_name
+    })
+    render
   end
 
   def show
     @obj = model_class.find(params[:id])
     @search_id = params[:search_id]
 
-    preprocess_model_object(@obj)
+    #preprocess_model_object(@obj)
 
     instance_variable_set("@" + type, @obj)
 
     define_ui_variables(status_text: "#{obj_tag} #{@obj.number_field}", context_specific_buttons: "shared/top_editing_buttons", obj: @obj, readonly: true)
-
-    respond_to do |format|
-      format.html
-      format.json { render json: @obj }
-    end
+    @content_json = @obj.as_json.html_safe
+    render
   end
 
   def auto_fill_generated_fields
     generate_date(@obj)
     generate_name(@obj)
     @obj.send(@obj.number_field_name.to_s + "=", generate_object_number(model_class, @obj.number_field_name))
-  end
-
-  def new
-
-    if params[:id] then
-      @obj = model_class.find(params[:id]).dup
-      if @obj.respond_to?(:linkable?) and @obj.linkable? then
-        @obj.clear_linked
-      end
-      preprocess_model_object(@obj)
-    else
-      @obj = model_class.new()
-    end
-
-    instance_variable_set("@" + type, @obj)
-
-    define_ui_variables(status_text: "New #{self.class.text.downcase}", readonly: false, submit_text: "Create #{self.class.text.downcase}")
-
-    auto_fill_generated_fields
-
-    respond_to do |format|
-      format.html
-      format.json { render json: @obj }
-    end
-  end
-  
-  def edit
-    @obj = model_class.find(params[:id])
-
-    preprocess_model_object(@obj)
-
-    instance_variable_set("@" + type, @obj)
-
-    define_ui_variables(status_text: "Editing #{obj_tag} #{@obj.number_field}", context_specific_buttons: "shared/top_editing_buttons", obj: @obj, readonly: false, submit_text: "Update #{self.class.text.downcase}")
-  end
-
-  def create
-
-    @obj = model_class.new(params[type.to_sym])
-    instance_variable_set("@" + type, @obj)
-
-    respond_to do |format|
-      if @obj.save
-        format.html { redirect_to @obj, notice: '#{self.class.text} was successfully created.' }
-        format.json { render json: @obj, status: :created, location: @obj }
-      else
-        format.html { render action: "new" }
-        format.json { render json: @obj.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  def update
-    
-    @obj = model_class.find(params[:id]) unless @obj
-    instance_variable_set("@" + type, @obj)
-
-    respond_to do |format|
-      if @obj.update_attributes(params[type])
-        format.html { redirect_to @obj, notice: 'obj was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: "edit" }
-        format.json { render json: @obj.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-
-  def destroy
-    @obj = model_class.find(params[:id])
-    instance_variable_set("@" + type, @obj)
-    @obj.destroy
-
-    respond_to do |format|
-      format.html { redirect_to polymorphic_url(model_class) }
-      format.json { head :no_content }
-    end
   end
 
   def search

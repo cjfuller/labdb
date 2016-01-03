@@ -21,7 +21,7 @@ require 'numbered'
 require 'described'
 require 'headings'
 require 'dna_sequence'
-
+require 'resource_helpers'
 
 class Oligo < ActiveRecord::Base
 
@@ -30,12 +30,13 @@ class Oligo < ActiveRecord::Base
   include Described
   include Headings
   include DNASequence
+  include ResourceHelpers
 
   Fields = [:oligoalias, :date_entered, :entered_by, :notebook, :oligo_number, :organism, :purpose, :sequence, :vendor]
 
   attr_accessible *Fields
 
-  @headings = {:oligo_number => "#{obj_tag} Number", :date_entered => "Date entered", :entered_by => "Entered by", :notebook => "Notebook", :oligoalias => "Alias", :purpose => "Description", :sequence => "Sequence", :organism => "Organism", :vendor => "Vendor"}
+  @headings = {:oligo_number => "#{obj_tag} Number", :date_entered => "Date", :entered_by => "Entered by", :notebook => "Notebook", :oligoalias => "Alias", :purpose => "Description", :sequence => "Sequence", :organism => "Organism", :vendor => "Vendor"}
 
   def get_linked(propertyname)
   	nil
@@ -61,30 +62,25 @@ class Oligo < ActiveRecord::Base
     {sidebar: [:entered_by, :date_entered, :notebook, :organism, :vendor]}
   end
 
-
-  def as_json
-    return JSON.generate({
-      type: "oligo",
-      resourceBase: "/oligos",
-      name: named_number_string,
-      shortDescHTML: info_field.labdb_auto_link.html_safe,
-      coreInfoSections: [
+  def core_info
+      [
         {name: "Description",
          preformatted: true,
+         lookup: :purpose,
+         single: true,
          inlineValue: Labdb::Application::MARKDOWN.render(purpose).labdb_auto_link.html_safe}
-      ],
-      sequenceInfo: {
-        sequence: sequence,
-        verified: nil,
-      },
-      supplementalFields: [
-        {name: "Entered by", value: entered_by},
-        {name: "Date", value: date_entered},
-        {name: "Notebook", value: notebook},
-        {name: "Organism", value: organism},
-        {name: "Vendor", value: vendor}
-      ],
-    })
+      ]
+  end
+
+  def sequence_info
+    {
+      sequence: {lookup: :sequence},
+      verified: nil,
+    }
+  end
+
+  def supplemental_info
+    fields [:entered_by, :date_entered, :notebook, :organism, :vendor]
   end
 
 end
