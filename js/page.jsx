@@ -1,11 +1,13 @@
 const React = require("react");
 const _ = require("underscore");
+const {StyleSheet, css} = require("../node_modules/aphrodite/lib/index.js");
 
-const Actions = require("actions");
-const ActionExecutors = require("action-executors");
-const ItemTable = require("itemlist");
-const ItemInfoView = require("itemview");
-const Navbar = require("nav");
+const Actions = require("./actions.js");
+const ActionExecutors = require("./action-executors.js");
+const ItemTable = require("./itemlist.jsx");
+const ItemInfoView = require("./itemview.jsx");
+const Navbar = require("./nav.jsx");
+const ss = require("./shared-styles.js");
 
 const Page = React.createClass({
     propTypes: {
@@ -45,7 +47,7 @@ const Page = React.createClass({
                 editMode={this.props.editMode}
                 onClickHamburger={this.toggleBurger}
             />
-            <div className="container">
+            <div className={css(styles.pageContainer)}>
                 {this.props.data.type === "collection" ?
                     <ItemTable
                         data={this.props.data}
@@ -59,6 +61,12 @@ const Page = React.createClass({
                     />}
             </div>
         </div>;
+    },
+});
+
+const styles = StyleSheet.create({
+    pageContainer: {
+        marginTop: ss.sizes.navbarHeightPx,
     },
 });
 

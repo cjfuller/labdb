@@ -1,6 +1,9 @@
+const {css, StyleSheet} = require("../node_modules/aphrodite/lib/index.js");
 const React = require("react");
 const _ = require("underscore");
 const $ = require("jquery");
+
+const ss = require("./shared-styles.js");
 
 const NavItem = React.createClass({
     propTypes: {
@@ -19,7 +22,7 @@ const NavItem = React.createClass({
     },
 
     render: function() {
-        return <div className="navitem" onClick={this.onClick}>
+        return <div className={css(styles.navitem)} onClick={this.onClick}>
             {this.props.name}
         </div>;
     },
@@ -117,14 +120,14 @@ const Actions = React.createClass({
     },
 
     render: function() {
-        return <div className="actions">
+        return <div className={css(styles.actions)}>
             <CtxActions
                 cancelEditCallback={this.props.cancelEditCallback}
                 data={this.props.data}
                 editCallback={this.props.editCallback}
                 editMode={this.props.editMode}
             />
-            <div className="fixactions">
+            <div className={css(styles.fixactions)}>
                 <div className="search" onClick={this.doSearch}>
                     <i className="material-icons">search</i>
                 </div>
@@ -170,8 +173,8 @@ const Navbar = React.createClass({
     },
 
     render: function() {
-        return <div className="navbar-top">
-            <div className="navbar-constiable">
+        return <div className={css(styles.navbar)}>
+            <div className={css(styles.navbarTextSection)}>
                 <NavLogo text={"LabDB2.\u03b2"} />
                 {_.map(this.props.navitems, function(n, i) {
                     return <NavItem
@@ -189,6 +192,34 @@ const Navbar = React.createClass({
                 onClickHamburger={this.props.onClickHamburger}
             />
         </div>;
+    },
+});
+
+const styles = StyleSheet.create({
+    actions: {
+        display: "inline-block",
+    },
+    fixactions: {
+        display: "inline-block",
+    },
+    navbar: {
+        backgroundColor: ss.colors.labdbGreen,
+        display: "flex",
+        fontFamily: ss.fonts.base,
+        height: ss.sizes.navbarHeightPx,
+        left: 0,
+        position: "fixed",
+        top: 0,
+        width: "100vw",
+    },
+    navbarTextSection: {
+        display: "flex",
+        alignItems: "center",
+    },
+    navitem: {
+        display: "inline-block",
+        marginLeft: ss.sizes.paddingPx,
+        marginRight: ss.sizes.paddingPx,
     },
 });
 

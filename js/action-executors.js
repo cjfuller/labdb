@@ -1,9 +1,8 @@
 let $ = require("jquery");
 
-let Actions = require("actions");
+let Actions = require("./actions.js");
 
 let _injected = {};
-
 export function injectDispatch(disp) {
     _injected.dispatch = (action) => {console.log(action); disp(action);};
 }

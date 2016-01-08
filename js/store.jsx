@@ -3,9 +3,9 @@ const ReactRedux = require("react-redux");
 const Redux = require("redux");
 const _ = require("underscore");
 
-const Actions = require("actions");
-const ActionExecutors = require("action-executors");
-const Page = require("page");
+const Actions = require("./actions.js");
+const ActionExecutors = require("./action-executors.js");
+const Page = require("./page.jsx");
 
 const Data = window._labdbPrefetch;
 const Provider = ReactRedux.Provider;
@@ -282,7 +282,7 @@ window.onload = () => {
     ActionExecutors.injectDispatch(store.dispatch);
     React.render(
         <Provider store={store} >
-            {() => <App />}
+            <App />
         </Provider>,
         document.getElementById("body"));
 };

@@ -1,7 +1,7 @@
 const React = require("react");
 const _ = require("underscore");
 
-const ActionExecutors = require("action-executors");
+const ActionExecutors = require("./action-executors.js");
 
 const extractLookup = function(group, fieldName) {
     const item = _.first(_.where(group, {name: fieldName}));

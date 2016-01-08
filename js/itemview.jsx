@@ -1,8 +1,9 @@
+const {StyleSheet, css} = require("../node_modules/aphrodite/lib/index.js");
 const React = require("react");
 const classNames = require("classnames");
 const _ = require("underscore");
 
-const ActionExecutors = require("action-executors");
+const ActionExecutors = require("./action-executors.js");
 
 const RPT = React.PropTypes;
 
@@ -36,7 +37,6 @@ const InventoryWidget = React.createClass({
     },
     inventoryDecrementAction: function(invitem) {
         return function() {
-            console.log("hello, world")
             $.ajax({
                 // TODO: don't rely on window location here.
                 url: (
