@@ -37,7 +37,11 @@ const NavLogo = React.createClass({
         window.location.pathname = "/";
     },
     render: function() {
-        return <div className="navlogo" id="labdb" onClick={this.goHome}>
+        return <div
+            className={css(styles.navlogo)}
+            id="labdb"
+            onClick={this.goHome}
+        >
             {this.props.text}
         </div>;
     },
@@ -45,13 +49,14 @@ const NavLogo = React.createClass({
 
 const CtxActions = React.createClass({
     propTypes: {
+        cancelEditCallback: React.PropTypes.func,
         data: React.PropTypes.any,
+        editCallback: React.PropTypes.func,
+        editMode: React.PropTypes.bool,
     },
     doNext: function() {
         const apiBase = this.props.data.dynamicResourceBase;
         const resource = this.props.data.resource;
-        const itemType = this.props.data.type;
-        const itemId = this.props.data.id;
         $.ajax({
             url: `${apiBase}${resource}/next`,
             method: "GET",
@@ -63,8 +68,6 @@ const CtxActions = React.createClass({
     doPrevious: function() {
         const apiBase = this.props.data.dynamicResourceBase;
         const resource = this.props.data.resource;
-        const itemType = this.props.data.type;
-        const itemId = this.props.data.id;
         $.ajax({
             url: `${apiBase}${resource}/previous`,
             method: "GET",
@@ -78,18 +81,35 @@ const CtxActions = React.createClass({
             return null;
         }
 
-        return <div className="ctxactions">
-            <div className="previous-item" onClick={this.doPrevious} title="previous">
+        return <div className={css(styles.ctxactions)}>
+            <div
+                className={css(styles.action)}
+                onClick={this.doPrevious}
+                title="previous"
+            >
                 <i className="material-icons">arrow_back</i>
             </div>
-            <div className="next-item" onClick={this.doNext} title="next">
+            <div
+                className={css(styles.action)}
+                onClick={this.doNext}
+                title="next"
+            >
                 <i className="material-icons">arrow_forward</i>
             </div>
             {this.props.editMode ?
-             <div className="cancel-edit-item" onClick={this.props.cancelEditCallback} title="discard changes">
-                <i className="material-icons">block</i>
-             </div> : null}
-            <div className="edit-item" onClick={this.props.editCallback} title={this.props.editMode ? "save changes" : "edit"} >
+                <div
+                    className={css(styles.action)}
+                    onClick={this.props.cancelEditCallback}
+                    title="discard changes"
+                >
+                    <i className="material-icons">block</i>
+                </div> : null
+            }
+            <div
+                className={css(styles.action)}
+                onClick={this.props.editCallback}
+                title={this.props.editMode ? "save changes" : "edit"}
+            >
                 {this.props.editMode ?
                  <i className="material-icons">save</i> :
                  <i className="material-icons">mode_edit</i>}
@@ -128,17 +148,19 @@ const Actions = React.createClass({
                 editMode={this.props.editMode}
             />
             <div className={css(styles.fixactions)}>
-                <div className="search" onClick={this.doSearch}>
+                <div className={css(styles.action)} onClick={this.doSearch}>
                     <i className="material-icons">search</i>
                 </div>
-                <div className="new-item" onClick={this.newItem}>
+                <div className={css(styles.action)} onClick={this.newItem}>
                    <i className="material-icons">add</i>
                 </div>
+                <div className={css(styles.hamburgerWrapper)}>
                 <div
-                    className="hamburger"  
+                    className={css(styles.action, styles.hamburger)}
                     onClick={this.props.onClickHamburger}
                 >
                     <i className="material-icons">menu</i>
+                </div>
                 </div>
             </div>
         </div>;
@@ -196,30 +218,72 @@ const Navbar = React.createClass({
 });
 
 const styles = StyleSheet.create({
-    actions: {
+    action: {
         display: "inline-block",
+        ':hover': {
+            cursor: "pointer",
+        },
+        marginLeft: ss.sizes.paddingPx,
+        marginRight: ss.sizes.paddingPx,
+    },
+    actions: {
+        alignContent: "center",
+        display: "flex",
+        flexDirection: "row",
+        height: ss.sizes.navbarHeightPx,
+        justifyContent: "flex-end",
+        marginRight: ss.sizes.paddingPx,
+    },
+    ctxactions: {
+        alignItems: "center",
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "flex-end",
     },
     fixactions: {
-        display: "inline-block",
+        alignItems: "center",
+        display: "flex",
+        flexDirection: "row",
+    },
+    hamburgerWrapper: {
+        borderLeft: "1px solid black",
+        boxSizing: "border-box",
+        display: "flex",
+        alignItems: "center",
+        height: ss.sizes.navbarHeightPx,
+        paddingLeft: ss.sizes.paddingPx / 2,
+        paddingRight: ss.sizes.paddingPx,
     },
     navbar: {
         backgroundColor: ss.colors.labdbGreen,
         display: "flex",
         fontFamily: ss.fonts.base,
         height: ss.sizes.navbarHeightPx,
+        justifyContent: "space-between",
         left: 0,
         position: "fixed",
         top: 0,
         width: "100vw",
     },
     navbarTextSection: {
-        display: "flex",
         alignItems: "center",
+        display: "flex",
+        marginLeft: ss.sizes.paddingPx,
     },
     navitem: {
         display: "inline-block",
+        ':hover': {
+            cursor: "pointer",
+        },
         marginLeft: ss.sizes.paddingPx,
         marginRight: ss.sizes.paddingPx,
+    },
+    navlogo: {
+        boxSizing: "border-box",
+        fontFamily: "Rokkitt, serif",
+        fontSize: "150%",
+        paddingLeft: 2 * ss.sizes.paddingPx,
+        paddingRight: 4 * ss.sizes.paddingPx,
     },
 });
 

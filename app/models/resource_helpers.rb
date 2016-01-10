@@ -22,7 +22,7 @@ module ResourceHelpers
     core_links = if self.respond_to? :core_alt_field then
                    {lookup: core_alt_field_name,
                     name: self.get_heading(core_alt_field_name),
-                    inlineValue: core_alt_field.map(&:labdb_auto_link).map(&:html_safe)}
+                    links: core_alt_field.map(&:item_links).map(&:first)}
                  else
                    nil
                  end

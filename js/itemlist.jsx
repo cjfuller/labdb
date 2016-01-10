@@ -1,7 +1,9 @@
 const React = require("react");
 const _ = require("underscore");
+const {StyleSheet, css} = require("../node_modules/aphrodite/lib/index.js");
 
 const ActionExecutors = require("./action-executors.js");
+const ss = require("./shared-styles.js");
 
 const extractLookup = function(group, fieldName) {
     const item = _.first(_.where(group, {name: fieldName}));
@@ -33,26 +35,39 @@ const ItemRow = React.createClass({
     },
     render: function() {
         const linkHTML = <span>
-            {this.props.data.coreLinks.inlineValue.map((inlVal, idx) => {
-                return <span
-                    dangerouslySetInnerHTML={{__html: inlVal}}
+            {this.props.data.coreLinks.links.map((lnk, idx) => {
+                const [text, addr] = lnk;
+                return <a
+                    className={css(styles.coreLink)}
+                    href={addr}
                     key={`link${idx}`}
-                    style={{marginRight: "1em"}}
-                />;
+                >
+                    {text}
+                </a>;
             })}
         </span>;
-        return <tr className="itemlist" onClick={this.props.clickHandler}>
-            <td>
+        return <tr
+            className={css(styles.itemRow)}
+            onClick={this.props.clickHandler}
+        >
+            <td className={css(styles.itemField)}>
                 {this.props.data.name}
             </td>
-            <td>{this.suppField("Date")}</td>
-            <td>{this.suppField("Entered by")}</td>
-            <td dangerouslySetInnerHTML={{__html: extVal(
-                this.props.data.fieldData,
-                this.props.data.shortDesc.lookup)}}
+            <td className={css(styles.itemField)}>
+                {this.suppField("Date")}
+            </td>
+            <td className={css(styles.itemField)}>
+                {this.suppField("Entered by")}
+            </td>
+            <td className={css(styles.itemField)}
+                dangerouslySetInnerHTML={{__html: extVal(
+                    this.props.data.fieldData,
+                    this.props.data.shortDesc.lookup)}}
             >
             </td>
-            <td>{linkHTML}</td>
+            <td className={css(styles.itemField)}>
+                {linkHTML}
+            </td>
         </tr>;
     },
 });
@@ -92,23 +107,56 @@ const ItemTable = React.createClass({
                                  this.props.data.numberFieldName);
         const endItem = extVal(sorted[sorted.length - 1].fieldData,
                                this.props.data.numberFieldName);
-
-        return <div className="itemtable-container">
+        return <div>
             Showing items {startItem}-{endItem}.
-            <table className="itemtable">
-                <thead><tr>
-                    <th>ID</th>
-                    <th>Date</th>
-                    <th>Entered by</th>
-                    <th>Name</th>
-                    <th>Links</th>
-                </tr></thead>
-                <tbody>
-                    {items}
-                </tbody>
-            </table>
+            <div className={css(styles.itemtableContainer)}>
+                <table className={css(styles.itemtable)}>
+                    <thead><tr>
+                        <th>ID</th>
+                        <th>Date</th>
+                        <th>Entered by</th>
+                        <th>Name</th>
+                        <th>Links</th>
+                    </tr></thead>
+                    <tbody>
+                        {items}
+                    </tbody>
+                </table>
+            </div>
         </div>;
     },
+});
+
+const styles = StyleSheet.create({
+    coreLink: {
+        color: ss.colors.linkBaseColor,
+        ':hover': {
+            color: ss.colors.linkHoverColor,
+        },
+        textDecoration: "none",
+    },
+    itemField: {
+        padding: `${ss.sizes.paddingPx / 2}px ${ss.sizes.paddingPx}px`,
+    },
+    itemRow: {
+        ':nth-of-type(2n)': {
+            backgroundColor: ss.colors.lightBackground,
+        },
+        ':hover': {
+            backgroundColor: ss.colors.mediumBackground,
+        },
+    },
+    itemtableContainer: {
+        display: "flex",
+        justifyContent: "center",
+    },
+    itemtable: {
+        borderCollapse: "collapse",
+        borderSpacing: 0,
+        fontFamily: ss.fonts.content,
+        fontSize: ss.sizes.fontSizeMedium,
+    },
+
 });
 
 module.exports = ItemTable;

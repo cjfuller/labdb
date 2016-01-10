@@ -1,4 +1,5 @@
 const React = require("react");
+const ReactDOM = require("react-dom");
 const ReactRedux = require("react-redux");
 const Redux = require("redux");
 const _ = require("underscore");
@@ -280,7 +281,7 @@ const App = ReactRedux.connect((s) => s)(Application);
 window.onload = () => {
     loadPrefetchedData();
     ActionExecutors.injectDispatch(store.dispatch);
-    React.render(
+    ReactDOM.render(
         <Provider store={store} >
             <App />
         </Provider>,

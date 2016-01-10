@@ -6,6 +6,7 @@ const colors = {
     lightBackground: "#f8f8f8",
     mediumBackground: "#e0e0e0",
     bitDarkBackground: "#c0c0c0",
+    linkBaseColor: "#007799",
     linkHoverColor: "#009977",
 
 };
@@ -21,6 +22,7 @@ const fonts = {
 
 const sizes = {
     cornerRadiusPx: 3,
+    fontSizeMedium: 13,
     hamburgerWidthPx: 50,
     navbarHeightPx: 50,
     paddingPx: 10,
