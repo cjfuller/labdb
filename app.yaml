@@ -1,0 +1,7 @@
+runtime: custom
+vm: true
+api_version: 1
+
+instance_class: f1-micro
+manual_scaling:
+  instances: 1

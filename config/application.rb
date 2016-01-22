@@ -71,7 +71,7 @@ module Labdb
     config.assets.version = '1.0'
 
     #require https communication
-    config.force_ssl = true
+    config.force_ssl = false
 
     config.middleware.use Rack::Static, urls: ["/_s"], root: "public"
   end

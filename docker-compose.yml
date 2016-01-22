@@ -1,0 +1,11 @@
+db:
+  image: postgres
+web:
+  build: .
+  command: bundle exec puma --config config/puma.rb
+  volumes:
+    - .:/app
+  ports:
+    - "3000:3000"
+  links:
+    - db

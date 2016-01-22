@@ -21,6 +21,9 @@ development:
   pool: 5
   timeout: 5000
   encoding: utf8
+  host: db
+  username: postgres
+  password:
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -31,7 +34,9 @@ test:
   pool: 5
   timeout: 5000
   encoding: utf8
-  usename: postgres
+  username: postgres
+  password:
+  host: db
 
 production:
   adapter: postgresql
