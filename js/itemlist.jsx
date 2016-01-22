@@ -129,11 +129,8 @@ const ItemTable = React.createClass({
 
 const styles = StyleSheet.create({
     coreLink: {
-        color: ss.colors.linkBaseColor,
-        ':hover': {
-            color: ss.colors.linkHoverColor,
-        },
-        textDecoration: "none",
+        marginRight: "1em",
+        ...ss.elements.link,
     },
     itemField: {
         padding: `${ss.sizes.paddingPx / 2}px ${ss.sizes.paddingPx}px`,

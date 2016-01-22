@@ -1,7 +1,9 @@
 const React = require("react");
+const {StyleSheet, css} = require("../node_modules/aphrodite/lib/index.js");
 
 const EditableText = require("./editable-text.jsx");
 const {extVal} = require("./util.js");
+const ss = require("./shared-styles.js");
 
 const MegaBar = React.createClass({
     propTypes: {
@@ -28,7 +30,13 @@ const MegaBar = React.createClass({
                     /> :
                     this.props.data.coreLinks.links.map((link, i) => {
                         const [text, href] = link;
-                        return <a href={href} key={href}>{text}</a>;
+                        return <a
+                            className={css(styles.coreLink)}
+                            href={href}
+                            key={href}
+                        >
+                            {text}
+                        </a>;
                     })
                 }
             </div>;
@@ -45,50 +53,83 @@ const MegaBar = React.createClass({
 
     render: function() {
         const editingString = this.props.editable ? "Editing " : "";
-        return <div className="item-megabar">
-            <div className="item-id">
+        return <div className={css(styles.itemMegabar)}>
+            <div className={css(styles.itemID)}>
                 {editingString + this.props.data.name}
             </div>
-            <div className="row">
-            <div className="nine columns">
-            <div className="alias-field">
-                {this.props.editable ?
-                    <div className="field-name">
-                        {this.props.data.shortDesc.name}
-                    </div> :
-                    null}
-            <div className="field-value major">
-                {this.props.editable ?
-                    <EditableText
-                        editable={this.props.editable}
-                        onChange={this.props.makeUpdater(
-                            this.props.data.shortDesc.lookup)}
-                        value={extVal(
-                            this.getFieldData(),
-                            this.props.data.shortDesc.lookup)}
-                    /> :
-                    <div
-                        className="item-alias"
-                        dangerouslySetInnerHTML={{
-                            __html: this.props.data.shortDesc.inlineValue,
-                        }}
-                    />}
+            <div className={css(styles.subtitleContainer)}>
+            <div className={css(styles.subtitle)}>
+                <div className={css(styles.alias)}>
+                    {this.props.editable ?
+                        <div className="field-name">
+                            {this.props.data.shortDesc.name}
+                        </div> :
+                        null}
+                    <div className="field-value major">
+                        {this.props.editable ?
+                            <EditableText
+                                editable={this.props.editable}
+                                onChange={this.props.makeUpdater(
+                                    this.props.data.shortDesc.lookup)}
+                                value={extVal(
+                                    this.getFieldData(),
+                                    this.props.data.shortDesc.lookup)}
+                            /> :
+                            <div
+                                className="item-alias"
+                                dangerouslySetInnerHTML={{
+                                    __html: (
+                                        this.props.data.shortDesc.inlineValue),
+                                }}
+                            />}
+                    </div>
+                </div>
+                <div className="linked-items">
+                    {this.props.editable ?
+                        <div className="field-name">
+                            {(this.props.data.coreLinks || {}).name}
+                        </div> :
+                        null}
+                    {this.getCoreLinks()}
+                </div>
             </div>
-            </div>
-            <div className="linked-items">
-                {this.props.editable ?
-                    <div className="field-name">
-                        {(this.props.data.coreLinks || {}).name}
-                    </div> :
-                    null}
-                {this.getCoreLinks()}
-            </div>
-            </div>
-            <div className="three columns">
+            <div className={css(styles.placeholder)}>
             </div>
             </div>
 
         </div>;
+    },
+});
+
+const styles = StyleSheet.create({
+    alias: {
+        fontFamily: ss.fonts.monospace,
+        fontSize: ss.sizes.fontSizeLarge,
+    },
+    coreLink: {
+        marginRight: ss.sizes.paddingPx,
+        ...ss.elements.link,
+    },
+    itemID: {
+        fontSize: "3rem",
+        fontFamily: ss.fonts.contrast,
+    },
+    itemMegabar: {
+        margin: 2 * ss.sizes.paddingPx,
+    },
+    placeholder: {
+        flex: 1,
+    },
+    subtitle: {
+        display: "flex",
+        flex: 3,
+        flexDirection: "row",
+        justifyContent: "space-between",
+    },
+    subtitleContainer: {
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-between",
     },
 });
 

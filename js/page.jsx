@@ -66,7 +66,8 @@ const Page = React.createClass({
 
 const styles = StyleSheet.create({
     pageContainer: {
-        marginTop: ss.sizes.navbarHeightPx,
+        padding: 3 * ss.sizes.paddingPx,
+        paddingTop: ss.sizes.navbarHeightPx,
     },
 });
 

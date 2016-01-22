@@ -11,6 +11,17 @@ const colors = {
 
 };
 
+const elements = {
+    link: {
+        color: colors.linkBaseColor,
+        ':hover': {
+            color: colors.linkHoverColor,
+            textDecoration: "underline",
+        },
+        textDecoration: "none",
+    },
+};
+
 // TODO: use aprhodite font face support
 const fonts = {
     monospace: "Source Code Pro, monospace",
@@ -21,12 +32,14 @@ const fonts = {
 
 
 const sizes = {
+    buttonHeightPx: 40,
     cornerRadiusPx: 3,
+    fontSizeLarge: 16,
     fontSizeMedium: 13,
     hamburgerWidthPx: 50,
     navbarHeightPx: 50,
     paddingPx: 10,
 };
 
-module.exports = {colors, fonts, sizes};
+module.exports = {colors, elements, fonts, sizes};
 

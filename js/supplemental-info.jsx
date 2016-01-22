@@ -1,6 +1,8 @@
 const React = require("react");
+const {StyleSheet, css} = require("../node_modules/aphrodite/lib/index.js");
 
 const EditableText = require("./editable-text.jsx");
+const ss = require("./shared-styles.js");
 
 const {extVal} = require("./util.js");
 
@@ -54,8 +56,8 @@ const SupplementalInfo = React.createClass({
     },
 
     render: function() {
-        return <div className="three columns">
-            <div className="supplemental-info">
+        return <div className={css(styles.supplementWrapper)}>
+            <div className={css(styles.supplementalInfo)}>
             {this.props.data.supplementalFields.map((f) => {
                 return <SupplementalField
                     data={this.getFieldData()}
@@ -67,13 +69,51 @@ const SupplementalInfo = React.createClass({
             })}
             </div>
             {(this.props.data.type === "plasmid") ?
-                <input
-                    className="plasmap-button"
-                    type="button"
-                    value="Plasmid map"
-                /> :
+                <div
+                    className={css(styles.plasmapButton)}
+                    role="button"
+                >
+                    Plasmid map
+                </div> :
                 null}
         </div>;
+    },
+});
+
+const styles = StyleSheet.create({
+    plasmapButton: {
+        alignItems: "center",
+        border: `1px solid ${ss.colors.borderColor}`,
+        borderRadius: ss.sizes.cornerRadiusPx,
+        boxShadow: `1px 1px 1px ${ss.colors.borderColor}`,
+        boxSizing: "border-box",
+        display: "flex",
+        height: ss.sizes.buttonHeightPx,
+        justifyContent: "center",
+        margin: ss.sizes.paddingPx,
+        textAlign: "center",
+        width: "100%",
+        ':active': {
+            backgroundColor: ss.colors.mediumBackground,
+            boxShadow: `inset 1px 1px ${ss.colors.borderColor}`,
+        },
+        ':hover': {
+            backgroundColor: ss.colors.lightBackground,
+            cursor: "pointer",
+        },
+    },
+    supplementalInfo: {
+        border: `1px solid ${ss.colors.borderColor}`,
+        borderRadius: ss.sizes.cornerRadiusPx,
+        boxSizing: "border-box",
+        margin: ss.sizes.paddingPx,
+        padding: 1.5 * ss.sizes.paddingPx,
+        width: "100%",
+    },
+    supplementWrapper: {
+        boxSizing: "border-box",
+        display: "block",
+        width: "100%",
     },
 });
 

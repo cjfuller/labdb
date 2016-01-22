@@ -3,6 +3,8 @@ const React = require("react");
 const InfoSection = require("./info-section.jsx");
 const InventoryWidget = require("./inventory-widget.jsx");
 const SequenceSection = require("./sequence-section.jsx");
+const {StyleSheet, css} = require("../node_modules/aphrodite/lib/index.js");
+const ss = require("./shared-styles.js");
 
 const CoreInfo = React.createClass({
     propTypes: {
@@ -12,7 +14,7 @@ const CoreInfo = React.createClass({
         unsavedChanges: React.PropTypes.any, // TODO
     },
     render: function() {
-        return <div className="core-info nine columns">
+        return <div className={css(styles.coreInfo)}>
             {this.props.data.coreInfoSections.map((s) => {
                 return <InfoSection
                     data={this.props.data.fieldData}
@@ -31,6 +33,15 @@ const CoreInfo = React.createClass({
             />
             <InventoryWidget inventory={this.props.data.inventory} />
         </div>;
+    },
+});
+
+const styles = StyleSheet.create({
+    coreInfo: {
+        border: `1px solid ${ss.colors.borderColor}`,
+        borderRadius: ss.sizes.cornerRadiusPx,
+        margin: ss.sizes.paddingPx,
+        padding: 1.5 * ss.sizes.paddingPx,
     },
 });
 
