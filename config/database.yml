@@ -22,7 +22,7 @@ development:
   timeout: 5000
   encoding: utf8
   host: db
-  username: postgres
+  username: labdb
   password:
 
 # Warning: The database defined as "test" will be erased and
@@ -41,6 +41,8 @@ test:
 production:
   adapter: postgresql
   database: labdb
+  username: labdb
+  password:
   pool: 5
   timeout: 5000
   encoding: utf8

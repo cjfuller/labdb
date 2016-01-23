@@ -35,6 +35,7 @@ class ApplicationController < ActionController::Base
   DATABASE_SYSTEM_SHORT_NAME = Naming.name_for("database_short")
 
   def redirect_https
+    return nil
     redirect_to :protocol => "https://" unless request.protocol == "https://"
   end
 
