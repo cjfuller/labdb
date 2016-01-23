@@ -1,7 +1,7 @@
 const React = require("react");
+const {StyleSheet, css} = require("../node_modules/aphrodite/lib/index.js");
 
-// TODO: replace with inline styles.
-const classNames = () => "";
+const ss = require("./shared-styles.js");
 
 const EditableField = React.createClass({
     propTypes: {
@@ -11,16 +11,28 @@ const EditableField = React.createClass({
         value: React.PropTypes.node,
     },
     render: function() {
-        return <input
-            className={classNames({
-                editableField: true,
-                editable: this.props.editable,
-            }, this.props.fieldClasses)}
-            disabled={!this.props.editable}
-            onChange={(e) => this.props.onChange(e.target.value)}
-            type="text"
-            value={this.props.value}
-        />;
+        {/* TODO: inject field classes */}
+        return (
+            <input
+                className={
+                    css(
+                        this.props.editable && styles.editableField,
+                        styles.field)}
+                disabled={!this.props.editable}
+                onChange={(e) => this.props.onChange(e.target.value)}
+                type="text"
+                value={this.props.value}
+            />);
+    },
+});
+
+const styles = StyleSheet.create({
+    editableField: {
+        ...ss.traits.editableBorders,
+        ...ss.traits.editableFocus,
+    },
+    field: {
+        ...ss.elements.inputField,
     },
 });
 

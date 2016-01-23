@@ -8,7 +8,32 @@ const colors = {
     bitDarkBackground: "#c0c0c0",
     linkBaseColor: "#007799",
     linkHoverColor: "#009977",
+    mutedBlue: "#115599",
+    yesGreen: "#7aa141",
+    noRed: "#ff3333",
+    ambiguousBlue: "#00aaff",
+};
 
+// TODO: use aprhodite font face support
+const fonts = {
+    monospace: "Source Code Pro, monospace",
+    base: "Lato, sans-serif",
+    content: "Lato, sans-serif",
+    contrast: "Montserrat, sans-serif",
+    weights: {
+        emph: 600,
+    },
+};
+
+const sizes = {
+    buttonHeightPx: 40,
+    cornerRadiusPx: 3,
+    fontSizeExtraLarge: 20,
+    fontSizeLarge: 17,
+    fontSizeMedium: 14,
+    hamburgerWidthPx: 50,
+    navbarHeightPx: 50,
+    paddingPx: 10,
 };
 
 const elements = {
@@ -20,26 +45,52 @@ const elements = {
         },
         textDecoration: "none",
     },
+    sectionContents: {
+        backgroundColor: colors.lightBackground,
+        borderLeft: `3px solid ${colors.mutedBlue}`,
+        borderRadius: sizes.cornerRadiusPx,
+        fontFamily: fonts.content,
+        fontSize: sizes.fontSizeMedium,
+        minHeight: 2 * sizes.paddingPx,
+        padding: sizes.paddingPx,
+    },
+    sectionLabel: {
+        fontFamily: fonts.content,
+        fontSize: sizes.fontSizeLarge,
+    },
+    inputField: {
+        background: "inherit",
+        border: "none",
+        display: "inline-block",
+        height: "inherit",
+        marginBottom: "inherit",
+        maxWidth: "100%",
+        padding: "inherit",
+        width: "100%",
+    },
+    fieldName: {
+        display: "inline-block",
+        fontWeight: fonts.weights.emph,
+        marginRight: sizes.paddingPx,
+    },
 };
 
-// TODO: use aprhodite font face support
-const fonts = {
-    monospace: "Source Code Pro, monospace",
-    base: "Open Sans, sans-serif",
-    content: "Open Sans, sans-serif",
-    contrast: "Montserrat, sans-serif",
+const traits = {
+    editableBorders: {
+        border: "none",
+        borderBottom: `1px solid ${colors.borderColor}`,
+        borderRadius: 0,
+    },
+    editableFocus: {
+        ':focus': {
+            borderBottom: "1px solid black",
+            outline: "none",
+        },
+    },
+    shadowedButton: {
+        boxShadow: `1px 1px 4px ${colors.bitDarkBackground}`,
+    },
 };
 
-
-const sizes = {
-    buttonHeightPx: 40,
-    cornerRadiusPx: 3,
-    fontSizeLarge: 16,
-    fontSizeMedium: 13,
-    hamburgerWidthPx: 50,
-    navbarHeightPx: 50,
-    paddingPx: 10,
-};
-
-module.exports = {colors, elements, fonts, sizes};
+module.exports = {colors, elements, fonts, sizes, traits};
 

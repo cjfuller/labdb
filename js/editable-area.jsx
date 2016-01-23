@@ -1,7 +1,7 @@
 const React = require("react");
+const {StyleSheet, css} = require("../node_modules/aphrodite/lib/index.js");
 
-// TODO: replace with inline styles.
-const classNames = () => "";
+const ss = require("./shared-styles.js");
 
 const EditableArea = React.createClass({
     propTypes: {
@@ -13,15 +13,21 @@ const EditableArea = React.createClass({
     render: function() {
         return this.props.editable ?
             <textarea
-                className={classNames({
-                    editableField: true,
-                    editable: this.props.editable,
-                }, this.props.fieldClasses)}
+                className={css(styles.editableField)}
                 disabled={!this.props.editable}
                 onChange={(e) => this.props.onChange(e.target.value)}
                 value={this.props.value}
             /> :
             <div>{this.props.value}</div>;
     }});
+
+const styles = StyleSheet.create({
+    editableField: {
+        border: "none",
+        fontFamily: ss.fonts.monospace,
+        minHeight: 200,
+        width: "100%",
+    },
+});
 
 module.exports = EditableArea;

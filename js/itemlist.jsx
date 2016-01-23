@@ -34,7 +34,7 @@ const ItemRow = React.createClass({
                 name));
     },
     render: function() {
-        const linkHTML = <span>
+        const linkHTML = this.props.data.coreLinks ? <span>
             {this.props.data.coreLinks.links.map((lnk, idx) => {
                 const [text, addr] = lnk;
                 return <a
@@ -45,7 +45,7 @@ const ItemRow = React.createClass({
                     {text}
                 </a>;
             })}
-        </span>;
+        </span> : null;
         return <tr
             className={css(styles.itemRow)}
             onClick={this.props.clickHandler}
@@ -65,9 +65,10 @@ const ItemRow = React.createClass({
                     this.props.data.shortDesc.lookup)}}
             >
             </td>
+            {this.props.data.coreLinks ?
             <td className={css(styles.itemField)}>
                 {linkHTML}
-            </td>
+            </td> : null}
         </tr>;
     },
 });
@@ -116,7 +117,8 @@ const ItemTable = React.createClass({
                         <th>Date</th>
                         <th>Entered by</th>
                         <th>Name</th>
-                        <th>Links</th>
+                        {sorted.length > 0 && sorted[0].coreLinks ?
+                        <th>Links</th> : null}
                     </tr></thead>
                     <tbody>
                         {items}
@@ -141,6 +143,7 @@ const styles = StyleSheet.create({
         },
         ':hover': {
             backgroundColor: ss.colors.mediumBackground,
+            cursor: "pointer",
         },
     },
     itemtableContainer: {

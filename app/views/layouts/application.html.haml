@@ -24,7 +24,22 @@
     = stylesheet_link_tag "//fonts.googleapis.com/css?family=Source+Code+Pro"
     = stylesheet_link_tag "//fonts.googleapis.com/icon?family=Material+Icons"
     = stylesheet_link_tag "//fonts.googleapis.com/icon?family=Open+Sans:400,600"
+    = stylesheet_link_tag "//fonts.googleapis.com/icon?family=Lato:400,600"
+    = stylesheet_link_tag "//fonts.googleapis.com/icon?family=Source+Sans+Pro:400,600"
     -#= stylesheet_link_tag "/_s/app.css"
+    :css
+      .auto-link {
+        text-decoration: none;
+        color: #007799;
+      }
+      .auto-link:hover {
+        color: #009977;
+        text-decoration: underline;
+      }
+      #body {
+        font-family: Lato, sans-serif;
+      }
+
   %body
     %div#body
     -# .navbar.navbar-fixed-top.navbar-inverse
@@ -54,5 +69,4 @@
     .container
       %script{type: "text/javascript"}
         = "window._labdbPrefetch = #{@content_json}".html_safe
-    = javascript_include_tag "/_s/third_party.js"
     = javascript_include_tag "/_s/app.js"

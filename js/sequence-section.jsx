@@ -1,8 +1,10 @@
 const React = require("react");
+const {StyleSheet, css} = require("../node_modules/aphrodite/lib/index.js");
 
 const EditableBoolean = require("./editable-boolean.jsx");
 const EditableText = require("./editable-text.jsx");
 const {extVal} = require("./util.js");
+const ss = require("./shared-styles.js");
 
 const SequenceSection = React.createClass({
     propTypes: {
@@ -38,12 +40,12 @@ const SequenceSection = React.createClass({
         }
         const verifiedLookup = (this.props.sequence.verified || {}).lookup;
         return <div className="sequence-section info-section">
-            <div className="seq-label-row">
+            <div className={css(styles.labelRow)}>
             <div className="seq-label-and-size">
-            <div className="info-section-label seq" ref="seqLabel">
+            <div className={css(styles.sequenceSectionLabel)} ref="seqLabel">
                 Sequence
             </div>
-            <div className="seq-size">
+            <div className={css(styles.sequenceSize)}>
                 &nbsp;({
                     (this.val(this.props.sequence.sequence.lookup) || []).length
                 }bp)
@@ -61,19 +63,47 @@ const SequenceSection = React.createClass({
                     null}
             </div>
             </div>
-            <div className="info-section-contents" aria-labelledby="seqLabel">
-                <div className="sequence field-value single major">
-            <EditableText
-                editable={this.props.editable}
-                onChange={this.props.makeUpdater(
-                    this.props.sequence.sequence.lookup)}
-                single={true}
-                value={this.val(this.props.sequence.sequence.lookup)}
-            />
-            </div>
+            <div
+                aria-labelledby="seqLabel"
+                className={css(styles.sequenceSectionContents)}
+            >
+                {/* Was: sequence field-value single major */}
+                <div className={css(styles.sequence)}>
+                    <EditableText
+                        editable={this.props.editable}
+                        onChange={this.props.makeUpdater(
+                            this.props.sequence.sequence.lookup)}
+                        single={true}
+                        value={this.val(this.props.sequence.sequence.lookup)}
+                    />
+                </div>
             </div>
         </div>;
 
+    },
+});
+
+const styles = StyleSheet.create({
+    labelRow: {
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+    },
+    sequenceSectionContents: {
+        ...ss.elements.sectionContents,
+    },
+    sequenceSectionLabel: {
+        display: "inline-block",
+        ...ss.elements.sectionLabel,
+    },
+    sequenceSize: {
+        display: "inline-block",
+    },
+    sequence: {
+        fontFamily: ss.fonts.monospace,
+        width: "100%",
+        wordWrap: "break-word",
     },
 });
 

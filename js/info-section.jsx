@@ -1,8 +1,10 @@
 const React = require("react");
+const {StyleSheet, css} = require("../node_modules/aphrodite/lib/index.js");
 
 const EditableBoolean = require("./editable-boolean.jsx");
 const EditableText = require("./editable-text.jsx");
 const {extVal} = require("./util.js");
+const ss = require("./shared-styles.js");
 
 // TODO: replace with inline styles
 const classNames = () => "";
@@ -53,16 +55,19 @@ const InfoSection = React.createClass({
 
             const labelRef = "label-" + f.name;
             return <div key={f.name}>
-                <div className="field-name" ref={labelRef} key={labelRef}>
+                <div
+                    className={css(styles.fieldName)}
+                    key={labelRef}
+                    ref={labelRef}
+                >
                     {f.name + sep}
                 </div>
                 <div
                     aria-labelledby={this.refs[labelRef]}
-                    className={classNames({
-                        core: true,
-                        editable: this.props.editable,
-                        'field-value': true,
-                        major: this.props.contents.single})}
+                    className={css(
+                            this.props.editable && styles.editableField,
+                            styles.fieldValue,
+                            this.props.contents.single && styles.major)}
                     key={"value-" + f.name}
                 >
                     {isBooleanField ?
@@ -83,13 +88,13 @@ const InfoSection = React.createClass({
     },
 
     render: function() {
-        return <div className="info-section">
-            <div className="info-section-label" ref="sectionLabel">
+        return <div className={css(styles.infoSection)}>
+            <div className={css(styles.infoSectionLabel)} ref="sectionLabel">
                 {this.props.name}
             </div>
             <div
                 aria-labelledby={this.refs.sectionLabel}
-                className="info-section-contents"
+                className={css(styles.infoSectionContents)}
             >
                 {this.getSectionContents()}
             </div>
@@ -97,5 +102,34 @@ const InfoSection = React.createClass({
     },
 
 });
+
+const styles = StyleSheet.create({
+    fieldName: {
+        ...ss.elements.fieldName,
+    },
+    infoSection: {
+        ':not(:last-of-type)': {
+            marginBottom: 2 * ss.sizes.paddingPx,
+        },
+    },
+    infoSectionContents: {
+        ...ss.elements.sectionContents,
+    },
+    infoSectionLabel: {
+        ...ss.elements.sectionLabel,
+    },
+    editableField: {
+        ...ss.traits.editableBorders,
+        ...ss.traits.editableFocus,
+    },
+    major: {
+        maxWidth: "100%",
+        width: "100%",
+    },
+    fieldValue: {
+        display: "inline-block",
+    },
+});
+
 
 module.exports = InfoSection;

@@ -103,7 +103,7 @@ module StandardActions
             items: @objs.map(&:as_resource_def),
             numberFieldName: @objs[0].number_field_name
     })
-    render
+    render 'layouts/application.html.haml'
   end
 
   def show
@@ -116,7 +116,7 @@ module StandardActions
 
     define_ui_variables(status_text: "#{obj_tag} #{@obj.number_field}", context_specific_buttons: "shared/top_editing_buttons", obj: @obj, readonly: true)
     @content_json = @obj.as_json.html_safe
-    render
+    render 'layouts/application.html.haml'
   end
 
   def auto_fill_generated_fields

@@ -16,8 +16,8 @@ const SupplementalField = React.createClass({
     render: function() {
         const f = this.props.item;
         const labelRef = "label-" + f.name;
-        return <div className="supplemental-item">
-            <div className="field-name suppl" ref={labelRef} key={labelRef}>
+        return <div className={css(styles.supplementalItem)}>
+            <div className={css(styles.fieldName)} ref={labelRef} key={labelRef}>
                 {f.name + ":"}
             </div>
             <div
@@ -81,6 +81,9 @@ const SupplementalInfo = React.createClass({
 });
 
 const styles = StyleSheet.create({
+    fieldName: {
+        ...ss.elements.fieldName,
+    },
     plasmapButton: {
         alignItems: "center",
         border: `1px solid ${ss.colors.borderColor}`,
@@ -109,6 +112,11 @@ const styles = StyleSheet.create({
         margin: ss.sizes.paddingPx,
         padding: 1.5 * ss.sizes.paddingPx,
         width: "100%",
+    },
+    supplementalItem: {
+        ':not(:last-of-type)': {
+            marginBottom: ss.sizes.paddingPx,
+        },
     },
     supplementWrapper: {
         boxSizing: "border-box",

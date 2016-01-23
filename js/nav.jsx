@@ -258,6 +258,7 @@ const styles = StyleSheet.create({
         backgroundColor: ss.colors.labdbGreen,
         display: "flex",
         fontFamily: ss.fonts.base,
+        fontSize: ss.sizes.fontSizeLarge,
         height: ss.sizes.navbarHeightPx,
         justifyContent: "space-between",
         left: 0,

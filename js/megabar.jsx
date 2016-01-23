@@ -19,7 +19,7 @@ const MegaBar = React.createClass({
     },
     getCoreLinks: function() {
         if (this.props.data.coreLinks) {
-            return <div className="field-value">
+            return <div className={css(styles.fieldValue)}>
                 {this.props.editable ?
                     <EditableText
                         editable={this.props.editable}
@@ -61,11 +61,11 @@ const MegaBar = React.createClass({
             <div className={css(styles.subtitle)}>
                 <div className={css(styles.alias)}>
                     {this.props.editable ?
-                        <div className="field-name">
+                        <div className={css(styles.fieldName)}>
                             {this.props.data.shortDesc.name}
                         </div> :
                         null}
-                    <div className="field-value major">
+                    <div className={css(styles.fieldValue)}>
                         {this.props.editable ?
                             <EditableText
                                 editable={this.props.editable}
@@ -84,9 +84,9 @@ const MegaBar = React.createClass({
                             />}
                     </div>
                 </div>
-                <div className="linked-items">
+                <div className={css(styles.linkedItems)}>
                     {this.props.editable ?
-                        <div className="field-name">
+                        <div className={css(styles.fieldName)}>
                             {(this.props.data.coreLinks || {}).name}
                         </div> :
                         null}
@@ -103,12 +103,24 @@ const MegaBar = React.createClass({
 
 const styles = StyleSheet.create({
     alias: {
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "flex-start",
         fontFamily: ss.fonts.monospace,
-        fontSize: ss.sizes.fontSizeLarge,
+        fontSize: ss.sizes.fontSizeExtraLarge,
+        minWidth: 400,
     },
     coreLink: {
         marginRight: ss.sizes.paddingPx,
         ...ss.elements.link,
+    },
+    fieldName: {
+        whiteSpace: "nowrap",
+        ...ss.elements.fieldName,
+    },
+    fieldValue: {
+        display: "inline-block",
+        width: "100%",
     },
     itemID: {
         fontSize: "3rem",
@@ -116,6 +128,16 @@ const styles = StyleSheet.create({
     },
     itemMegabar: {
         margin: 2 * ss.sizes.paddingPx,
+    },
+    link: {
+        ...ss.elements.link,
+    },
+    linkedItems: {
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "flex-end",
+        fontFamily: ss.fonts.base,
+        fontSize: ss.sizes.fontSizeLarge,
     },
     placeholder: {
         flex: 1,
