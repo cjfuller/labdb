@@ -1,8 +1,8 @@
 const {css, StyleSheet} = require("../node_modules/aphrodite/lib/index.js");
 const React = require("react");
-const _ = require("underscore");
 const $ = require("jquery");
 
+const ae = require("./action-executors.js");
 const ss = require("./shared-styles.js");
 
 const NavItem = React.createClass({
@@ -54,49 +54,85 @@ const CtxActions = React.createClass({
         editCallback: React.PropTypes.func,
         editMode: React.PropTypes.bool,
     },
+    collection: function() {
+        return (this.props.data.type === "collection");
+    },
+    doNextCollection: function() {
+        // TODO: handle ascending sort
+        const desc = true;
+        let nextIndex = null;
+        let sortOrder = null;
+        // TODO: what if there's no items?  Should probably disable buttons.
+        if (desc) {
+            nextIndex = (
+                this.props.data.items[this.props.data.items.length - 1]
+                    .fieldData[this.props.data.numberFieldName] - 1);
+            sortOrder = "DESC";
+        } else {
+            nextIndex = (
+                this.props.data.items[this.props.data.items.length - 1]
+                    .fieldData[this.props.data.numberFieldName] + 1);
+            sortOrder = "ASC";
+        }
+        // TODO: make this not require a reload using:
+        /* ae.maybeFetchThenDisplay("table", {
+           type: this.props.data.items[0].type,
+           start: nextIndex,
+           }, sortOrder); */
+        window.location.search = `sort_order=${sortOrder}&start=${nextIndex}`;
+    },
     doNext: function() {
-        const apiBase = this.props.data.dynamicResourceBase;
-        const resource = this.props.data.resource;
-        $.ajax({
-            url: `${apiBase}${resource}/next`,
-            method: "GET",
-            success: (resp) => window._store.updateDataFromURL(
-                `${resp}`),
-        });
+        // TODO: make this not require a reload.
+        window.location = `${this.props.data.resourcePath}/next`;
     },
 
     doPrevious: function() {
-        const apiBase = this.props.data.dynamicResourceBase;
-        const resource = this.props.data.resource;
-        $.ajax({
-            url: `${apiBase}${resource}/previous`,
-            method: "GET",
-            success: (resp) => window._store.updateDataFromURL(
-                `${resp}`),
-        });
+        // TODO: make this not require a reload.
+        window.location =  `${this.props.data.resourcePath}/previous`;
     },
 
-    render: function() {
-        if (_.isArray(window._labdbPrefetch)) {
-            return null;
+    doPreviousCollection: function() {
+        // TODO: handle ascending sort
+        const desc = true;
+        let nextIndex = null;
+        let sortOrder = null;
+        // TODO: is there a way to make this symmetric with the next
+        // button in the face of missing items?
+        const offset = 100;
+        // TODO: what if there's no items?  Should probably disable buttons.
+        if (desc) {
+            nextIndex = (
+                this.props.data.items[0]
+                    .fieldData[this.props.data.numberFieldName] + offset);
+            sortOrder = "DESC";
+        } else {
+            nextIndex = (
+                this.props.data.items[0]
+                    .fieldData[this.props.data.numberFieldName] - offset);
+            sortOrder = "ASC";
         }
+        window.location.search = `sort_order=${sortOrder}&start=${nextIndex}`;
+    },
+    render: function() {
 
         return <div className={css(styles.ctxactions)}>
             <div
                 className={css(styles.action)}
-                onClick={this.doPrevious}
+                onClick={this.collection() ? this.doPreviousCollection :
+                         this.doPrevious}
                 title="previous"
             >
                 <i className="material-icons">arrow_back</i>
             </div>
             <div
                 className={css(styles.action)}
-                onClick={this.doNext}
+                onClick={this.collection() ? this.doNextCollection :
+                         this.doNext}
                 title="next"
             >
                 <i className="material-icons">arrow_forward</i>
             </div>
-            {this.props.editMode ?
+            {this.props.editMode && !this.collection() ?
                 <div
                     className={css(styles.action)}
                     onClick={this.props.cancelEditCallback}
@@ -105,6 +141,7 @@ const CtxActions = React.createClass({
                     <i className="material-icons">block</i>
                 </div> : null
             }
+            {this.collection() ? null :
             <div
                 className={css(styles.action)}
                 onClick={this.props.editCallback}
@@ -113,7 +150,7 @@ const CtxActions = React.createClass({
                 {this.props.editMode ?
                  <i className="material-icons">save</i> :
                  <i className="material-icons">mode_edit</i>}
-            </div>
+            </div>}
         </div>;
     },
 });
@@ -140,7 +177,9 @@ const Actions = React.createClass({
     },
 
     render: function() {
-        return <div className={css(styles.actions)}>
+        return <div
+            className={css(styles.actions)}
+        >
             <CtxActions
                 cancelEditCallback={this.props.cancelEditCallback}
                 data={this.props.data}
@@ -198,13 +237,13 @@ const Navbar = React.createClass({
         return <div className={css(styles.navbar)}>
             <div className={css(styles.navbarTextSection)}>
                 <NavLogo text={"LabDB2.\u03b2"} />
-                {_.map(this.props.navitems, function(n, i) {
+                {this.props.navitems.map((n, i) => {
                     return <NavItem
                         addr={this.props.navlinks[n]}
                         name={n}
                         key={n}
                     />;
-                }.bind(this))}
+                })}
             </div>
             <Actions
                 cancelEditCallback={this.props.cancelEditCallback}
@@ -232,7 +271,6 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         height: ss.sizes.navbarHeightPx,
         justifyContent: "flex-end",
-        marginRight: ss.sizes.paddingPx,
     },
     ctxactions: {
         alignItems: "center",
@@ -252,10 +290,11 @@ const styles = StyleSheet.create({
         alignItems: "center",
         height: ss.sizes.navbarHeightPx,
         paddingLeft: ss.sizes.paddingPx / 2,
-        paddingRight: ss.sizes.paddingPx,
+        paddingRight: ss.sizes.paddingPx / 2,
     },
     navbar: {
         backgroundColor: ss.colors.labdbGreen,
+        boxSizing: "border-box",
         display: "flex",
         fontFamily: ss.fonts.base,
         fontSize: ss.sizes.fontSizeLarge,

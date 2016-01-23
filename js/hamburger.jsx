@@ -1,3 +1,4 @@
+const React = require("react");
 
 const Hamburger = React.createClass({
     render: function() {

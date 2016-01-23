@@ -71,22 +71,26 @@ module StandardActions
     @objs = Kaminari.paginate_array(@objs).page(page).per(page_size)
   end
 
-  def index_all(page_size, page)
-    @objs = model_class.order(index_order).page(page).per(page_size)
+  def index_all(page_size, start_id)
+    if sort_order == "DESC" then
+      @objs = model_class.order(index_order).select { |o| o.send(o.number_field_name) <= start_id}.take(page_size)
+    else
+      @objs = model_class.order(index_order).select { |o| o.send(o.number_field_name) >= start_id}.take(page_size)
+    end
   end
 
   def index
     page_size = 100
-    page = (params[:page] or 1).to_i
-    if params[:id_for_page] and not params[:page] then
-      page = index_page_number_for_id(params[:id_for_page], page_size)
-    end
+    start_id = (params[:start] or (
+      (sort_order == "DESC") and 2**64 - 1) or 0).to_i
+    # TODO: use start_id for searches too
+    page = 1
     if params.has_key?(type) then
       index_with_new_search(page_size, page)
     elsif valid_search_requested? then
       index_with_stored_search(page_size, page)
     else
-      index_all(page_size, page)
+      index_all(page_size, start_id)
     end
 
     instance_variable_set("@" + type.pluralize, @objs)

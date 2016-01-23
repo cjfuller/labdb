@@ -47,18 +47,20 @@ const Page = React.createClass({
                 editMode={this.props.editMode}
                 onClickHamburger={this.toggleBurger}
             />
-            <div className={css(styles.pageContainer)}>
-                {this.props.data.type === "collection" ?
-                    <ItemTable
-                        data={this.props.data}
-                        dispatch={this.props.dispatch}
-                    /> :
-                    <ItemInfoView
-                        data={this.props.data}
-                        editable={this.props.editMode}
-                        dispatch={this.props.dispatch}
-                        unsavedChanges={this.props.unsavedChanges}
-                    />}
+            <div className={css(styles.pageContainerOuter)}>
+                <div className={css(styles.pageContainer)}>
+                    {this.props.data.type === "collection" ?
+                        <ItemTable
+                            data={this.props.data}
+                            dispatch={this.props.dispatch}
+                        /> :
+                        <ItemInfoView
+                            data={this.props.data}
+                            editable={this.props.editMode}
+                            dispatch={this.props.dispatch}
+                            unsavedChanges={this.props.unsavedChanges}
+                        />}
+                </div>
             </div>
         </div>;
     },
@@ -66,8 +68,19 @@ const Page = React.createClass({
 
 const styles = StyleSheet.create({
     pageContainer: {
+        margin: "0 auto",
+        maxWidth: "80vw",
         padding: 3 * ss.sizes.paddingPx,
         paddingTop: ss.sizes.navbarHeightPx,
+    },
+    pageContainerOuter: {
+        boxSizing: "border-box",
+        fontFamily: ss.fonts.base,
+        fontSize: ss.sizes.fontSizeNormal,
+        height: "100vh",
+        overflowX: "hidden",
+        overflowY: "auto",
+        maxWidth: "100vw",
     },
 });
 

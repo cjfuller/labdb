@@ -20,22 +20,22 @@ function fetchItem(resourcePath) {
     });
 }
 
-function fetchItemList(resourceType, start, end) {
+function fetchItemList(resourceType, start, sortOrder) {
     return $.ajax({
-        url: `${FETCH_BASE}/${resourceType}/list?start=${start}&end=${end}`,
+        url: `${FETCH_BASE}/${resourceType}/list?start=${start}&sort_order=${sortOrder}`,
         method: "GET",
     });
 }
 
-export function maybeFetchThenDisplay(fetchType, resource) {
+export function maybeFetchThenDisplay(fetchType, resource, sortOrder="DESC") {
     if (fetchType === "item") {
-        return fetchItem(resource.resourcePath).done((data) => {
+        return fetchItem(resource.resourcePath).then((data) => {
             dispatch(Actions.updateItemCache(resource.type, data));
             dispatch(Actions.displayItem(resource.type, resource.id));
         });
         //TODO: error handling
     } else if (fetchType === "table") {
-        return fetchItemList(resource.type, resource.id[0], resource.id[1]).done((data) => {
+        return fetchItemList(resource.type, resource.start, sortOrder).then((data) => {
             dispatch(Actions.updateTableCache(resource.type, data));
             dispatch(Actions.displayTable(resource.type, resource.id, resource.resourcePath));
         });

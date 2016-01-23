@@ -17,12 +17,16 @@ const SupplementalField = React.createClass({
         const f = this.props.item;
         const labelRef = "label-" + f.name;
         return <div className={css(styles.supplementalItem)}>
-            <div className={css(styles.fieldName)} ref={labelRef} key={labelRef}>
+            <div
+                className={css(styles.fieldName)}
+                key={labelRef}
+                ref={labelRef}
+            >
                 {f.name + ":"}
             </div>
             <div
                 aria-labelledby={this.refs.labelRef}
-                className="field-value suppl"
+                className={css(styles.fieldValue)}
                 ref={"value-" + f.name}
             >
                 <EditableText
@@ -83,6 +87,10 @@ const SupplementalInfo = React.createClass({
 const styles = StyleSheet.create({
     fieldName: {
         ...ss.elements.fieldName,
+    },
+    fieldValue: {
+        fontFamily: ss.fonts.base,
+        fontSize: ss.sizes.fontSizeNormal,
     },
     plasmapButton: {
         alignItems: "center",
