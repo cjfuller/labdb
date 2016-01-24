@@ -5,6 +5,7 @@ export const INVALIDATE_CACHE = "INVALIDATE_CACHE";
 export const CLEAR_UNSAVED = "CLEAR_UNSAVED";
 export const UPDATE_ITEM = "UPDATE_ITEM";
 export const ROUTING_UPDATE = "ROUTING";
+export const HAMBURGER_VISIBILITY = "HAMBURGER";
 
 export function updateItemCache(itemType, data) {
     return {
@@ -78,5 +79,12 @@ export function clearEdits(itemType, idx) {
         cacheType: "item",
         itemType: itemType,
         idx: idx,
+    };
+}
+
+export function hamburgerVisibility(visible) {
+    return {
+        type: HAMBURGER_VISIBILITY,
+        visible: visible,
     };
 }

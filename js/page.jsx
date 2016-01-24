@@ -4,6 +4,7 @@ const {StyleSheet, css} = require("../node_modules/aphrodite/lib/index.js");
 
 const Actions = require("./actions.js");
 const ActionExecutors = require("./action-executors.js");
+const Hamburger = require("./hamburger.jsx");
 const ItemTable = require("./itemlist.jsx");
 const ItemInfoView = require("./itemview.jsx");
 const Navbar = require("./nav.jsx");
@@ -14,6 +15,7 @@ const Page = React.createClass({
         data: React.PropTypes.any,
         dispatch: React.PropTypes.func,
         editMode: React.PropTypes.bool,
+        showHamburger: React.PropTypes.bool,
         unsavedChanges: React.PropTypes.any,
     },
     editToggle: function() {
@@ -35,7 +37,8 @@ const Page = React.createClass({
     },
 
     toggleBurger: function() {
-        console.log("Hamburger!");
+        this.props.dispatch(Actions.hamburgerVisibility(
+            !this.props.showHamburger));
     },
 
     render: function() {
@@ -47,7 +50,11 @@ const Page = React.createClass({
                 editMode={this.props.editMode}
                 onClickHamburger={this.toggleBurger}
             />
-            <div className={css(styles.pageContainerOuter)}>
+            {this.props.showHamburger ? <Hamburger /> : null}
+            <div
+                className={css(styles.pageContainerOuter)}
+                onClick={this.props.showHamburger ? this.toggleBurger : null}
+            >
                 <div className={css(styles.pageContainer)}>
                     {this.props.data.type === "collection" ?
                         <ItemTable

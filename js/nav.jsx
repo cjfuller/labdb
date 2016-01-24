@@ -22,9 +22,18 @@ const NavItem = React.createClass({
     },
 
     render: function() {
-        return <div className={css(styles.navitem)} onClick={this.onClick}>
-            {this.props.name}
-        </div>;
+        return (
+            <div
+                className={css(styles.navitemContainer)}
+                onClick={this.onClick}
+            >
+                <div
+                    className={css(styles.navitem)}
+                >
+                    {this.props.name}
+                </div>
+            </div>
+        );
     },
 
 });
@@ -304,6 +313,7 @@ const styles = StyleSheet.create({
         position: "fixed",
         top: 0,
         width: "100vw",
+        zIndex: 20,
     },
     navbarTextSection: {
         alignItems: "center",
@@ -312,11 +322,21 @@ const styles = StyleSheet.create({
     },
     navitem: {
         display: "inline-block",
-        ':hover': {
-            cursor: "pointer",
-        },
         marginLeft: ss.sizes.paddingPx,
         marginRight: ss.sizes.paddingPx,
+    },
+    navitemContainer: {
+        borderBottom: "3px solid rgba(0,0,0,0)",
+        boxSizing: "border-box",
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+        ':hover': {
+            cursor: "pointer",
+            borderBottom: `3px solid ${ss.colors.mutedBlue}`,
+        },
+        height: ss.sizes.navbarHeightPx,
     },
     navlogo: {
         boxSizing: "border-box",

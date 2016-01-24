@@ -150,6 +150,10 @@ function editHandler(state, action) {
     return {...state, editMode: action.value};
 }
 
+function hamburgerHandler(state, action) {
+    return {...state, showHamburger: action.visible};
+}
+
 const actionHandlers = {};
 
 actionHandlers[Actions.INVALIDATE_CACHE] = invalidateCacheHandler;
@@ -159,6 +163,7 @@ actionHandlers[Actions.ROUTING_UPDATE] = routingHandler;
 actionHandlers[Actions.UPDATE_CACHE] = cacheHandler;
 actionHandlers[Actions.UPDATE_ITEM] = updateHandler;
 actionHandlers[Actions.EDIT_MODE] = editHandler;
+actionHandlers[Actions.HAMBURGER_VISIBILITY] = hamburgerHandler;
 
 function stateReducer(state, action) {
     if (typeof state === 'undefined') {
@@ -271,6 +276,7 @@ const Application = React.createClass({
             data={dataForCurrentResource()}
             dispatch={this.props.dispatch}
             editMode={this.props.editMode}
+            showHamburger={store.getState().showHamburger}
             unsavedChanges={unsavedForCurrentResource()}
         />;
     },
