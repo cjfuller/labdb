@@ -6,8 +6,15 @@ const ss = require("./shared-styles.js");
 const HamburgerEntry = React.createClass({
     propTypes: {
         children: React.PropTypes.node,
+        href: React.PropTypes.string,
         iconName: React.PropTypes.string.isRequired,
         interactive: React.PropTypes.bool,
+    },
+    onClick: function() {
+        if (this.props.href) {
+            // TODO: make this not require a page reload.
+            window.location = this.props.href;
+        }
     },
     render: function() {
         return (
@@ -15,6 +22,7 @@ const HamburgerEntry = React.createClass({
                 className={
                     css(styles.hamburgerEntry,
                         this.props.interactive && styles.interactive)}
+                onClick={this.onClick}
             >
                 <div className={css(styles.icon)}>
                     <i className="material-icons">{this.props.iconName}</i>
@@ -74,25 +82,53 @@ const Hamburger = React.createClass({
                     <span>Delete</span>
                 </HamburgerEntry>
                 <HamburgerSectionName name="All databases" />
-                <HamburgerEntry iconName="folder_open" interactive={true}>
+                <HamburgerEntry
+                    href="/plasmids"
+                    iconName="folder_open"
+                    interactive={true}
+                >
                     <span>Plasmids</span>
                 </HamburgerEntry>
-                <HamburgerEntry iconName="folder_open" interactive={true}>
+                <HamburgerEntry
+                    href="/oligos"
+                    iconName="folder_open"
+                    interactive={true}
+                >
                     <span>Oligos</span>
                 </HamburgerEntry>
-                <HamburgerEntry iconName="folder_open" interactive={true}>
+                <HamburgerEntry
+                    href="/bacteria"
+                    iconName="folder_open"
+                    interactive={true}
+                >
                     <span>Bacteria</span>
                 </HamburgerEntry>
-                <HamburgerEntry iconName="folder_open" interactive={true}>
+                <HamburgerEntry
+                    href="/samples"
+                    iconName="folder_open"
+                    interactive={true}
+                >
                     <span>Samples</span>
                 </HamburgerEntry>
-                <HamburgerEntry iconName="folder_open" interactive={true}>
+                <HamburgerEntry
+                    href="/antibodies"
+                    iconName="folder_open"
+                    interactive={true}
+                >
                     <span>Antibodies</span>
                 </HamburgerEntry>
-                <HamburgerEntry iconName="folder_open" interactive={true}>
+                <HamburgerEntry
+                    href="/lines"
+                    iconName="folder_open"
+                    interactive={true}
+                >
                     <span>TC</span>
                 </HamburgerEntry>
-                <HamburgerEntry iconName="folder_open" interactive={true}>
+                <HamburgerEntry
+                    href="/yeaststrains"
+                    iconName="folder_open"
+                    interactive={true}
+                >
                     <span>Yeast</span>
                 </HamburgerEntry>
             </div>
