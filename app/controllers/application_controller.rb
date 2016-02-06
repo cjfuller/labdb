@@ -44,7 +44,7 @@ class ApplicationController < ActionController::Base
   around_filter :clear_temporary_number_assignments
 
   def clear_temporary_number_assignments
-    
+
     if request.get?
       NumberAssignment.clear_unused_temporaries(session[:session_id])
     end
@@ -98,7 +98,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  
+
   def define_ui_variables(opts_hash)
     opts_hash.each do |k, v|
       instance_variable_set("@#{k}", v)
@@ -112,7 +112,7 @@ class ApplicationController < ActionController::Base
       a
     end
   end
-  
+
   def generate_object_number(klass, number_field_name)
     NumberAssignment.assignment_for_class(klass, number_field_name, session)
   end

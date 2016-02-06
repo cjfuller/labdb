@@ -58,6 +58,14 @@ class Oligo < ActiveRecord::Base
     :purpose
   end
 
+  def owner_field_name
+    :entered_by
+  end
+
+  def timestamp_field_name
+    :date_entered
+  end
+
   def groups
     {sidebar: [:entered_by, :date_entered, :notebook, :organism, :vendor]}
   end
@@ -68,7 +76,7 @@ class Oligo < ActiveRecord::Base
          preformatted: true,
          lookup: :purpose,
          single: true,
-         inlineValue: Labdb::Application::MARKDOWN.render(purpose).labdb_auto_link.html_safe}
+         inlineValue: Labdb::Application::MARKDOWN.render(purpose || "").labdb_auto_link.html_safe}
       ]
   end
 

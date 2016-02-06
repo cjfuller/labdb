@@ -91,6 +91,14 @@ class Sample < ActiveRecord::Base
     :description
   end
 
+  def timestamp_field_name
+    :date_entered
+  end
+
+  def owner_field_name
+    :entered_by
+  end
+
   def core_alt_field
     self.depleted ? ["Depleted"] : []
   end
@@ -105,7 +113,7 @@ class Sample < ActiveRecord::Base
   def sample_links
   	links = []
   	LINK_METHODS.each_key do |k|
-    	k_links = get_linked(k)
+    	k_links = get_linked(k) || []
     	k_links.each do |lnk_num, lnk|
     		next unless lnk
     		links << {link_text: Naming.name_for(lnk.class) + " " + lnk_num, link_obj: lnk, link_desc: lnk.info_field }
@@ -127,11 +135,11 @@ class Sample < ActiveRecord::Base
          preformatted: true,
          lookup: :description,
          single: true,
-         inlineValue: Labdb::Application::MARKDOWN.render(description).labdb_auto_link.html_safe},
+         inlineValue: Labdb::Application::MARKDOWN.render(description || "").labdb_auto_link.html_safe},
         {name: "Linked items",
          preformatted: true,
          lookup: :linked_items,
-         inlineValue: sample_links.map{|lnk| lnk[:link_text] + ": " + lnk[:link_desc]}.join("<br />").labdb_auto_link.html_safe}
+         inlineValue: (sample_links || []).map{|lnk| lnk[:link_text] + ": " + lnk[:link_desc]}.join("<br />").labdb_auto_link.html_safe}
       ]
   end
 

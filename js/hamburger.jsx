@@ -1,6 +1,8 @@
 const React = require("react");
 const {StyleSheet, css} = require("../node_modules/aphrodite/lib/index.js");
 
+const ae = require("./action-executors.js");
+const exportHandler = require("./export-handler.js");
 const ss = require("./shared-styles.js");
 
 const HamburgerEntry = React.createClass({
@@ -9,11 +11,14 @@ const HamburgerEntry = React.createClass({
         href: React.PropTypes.string,
         iconName: React.PropTypes.string.isRequired,
         interactive: React.PropTypes.bool,
+        onClick: React.PropTypes.func,
     },
     onClick: function() {
         if (this.props.href) {
             // TODO: make this not require a page reload.
             window.location = this.props.href;
+        } else {
+            this.props.onClick();
         }
     },
     render: function() {
@@ -47,6 +52,11 @@ const HamburgerSectionName = React.createClass({
 });
 
 const Hamburger = React.createClass({
+    propTypes: {
+        close: React.PropTypes.func,
+        context: React.PropTypes.oneOf(['collection', 'item']),
+        getState: React.PropTypes.func,
+    },
     render: function() {
         return (
             <div className={css(styles.hamburgerMenu)}>
@@ -65,22 +75,51 @@ const Hamburger = React.createClass({
                 <HamburgerEntry iconName="people" interactive={true}>
                     <span>Manage users</span>
                 </HamburgerEntry>
-                <HamburgerEntry iconName="cloud_upload" interactive={true}>
+                <HamburgerEntry iconName="cloud_upload" interactive={false}>
                     <span>Bulk import data</span>
+                    <span className={css(styles.comingSoon)}>
+                        Coming soon!
+                    </span>
                 </HamburgerEntry>
-                <HamburgerEntry iconName="cloud_download" interactive={true}>
+                <HamburgerEntry iconName="cloud_download" interactive={false}>
                     <span>Bulk export data</span>
+                    <span className={css(styles.comingSoon)}>
+                        Coming soon!
+                    </span>
                 </HamburgerEntry>
+                {this.props.context === 'item' ? <div>
                 <HamburgerSectionName name="Current item" />
-                <HamburgerEntry iconName="content_copy" interactive={true}>
+                <HamburgerEntry
+                    iconName="content_copy"
+                    interactive={true}
+                    onClick={() => {
+                        this.props.close();
+                        ae.copyItem(this.props.getState());
+                    }}
+                >
                     <span>Make a duplicate</span>
                 </HamburgerEntry>
-                <HamburgerEntry iconName="file_download" interactive={true}>
+                <HamburgerEntry
+                    iconName="file_download"
+                    interactive={true}
+                    onClick={exportHandler(this.props.getState, 'json')}
+                >
                     <span>Export as JSON</span>
                 </HamburgerEntry>
-                <HamburgerEntry iconName="delete" interactive={true}>
+                {this.props.getState().sequenceInfo ? <HamburgerEntry
+                    iconName="file_download"
+                    interactive={true}
+                    onClick={exportHandler(this.props.getState, 'fasta')}
+                >
+                    <span>Export as FASTA</span>
+                </HamburgerEntry> : null}
+                <HamburgerEntry
+                    iconName="delete"
+                    interactive={true}
+                    onClick={() => ae.deleteItem(this.props.getState())}
+                >
                     <span>Delete</span>
-                </HamburgerEntry>
+                </HamburgerEntry></div> : null}
                 <HamburgerSectionName name="All databases" />
                 <HamburgerEntry
                     href="/plasmids"
@@ -140,6 +179,11 @@ const Hamburger = React.createClass({
 const hamburgerBorderPx = 6;
 
 const styles = StyleSheet.create({
+    comingSoon: {
+        color: ss.colors.labdbGreen,
+        fontSize: 10,
+        marginLeft: 30,
+    },
     hamburgerEntry: {
         borderBottom: `1px solid ${ss.colors.borderColor}`,
         borderLeft: `${hamburgerBorderPx}px solid rgba(0,0,0,0)`,

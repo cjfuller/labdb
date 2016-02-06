@@ -73,14 +73,22 @@ class Yeaststrain < ActiveRecord::Base
     :plasmidnumber
   end
 
+  def timestamp_field_name
+    :date_entered
+  end
+
+  def owner_field_name
+    :entered_by
+  end
+
   def core_alt_field
-    numbers = get_linked_number_fields(core_alt_field_name)
+    numbers = get_linked_number_fields(core_alt_field_name) || []
     numbers.map { |n| "#{Naming.name_for(Plasmid) + " " + n.to_s}" }
   end
 
   def core_alt_link
     links = get_linked(core_alt_field_name)
-    get_linked_number_fields(core_alt_field_name).map { |n| links[n] }
+    get_linked_number_fields(core_alt_field_name || []).map { |n| links[n] }
   end
 
   def groups
@@ -96,7 +104,7 @@ class Yeaststrain < ActiveRecord::Base
        preformatted: true,
        lookup: :comments,
        single: true,
-       inlineValue: Labdb::Application::MARKDOWN.render(comments).labdb_auto_link.html_safe}
+       inlineValue: Labdb::Application::MARKDOWN.render(comments || "").labdb_auto_link.html_safe}
     ]
   end
 

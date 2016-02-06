@@ -42,6 +42,8 @@ const Page = React.createClass({
     },
 
     render: function() {
+        const hamburgerContext = this.props.data.type === "collection" ?
+                                 'collection' : 'item';
         return <div id="page">
             <Navbar
                 cancelEditCallback={this.cancelEdits}
@@ -50,7 +52,12 @@ const Page = React.createClass({
                 editMode={this.props.editMode}
                 onClickHamburger={this.toggleBurger}
             />
-            {this.props.showHamburger ? <Hamburger /> : null}
+            {this.props.showHamburger ?
+             <Hamburger
+                 close={this.toggleBurger}
+                 context={hamburgerContext}
+                 getState={() => this.props.data}
+             /> : null}
             <div
                 className={css(styles.pageContainerOuter)}
                 onClick={this.props.showHamburger ? this.toggleBurger : null}

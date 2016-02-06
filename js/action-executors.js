@@ -3,6 +3,7 @@ let $ = require("jquery");
 let Actions = require("./actions.js");
 
 let _injected = {};
+
 export function injectDispatch(disp) {
     _injected.dispatch = (action) => {console.log(action); disp(action);};
 }
@@ -36,8 +37,10 @@ export function maybeFetchThenDisplay(fetchType, resource, sortOrder="DESC") {
         //TODO: error handling
     } else if (fetchType === "table") {
         return fetchItemList(resource.type, resource.start, sortOrder).then((data) => {
-            dispatch(Actions.updateTableCache(resource.type, data));
-            dispatch(Actions.displayTable(resource.type, resource.id, resource.resourcePath));
+            window.location.href = data.resourcePath;
+            // TODO: don't require a reload
+            // dispatch(Actions.updateTableCache(resource.type, data.items));
+            // dispatch(Actions.displayTable(resource.type, [resource.start, resource.start - 99], resource.resourcePath));
         });
         //TODO: error handling
     }
@@ -67,4 +70,40 @@ export function clearEdits(resource) {
         dispatch(Actions.clearEdits(resource.type, resource.id));
         dispatch(Actions.setEditMode(false));
     });
+}
+
+export function newItem(itemType) {
+    return $.ajax({
+        url: `${FETCH_BASE}/${itemType}/new`,
+        method: "POST"
+    }).then((data) => {
+        return maybeFetchThenDisplay('item', data).then(() => {
+            dispatch(Actions.setEditMode(true));
+            return Promise.resolve();
+        });
+    });
+}
+
+export function copyItem(resource) {
+    return $.ajax({
+        url: `${FETCH_BASE}/${resource.type}/${resource.id}/copy`,
+        method: "POST"
+    }).then((data) => {
+        return maybeFetchThenDisplay('item', data).then(() => {
+            dispatch(Actions.setEditMode(true));
+            return Promise.resolve();
+        });
+    });
+}
+
+export function deleteItem(resource) {
+    if (window.confirm(`Are you sure you want to delete ${resource.name}?  (This cannot be undone.)`)) {
+        return $.ajax({
+            url: `${FETCH_BASE}/${resource.type}/${resource.id}`,
+            method: "DELETE",
+        }).then(() => {
+            // TODO: delete item from cache
+            return maybeFetchThenDisplay('table', {type: resource.type, start: resource.id});
+        });
+    }
 }

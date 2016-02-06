@@ -58,6 +58,14 @@ class Antibody < ActiveRecord::Base
     :comments
   end
 
+  def timestamp_field_name
+    :date_entered
+  end
+
+  def owner_field_name
+    :entered_by
+  end
+
   def groups
     {sidebar: [:entered_by, :date_entered, :vendor],
     	"Antibody information" => [:host, :fluorophore],
@@ -79,7 +87,7 @@ class Antibody < ActiveRecord::Base
        preformatted: true,
        lookup: :comments,
        single: true,
-       inlineValue: Labdb::Application::MARKDOWN.render(comments).labdb_auto_link.html_safe}
+       inlineValue: Labdb::Application::MARKDOWN.render(comments || "").labdb_auto_link.html_safe}
     ]
   end
 

@@ -112,6 +112,14 @@ class Plasmid < ActiveRecord::Base
     :strainnumbers
   end
 
+  def owner_field_name
+    :enteredby
+  end
+
+  def timestamp_field_name
+    :date_entered
+  end
+
   def core_alt_field
     numbers = get_linked_number_fields(core_alt_field_name) || []
     numbers.map { |n| "#{Naming.name_for(Bacterium) + " " + n.to_s}" }
@@ -142,7 +150,7 @@ class Plasmid < ActiveRecord::Base
        preformatted: true,
        lookup: :description,
        single: true,
-       inlineValue: Labdb::Application::MARKDOWN.render(description).labdb_auto_link.html_safe}
+       inlineValue: Labdb::Application::MARKDOWN.render(description || "").labdb_auto_link.html_safe}
     ]
   end
 

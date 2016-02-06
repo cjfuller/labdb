@@ -83,8 +83,12 @@ Labdb::Application.routes.draw do
   end
 
   scope '/api/v1/m' do
+    post '/:model/new', to: "api#new"
+    get '/:model/list', to: "api#list"
+    post '/:model/:id/copy', to: "api#copy"
     get '/:model/:id', to: "api#fetch"
     put '/:model/:id', to: "api#update"
+    delete '/:model/:id', to: "api#delete"
   end
 
 end

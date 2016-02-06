@@ -41,7 +41,7 @@ module LinkableModel
   def get_linked_number_fields(property_name)
     return nil unless linked_properties.include? property_name
     return nil if self.send(property_name).nil?
-    self.send(property_name).split(",").map! { |e| e.strip }
+    self.send(property_name).split(",").map! { |e| e.strip }.delete_if { |e| e == "none" }
   end
 
   def clear_linked

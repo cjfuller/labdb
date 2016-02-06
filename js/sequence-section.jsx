@@ -103,6 +103,7 @@ const styles = StyleSheet.create({
     sequence: {
         fontFamily: ss.fonts.monospace,
         width: "100%",
+        wordBreak: "break-all",
         wordWrap: "break-word",
     },
 });

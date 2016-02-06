@@ -20,8 +20,15 @@ The new install!
 
 8. `CREATE ROLE labdb WITH SUPERUSER LOGIN;`
 
+9. `CREATE DATABASE labdb;`
+
 9. (legacy: ) `ALTER ROLE labdb WITH LOGIN;`
 
-9. `docker-compose run web bash -c "psql -h db --username postgres < /app/20150711_084336_labdb_backup.dump"`
+9. `docker-compose run web bash -c "psql -d labdb -h db --username postgres < /app/20150711_084336_labdb_backup.dump"`
 
 10. `docker-machine ip dev` to get the IP, then visit :3000 in a browser.
+
+
+GCE:
+
+`gcloud compute disks create postgres --description "postgresql persistent storage for labdb" --size 10GB`

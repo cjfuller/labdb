@@ -5,14 +5,13 @@ const $ = require("jquery");
 const ae = require("./action-executors.js");
 const ss = require("./shared-styles.js");
 
+const dynamicResourceBase = "/api/v1/m";
+
 const NavItem = React.createClass({
     propTypes: {
         addr: React.PropTypes.string,
         name: React.PropTypes.string,
     },
-
-    // TODO: get this from somewhere instead of hardcoding
-    dynamicResourceBase: "/api/v1/m",
 
     onClick: function() {
         // TODO: add to API and do this instead
@@ -170,14 +169,22 @@ const Actions = React.createClass({
     propTypes: {
         cancelEditCallback: React.PropTypes.func,
         data: React.PropTypes.any,
+        dispatch: React.PropTypes.func,
         editCallback: React.PropTypes.func,
         editMode: React.PropTypes.bool,
         onClickHamburger: React.PropTypes.func,
     },
 
     newItem: function() {
-        // TODO: real implementation
-        window.location.pathname += "/new";
+        const {data} = this.props;
+        const type = (data.type === "collection" ?
+                      data.items.length && data.items[0].type :
+                      data.type);
+        // TODO: this won't work on a search with 0 items.
+        // Probably should disable new on search.
+        if (type) {
+            ae.newItem(type);
+        }
     },
 
     doSearch: function() {

@@ -20,7 +20,7 @@ require 'object_naming'
 
 module Exportable
 
-	Formats = {yml: :export_to_yaml, fasta: :export_to_fasta}
+	Formats = {yml: :export_to_yaml, fasta: :export_to_fasta, json: :export_to_json}
 
 	def name_str
 		Naming.name_for(self.class) + number_field.to_s
@@ -35,7 +35,7 @@ module Exportable
 		exp_params[:type] = "text/plain"
 
 		exp_params
-		
+
 	end
 
 	def export_to(format)
@@ -64,6 +64,16 @@ module Exportable
 
 	end
 
+  def export_to_json
+    fields = exportable_fields
+    output = {}
+    fields.each do |f|
+      fe = f.to_s.encode('utf-8')
+      output[fe] = self.send(f).to_s.encode('utf-8')
+    end
+
+    JSON.pretty_generate({self.class.to_s.encode('utf-8') => output})
+  end
 
 	def export_to_fasta
 

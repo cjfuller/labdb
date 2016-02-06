@@ -106,14 +106,22 @@ class Line < ActiveRecord::Base
     :plasmid_numbers
   end
 
+  def owner_field_name
+    :entered_by
+  end
+
+  def timestamp_field_name
+    :date_entered
+  end
+
   def core_alt_field
-    numbers = get_linked_number_fields(:plasmid_numbers)
+    numbers = get_linked_number_fields(:plasmid_numbers) || []
     numbers.map { |n| "#{Naming.name_for(Plasmid) + " " + n.to_s}" }
   end
 
   def core_alt_link
     links = get_linked(:plasmid_numbers)
-    get_linked_number_fields(:plasmid_numbers).map { |n| links[n] }
+    (get_linked_number_fields(:plasmid_numbers) || []).map { |n| links[n] }
   end
 
   def groups
@@ -129,7 +137,7 @@ class Line < ActiveRecord::Base
        preformatted: true,
        single: true,
        lookup: :description,
-       inlineValue: Labdb::Application::MARKDOWN.render(description).labdb_auto_link.html_safe}
+       inlineValue: Labdb::Application::MARKDOWN.render(description || "").labdb_auto_link.html_safe}
     ]
   end
 
