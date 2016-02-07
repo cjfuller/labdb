@@ -20,7 +20,7 @@ const LandingPage = React.createClass({
             theme: 'dark',
             width: 200,
             onsuccess: onSignIn,
-            onfailure: (resp) => console.log(resp),
+            onfailure: window.location.reload,
         });
     },
     render: function() {

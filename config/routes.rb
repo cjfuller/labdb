@@ -19,7 +19,7 @@ Labdb::Application.routes.draw do
 
   root to: "static#index"
 
-  get '/logout', to: 'sessions#destroy', as: :logout
+  post '/logout', to: 'api#logout'
 
   match '/auth/:provider/callback', to: 'sessions#create', via: [:get, :post]
   match '/auth/failure', to: 'sessions#failure', via: [:get, :post]

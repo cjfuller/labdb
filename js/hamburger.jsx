@@ -1,5 +1,6 @@
 const React = require("react");
 const {StyleSheet, css} = require("aphrodite");
+const $ = require("jquery");
 
 const ae = require("./action-executors.js");
 const exportHandler = require("./export-handler.js");
@@ -51,6 +52,17 @@ const HamburgerSectionName = React.createClass({
     },
 });
 
+function logout() {
+    return $.ajax({
+        url: '/logout',
+        method: 'POST',
+    }).then(() => {
+        return window.gapi.auth2.getAuthInstance().signOut();
+    }).then(() => {
+        window.location.href = '/';
+    });
+}
+
 const Hamburger = React.createClass({
     propTypes: {
         close: React.PropTypes.func,
@@ -70,7 +82,11 @@ const Hamburger = React.createClass({
                         {this.props.user.name}
                     </span>
                 </HamburgerEntry>
-                <HamburgerEntry iconName="cloud_off" interactive={true}>
+                <HamburgerEntry
+                    iconName="cloud_off"
+                    interactive={true}
+                    onClick={logout}
+                >
                     <span>
                         Log out
                     </span>

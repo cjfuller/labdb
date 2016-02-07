@@ -313,6 +313,7 @@ window.onload = () => {
             <LandingPage />,
             document.getElementById("landing"));
     } else {
+        window.gapi.load('auth2', () => window.gapi.auth2.init());
         loadPrefetchedData();
         ActionExecutors.injectDispatch(store.dispatch);
         ReactDOM.render(

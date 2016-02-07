@@ -93,4 +93,9 @@ class ApiController < ApplicationController
     session[:user_id] = nil
     return head :no_content
   end
+
+  def logout
+    session[:user_id] = nil
+    return head :no_content
+  end
 end
