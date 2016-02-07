@@ -3,7 +3,7 @@ const React = require("react");
 const InfoSection = require("./info-section.jsx");
 const InventoryWidget = require("./inventory-widget.jsx");
 const SequenceSection = require("./sequence-section.jsx");
-const {StyleSheet, css} = require("../node_modules/aphrodite/lib/index.js");
+const {StyleSheet, css} = require("aphrodite");
 const ss = require("./shared-styles.js");
 
 const CoreInfo = React.createClass({

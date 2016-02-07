@@ -1,11 +1,9 @@
-const {css, StyleSheet} = require("../node_modules/aphrodite/lib/index.js");
+const {css, StyleSheet} = require("aphrodite");
 const React = require("react");
-const $ = require("jquery");
 
+const actions = require("./actions.js");
 const ae = require("./action-executors.js");
 const ss = require("./shared-styles.js");
-
-const dynamicResourceBase = "/api/v1/m";
 
 const NavItem = React.createClass({
     propTypes: {
@@ -188,8 +186,7 @@ const Actions = React.createClass({
     },
 
     doSearch: function() {
-        // TODO: real implementation
-        window.location.pathname += "/search";
+        this.props.dispatch(actions.searchVisibility(true));
     },
 
     render: function() {
@@ -226,6 +223,7 @@ const Navbar = React.createClass({
     propTypes: {
         cancelEditCallback: React.PropTypes.func,
         data: React.PropTypes.any,
+        dispatch: React.PropTypes.func,
         editCallback: React.PropTypes.func,
         editMode: React.PropTypes.bool,
         navitems: React.PropTypes.arrayOf(React.PropTypes.string),
@@ -264,6 +262,7 @@ const Navbar = React.createClass({
             <Actions
                 cancelEditCallback={this.props.cancelEditCallback}
                 data={this.props.data}
+                dispatch={this.props.dispatch}
                 editCallback={this.props.editCallback}
                 editMode={this.props.editMode}
                 onClickHamburger={this.props.onClickHamburger}
@@ -274,12 +273,13 @@ const Navbar = React.createClass({
 
 const styles = StyleSheet.create({
     action: {
-        display: "inline-block",
+        alignItems: "center",
+        display: "flex",
         ':hover': {
             cursor: "pointer",
         },
-        marginLeft: ss.sizes.paddingPx,
-        marginRight: ss.sizes.paddingPx,
+        justifyContent: "center",
+        width: ss.sizes.hamburgerWidthPx,
     },
     actions: {
         alignContent: "center",
@@ -304,9 +304,9 @@ const styles = StyleSheet.create({
         boxSizing: "border-box",
         display: "flex",
         alignItems: "center",
+        justifyContent: "center",
         height: ss.sizes.navbarHeightPx,
-        paddingLeft: ss.sizes.paddingPx / 2,
-        paddingRight: ss.sizes.paddingPx / 2,
+        width: ss.sizes.hamburgerWidthPx,
     },
     navbar: {
         backgroundColor: ss.colors.labdbGreen,

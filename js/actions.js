@@ -7,6 +7,7 @@ export const UPDATE_ITEM = "UPDATE_ITEM";
 export const ROUTING_UPDATE = "ROUTING";
 export const HAMBURGER_VISIBILITY = "HAMBURGER";
 export const USER = "USER";
+export const SEARCH_VISIBILITY = "SEARCH";
 
 export function updateItemCache(itemType, data) {
     return {
@@ -95,5 +96,12 @@ export function setUserAndAuth(user, auth) {
         type: USER,
         name: user,
         auth: auth,
+    };
+}
+
+export function searchVisibility(visible) {
+    return {
+        type: SEARCH_VISIBILITY,
+        visible: visible,
     };
 }

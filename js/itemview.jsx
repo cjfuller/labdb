@@ -1,5 +1,5 @@
 const React = require("react");
-const {StyleSheet, css} = require("../node_modules/aphrodite/lib/index.js");
+const {StyleSheet, css} = require("aphrodite");
 
 const ActionExecutors = require("./action-executors.js");
 const CoreInfo = require("./core-info.jsx");

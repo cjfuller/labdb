@@ -1,6 +1,6 @@
 const React = require("react");
 const _ = require("underscore");
-const {StyleSheet, css} = require("../node_modules/aphrodite/lib/index.js");
+const {StyleSheet, css} = require("aphrodite");
 
 const ActionExecutors = require("./action-executors.js");
 const ss = require("./shared-styles.js");

@@ -1,6 +1,6 @@
 const React = require("react");
 const _ = require("underscore");
-const {StyleSheet, css} = require("../node_modules/aphrodite/lib/index.js");
+const {StyleSheet, css} = require("aphrodite");
 
 const Actions = require("./actions.js");
 const ActionExecutors = require("./action-executors.js");
@@ -9,6 +9,7 @@ const ItemTable = require("./itemlist.jsx");
 const ItemInfoView = require("./itemview.jsx");
 const Navbar = require("./nav.jsx");
 const ss = require("./shared-styles.js");
+const SearchBar = require("./search.jsx");
 
 const Page = React.createClass({
     propTypes: {
@@ -16,6 +17,7 @@ const Page = React.createClass({
         dispatch: React.PropTypes.func,
         editMode: React.PropTypes.bool,
         showHamburger: React.PropTypes.bool,
+        showSearch: React.PropTypes.bool,
         unsavedChanges: React.PropTypes.any,
         user: React.PropTypes.shape({
             name: React.PropTypes.string,
@@ -52,10 +54,13 @@ const Page = React.createClass({
             <Navbar
                 cancelEditCallback={this.cancelEdits}
                 data={this.props.data}
+                dispatch={this.props.dispatch}
                 editCallback={this.editToggle}
                 editMode={this.props.editMode}
                 onClickHamburger={this.toggleBurger}
             />
+            {this.props.showSearch ?
+            <SearchBar dispatch={this.props.dispatch}/> : null}
             {this.props.showHamburger ?
              <Hamburger
                  close={this.toggleBurger}

@@ -19,9 +19,6 @@ module.exports = {
         }],
     },
     resolve: {
-        alias: {
-            aphrodite: "node_modules/aprhodite/dist/aprhodite.js",
-        },
         extensions: ['', '.js', '.jsx'],
     },
 };

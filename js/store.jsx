@@ -160,6 +160,10 @@ function userHandler(state, action) {
     return {...state, user: {name: action.name, auth: action.auth}};
 }
 
+function searchBarHandler(state, action) {
+    return {...state, showSearch: action.visible};
+}
+
 const actionHandlers = {};
 
 actionHandlers[Actions.INVALIDATE_CACHE] = invalidateCacheHandler;
@@ -171,6 +175,7 @@ actionHandlers[Actions.UPDATE_ITEM] = updateHandler;
 actionHandlers[Actions.EDIT_MODE] = editHandler;
 actionHandlers[Actions.HAMBURGER_VISIBILITY] = hamburgerHandler;
 actionHandlers[Actions.USER] = userHandler;
+actionHandlers[Actions.SEARCH_VISIBILITY] = searchBarHandler;
 
 function stateReducer(state, action) {
     if (typeof state === 'undefined') {
@@ -286,6 +291,7 @@ const Application = React.createClass({
             dispatch={this.props.dispatch}
             editMode={this.props.editMode}
             showHamburger={store.getState().showHamburger}
+            showSearch={store.getState().showSearch}
             unsavedChanges={unsavedForCurrentResource()}
             user={store.getState().user}
         />;

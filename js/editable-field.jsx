@@ -1,5 +1,5 @@
 const React = require("react");
-const {StyleSheet, css} = require("../node_modules/aphrodite/lib/index.js");
+const {StyleSheet, css} = require("aphrodite");
 
 const ss = require("./shared-styles.js");
 
