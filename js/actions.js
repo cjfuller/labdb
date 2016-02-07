@@ -6,6 +6,7 @@ export const CLEAR_UNSAVED = "CLEAR_UNSAVED";
 export const UPDATE_ITEM = "UPDATE_ITEM";
 export const ROUTING_UPDATE = "ROUTING";
 export const HAMBURGER_VISIBILITY = "HAMBURGER";
+export const USER = "USER";
 
 export function updateItemCache(itemType, data) {
     return {
@@ -86,5 +87,13 @@ export function hamburgerVisibility(visible) {
     return {
         type: HAMBURGER_VISIBILITY,
         visible: visible,
+    };
+}
+
+export function setUserAndAuth(user, auth) {
+    return {
+        type: USER,
+        name: user,
+        auth: auth,
     };
 }

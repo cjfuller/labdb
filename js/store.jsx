@@ -3,9 +3,11 @@ const ReactDOM = require("react-dom");
 const ReactRedux = require("react-redux");
 const Redux = require("redux");
 const _ = require("underscore");
+const $ = require("jquery");
 
 const Actions = require("./actions.js");
 const ActionExecutors = require("./action-executors.js");
+const LandingPage = require("./landing.jsx");
 const Page = require("./page.jsx");
 
 const Data = window._labdbPrefetch;
@@ -154,6 +156,10 @@ function hamburgerHandler(state, action) {
     return {...state, showHamburger: action.visible};
 }
 
+function userHandler(state, action) {
+    return {...state, user: {name: action.name, auth: action.auth}};
+}
+
 const actionHandlers = {};
 
 actionHandlers[Actions.INVALIDATE_CACHE] = invalidateCacheHandler;
@@ -164,6 +170,7 @@ actionHandlers[Actions.UPDATE_CACHE] = cacheHandler;
 actionHandlers[Actions.UPDATE_ITEM] = updateHandler;
 actionHandlers[Actions.EDIT_MODE] = editHandler;
 actionHandlers[Actions.HAMBURGER_VISIBILITY] = hamburgerHandler;
+actionHandlers[Actions.USER] = userHandler;
 
 function stateReducer(state, action) {
     if (typeof state === 'undefined') {
@@ -229,6 +236,8 @@ function loadPrefetchedData() {
             Actions.displayItem(
                 Data.type, Data.id));
     }
+    store.dispatch(
+        Actions.setUserAndAuth(window._labdbUser, window._labdbAuth));
 }
 
 
@@ -278,6 +287,7 @@ const Application = React.createClass({
             editMode={this.props.editMode}
             showHamburger={store.getState().showHamburger}
             unsavedChanges={unsavedForCurrentResource()}
+            user={store.getState().user}
         />;
     },
 });
@@ -285,13 +295,26 @@ const Application = React.createClass({
 const App = ReactRedux.connect((s) => s)(Application);
 
 window.onload = () => {
-    loadPrefetchedData();
-    ActionExecutors.injectDispatch(store.dispatch);
-    ReactDOM.render(
-        <Provider store={store} >
-            <App />
-        </Provider>,
-        document.getElementById("body"));
+    window.getCSRFToken = function() {
+        return $("meta[name='csrf-token']").attr('content');
+    };
+
+    $.ajaxPrefilter((options, originalOptions, jqXHR) => {
+        jqXHR.setRequestHeader('X-CSRF-Token', window.getCSRFToken());
+    });
+    if (document.getElementById("landing")) {
+        ReactDOM.render(
+            <LandingPage />,
+            document.getElementById("landing"));
+    } else {
+        loadPrefetchedData();
+        ActionExecutors.injectDispatch(store.dispatch);
+        ReactDOM.render(
+            <Provider store={store} >
+                <App />
+            </Provider>,
+            document.getElementById("body"));
+    }
 };
 
 module.exports = App;

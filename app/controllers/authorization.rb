@@ -45,7 +45,7 @@ module Authorization
   end
 
   def auth?(auth_type_key)
-    return request.query_parameters["reauth"] != "1"
+    #return request.query_parameters["reauth"] != "1"
     curr_uid = session[:user_id]
     return false if curr_uid.nil?
 
@@ -62,4 +62,16 @@ module Authorization
     end
   end
 
+  def current_user
+    curr_uid = session[:user_id]
+    return curr_uid && User.find_by_email(curr_uid)
+  end
+
+  def auth_scope
+    curr_user = current_user
+    ((curr_user.send(:auth_admin) && 'admin') ||
+     (curr_user.send(:auth_write) && 'write') ||
+     (curr_user.send(:auth_read) && 'read') ||
+     nil)
+  end
 end

@@ -18,6 +18,9 @@
 !!!
 %html
   %head
+    %meta{name: "google-signin-client_id",
+          content: "413612736524-90sshskkh7m2sn1jta2gpfi7io5ou850.apps.googleusercontent.com"}
+    %script{src: "https://apis.google.com/js/platform.js", async: true, defer: true}
     %title= ApplicationController::DATABASE_SYSTEM_NAME
     = stylesheet_link_tag "//fonts.googleapis.com/css?family=Montserrat:400"
     = stylesheet_link_tag "//fonts.googleapis.com/css?family=Rokkitt:400"
@@ -25,6 +28,7 @@
     = stylesheet_link_tag "//fonts.googleapis.com/icon?family=Material+Icons"
     = stylesheet_link_tag "//fonts.googleapis.com/icon?family=Lato:400,700"
     -#= stylesheet_link_tag "/_s/app.css"
+    = csrf_meta_tags
     :css
       .auto-link {
         text-decoration: none;
@@ -62,6 +66,12 @@
     -#                 %li.divider
     -#                 %li= link_to 'Log out', '/logout', {id: 'logout-button'}
     .container
+    %script{type: "text/javascript"}
+      = "window._labdbPrefetch = #{@content_json || '{}'};".html_safe
+      = "window._labdbUser = '#{@user_name || ""}';".html_safe
+      = "window._labdbAuth = '#{@user_auth || ""}';".html_safe
+    - if @login_page
+      %div#landing
       %script{type: "text/javascript"}
-        = "window._labdbPrefetch = #{@content_json}".html_safe
+        = "window._labdbName = '#{@labdb_name}';".html_safe
     = javascript_include_tag "/_s/app.js"

@@ -29,7 +29,7 @@ class ApplicationController < ActionController::Base
   include Searching
   include Authorization
 
-  #protect_from_forgery
+  protect_from_forgery
 
   DATABASE_SYSTEM_NAME = Naming.name_for("database_full")
   DATABASE_SYSTEM_SHORT_NAME = Naming.name_for("database_short")

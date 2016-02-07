@@ -56,6 +56,10 @@ const Hamburger = React.createClass({
         close: React.PropTypes.func,
         context: React.PropTypes.oneOf(['collection', 'item']),
         getState: React.PropTypes.func,
+        user: React.PropTypes.shape({
+            name: React.PropTypes.string,
+            auth: React.PropTypes.oneOf(["admin", "write", "read"]),
+        }),
     },
     render: function() {
         return (
@@ -63,7 +67,7 @@ const Hamburger = React.createClass({
                 <HamburgerSectionName name="Logged in as" />
                 <HamburgerEntry iconName="person">
                     <span className={css(styles.userName)}>
-                        Anonymous Person
+                        {this.props.user.name}
                     </span>
                 </HamburgerEntry>
                 <HamburgerEntry iconName="cloud_off" interactive={true}>
@@ -71,6 +75,7 @@ const Hamburger = React.createClass({
                         Log out
                     </span>
                 </HamburgerEntry>
+                {this.props.user.auth === "admin" ? <div>
                 <HamburgerSectionName name="Administration" />
                 <HamburgerEntry iconName="people" interactive={true}>
                     <span>Manage users</span>
@@ -87,6 +92,7 @@ const Hamburger = React.createClass({
                         Coming soon!
                     </span>
                 </HamburgerEntry>
+                </div> : null}
                 {this.props.context === 'item' ? <div>
                 <HamburgerSectionName name="Current item" />
                 <HamburgerEntry

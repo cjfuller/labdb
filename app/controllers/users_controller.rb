@@ -35,6 +35,8 @@ class UsersController < ApplicationController
       format.html
       format.json { render json: @objs }
     end
+    @user_name = current_user.name
+    @user_auth = auth_scope
   end
 
   def toggle(auth_type)

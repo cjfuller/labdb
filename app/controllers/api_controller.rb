@@ -1,3 +1,5 @@
+require 'net/http'
+
 class Object
   # TODO: seriously, don't do this.
   def update_dynamic_field(field_name_fn_name, value)
@@ -10,6 +12,8 @@ class Object
 end
 
 class ApiController < ApplicationController
+
+  skip_before_filter :require_authorization, only: [:verify]
 
   def fetch
     cls = params[:model].classify.constantize
@@ -66,5 +70,27 @@ class ApiController < ApplicationController
     @obj = cls.find(params[:id])
     @obj.delete
     head :no_content
+  end
+
+  APP_ID = "413612736524-90sshskkh7m2sn1jta2gpfi7io5ou850.apps.googleusercontent.com"
+
+  def verify
+    endpoint = URI("https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=#{params[:token]}")
+    Net::HTTP.start(endpoint.host, endpoint.port, use_ssl: true) do |http|
+      request = Net::HTTP::Get.new endpoint
+      response = http.request request
+      if response.code == '200' then
+        info = JSON.parse(response.body)
+        if info["aud"].include? APP_ID and info["email_verified"] == "true" then
+          user = User.find_by_email(info["email"])
+          if user then
+            session[:user_id] = user.email
+            return head :no_content
+          end
+        end
+      end
+    end
+    session[:user_id] = nil
+    return head :no_content
   end
 end

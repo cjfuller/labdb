@@ -17,6 +17,10 @@ const Page = React.createClass({
         editMode: React.PropTypes.bool,
         showHamburger: React.PropTypes.bool,
         unsavedChanges: React.PropTypes.any,
+        user: React.PropTypes.shape({
+            name: React.PropTypes.string,
+            auth: React.PropTypes.oneOf(["admin", "write", "read"]),
+        }),
     },
     editToggle: function() {
         if (this.props.editMode &&
@@ -57,6 +61,7 @@ const Page = React.createClass({
                  close={this.toggleBurger}
                  context={hamburgerContext}
                  getState={() => this.props.data}
+                 user={this.props.user}
              /> : null}
             <div
                 className={css(styles.pageContainerOuter)}
