@@ -11,7 +11,8 @@ const LandingPage = React.createClass({
                 url: `/api/verify?token=${googleUser.getAuthResponse().id_token}`,
                 method: "POST",
             }).then(() => {
-                window.location.reload;
+                // TODO: make a logged in landing page.
+                window.location.href = "/plasmids";
             });
         };
         window.gapi.signin2.render('g-signin2', {
