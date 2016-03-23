@@ -12,6 +12,7 @@ const Page = require("./page.jsx");
 
 const Data = window._labdbPrefetch;
 const Provider = ReactRedux.Provider;
+
 const initialState = {
     editMode: false,
     itemCache: {},
@@ -84,6 +85,14 @@ function displayHandler(state, action) {
             },
             updateUrl: true,
         };
+    } else if (action.displayType === "search") {
+        return {
+            ...state,
+            displayedResource: {
+                type: "search",
+            },
+            updateUrl: true,
+        };
     }
 
     throw new Error(`Unknown displayType: ${action.displayType}`);
@@ -98,6 +107,8 @@ function routingHandler(state, action) {
         fullResource.data = extractTableRows(
             state, fullResource.itemType, fullResource.idx[0],
             fullResource.idx[1]);
+    } else if (action.resource.type === "search") {
+        // TODO: handle the notion of what was searched for.
     } else {
         throw new Error(`Unknown resource type ${action.resource.type}`);
     }
@@ -164,6 +175,10 @@ function searchBarHandler(state, action) {
     return {...state, showSearch: action.visible};
 }
 
+function searchDataHandler(state, action) {
+    return {...state, searchResults: action.data};
+}
+
 const actionHandlers = {};
 
 actionHandlers[Actions.INVALIDATE_CACHE] = invalidateCacheHandler;
@@ -176,6 +191,7 @@ actionHandlers[Actions.EDIT_MODE] = editHandler;
 actionHandlers[Actions.HAMBURGER_VISIBILITY] = hamburgerHandler;
 actionHandlers[Actions.USER] = userHandler;
 actionHandlers[Actions.SEARCH_VISIBILITY] = searchBarHandler;
+actionHandlers[Actions.SEARCH_DATA] = searchDataHandler;
 
 function stateReducer(state, action) {
     if (typeof state === 'undefined') {
@@ -201,6 +217,12 @@ function currentResourceURI() {
 
 function dataForCurrentResource() {
     const resource = store.getState().displayedResource;
+    if (resource.type === "search") {
+        return {
+            type: "search",
+            items: store.getState().searchResults,
+        };
+    }
     if (resource.type === "table") {
         return {
             type: "collection",
@@ -223,7 +245,17 @@ function unsavedForCurrentResource() {
 }
 
 function loadPrefetchedData() {
-    if (Data.type === "collection") {
+    if (window._labdbSearchResults && window._labdbSearchResults.length > 0) {
+        // TODO: handle case where no results are found.
+        store.dispatch(
+            Actions.searchData(window._labdbSearchResults));
+        window._labdbSearchResults.forEach((result) => {
+            store.dispatch(
+                Actions.updateTableCache(
+                    result.type, [result]));
+        });
+        store.dispatch(Actions.displaySearch());
+    } else if (Data.type === "collection") {
         store.dispatch(
             Actions.updateTableCache(
                 Data.items[0].type, Data.items));

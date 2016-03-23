@@ -2,6 +2,7 @@
 
 const colors = {
     borderColor: "#e3e3e3",
+    darkGray: "rgba(0, 0, 0, 0.2)",
     labdbGreen: "#559955",
     lightBackground: "#f8f8f8",
     mediumBackground: "#e0e0e0",
@@ -92,6 +93,12 @@ const traits = {
     },
     shadowedButton: {
         boxShadow: `1px 1px 4px ${colors.bitDarkBackground}`,
+        ':active': {
+            boxShadow: `inset 1px 1px 2px 1px ${colors.darkGray}`,
+        },
+    },
+    shadowed: {
+        boxShadow: `0px 0px 10px 1px ${colors.darkGray}`,
     },
 };
 

@@ -81,7 +81,7 @@ class Bacterium < ActiveRecord::Base
     :strainalias
   end
 
-  def description_field_name
+  def self.description_field_name
     :comments
   end
 

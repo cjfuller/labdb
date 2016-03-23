@@ -30,6 +30,7 @@ module ResourceHelpers
     return {
       type: self.class.name.demodulize.downcase,
       id: id,
+      timestamp: self.send(self.timestamp_field_name),
       fieldData: field_data,
       resourcePath: "/#{self.class.name.demodulize.pluralize.downcase}/#{id}",
       name: named_number_string,

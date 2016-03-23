@@ -77,10 +77,11 @@ const ItemRow = React.createClass({
 const ItemTable = React.createClass({
     propTypes: {
         data: React.PropTypes.any,  // TODO(colin): what is this?
+        sort: React.PropTypes.arrayOf(React.PropTypes.string),
     },
     getInitialState: function() {
         return {
-            sort: "id",
+            sort: this.props.sort || ["id"],
             sortOrder: "desc",
         };
     },
@@ -93,7 +94,7 @@ const ItemTable = React.createClass({
     render: function() {
         const sorted = _.sortBy(
             this.props.data.items,
-            (x) => x[this.state.sort]);
+            (x) => this.state.sort.map((field) => x[field]));
         if (this.state.sortOrder === "desc") {
             sorted.reverse();
         }
@@ -101,7 +102,7 @@ const ItemTable = React.createClass({
             return <ItemRow
                 clickHandler={() => this.viewItem(item)}
                 data={item}
-                key={item.id}
+                key={item.type + item.id}
             />;
         });
         const startItem = extVal(sorted[0].fieldData,
@@ -109,7 +110,8 @@ const ItemTable = React.createClass({
         const endItem = extVal(sorted[sorted.length - 1].fieldData,
                                this.props.data.numberFieldName);
         return <div>
-            Showing items {startItem}-{endItem}.
+            {this.props.data.type === "collection" ?
+            <span>Showing items {startItem}-{endItem}.</span> : null}
             <div className={css(styles.itemtableContainer)}>
                 <table className={css(styles.itemtable)}>
                     <thead><tr>

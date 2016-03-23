@@ -124,4 +124,33 @@ class ApplicationController < ActionController::Base
   def preprocess_model_object(model_obj)
   end
 
+  def index_order
+    "#{@model_class.number_field_name} DESC"
+  end
+
+  def search()
+    search_term = params[:term]
+    linked_term = LinkableString.new(search_term)
+    results = []
+    if linked_term.item_links(items: true) then
+      results += linked_term.item_links(items: true)
+    end
+    # TODO: don't hardcode these
+    model_classes = [
+      Plasmid, Oligo, Bacterium, Sample, Antibody, Line, Yeaststrain]
+    model_classes.map do |cls|
+      @model_class = cls
+      partial_results = process_search_query(
+        {cls.description_field_name => search_term},
+        cls)
+      results += partial_results
+    end
+    if results.size == 1 then
+      redirect_to results[0]
+    end
+    @search_results = JSON.generate(results.map(&:as_resource_def));
+    @content_json = JSON.generate([])
+    @user_name = current_user.name
+    @user_auth = auth_scope
+  end
 end

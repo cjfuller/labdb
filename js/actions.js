@@ -8,6 +8,7 @@ export const ROUTING_UPDATE = "ROUTING";
 export const HAMBURGER_VISIBILITY = "HAMBURGER";
 export const USER = "USER";
 export const SEARCH_VISIBILITY = "SEARCH";
+export const SEARCH_DATA = "SEARCH_DATA";
 
 export function updateItemCache(itemType, data) {
     return {
@@ -104,4 +105,23 @@ export function searchVisibility(visible) {
         type: SEARCH_VISIBILITY,
         visible: visible,
     };
+}
+
+export function searchData(data) {
+    return {
+        type: SEARCH_DATA,
+        data: data,
+    };
+}
+
+export function displaySearch() {
+    // TODO: include the notion of what was searched for.
+    return {
+        type: DISPLAY,
+        displayType: "search",
+    };
+}
+
+export function doSearchAndRedirect(searchTerm) {
+    window.location = `/search?term=${searchTerm}`;
 }

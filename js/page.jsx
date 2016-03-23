@@ -47,9 +47,44 @@ const Page = React.createClass({
             !this.props.showHamburger));
     },
 
+    doSearch: function(searchTerm) {
+        Actions.doSearchAndRedirect(searchTerm);
+    },
+
     render: function() {
-        const hamburgerContext = this.props.data.type === "collection" ?
-                                 'collection' : 'item';
+        let hamburgerContext = null;
+        let pageContent = null;
+        switch (this.props.data.type) {
+            case "search":
+                hamburgerContext = "collection";
+                pageContent = (
+                    <ItemTable
+                        data={this.props.data}
+                        dispatch={this.props.dispatch}
+                        sort={["timestamp", "id"]}
+                    />
+                );
+                break;
+            case "collection":
+                hamburgerContext = "collection";
+                pageContent = (
+                    <ItemTable
+                        data={this.props.data}
+                        dispatch={this.props.dispatch}
+                    />
+                );
+                break;
+            default:
+                hamburgerContext = "item";
+                pageContent = (
+                    <ItemInfoView
+                        data={this.props.data}
+                        editable={this.props.editMode}
+                        dispatch={this.props.dispatch}
+                        unsavedChanges={this.props.unsavedChanges}
+                    />
+                );
+        }
         return <div id="page">
             <Navbar
                 cancelEditCallback={this.cancelEdits}
@@ -60,7 +95,10 @@ const Page = React.createClass({
                 onClickHamburger={this.toggleBurger}
             />
             {this.props.showSearch ?
-            <SearchBar dispatch={this.props.dispatch}/> : null}
+             <SearchBar
+                 dispatch={this.props.dispatch}
+                 doSearch={this.doSearch}
+             /> : null}
             {this.props.showHamburger ?
              <Hamburger
                  close={this.toggleBurger}
@@ -73,17 +111,7 @@ const Page = React.createClass({
                 onClick={this.props.showHamburger ? this.toggleBurger : null}
             >
                 <div className={css(styles.pageContainer)}>
-                    {this.props.data.type === "collection" ?
-                        <ItemTable
-                            data={this.props.data}
-                            dispatch={this.props.dispatch}
-                        /> :
-                        <ItemInfoView
-                            data={this.props.data}
-                            editable={this.props.editMode}
-                            dispatch={this.props.dispatch}
-                            unsavedChanges={this.props.unsavedChanges}
-                        />}
+                    {pageContent}
                 </div>
             </div>
         </div>;

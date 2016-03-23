@@ -98,7 +98,7 @@ class Line < ActiveRecord::Base
 		:line_alias
 	end
 
-	def description_field_name
+  def self.description_field_name
     :description
   end
 

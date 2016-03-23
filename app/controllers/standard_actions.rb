@@ -107,6 +107,7 @@ module StandardActions
             items: @objs.map(&:as_resource_def),
             numberFieldName: @objs[0].number_field_name
     })
+    @search_results = JSON.generate([]);
     @user_name = current_user.name
     @user_auth = auth_scope
     render 'layouts/application.html.haml'
@@ -124,6 +125,7 @@ module StandardActions
     @content_json = @obj.as_json.html_safe
     @user_name = current_user.name
     @user_auth = auth_scope
+    @search_results = JSON.generate([]);
     render 'layouts/application.html.haml'
   end
 

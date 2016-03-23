@@ -248,6 +248,7 @@ const styles = StyleSheet.create({
         paddingTop: ss.sizes.navbarHeightPx,
         right: 0,
         zIndex: 10,
+        ...ss.traits.shadowed,
     },
     icon: {
         display: "inline-block",

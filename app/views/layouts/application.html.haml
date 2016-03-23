@@ -67,9 +67,10 @@
     -#                 %li= link_to 'Log out', '/logout', {id: 'logout-button'}
     .container
     %script{type: "text/javascript"}
-      = "window._labdbPrefetch = #{@content_json || '{}'};".html_safe
+      = "window._labdbPrefetch = #{@content_json};".html_safe
       = "window._labdbUser = '#{@user_name || ""}';".html_safe
       = "window._labdbAuth = '#{@user_auth || ""}';".html_safe
+      = "window._labdbSearchResults = #{@search_results};".html_safe
     - if @login_page
       %div#landing
       %script{type: "text/javascript"}

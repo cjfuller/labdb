@@ -54,7 +54,7 @@ class Oligo < ActiveRecord::Base
 		:oligoalias
 	end
 
-	def description_field_name
+	def self.description_field_name
     :purpose
   end
 

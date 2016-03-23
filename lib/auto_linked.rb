@@ -42,18 +42,23 @@ class LinkableString
     matches
   end
 
-  def item_links
+  def item_links(items: false)
     matches = []
     Naming::NAMES_LOOKUP.each_key do |k|
       scan_matchobjs(/#{k}N?\W*(\d+)/) do |m|
         cls = Naming.named_class_for(k).constantize
         id = cls.where(cls.number_field_name => m[1]).first
         if id then
-          matches << [m[0], url_for(
-            controller: Naming.named_class_for(k).downcase.pluralize,
-            action: :show,
-            id: id,
-            only_path: true)]
+          if items then
+            matches << id
+          else
+            matches << [
+              m[0], url_for(
+                controller: Naming.named_class_for(k).downcase.pluralize,
+                action: :show,
+                id: id,
+                only_path: true)]
+          end
         end
       end
     end

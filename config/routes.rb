@@ -82,6 +82,8 @@ Labdb::Application.routes.draw do
     end
   end
 
+  get '/search/', to: "application#search"
+
   scope '/api/v1/m' do
     post '/:model/new', to: "api#new"
     get '/:model/list', to: "api#list"

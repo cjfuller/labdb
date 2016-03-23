@@ -54,7 +54,7 @@ class Antibody < ActiveRecord::Base
 		:alias
 	end
 
-	def description_field_name
+  def self.description_field_name
     :comments
   end
 
