@@ -1,3 +1,4 @@
+const icepick = require("icepick");
 const React = require("react");
 const ReactDOM = require("react-dom");
 const ReactRedux = require("react-redux");
@@ -19,6 +20,7 @@ const initialState = {
     tableCache: {},
     displayedResource: {},
     invertTable: true,
+    mapVisible: false,
     scrollTop: true,
     updateUrl: false,
     unsavedChanges: {},
@@ -179,6 +181,16 @@ function searchDataHandler(state, action) {
     return {...state, searchResults: action.data};
 }
 
+function mapVisibilityHandler(state, action) {
+    return {...state, mapVisible: action.visible};
+}
+
+function mapDataHandler(state, action) {
+    const {id, data} = action;
+    return icepick.assocIn(
+        state, ["itemCache", "plasmid", id, "plasmid_map"], data);
+}
+
 const actionHandlers = {};
 
 actionHandlers[Actions.INVALIDATE_CACHE] = invalidateCacheHandler;
@@ -192,6 +204,8 @@ actionHandlers[Actions.HAMBURGER_VISIBILITY] = hamburgerHandler;
 actionHandlers[Actions.USER] = userHandler;
 actionHandlers[Actions.SEARCH_VISIBILITY] = searchBarHandler;
 actionHandlers[Actions.SEARCH_DATA] = searchDataHandler;
+actionHandlers[Actions.MAP_VISIBILITY] = mapVisibilityHandler;
+actionHandlers[Actions.MAP_DATA] = mapDataHandler;
 
 function stateReducer(state, action) {
     if (typeof state === 'undefined') {
@@ -283,6 +297,7 @@ const Application = React.createClass({
         dispatch: React.PropTypes.func,
         displayedResource: React.PropTypes.any,
         editMode: React.PropTypes.bool,
+        mapVisible: React.PropTypes.bool,
         scrollTop: React.PropTypes.bool,
         updateUrl: React.PropTypes.bool,
     },
@@ -322,6 +337,7 @@ const Application = React.createClass({
             data={dataForCurrentResource()}
             dispatch={this.props.dispatch}
             editMode={this.props.editMode}
+            mapVisible={this.props.mapVisible}
             showHamburger={store.getState().showHamburger}
             showSearch={store.getState().showSearch}
             unsavedChanges={unsavedForCurrentResource()}

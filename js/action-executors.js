@@ -33,6 +33,9 @@ export function maybeFetchThenDisplay(fetchType, resource, sortOrder="DESC") {
         return fetchItem(resource.resourcePath).then((data) => {
             dispatch(Actions.updateItemCache(resource.type, data));
             dispatch(Actions.displayItem(resource.type, resource.id));
+            if (resource.type === "plasmid" && !resource.plasmid_map) {
+                loadPlasmidMapData(resource);
+            }
         });
         //TODO: error handling
     } else if (fetchType === "table") {
@@ -106,4 +109,24 @@ export function deleteItem(resource) {
             return maybeFetchThenDisplay('table', {type: resource.type, start: resource.id});
         });
     }
+}
+
+export function loadPlasmidMapData(resource) {
+    return $.ajax({
+        url: `${FETCH_BASE}/plasmid_map/${resource.id}`,
+        method: "GET",
+    }).then((data) => {
+        dispatch(Actions.setPlasmidMapData(resource.id, data));
+    });
+}
+
+export function showPlasmidMap(resource) {
+    let promise = Promise.resolve();
+    if (!resource.plasmid_map) {
+        promise = loadPlasmidMapData(resource);
+    }
+    promise.then(() => {
+        dispatch(Actions.displayItem("plasmid", resource.id));
+        dispatch(Actions.mapVisibility(true));
+    });
 }

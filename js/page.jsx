@@ -8,6 +8,7 @@ const Hamburger = require("./hamburger.jsx");
 const ItemTable = require("./itemlist.jsx");
 const ItemInfoView = require("./itemview.jsx");
 const Navbar = require("./nav.jsx");
+const PlasmidMap = require("./plasmid-map.jsx");
 const ss = require("./shared-styles.js");
 const SearchBar = require("./search.jsx");
 
@@ -16,6 +17,7 @@ const Page = React.createClass({
         data: React.PropTypes.any,
         dispatch: React.PropTypes.func,
         editMode: React.PropTypes.bool,
+        mapVisible: React.PropTypes.bool,
         showHamburger: React.PropTypes.bool,
         showSearch: React.PropTypes.bool,
         unsavedChanges: React.PropTypes.any,
@@ -49,6 +51,10 @@ const Page = React.createClass({
 
     doSearch: function(searchTerm) {
         Actions.doSearchAndRedirect(searchTerm);
+    },
+
+    closePlasmidMap: function() {
+        this.props.dispatch(Actions.mapVisibility(false));
     },
 
     render: function() {
@@ -85,6 +91,11 @@ const Page = React.createClass({
                     />
                 );
         }
+        const plasmidMapModal = this.props.mapVisible ?
+                                <PlasmidMap
+                                    data={this.props.data.plasmid_map}
+                                    onClose={this.closePlasmidMap}
+                                /> : null;
         return <div id="page">
             <Navbar
                 cancelEditCallback={this.cancelEdits}
@@ -106,6 +117,7 @@ const Page = React.createClass({
                  getState={() => this.props.data}
                  user={this.props.user}
              /> : null}
+            {plasmidMapModal}
             <div
                 className={css(styles.pageContainerOuter)}
                 onClick={this.props.showHamburger ? this.toggleBurger : null}

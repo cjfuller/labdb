@@ -18,9 +18,12 @@
 ###
 
 ##
-# This is a set of functions for displaying maps of plasmids.  The acual 
+# This is a set of functions for displaying maps of plasmids.  The acual
 # finding of features is accomplished by lib/plasmid_mapping.rb.
 ##
+
+$ = require("jquery")
+d3 = require("d3")
 
 # constants -- names, sizes, etc.
 parameters = {
@@ -34,7 +37,7 @@ parameters = {
 
   # CSS classes
   css_selected: 'feature-selected',
-  css_featureinfo: 'alert',
+  css_featureinfo: 'feature-info',
   css_point_feature: 'feature-point-feature',
   css_regional_feature: 'regional-feature',
   css_point_group: 'feature-point-group',
@@ -113,12 +116,12 @@ objects.regional_features = () ->
 angle_from_bp = (bp) ->
   2*Math.PI*bp/p('pl_size')
 
-# calculates the x-coordinate given r,theta polar coordinates, accounting for 
+# calculates the x-coordinate given r,theta polar coordinates, accounting for
 #   the fact that angle 0 points straight up
 x_from_polar = (r, theta) ->
   r*Math.cos(theta - Math.PI/2)
 
-# calculates the y-coordinate given r,theta polar coordinates, accounting for 
+# calculates the y-coordinate given r,theta polar coordinates, accounting for
 #   the fact that angle 0 points straight up
 y_from_polar = (r, theta) ->
   r*Math.sin(theta - Math.PI/2)
@@ -141,12 +144,12 @@ text_for_group = (g, i) ->
   for f in g
     if (strrep.length > 0)
       strrep += ", "
-    else 
+    else
       strrep += "[#{i}]: "
     strrep += "#{f.text} (#{f.at})"
   strrep
 
-# calculates an offset correction for the map that compensates for the size of 
+# calculates an offset correction for the map that compensates for the size of
 #   any displayed regional/group feature information
 calculate_map_offset = () ->
   if $(".#{p('css_featureinfo')}").length > 0
@@ -189,10 +192,10 @@ highlight_expanded_feature = (f_element) ->
 set_up_feature_information_box = (text) ->
   $(".#{p('css_featureinfo')}").remove()
   info_el = document.createElement("div")
-  info_el.className = "alert alert-info"
+  info_el.className = "feature-info"
   $(p('plas_map_div_id')).prepend(info_el)
-  $(".#{p('css_featureinfo')}").append('<button type="button" class="close">&times;</button>')
-  $(".#{p('css_featureinfo')}").append(text)
+  $(".#{p('css_featureinfo')}").append('<button type="button" class="close"><i class="material-icons">highlight_off</i></button>')
+  $(".#{p('css_featureinfo')}").append("<div>#{text}</div>")
   $('button.close').click(reset_feature_info)
   calculate_map_offset()
   update_offset()
@@ -282,7 +285,7 @@ draw_point_groups = () ->
 #   angle: the angle of the feature
 #   text: the text to use for the label
 #   radial_offset (default 3): the offset in px from the outer_radius parameter
-#   text_rotation (default true): whether to rotate the text slightly for 
+#   text_rotation (default true): whether to rotate the text slightly for
 #     better packing near the poles
 draw_single_feature_label = (grp, angle, text, radial_offset=3, text_rotation=true) ->
   symm_angle = angle
@@ -313,7 +316,7 @@ draw_point_labels = () ->
     text = "#{f.text} (#{f.at})"
     draw_single_feature_label(grp, angle, text)
 
-# Draw all the point feature group labels    
+# Draw all the point feature group labels
 draw_group_labels = () ->
   grp = o().svg.append("g")
   for g, i in o().groups
@@ -325,7 +328,7 @@ draw_group_labels = () ->
 draw_plasmid_label = () ->
   grp = o().svg.append("g")
   grp.append("text")
-    .attr("class", "#{p('css_plasmid_label')}")  
+    .attr("class", "#{p('css_plasmid_label')}")
     .text("#{p('pl_name')} (#{p('pl_size')}bp)")
     .attr("text-anchor", "middle")
 
@@ -369,7 +372,7 @@ redraw_map = () ->
 
 ## Feature handling functions
 
-# Helper to ensure that there are at least as many point feature groups as 
+# Helper to ensure that there are at least as many point feature groups as
 # necessary
 ensure_n_feature_groups = (n) ->
   while o().groups.length < n
@@ -378,7 +381,7 @@ ensure_n_feature_groups = (n) ->
 # Adds a feature to the specified group.
 # Args:
 #   f: the feature to add
-#   group_n: the 0-indexed group number; pass a negative number to indicate 
+#   group_n: the 0-indexed group number; pass a negative number to indicate
 #     not grouped
 group_feature = (f, group_n) ->
   if group_n < 0
@@ -425,7 +428,7 @@ fix_feature_overlap = () ->
 add_hidden_feature = (name, f) ->
   if o()['features_not_displayed'][name] == undefined
     o()['features_not_displayed'][name] = []
-  
+
   o()['features_not_displayed'][name].push(f)
 
 # Shows a previously hidden feature
@@ -459,15 +462,17 @@ add_feature_from_field = () ->
   set_feature_from_field(true)
 
 # Hide a feature named by the user in the feature field
-hide_feature_from_field = () -> 
+hide_feature_from_field = () ->
   set_feature_from_field(false)
 
 ## Initialization functions
 
 # Read, parse, and return the json plasmid map data from the plasmid map page
 # element
-read_data = () -> 
-  JSON.parse($(p('plas_map_div_id')).attr(p('data_attr')))
+read_data = () ->
+  data = JSON.parse($(p('plas_map_div_id')).attr(p('data_attr')))
+  data
+
 
 # Add all features in a collection to the map (initially hidden)
 # Input should be a mapping {name: [list of features with that name]}
@@ -484,7 +489,7 @@ show_initial_features = () ->
     if n in always_on
       show_feature(n, false)
     else if f.length == 1 and f[0].type == 'point'
-      show_feature(n, false)  
+      show_feature(n, false)
     else if f.length > 0 and f[0].type == 'regional'
       show_feature(n, false)
 
@@ -497,7 +502,7 @@ initialize_features = () ->
   p().pl_size = fs.pl_size
   p().pl_name = fs.pl_name
   add_all_features(fs['point_features'])
-  add_all_features(fs['regional_features']) 
+  add_all_features(fs['regional_features'])
   show_initial_features()
 
 # Set up the show/hide button click handlers
@@ -512,7 +517,4 @@ do_map = () ->
   initialize_buttons()
   draw_all()
 
-# Bind the do_map action to the button that shows the map
-$("#show-map-button").on("click", do_map)
-
-
+module.exports = do_map

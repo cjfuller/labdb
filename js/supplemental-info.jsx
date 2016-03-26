@@ -1,6 +1,7 @@
 const React = require("react");
 const {StyleSheet, css} = require("aphrodite");
 
+const ActionExecutors = require("./action-executors.js");
 const EditableText = require("./editable-text.jsx");
 const ss = require("./shared-styles.js");
 
@@ -73,8 +74,11 @@ const SupplementalInfo = React.createClass({
             })}
             </div>
             {(this.props.data.type === "plasmid") ?
+                // TODO: thread click callback through props.
                 <div
                     className={css(styles.plasmapButton)}
+                    onClick={() => ActionExecutors.showPlasmidMap(
+                            this.props.data)}
                     role="button"
                 >
                     Plasmid map

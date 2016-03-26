@@ -33,6 +33,7 @@ const sizes = {
     fontSizeLarge: 17,
     fontSizeMedium: 14,
     fontSizeNormal: 13,
+    fontSizeCaption: 11,
     hamburgerWidthPx: 50,
     navbarHeightPx: 50,
     paddingPx: 10,

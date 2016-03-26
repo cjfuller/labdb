@@ -9,6 +9,8 @@ export const HAMBURGER_VISIBILITY = "HAMBURGER";
 export const USER = "USER";
 export const SEARCH_VISIBILITY = "SEARCH";
 export const SEARCH_DATA = "SEARCH_DATA";
+export const MAP_VISIBILITY = "MAP_VISIBILITY";
+export const MAP_DATA = "MAP_DATA";
 
 export function updateItemCache(itemType, data) {
     return {
@@ -121,6 +123,21 @@ export function displaySearch() {
         displayType: "search",
     };
 }
+
+export function mapVisibility(value) {
+    return {
+        type: MAP_VISIBILITY,
+        visible: value,
+    };
+}
+
+export function setPlasmidMapData(id, data) {
+    return {
+        type: MAP_DATA,
+        data: data,
+        id: id,
+    };
+};
 
 export function doSearchAndRedirect(searchTerm) {
     window.location = `/search?term=${searchTerm}`;

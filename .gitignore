@@ -36,6 +36,3 @@ public/*.css
 public/*.map
 jscssdeps
 public/_s
-
-# Eventually may want to commit this.
-Gemfile.lock

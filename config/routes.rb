@@ -85,6 +85,7 @@ Labdb::Application.routes.draw do
   get '/search/', to: "application#search"
 
   scope '/api/v1/m' do
+    get '/plasmid_map/:id', to: "api#plasmid_map"
     post '/:model/new', to: "api#new"
     get '/:model/list', to: "api#list"
     post '/:model/:id/copy', to: "api#copy"

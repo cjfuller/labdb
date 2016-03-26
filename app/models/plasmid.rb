@@ -135,7 +135,7 @@ class Plasmid < ActiveRecord::Base
       "Vector information" => [:vector, :antibiotic]}
   end
 
-  def map
+  def plasmid_map
     @map or (@map = PlasmidMapping.map_for_plasmid(self).plasmidmap_json)
   end
 

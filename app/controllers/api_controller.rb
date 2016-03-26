@@ -98,4 +98,9 @@ class ApiController < ApplicationController
     session[:user_id] = nil
     return head :no_content
   end
+
+  def plasmid_map
+    plas_id = params[:id]
+    render json: Plasmid.find(plas_id).plasmid_map
+  end
 end

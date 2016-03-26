@@ -107,9 +107,9 @@ module PlasmidMapping
             pos.each do |p|
               map.add_regional_feature(
                 RegionalFeature.new(
-                  name: f, 
-                  start_pos: (p-1)*3 + tr_i + 1, 
-                  length: info['size']*3, 
+                  name: f,
+                  start_pos: (p-1)*3 + tr_i + 1,
+                  length: info['size']*3,
                   feature_class: (info['display']['feature_class'] or "affinity-tag")))
             end
           end
@@ -119,9 +119,9 @@ module PlasmidMapping
           pos.each do |p|
             map.add_regional_feature(
               RegionalFeature.new(
-                name: f, 
-                start_pos: p, 
-                length: info['size'], 
+                name: f,
+                start_pos: p,
+                length: info['size'],
                 color: (info['display']['feature_class'] or "affinity-tag")))
           end
         end
@@ -149,22 +149,21 @@ module PlasmidMapping
       @size = size
       @regions = []
       @points = []
-    end 
+    end
 
     attr_accessor :size, :name
 
     def to_h
       pts = {}
       reg = {}
-      @points.each do |p| 
+      @points.each do |p|
         pts[p.name] ||= []
         pts[p.name] << p.to_h
       end
-      @regions.each do |r| 
+      @regions.each do |r|
         reg[r.name] ||= []
         reg[r.name] << r.to_h
       end
-      puts reg
 
       {pl_name: @name, pl_size: @size, point_features: pts, regional_features: reg}
     end
