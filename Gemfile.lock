@@ -30,25 +30,15 @@ GEM
     bcrypt-ruby (3.0.1)
     bio (1.5.0)
     builder (3.1.4)
-    capybara (2.6.0)
+    capybara (2.6.2)
       addressable
       mime-types (>= 1.16)
       nokogiri (>= 1.3.3)
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
-    coderay (1.1.0)
-    coffee-rails (4.1.1)
-      coffee-script (>= 2.2.0)
-      railties (>= 4.0.0, < 5.1.x)
-    coffee-script (2.4.1)
-      coffee-script-source
-      execjs
-    coffee-script-source (1.10.0)
+    coderay (1.1.1)
     colorize (0.7.7)
-    commonjs (0.2.7)
-    d3-rails (3.5.11)
-      railties (>= 3.1)
     diff-lcs (1.2.5)
     erubis (2.7.0)
     execjs (2.6.0)
@@ -60,15 +50,6 @@ GEM
     hashie (3.4.3)
     hike (1.2.3)
     i18n (0.7.0)
-    jquery-hotkeys-rails (0.7.9.1)
-      railties (>= 3.1)
-    jquery-rails (3.1.4)
-      railties (>= 3.0, < 5.0)
-      thor (>= 0.14, < 2.0)
-    json (1.8.3)
-    kaminari (0.16.3)
-      actionpack (>= 3.0.0)
-      activesupport (>= 3.0.0)
     konacha (3.7.0)
       actionpack (>= 3.1, < 5)
       capybara
@@ -76,18 +57,12 @@ GEM
       railties (>= 3.1, < 5)
       sprockets (>= 2, < 4)
       tilt
-    less (2.6.0)
-      commonjs (~> 0.2.7)
-    less-rails (2.7.1)
-      actionpack (>= 4.0)
-      less (~> 2.6.0)
-      sprockets (> 2, < 4)
-      tilt
-    libv8 (3.16.14.13)
-    mail (2.6.3)
-      mime-types (>= 1.16, < 3)
+    mail (2.6.4)
+      mime-types (>= 1.16, < 4)
     method_source (0.8.2)
-    mime-types (2.99)
+    mime-types (3.0)
+      mime-types-data (~> 3.2015)
+    mime-types-data (3.2016.0221)
     mini_portile2 (2.0.0)
     minitest (4.7.5)
     multi_json (1.11.2)
@@ -111,7 +86,7 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
-    puma (2.15.3)
+    puma (2.16.0)
     racc (1.4.14)
     rack (1.5.5)
     rack-openid (1.3.1)
@@ -132,14 +107,13 @@ GEM
       activesupport (= 4.0.13)
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
-    rake (10.5.0)
+    rake (11.1.1)
     redcarpet (2.2.2)
-    ref (2.0.0)
     rspec (3.4.0)
       rspec-core (~> 3.4.0)
       rspec-expectations (~> 3.4.0)
       rspec-mocks (~> 3.4.0)
-    rspec-core (3.4.1)
+    rspec-core (3.4.4)
       rspec-support (~> 3.4.0)
     rspec-expectations (3.4.0)
       diff-lcs (>= 1.2.0, < 2.0)
@@ -147,7 +121,7 @@ GEM
     rspec-mocks (3.4.1)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.4.0)
-    rspec-rails (3.4.0)
+    rspec-rails (3.4.2)
       actionpack (>= 3.0, < 4.3)
       activesupport (>= 3.0, < 4.3)
       railties (>= 3.0, < 4.3)
@@ -157,12 +131,6 @@ GEM
       rspec-support (~> 3.4.0)
     rspec-support (3.4.1)
     ruby-openid (2.7.0)
-    sass (3.2.19)
-    sass-rails (4.0.5)
-      railties (>= 4.0.0, < 5.0)
-      sass (~> 3.2.2)
-      sprockets (~> 2.8, < 3.0)
-      sprockets-rails (~> 2.0)
     slop (3.6.0)
     sprockets (2.12.4)
       hike (~> 1.2)
@@ -173,16 +141,12 @@ GEM
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       sprockets (>= 2.8, < 4.0)
-    therubyracer (0.12.2)
-      libv8 (~> 3.16.14.0)
-      ref
     thor (0.19.1)
     thread_safe (0.3.5)
     tilt (1.4.1)
-    tzinfo (0.3.46)
-    uglifier (2.7.2)
-      execjs (>= 0.3.0)
-      json (>= 1.8.0)
+    tzinfo (0.3.48)
+    uglifier (3.0.0)
+      execjs (>= 0.3.0, < 3)
     xpath (2.0.0)
       nokogiri (~> 1.3)
 
@@ -192,16 +156,9 @@ PLATFORMS
 DEPENDENCIES
   bcrypt-ruby (~> 3.0.0)
   bio
-  coffee-rails (~> 4.0)
-  d3-rails
   facets
   haml (~> 4.0)
-  jquery-hotkeys-rails
-  jquery-rails
-  kaminari
   konacha
-  less-rails (~> 2.7.0)
-  nokogiri
   omniauth
   omniauth-browserid
   omniauth-openid
@@ -215,9 +172,7 @@ DEPENDENCIES
   redcarpet (~> 2.2.2)
   rspec
   rspec-rails (~> 3)
-  sass-rails (~> 4.0)
-  therubyracer
   uglifier (>= 1.0.3)
 
 BUNDLED WITH
-   1.10.6
+   1.11.2

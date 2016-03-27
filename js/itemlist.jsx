@@ -111,7 +111,9 @@ const ItemTable = React.createClass({
                                this.props.data.numberFieldName);
         return <div>
             {this.props.data.type === "collection" ?
-            <span>Showing items {startItem}-{endItem}.</span> : null}
+             <div className={css(styles.itemsShown)}>
+                 Showing items {startItem}-{endItem}.
+             </div> : null}
             <div className={css(styles.itemtableContainer)}>
                 <table className={css(styles.itemtable)}>
                     <thead><tr>
@@ -147,6 +149,10 @@ const styles = StyleSheet.create({
             backgroundColor: ss.colors.mediumBackground,
             cursor: "pointer",
         },
+    },
+    itemsShown: {
+        marginBottom: 10,
+        marginTop: 10,
     },
     itemtableContainer: {
         display: "flex",

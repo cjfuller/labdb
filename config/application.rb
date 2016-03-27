@@ -19,9 +19,7 @@ require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
 
-if defined?(Bundler)
-  Bundler.require(:default, Rails.env)
-end
+Bundler.require(:default, Rails.env)
 
 module Labdb
   class Application < Rails::Application

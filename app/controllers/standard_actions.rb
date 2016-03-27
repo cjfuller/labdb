@@ -59,7 +59,6 @@ module StandardActions
 
   def index_with_new_search(page_size, page)
     @objs = process_search_query(params[type], model_class)
-    @objs = Kaminari.paginate_array(@objs).page(page).per(page_size)
     @search_id = find_current_search.id
   end
 
@@ -68,7 +67,6 @@ module StandardActions
     result = find_current_search.loaded_result
     @objs = model_class.find(result.keys).sort { |e1, e2| result[e1.id].to_i <=> result[e2.id].to_i }
     @objs.reverse! if reverse_sorted?
-    @objs = Kaminari.paginate_array(@objs).page(page).per(page_size)
   end
 
   def index_all(page_size, start_id)
