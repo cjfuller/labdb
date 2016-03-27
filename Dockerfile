@@ -10,4 +10,6 @@ RUN ["/usr/bin/bundle", "install", "--without", "development", "test", "--deploy
 RUN ["/usr/bin/npm", "install"]
 RUN ["/usr/bin/npm", "run-script", "coffee-compile"]
 RUN ["/usr/bin/npm", "run-script", "compile"]
+RUN ["/usr/bin/python", "manage.py", "secret"]
+RUN ["/usr/bin/python", "manage.py", "hostname", "--value", "straight.labdb.io"]
 CMD RAILS_ENV=production bundle exec puma --config config/puma.rb
