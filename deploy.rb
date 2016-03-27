@@ -1,6 +1,9 @@
 require 'fileutils'
 require 'yaml'
 
+UPDATE_STAGES = [
+    "./labdb_web_controller.yaml"
+]
 INJECT_VERSION_REPLACE = "<VERSION>"
 DOCKER_MACHINE_NAME = "dev"
 DOCKER_REGISTRY_NAME = "us.gcr.io"
@@ -22,6 +25,7 @@ def prev_version
 end
 
 def cmd(*args)
+  puts "Running: #{args}"
   system(*args) || exit(1)
 end
 
@@ -30,12 +34,13 @@ def container_name(version)
 end
 
 def docker_env
-  "eval $(docker-machine env #{DOCKER_MACHINE_NAME}) &&"
+  ""
+  #"eval $(docker-machine env #{DOCKER_MACHINE_NAME}) && "
 end
 
 def docker_build(version)
-  cmd("#{docker_env} docker build -t #{container_name(version)} .")
-  cmd("#{docker_env} gcloud --project #{PROJECT_NAME} docker push #{container_name(version)}")
+  cmd("#{docker_env}docker build -t #{container_name(version)} .")
+  cmd("#{docker_env}gcloud --project #{PROJECT_NAME} docker push #{container_name(version)}")
 end
 
 def interpolate_version(fn, version)
