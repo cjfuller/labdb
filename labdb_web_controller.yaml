@@ -1,17 +1,17 @@
 apiVersion: v1
 kind: ReplicationController
 metadata:
-  name: labdb-web-<VERSION>
+  name: labdb-web
   labels:
-    name: labdb-web-<VERSION>
+    name: labdb-web
 spec:
   replicas: 2
   selector:
-    name: labdb-web-<VERSION>
+    name: labdb-web
   template:
     metadata:
       labels:
-        name: labdb-web-<VERSION>
+        name: labdb-web
     spec:
       containers:
       - name: labdb
