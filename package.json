@@ -27,7 +27,7 @@
     "scripts": {
         "coffee-watch": "node_modules/coffee-script/bin/coffee --watch --compile js/plasmid-map.coffee",
         "coffee-compile": "node_modules/coffee-script/bin/coffee --compile js/plasmid-map.coffee",
-        "compile": "webpack -p",
+        "compile": "webpack -p --define process.env.NODE_ENV='\"production\"'",
         "watch": "node node_modules/webpack/bin/webpack.js --watch-stdin --progress --colors"
     }
 }
