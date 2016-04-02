@@ -38,13 +38,7 @@ Labdb::Application.routes.draw do
     end
   end
 
-  resources :users, except: [:show] do
-    member do
-      put 'toggle_auth_read'
-      put 'toggle_auth_write'
-      put 'toggle_auth_admin'
-    end
-  end
+  resources :users, &common_actions
 
   resources :plasmids, as: 'plasmid', &common_actions
 

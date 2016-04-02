@@ -12,6 +12,7 @@ module.exports = {
             query: {
                 presets: ["es2015", "react"],
                 plugins: [
+                    "array-includes",
                     "syntax-object-rest-spread",
                     "transform-object-rest-spread",
                 ],

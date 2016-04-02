@@ -11,7 +11,10 @@ const SearchBar = React.createClass({
         doSearch: React.PropTypes.func,
     },
     getInitialState: function() {
-        return {searchTerms: ''};
+        return {searchTerms: '', includeSequence: false};
+    },
+    updateIncludeSequence: function() {
+        this.setState({includeSequence: !this.state.includeSequence});
     },
     updateSearchState: function(value) {
         this.setState({searchTerms: value});
@@ -20,7 +23,8 @@ const SearchBar = React.createClass({
         this.props.dispatch(actions.searchVisibility(false));
     },
     doSearch: function() {
-        return this.props.doSearch(this.state.searchTerms);
+        return this.props.doSearch(this.state.searchTerms,
+                                   this.state.includeSequence);
     },
     render: function() {
         return <div>
@@ -37,6 +41,16 @@ const SearchBar = React.createClass({
                         value={this.state.searchTerms}
                     />
                 </div>
+                <label>
+                    <input
+                        type="checkbox"
+                        checked={this.state.includeSequence}
+                        className={css(styles.checkBox)}
+                        value={this.state.includeSequence ? "true" : "false"}
+                        onChange={this.updateIncludeSequence}
+                    />
+                    Include sequence in search?
+                </label>
                 <div
                     className={css(styles.searchButton)}
                     onClick={this.doSearch}

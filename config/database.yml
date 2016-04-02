@@ -21,8 +21,8 @@ development:
   pool: 5
   timeout: 5000
   encoding: utf8
-  host: db
-  username: labdb
+  host:
+  username:
   password:
 
 # Warning: The database defined as "test" will be erased and

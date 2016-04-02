@@ -143,9 +143,13 @@ module Searching
 		preliminary_list = search_class.order(index_order)
 
 		final_list = preliminary_list.select do |p|
-			regex_conditions.all? do |k, r|
-				val = p.send(k.to_s).to_s
-				r.match(val)
+			regex_conditions.any? do |k, r|
+        if p.respond_to? k then
+				  val = p.send(k.to_s).to_s
+				  r.match(val)
+        else
+          nil
+        end
 			end
 		end
 

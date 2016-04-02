@@ -7,21 +7,24 @@ const ss = require("./shared-styles.js");
 const LandingPage = React.createClass({
     componentDidMount: function() {
         const onSignIn = function(googleUser) {
-            $.ajax({
-                url: `/api/verify?token=${googleUser.getAuthResponse().id_token}`,
+            const token = googleUser.getAuthResponse().id_token;
+            return $.ajax({
+                url: `/api/verify?token=${token}`,
                 method: "POST",
             }).then(() => {
                 // TODO: make a logged in landing page.
                 window.location.href = "/plasmids";
+            }, () => {
+                window.gapi.auth2.getAuthInstance().signOut();
             });
         };
         window.gapi.signin2.render('g-signin2', {
             scope: 'openid email profile',
             longtitle: true,
+            prompt: 'select_account',
             theme: 'dark',
             width: 200,
             onsuccess: onSignIn,
-            onfailure: window.location.reload,
         });
     },
     render: function() {

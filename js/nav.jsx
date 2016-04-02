@@ -3,6 +3,7 @@ const React = require("react");
 
 const actions = require("./actions.js");
 const ae = require("./action-executors.js");
+const auth = require("./auth.js");
 const ss = require("./shared-styles.js");
 
 const NavItem = React.createClass({
@@ -138,7 +139,7 @@ const CtxActions = React.createClass({
             >
                 <i className="material-icons">arrow_forward</i>
             </div>
-            {this.props.editMode && !this.collection() ?
+            {this.props.editMode && auth('write') && !this.collection() ?
                 <div
                     className={css(styles.action)}
                     onClick={this.props.cancelEditCallback}
@@ -147,7 +148,7 @@ const CtxActions = React.createClass({
                     <i className="material-icons">block</i>
                 </div> : null
             }
-            {this.collection() ? null :
+            {this.collection() || !auth('write') ? null :
             <div
                 className={css(styles.action)}
                 onClick={this.props.editCallback}
@@ -203,9 +204,10 @@ const Actions = React.createClass({
                 <div className={css(styles.action)} onClick={this.doSearch}>
                     <i className="material-icons">search</i>
                 </div>
-                <div className={css(styles.action)} onClick={this.newItem}>
-                   <i className="material-icons">add</i>
-                </div>
+                {auth('write') ?
+                 <div className={css(styles.action)} onClick={this.newItem}>
+                     <i className="material-icons">add</i>
+                 </div> : null}
                 <div className={css(styles.hamburgerWrapper)}>
                 <div
                     className={css(styles.action, styles.hamburger)}

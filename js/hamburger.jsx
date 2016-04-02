@@ -93,8 +93,12 @@ const Hamburger = React.createClass({
                 </HamburgerEntry>
                 {this.props.user.auth === "admin" ? <div>
                 <HamburgerSectionName name="Administration" />
-                <HamburgerEntry iconName="people" interactive={true}>
-                    <span>Manage users</span>
+                <HamburgerEntry
+                    href="/users"
+                    iconName="people"
+                    interactive={true}
+                >
+                    Manage users
                 </HamburgerEntry>
                 <HamburgerEntry iconName="cloud_upload" interactive={false}>
                     <span>Bulk import data</span>
@@ -135,13 +139,15 @@ const Hamburger = React.createClass({
                 >
                     <span>Export as FASTA</span>
                 </HamburgerEntry> : null}
-                <HamburgerEntry
-                    iconName="delete"
-                    interactive={true}
-                    onClick={() => ae.deleteItem(this.props.getState())}
-                >
-                    <span>Delete</span>
-                </HamburgerEntry></div> : null}
+                {['admin', 'edit'].includes(this.props.user.auth) ?
+                 <HamburgerEntry
+                     iconName="delete"
+                     interactive={true}
+                     onClick={() => ae.deleteItem(this.props.getState())}
+                 >
+                     <span>Delete</span>
+                 </HamburgerEntry> : null}
+                </div> : null}
                 <HamburgerSectionName name="All databases" />
                 <HamburgerEntry
                     href="/plasmids"

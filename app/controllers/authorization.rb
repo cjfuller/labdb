@@ -30,7 +30,7 @@ module Authorization
   end
 
   def denied
-    redirect_to "/", notice: "Access denied."
+    render status: :forbidden, text: "Forbidden."
   end
 
   def require_admin

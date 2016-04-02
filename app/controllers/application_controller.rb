@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
+require 'set'
 
 require 'psych'
 require 'number_assignment'
@@ -130,6 +131,7 @@ class ApplicationController < ActionController::Base
 
   def search()
     search_term = params[:term]
+    include_seq = params[:seq] == "1"
     linked_term = LinkableString.new(search_term)
     results = []
     if linked_term.item_links(items: true) then
@@ -139,11 +141,25 @@ class ApplicationController < ActionController::Base
     model_classes = [
       Plasmid, Oligo, Bacterium, Sample, Antibody, Line, Yeaststrain]
     model_classes.map do |cls|
+      fields = [cls.description_field_name,
+                cls.info_field_name]
+      if include_seq then
+        fields += [:sequence]
+      end
+      seen_ids = Set.new
       @model_class = cls
-      partial_results = process_search_query(
-        {cls.description_field_name => search_term},
-        cls)
-      results += partial_results
+      fields.each do |f|
+        partial_results = process_search_query(
+          {f => search_term},
+          cls)
+        partial_results = partial_results.reject do |r|
+          seen_ids.include?(r.id)
+        end
+        partial_results.each do |r|
+          seen_ids.add(r.id)
+        end
+        results += partial_results
+      end
     end
     if results.size == 1 then
       redirect_to results[0]

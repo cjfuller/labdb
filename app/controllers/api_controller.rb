@@ -12,8 +12,18 @@ class Object
 end
 
 class ApiController < ApplicationController
+  skip_before_filter :require_authorization, only: [:verify, :logout]
+  before_filter :safeguard_self_modification, only: [:delete, :update]
 
-  skip_before_filter :require_authorization, only: [:verify]
+  def safeguard_self_modification
+    return unless params[:id]
+    cls = params[:model].classify.constantize
+    return unless cls == User
+    @user = User.find(params[:id])
+    if @user == curr_user_obj then
+      return head :conflict
+    end
+  end
 
   def fetch
     cls = params[:model].classify.constantize
@@ -91,12 +101,12 @@ class ApiController < ApplicationController
       end
     end
     session[:user_id] = nil
-    return head :no_content
+    head :forbidden
   end
 
   def logout
     session[:user_id] = nil
-    return head :no_content
+    head :no_content
   end
 
   def plasmid_map

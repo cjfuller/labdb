@@ -49,8 +49,8 @@ const Page = React.createClass({
             !this.props.showHamburger));
     },
 
-    doSearch: function(searchTerm) {
-        Actions.doSearchAndRedirect(searchTerm);
+    doSearch: function(searchTerm, includeSequence) {
+        Actions.doSearchAndRedirect(searchTerm, includeSequence);
     },
 
     closePlasmidMap: function() {

@@ -36,6 +36,7 @@ const ItemRow = React.createClass({
     render: function() {
         const linkHTML = this.props.data.coreLinks ? <span>
             {this.props.data.coreLinks.links.map((lnk, idx) => {
+                if (!lnk) {return "";}
                 const [text, addr] = lnk;
                 return <a
                     className={css(styles.coreLink)}

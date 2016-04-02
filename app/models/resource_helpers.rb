@@ -15,6 +15,14 @@ module ResourceHelpers
     :value
   end
 
+  def number_field
+    self.send(number_field_name)
+  end
+
+  def info_field
+    self.send(info_field_name)
+  end
+
   def as_resource_def
     field_data = {}
     exportable_fields.each { |f| field_data[f] = self.send f }
@@ -30,7 +38,7 @@ module ResourceHelpers
     return {
       type: self.class.name.demodulize.downcase,
       id: id,
-      timestamp: self.send(self.timestamp_field_name),
+      timestamp: (self.send(self.timestamp_field_name) if self.respond_to? :timestamp_field_name),
       fieldData: field_data,
       resourcePath: "/#{self.class.name.demodulize.pluralize.downcase}/#{id}",
       name: named_number_string,
