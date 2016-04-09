@@ -31,7 +31,13 @@ const CoreInfo = React.createClass({
                 unsavedChanges={this.props.unsavedChanges}
                 makeUpdater={this.props.makeUpdater}
             />
-            <InventoryWidget inventory={this.props.data.inventory} />
+            <InventoryWidget
+                data={this.props.data.fieldData}
+                editable={this.props.editable}
+                inventory={this.props.data.inventory}
+                makeUpdater={this.props.makeUpdater}
+                unsavedChanges={this.props.unsavedChanges}
+            />
         </div>;
     },
 });

@@ -63,6 +63,31 @@ function logout() {
     });
 }
 
+const AuthScopes = ["admin", "write", "read"];
+const AuthType = React.PropTypes.oneOf(AuthScopes);
+
+/**
+ * Control display of children based on auth scope.
+ * (This is actually enforced server-side, and just so that we don't show
+ * options that are forbidden anyway.)
+ */
+const Auth = React.createClass({
+    propTypes: {
+        auth: AuthType,
+        children: React.PropTypes.node,
+        required: AuthType,
+    },
+    meetsAuthRequirement: function() {
+        return AuthScopes.indexOf(this.props.auth) <= AuthScopes.indexOf(this.props.required);
+    },
+    render: function() {
+        if (this.meetsAuthRequirement()) {
+            return <div>{this.props.children}</div>;
+        }
+        return null;
+    },
+});
+
 const Hamburger = React.createClass({
     propTypes: {
         close: React.PropTypes.func,
@@ -70,7 +95,7 @@ const Hamburger = React.createClass({
         getState: React.PropTypes.func,
         user: React.PropTypes.shape({
             name: React.PropTypes.string,
-            auth: React.PropTypes.oneOf(["admin", "write", "read"]),
+            auth: AuthType,
         }),
     },
     render: function() {
@@ -91,40 +116,59 @@ const Hamburger = React.createClass({
                         Log out
                     </span>
                 </HamburgerEntry>
-                {this.props.user.auth === "admin" ? <div>
-                <HamburgerSectionName name="Administration" />
-                <HamburgerEntry
-                    href="/users"
-                    iconName="people"
-                    interactive={true}
+                <Auth
+                    required="admin"
+                    auth={this.props.user.auth}
                 >
-                    Manage users
-                </HamburgerEntry>
-                <HamburgerEntry iconName="cloud_upload" interactive={false}>
-                    <span>Bulk import data</span>
-                    <span className={css(styles.comingSoon)}>
-                        Coming soon!
-                    </span>
-                </HamburgerEntry>
-                <HamburgerEntry iconName="cloud_download" interactive={false}>
-                    <span>Bulk export data</span>
-                    <span className={css(styles.comingSoon)}>
-                        Coming soon!
-                    </span>
-                </HamburgerEntry>
-                </div> : null}
+                    <HamburgerSectionName name="Administration" />
+                    <HamburgerEntry
+                        href="/users"
+                        iconName="people"
+                        interactive={true}
+                    >
+                        Manage users
+                    </HamburgerEntry>
+                    <HamburgerEntry iconName="cloud_upload" interactive={false}>
+                        <span>Bulk import data</span>
+                        <span className={css(styles.comingSoon)}>
+                            Coming soon!
+                        </span>
+                    </HamburgerEntry>
+                    <HamburgerEntry iconName="cloud_download" interactive={false}>
+                        <span>Bulk export data</span>
+                        <span className={css(styles.comingSoon)}>
+                            Coming soon!
+                        </span>
+                    </HamburgerEntry>
+                </Auth>
                 {this.props.context === 'item' ? <div>
                 <HamburgerSectionName name="Current item" />
-                <HamburgerEntry
-                    iconName="content_copy"
-                    interactive={true}
-                    onClick={() => {
-                        this.props.close();
-                        ae.copyItem(this.props.getState());
-                    }}
+                <Auth
+                    auth={this.props.user.auth}
+                    required="write"
                 >
-                    <span>Make a duplicate</span>
-                </HamburgerEntry>
+                    <HamburgerEntry
+                        iconName="content_copy"
+                        interactive={true}
+                        onClick={() => {
+                            this.props.close();
+                            ae.copyItem(this.props.getState());
+                        }}
+                    >
+                        <span>Make a duplicate</span>
+                    </HamburgerEntry>
+                    {this.props.context === 'item' && this.props.getState().type === "plasmid" ?
+                    <HamburgerEntry
+                        iconName="library_add"
+                        interactive={true}
+                        onClick={() => {
+                            this.props.close();
+                            ae.strainFromPlasmid(this.props.getState());
+                        }}
+                    >
+                        <span>Make a strain from this plasmid</span>
+                    </HamburgerEntry> : null}
+                </Auth>
                 <HamburgerEntry
                     iconName="file_download"
                     interactive={true}

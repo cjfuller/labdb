@@ -130,3 +130,16 @@ export function showPlasmidMap(resource) {
         dispatch(Actions.mapVisibility(true));
     });
 }
+
+export function strainFromPlasmid(resource) {
+    return $.ajax({
+        url: `/bacteria/create_from_plasmid?plasmid_id=${resource.id}`,
+        method: "POST",
+    }).then((data) => {
+        maybeFetchThenDisplay('item', {
+            type: 'bacterium',
+            resourcePath: `/bacteria/${data}`,
+            id: data,
+        });
+    });
+}

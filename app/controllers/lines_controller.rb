@@ -49,34 +49,6 @@ class LinesController < ApplicationController
 
   end
 
-  def update_number
-
-    @obj = Line.find(params[:id])
-    loc = Line::InventoryItem.from_json(params[:location])
-    inc = params[:inc].to_i
-
-    inv = @obj.inventory
-
-    #puts inv.map { |e| e.inspect }.join(",")
-
-    #puts loc.inspect
-
-    upd_item = inv.find { |e| e == loc }
-
-    upd_item.count += inc
-
-    if upd_item.count <= 0 then
-      inv.delete(upd_item)
-    end
-
-    @obj.update_inventory(inv)
-
-    @obj.save
-
-    redirect_to @obj
-
-  end
-
   def generate_location_params
 
     table_params =  [:location, :count, :clone, :person, :date]

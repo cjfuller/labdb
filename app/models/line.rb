@@ -28,7 +28,7 @@ class Line < ActiveRecord::Base
 
   Fields = [:current_stock_counts, :date_entered, :description, :entered_by, :line_alias, :line_number, :locations, :notebook, :parent_line, :plasmid_numbers, :selectable_markers, :sequence, :species, :genotype, :stock_person, :stock_date]
 
-  InvFields = [:current_stock_counts, :locations, :stock_person, :stock_date]
+  InvFields = [:locations, :current_stock_counts, :stock_clone, :stock_person, :stock_date]
 
 	attr_accessible *Fields
 
@@ -150,7 +150,11 @@ class Line < ActiveRecord::Base
     fields([:entered_by, :date_entered, :notebook])
   end
 
-	def inventory
+  def inventory
+    fields(InvFields)
+  end
+
+	def _inventory
 
 		inv = []
 

@@ -18,6 +18,8 @@ group :development, :test do
 	gem 'rspec'
 	gem 'rspec-rails', '~> 3'
   gem 'konacha'
+  gem 'pry-rails'
+  gem 'pry'
 end
 
 gem 'bcrypt-ruby', '~> 3.0.0'
@@ -32,7 +34,5 @@ gem 'puma', '~> 2.7'
 gem 'facets', require: false
 
 gem 'racc'
-
-gem 'pry'
 
 gem 'bio'

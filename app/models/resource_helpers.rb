@@ -35,7 +35,7 @@ module ResourceHelpers
                  else
                    nil
                  end
-    return {
+    resource_def = {
       type: self.class.name.demodulize.downcase,
       id: id,
       timestamp: (self.send(self.timestamp_field_name) if self.respond_to? :timestamp_field_name),
@@ -48,5 +48,9 @@ module ResourceHelpers
       sequenceInfo: sequence_info,
       supplementalFields: supplemental_info,
     }
+    if self.respond_to? :inventory then
+      resource_def[:inventory] = inventory
+    end
+    resource_def
   end
 end

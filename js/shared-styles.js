@@ -70,7 +70,6 @@ const elements = {
         height: "inherit",
         marginBottom: "inherit",
         maxWidth: "100%",
-        padding: "inherit",
         width: "100%",
     },
     fieldName: {
@@ -93,7 +92,7 @@ const traits = {
         },
     },
     shadowedButton: {
-        boxShadow: `1px 1px 4px ${colors.bitDarkBackground}`,
+        boxShadow: `1px 1px 1px ${colors.bitDarkBackground}`,
         ':active': {
             boxShadow: `inset 1px 1px 2px 1px ${colors.darkGray}`,
         },

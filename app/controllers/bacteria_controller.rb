@@ -86,9 +86,7 @@ class BacteriaController < ApplicationController
     append_strain_number(@obj, plas)
 
     @obj.save
-
-    redirect_to polymorphic_path(@obj, action: :edit)
-
+    render json: @obj.id
   end
 
 
