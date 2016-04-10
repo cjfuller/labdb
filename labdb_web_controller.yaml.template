@@ -1,21 +1,21 @@
 apiVersion: v1
 kind: ReplicationController
 metadata:
-  name: labdb-web
+  name: labdb-web-<LAB>
   labels:
-    name: labdb-web
+    name: labdb-web-<LAB>
 spec:
   replicas: 2
   selector:
-    name: labdb-web
+    name: labdb-web-<LAB>
   template:
     metadata:
       labels:
-        name: labdb-web
+        name: labdb-web-<LAB>
     spec:
       containers:
       - name: labdb
-        image: us.gcr.io/straightlabdb/labdb_web:<VERSION>
+        image: us.gcr.io/labdb-io/labdb_web:<VERSION>
         env:
         - name: GET_HOSTS_FROM
           value: dns
