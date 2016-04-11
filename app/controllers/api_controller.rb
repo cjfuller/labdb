@@ -82,7 +82,7 @@ class ApiController < ApplicationController
     head :no_content
   end
 
-  APP_ID = "413612736524-90sshskkh7m2sn1jta2gpfi7io5ou850.apps.googleusercontent.com"
+  APP_ID = "146923434465-alq7iagpanjvoag20smuirj0ivdtfldk.apps.googleusercontent.com"
 
   def verify
     endpoint = URI("https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=#{params[:token]}")
