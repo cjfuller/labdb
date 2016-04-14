@@ -183,14 +183,18 @@ const Hamburger = React.createClass({
                 >
                     <span>Export as FASTA</span>
                 </HamburgerEntry> : null}
-                {['admin', 'edit'].includes(this.props.user.auth) ?
-                 <HamburgerEntry
-                     iconName="delete"
-                     interactive={true}
-                     onClick={() => ae.deleteItem(this.props.getState())}
-                 >
-                     <span>Delete</span>
-                 </HamburgerEntry> : null}
+                <Auth
+                    auth={this.props.user.auth}
+                    required="write"
+                >
+                    <HamburgerEntry
+                        iconName="delete"
+                        interactive={true}
+                        onClick={() => ae.deleteItem(this.props.getState())}
+                    >
+                        <span>Delete</span>
+                    </HamburgerEntry>
+                </Auth>
                 </div> : null}
                 <HamburgerSectionName name="All databases" />
                 <HamburgerEntry
