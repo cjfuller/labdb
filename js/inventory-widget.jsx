@@ -1,34 +1,10 @@
 const React = require("react");
 const {StyleSheet, css} = require("aphrodite");
-const $ = require("jquery");
 
 const EditableField = require("./editable-field.jsx");
 const {extVal} = require("./util.js");
 const ss = require("./shared-styles.js");
 
-const DecrementButton = React.createClass({
-    propTypes: {
-        clickCallback: React.PropTypes.func,
-    },
-    render: function() {
-        return <div
-            className={css(styles.decrementButton)}
-            onClick={this.props.clickCallback}
-        >
-            -1
-        </div>;
-    },
-});
-
-const InventoryItem = React.createClass({
-    propTypes: {
-        itemData: React.PropTypes.any,
-    },
-
-    render: function() {
-        return <div>{JSON.stringify(this.props.itemData)}</div>;
-    },
-});
 
 const InventoryWidget = React.createClass({
     propTypes: {
@@ -72,6 +48,13 @@ const InventoryWidget = React.createClass({
         arrValues[index] = newValue;
         const nextValue = arrValues.join(",");
         updater(nextValue);
+    },
+
+    addRow: function() {
+        const fieldToUse = 'locations';
+        const origValue = extVal(this.getFieldData(), fieldToUse) || "";
+        const nextValue = origValue + ",";
+        this.props.makeUpdater(fieldToUse)(nextValue);
     },
 
     getInventoryRows: function(invItems) {
@@ -143,6 +126,15 @@ const InventoryWidget = React.createClass({
                         {this.getInventoryRows(invItems)}
                     </tbody>
                 </table>
+                {this.props.editable ?
+                    <a
+                        className={css(styles.addRowButton)}
+                        href="javascript:void(0)"
+                        onClick={this.addRow}
+                    >
+                        <i className="material-icons">playlist_add</i>Add row
+                    </a> :
+                    null}
             </div>
         </div>;
     },
@@ -180,6 +172,27 @@ const styles = StyleSheet.create({
         ':hover': {
             backgroundColor: "#eee",
             cursor: "pointer",
+        },
+    },
+    addRowButton: {
+        alignItems: "center",
+        backgroundColor: ss.colors.labdbGreen,
+        borderRadius: 4,
+        boxShadow: "1px 1px 2px rgba(0, 0, 0, 0.2)",
+        color: "inherit",
+        display: "flex",
+        height: 25,
+        justifyContent: "center",
+        margin: 10,
+        textDecoration: "none",
+        width: 100,
+        ':hover': {
+            cursor: "pointer",
+            backgroundColor: ss.colors.labdbGreenLight,
+        },
+        ':active': {
+            backgroundColor: ss.colors.labdbGreenLight,
+            boxShadow: "inset 1px 1px rgba(0, 0, 0, 0.2)",
         },
     },
 });

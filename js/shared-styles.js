@@ -4,6 +4,7 @@ const colors = {
     borderColor: "#e3e3e3",
     darkGray: "rgba(0, 0, 0, 0.2)",
     labdbGreen: "#559955",
+    labdbGreenLight: "#66aa66",
     lightBackground: "#f8f8f8",
     mediumBackground: "#e0e0e0",
     bitDarkBackground: "#c0c0c0",
