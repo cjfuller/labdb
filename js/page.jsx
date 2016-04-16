@@ -63,13 +63,19 @@ const Page = React.createClass({
         switch (this.props.data.type) {
             case "search":
                 hamburgerContext = "collection";
-                pageContent = (
-                    <ItemTable
-                        data={this.props.data}
-                        dispatch={this.props.dispatch}
-                        sort={["timestamp", "id"]}
-                    />
-                );
+                if (!this.props.data.items) {
+                    pageContent = <div className={css(styles.noResults)}>
+                        No results found.
+                    </div>;
+                } else {
+                    pageContent = (
+                        <ItemTable
+                            data={this.props.data}
+                            dispatch={this.props.dispatch}
+                            sort={["timestamp", "id"]}
+                        />
+                    );
+                }
                 break;
             case "collection":
                 hamburgerContext = "collection";
@@ -131,6 +137,9 @@ const Page = React.createClass({
 });
 
 const styles = StyleSheet.create({
+    noResults: {
+        marginTop: 10,
+    },
     pageContainer: {
         margin: "0 auto",
         maxWidth: "80vw",

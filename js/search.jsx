@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     searchBarArrow: {
         position: "absolute",
         top: -15,
-        right: 2.5 * ss.sizes.hamburgerWidthPx - 8,
+        right: 1.5 * ss.sizes.hamburgerWidthPx - 8,
         border: "8px solid rgba(0, 0, 0, 0)",
         borderBottom: "8px solid white",
         zIndex: 21,

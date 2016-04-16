@@ -260,7 +260,6 @@ function unsavedForCurrentResource() {
 
 function loadPrefetchedData() {
     if (window._labdbSearchResults && window._labdbSearchResults.length > 0) {
-        // TODO: handle case where no results are found.
         store.dispatch(
             Actions.searchData(window._labdbSearchResults));
         window._labdbSearchResults.forEach((result) => {
@@ -268,6 +267,10 @@ function loadPrefetchedData() {
                 Actions.updateTableCache(
                     result.type, [result]));
         });
+        store.dispatch(Actions.displaySearch());
+    } else if (window._labdbSearchResults.length === 0 &&
+               window._labdbPrefetch.length === 0) {
+        store.dispatch(Actions.displaySearch([]));
         store.dispatch(Actions.displaySearch());
     } else if (Data.type === "collection") {
         store.dispatch(

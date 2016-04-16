@@ -62,7 +62,8 @@ const CtxActions = React.createClass({
         editMode: React.PropTypes.bool,
     },
     collection: function() {
-        return (this.props.data.type === "collection");
+        return (this.props.data.type === "collection" ||
+                this.props.data.type === "search");
     },
     doNextCollection: function() {
         // TODO: handle ascending sort
@@ -201,13 +202,13 @@ const Actions = React.createClass({
                 editMode={this.props.editMode}
             />
             <div className={css(styles.fixactions)}>
-                <div className={css(styles.action)} onClick={this.doSearch}>
-                    <i className="material-icons">search</i>
-                </div>
-                {auth('write') ?
+                {auth('write') && this.props.data['type'] !== 'search' ?
                  <div className={css(styles.action)} onClick={this.newItem}>
                      <i className="material-icons">add</i>
                  </div> : null}
+                <div className={css(styles.action)} onClick={this.doSearch}>
+                    <i className="material-icons">search</i>
+                </div>
                 <div className={css(styles.hamburgerWrapper)}>
                 <div
                     className={css(styles.action, styles.hamburger)}
