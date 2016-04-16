@@ -287,6 +287,7 @@ const styles = StyleSheet.create({
         alignContent: "center",
         display: "flex",
         flexDirection: "row",
+        flexShrink: 0,
         height: ss.sizes.navbarHeightPx,
         justifyContent: "flex-end",
     },
@@ -327,7 +328,9 @@ const styles = StyleSheet.create({
     navbarTextSection: {
         alignItems: "center",
         display: "flex",
+        flexShrink: 1,
         marginLeft: ss.sizes.paddingPx,
+        overflowX: "hidden",
     },
     navitem: {
         display: "inline-block",

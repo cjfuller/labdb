@@ -27,7 +27,7 @@ const SearchBar = React.createClass({
                                    this.state.includeSequence);
     },
     render: function() {
-        return <div>
+        return <div className={css(styles.searchBarOuter)}>
             <div className={css(styles.searchBar)}>
                 <div>
                     Search:
@@ -41,7 +41,7 @@ const SearchBar = React.createClass({
                         value={this.state.searchTerms}
                     />
                 </div>
-                <label>
+                <label className={css(styles.seqOption)}>
                     <input
                         type="checkbox"
                         checked={this.state.includeSequence}
@@ -57,39 +57,55 @@ const SearchBar = React.createClass({
                 >
                     Go
                 </div>
-                <div
-                    className={css(styles.searchBarClose)}
-                    onClick={this.closeSearch}
-                >
-                    <i className="material-icons">close</i>
-                </div>
-                <div className={css(styles.searchBarArrow)}>
-                </div>
+            </div>
+            <div className={css(styles.searchBarArrow)}>
+            </div>
+            <div
+                className={css(styles.searchBarClose)}
+                onClick={this.closeSearch}
+            >
+                <i className="material-icons">close</i>
             </div>
         </div>;
     },
 });
 
+const searchWrapMq = '@media(max-width: 899px)';
+
 const styles = StyleSheet.create({
     searchBar: {
         alignItems: "center",
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "flex-start",
+        width: "100%",
+        [searchWrapMq]: {
+            alignItems: "flex-start",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            marginTop: 10,
+        },
+    },
+    searchBarOuter: {
         backgroundColor: "white",
         border: `1px solid ${ss.colors.borderColor}`,
         borderBottom: `1px solid ${ss.colors.borderColor}`,
         borderLeft: `1px solid ${ss.colors.borderColor}`,
         borderRadius: 4,
         display: "flex",
-        flexDirection: "row",
         fontFamily: ss.fonts.base,
         height: ss.sizes.navbarHeightPx,
-        justifyContent: "flex-start",
-        right: 0,
+        justifyContent: "space-between",
         paddingLeft: 10,
         position: "fixed",
+        right: 0,
         top: ss.sizes.navbarHeightPx,
         width: "50vw",
         zIndex: 21,
         ...ss.traits.shadowed,
+        [searchWrapMq]: {
+            height: 2.5 * ss.sizes.navbarHeightPx,
+        },
     },
     searchBarArrow: {
         position: "absolute",
@@ -100,15 +116,13 @@ const styles = StyleSheet.create({
         zIndex: 21,
     },
     searchBarClose: {
-        position: "absolute",
-        right: 0,
-        top: 0,
         ':hover': {
             cursor: "pointer",
         },
     },
     searchButton: {
         display: "flex",
+        flexShrink: 0,
         border: `1px solid ${ss.colors.borderColor}`,
         alignItems: "center",
         justifyContent: "center",
@@ -124,9 +138,26 @@ const styles = StyleSheet.create({
         },
     },
     searchField: {
+        flexShrink: 1,
         height: "1.2em",
         marginLeft: 10,
+        minWidth: 175,
         width: "60%",
+        [searchWrapMq]: {
+
+            marginBottom: 10,
+        },
+    },
+    seqOption: {
+        flexShrink: 0,
+        fontSize: ss.sizes.fontSizeCaption,
+        maxHeight: ss.sizes.navbarHeightPx,
+        [searchWrapMq]: {
+            flexShrink: 1,
+            marginLeft: 10,
+            marginBottom: 10,
+            overflow: "hidden",
+        },
     },
 });
 
