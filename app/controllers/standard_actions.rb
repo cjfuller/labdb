@@ -81,15 +81,7 @@ module StandardActions
     page_size = 100
     start_id = (params[:start] or (
       (sort_order == "DESC") and 2**64 - 1) or 0).to_i
-    # TODO: use start_id for searches too
-    page = 1
-    if params.has_key?(type) then
-      index_with_new_search(page_size, page)
-    elsif valid_search_requested? then
-      index_with_stored_search(page_size, page)
-    else
-      index_all(page_size, start_id)
-    end
+    index_all(page_size, start_id)
 
     instance_variable_set("@" + type.pluralize, @objs)
 

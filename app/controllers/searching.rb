@@ -19,53 +19,6 @@ module Searching
 
   REGEX_DETECTION_REGEX = /\A\/.*\/(i?)\Z/
 
-  def delete_old_searches
-    all_searches = Search.all
-
-    unless all_searches.nil? then
-      all_searches.each { |s| s.destroy if s.expired? }
-    end
-
-    searches = Search.where(user_id: curr_user_id)
-
-    unless searches.nil? then
-      searches.each { |s| s.destroy }
-    end
-  end
-
-
-  def generate_search_object(search_params, result)
-    delete_old_searches
-    sec_per_day = 60*60*24
-    exp_time = Time.now + 1.5*sec_per_day
-    res_hash = result.inject({}) { |h, e| h[e.id]= e.number_field; h }
-    params = ActionController::Parameters.new(expires: exp_time,
-                                              result: Psych.dump(res_hash),
-                                              searchparams: search_params,
-                                              user_id: curr_user_id)
-    s = Search.new(params.permit(:expires, :result, :searchparams, :user_id))
-    s.save
-  end
-
-  def valid_search_requested?
-    return false unless params.has_key?(:search_id)
-    current_search = find_current_search
-    current_search and current_search.id == params[:search_id].to_i
-  end
-
-  def find_current_search
-    s = Search.find_by_user_id(curr_user_id)
-    return nil if s.nil? or s.expired?
-
-    begin
-      s.loaded_result = Psych.load(s.result) unless s.loaded_result
-    rescue ArgumentError => e
-      logger.warn("Exception encountered while loading stored search result.  Likely a development mode lazy-loading issue: #{e.message}")
-    end
-
-    s
-  end
-
   def glob_style_search_to_regex(search_params, key)
     search_params[key].gsub!("*", ".*")
     #add start and end of string matchers to avoid, e.g., matching all plasmids with a 1 when searching for #1
@@ -124,7 +77,6 @@ module Searching
       end
     end
 
-    generate_search_object(search_params, final_list)
     final_list
   end
 
