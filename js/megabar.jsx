@@ -33,7 +33,7 @@ const MegaBar = React.createClass({
                         return <a
                             className={css(styles.coreLink)}
                             href={href}
-                            key={href}
+                            key={text}
                         >
                             {text}
                         </a>;

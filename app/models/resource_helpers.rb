@@ -23,6 +23,14 @@ module ResourceHelpers
     self.send(info_field_name)
   end
 
+  def maybe_link_item(item)
+    if item.item_links.empty? then
+      [[item, nil]]
+    else
+      item.item_links
+    end
+  end
+
   def as_resource_def
     field_data = {}
     exportable_fields.each { |f| field_data[f] = self.send f }
@@ -31,7 +39,7 @@ module ResourceHelpers
     core_links = if self.respond_to? :core_alt_field and not [:depleted].include? self.core_alt_field_name then
                    {lookup: core_alt_field_name,
                     name: self.get_heading(core_alt_field_name),
-                    links: core_alt_field.map(&:item_links).map(&:first)}
+                    links: (core_alt_field.map { |i| maybe_link_item(i) }.map { |l| l.first or [] })}
                  else
                    nil
                  end

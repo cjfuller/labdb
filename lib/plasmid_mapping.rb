@@ -130,10 +130,10 @@ module PlasmidMapping
   end
 
   def self.map_for_plasmid(plas)
-    plas_map = PlasmidMap.new(plas.named_number_string, plas.sequence.size)
-    plas_map.size = plas.sequence.length
-    plas_map.name = plas.named_number_string
     seq = (plas.sequence or "")
+    plas_map = PlasmidMap.new(plas.named_number_string, seq.size)
+    plas_map.size = seq.size
+    plas_map.name = plas.named_number_string
 
     map_restriction_enzymes(plas_map, seq)
     map_other_features(plas_map, seq)
