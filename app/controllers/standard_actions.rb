@@ -145,7 +145,6 @@ module StandardActions
 
   def handle_next_previous_redirection(next_obj, obj)
     params_hash = {}
-    params_hash[:search_id] = params[:search_id] if valid_search_requested?
 
     if next_obj then
       redirect_to polymorphic_path(next_obj, params_hash)
@@ -162,15 +161,7 @@ module StandardActions
     num = obj.number_field.to_i
     next_obj = nil
 
-    if valid_search_requested? then
-      objs = find_current_search.loaded_result
-      ids = objs.keys.select { |k| objs[k].to_i.send(num_comparators[direction], num) }.sort { |e1, e2| objs[e1].to_i <=> objs[e2].to_i }
-      ids.reverse! if direction == :previous
-      next_id = ids.first
-      next_obj = model_class.find(next_id) unless next_id.nil?
-    else
-      next_obj = model_class.where("#{obj.number_field_name.to_s} #{num_comparators[direction]} ?", obj.number_field).order("#{obj.number_field_name.to_s} #{sort_direction[direction]}").limit(1).first
-    end
+    next_obj = model_class.where("#{obj.number_field_name.to_s} #{num_comparators[direction]} ?", obj.number_field).order("#{obj.number_field_name.to_s} #{sort_direction[direction]}").limit(1).first
 
     handle_next_previous_redirection(next_obj, obj)
   end
