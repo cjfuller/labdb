@@ -100,8 +100,23 @@ const SearchBar = React.createClass({
                     </div>
                 </div>
                 <div className={css(styles.searchBarRow)}>
+                    <label className={css(styles.seqOption)}>
+                        <input
+                            type="checkbox"
+                            checked={this.state.includeSequence}
+                            className={css(styles.checkBox)}
+                            value={this.state.includeSequence ? "true" : "false"}
+                            onChange={this.updateIncludeSequence}
+                        />
+                        Include sequence in search?
+                    </label>
+                </div>
+                <div className={css(styles.searchBarRow)}>
+                    Filters:
+                </div>
+                <div className={css(styles.searchBarRow)}>
                     <label>
-                        <div className={css(styles.inline)}>
+                        <div className={css(styles.inline, styles.smallLabel)}>
                             Person:
                         </div>
                         <EditableField
@@ -114,25 +129,13 @@ const SearchBar = React.createClass({
                     </label>
                 </div>
                 <div className={css(styles.searchBarRow)}>
-                    <div className={css(styles.inline)}>
+                    <div className={css(styles.inline, styles.smallLabel)}>
                         Types to search:
                         <TypeSelector
                             onChange={this.updateTypes}
                             selected={this.state.types}
                         />
                     </div>
-                </div>
-                <div className={css(styles.searchBarRow)}>
-                    <label className={css(styles.seqOption)}>
-                        <input
-                            type="checkbox"
-                            checked={this.state.includeSequence}
-                            className={css(styles.checkBox)}
-                            value={this.state.includeSequence ? "true" : "false"}
-                            onChange={this.updateIncludeSequence}
-                        />
-                        Include sequence in search?
-                    </label>
                 </div>
             </div>
             <div className={css(styles.searchBarArrow)}>
@@ -179,6 +182,7 @@ const styles = StyleSheet.create({
         display: "flex",
         fontFamily: ss.fonts.base,
         justifyContent: "space-between",
+        minWidth: 475,
         paddingLeft: 10,
         position: "fixed",
         right: 0,
@@ -228,6 +232,9 @@ const styles = StyleSheet.create({
         flexShrink: 0,
         fontSize: ss.sizes.fontSizeCaption,
         maxHeight: ss.sizes.navbarHeightPx,
+    },
+    smallLabel: {
+        fontSize: ss.sizes.fontSizeNormal,
     },
     typeSelectorOuter: {
         display: "inline-flex",
