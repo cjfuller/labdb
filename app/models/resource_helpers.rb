@@ -1,4 +1,12 @@
 module ResourceHelpers
+  def method_missing(m, *args, &block)
+    if self.class.respond_to? m then
+      self.class.send(m, *args, &block)
+    else
+      super
+    end
+  end
+
   def field(sym, type: :value)
     {name: get_heading(sym), lookup: sym, type: type}
   end

@@ -20,6 +20,9 @@ group :development, :test do
   gem 'konacha'
   gem 'pry-rails'
   gem 'pry'
+  gem 'pry-doc'
+  gem 'method_source'
+  gem 'rubocop'
 end
 
 gem 'bcrypt-ruby', '~> 3.0.0'

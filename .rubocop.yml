@@ -1,0 +1,11 @@
+Style/TrailingCommaInLiteral:
+  Enabled: false
+
+Style/RedundantSelf:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+
+Style/MultilineIfThen:
+  Enabled: false
