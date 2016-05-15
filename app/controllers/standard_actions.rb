@@ -16,7 +16,6 @@
 #++
 
 module StandardActions
-
   def type
     model_class.to_s.downcase
   end
@@ -26,8 +25,8 @@ module StandardActions
   end
 
   def define_ui_variables(params)
-    params[:model_class]= model_class
-    params[:search_path]= search_path
+    params[:model_class] = model_class
+    params[:search_path] = search_path
     super(params)
   end
 
@@ -40,11 +39,11 @@ module StandardActions
   end
 
   def sort_order
-    order = "DESC"
-    if params[:sort_order] == "ASC" then
-      order = "ASC"
+    if params[:sort_order] == 'ASC' then
+      'ASC'
+    else
+      'DESC'
     end
-    order
   end
 
   def index_order
@@ -54,26 +53,14 @@ module StandardActions
   def index_page_number_for_id(id, page_size)
     objs = model_class.order(index_order)
     ind = objs.find_index { |obj| obj.id.to_i == id.to_i }
-    ind/page_size + 1
-  end
-
-  def index_with_new_search(page_size, page)
-    @objs = process_search_query(params[type], model_class)
-    @search_id = find_current_search.id
-  end
-
-  def index_with_stored_search(page_size, page)
-    @search_id = find_current_search.id
-    result = find_current_search.loaded_result
-    @objs = model_class.find(result.keys).sort { |e1, e2| result[e1.id].to_i <=> result[e2.id].to_i }
-    @objs.reverse! if reverse_sorted?
+    ind / page_size + 1
   end
 
   def index_all(page_size, start_id)
     if sort_order == "DESC" then
-      @objs = model_class.order(index_order).select { |o| o.send(o.number_field_name) <= start_id}.take(page_size)
+      @objs = model_class.order(index_order).where(model_class.number_field_name => 0..start_id).limit(page_size)
     else
-      @objs = model_class.order(index_order).select { |o| o.send(o.number_field_name) >= start_id}.take(page_size)
+      @objs = model_class.order(index_order).where(model_class.number_field_name => start_id..(2**32 - 1)).limit(page_size)
     end
   end
 
@@ -106,8 +93,6 @@ module StandardActions
   def show
     @obj = model_class.find(params[:id])
     @search_id = params[:search_id]
-
-    #preprocess_model_object(@obj)
 
     instance_variable_set("@" + type, @obj)
 

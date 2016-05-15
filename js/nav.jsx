@@ -16,7 +16,7 @@ const NavItem = React.createClass({
         // TODO: add to API and do this instead
         // window._store.updateDataFromURL(
         //     `${this.dynamicResourceBase}${this.props.addr}`);
-        window.location.pathname = this.props.addr;
+        window.location.href = this.props.addr;
     },
 
     render: function() {
