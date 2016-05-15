@@ -316,7 +316,7 @@ const Application = React.createClass({
         window.history.replaceState(
             this.compactResource(this.props.displayedResource),
             window.title,
-            window.location.pathname);
+            window.location.pathname + window.location.search);
     },
 
     componentDidUpdate: function() {

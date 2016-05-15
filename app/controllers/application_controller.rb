@@ -93,6 +93,12 @@ class ApplicationController < ActionController::Base
   def search
     search_term = params[:term]
     include_seq = params[:seq] == '1'
+    types = params[:types] &&
+            !params[:types].strip.empty? &&
+            JSON.parse(params[:types].strip)
+    person = params[:person] &&
+             !params[:person].strip.empty? &&
+             params[:person].strip
     linked_term = LinkableString.new(search_term)
     results = []
     if linked_term.item_links(items: true) then
@@ -100,8 +106,9 @@ class ApplicationController < ActionController::Base
     end
     # TODO: don't hardcode these
     model_classes = [
-      Plasmid, Oligo, Bacterium, Sample, Antibody, Line, Yeaststrain]
-
+      Plasmid, Oligo, Bacterium, Sample, Antibody, Line, Yeaststrain
+    ]
+    model_classes = model_classes.select { |t| types.include? t.name } if types
     model_classes.map do |cls|
       fields = [cls.description_field_name,
                 cls.info_field_name]
@@ -109,12 +116,14 @@ class ApplicationController < ActionController::Base
       seen_ids = Set.new
       @model_class = cls
       fields.each do |f|
-        partial_results = process_search_query(
-          { f => search_term },
-          cls
-        )
-        partial_results = partial_results.reject do |r|
-          seen_ids.include?(r.id)
+        query = { f => search_term }
+        partial_results = process_search_query(query, cls)
+                          .reject { |r| seen_ids.include? r.id }
+
+        if person then
+          partial_results = partial_results.select do |r|
+            r.send(r.class.owner_field_name).downcase.include? person.downcase
+          end
         end
         partial_results.each do |r|
           seen_ids.add(r.id)

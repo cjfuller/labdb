@@ -7,6 +7,8 @@ const EditableField = React.createClass({
     propTypes: {
         autoFocus: React.PropTypes.bool,
         editable: React.PropTypes.bool,
+        // An array of aphrodite style objects
+        extraStyles: React.PropTypes.arrayOf(React.PropTypes.any),
         fieldClasses: React.PropTypes.any, // TODO
         onChange: React.PropTypes.func,
         onEnter: React.PropTypes.func,
@@ -23,14 +25,15 @@ const EditableField = React.createClass({
         return true;
     },
     render: function() {
-        {/* TODO: inject field classes */}
         return (
             <input
                 autoFocus={!!this.props.autoFocus}
                 className={
                     css(
                         this.props.editable && styles.editableField,
-                        styles.field)}
+                        styles.field,
+                        ...(this.props.extraStyles || [])
+                    )}
                 disabled={!this.props.editable}
                 onChange={(e) => this.props.onChange(e.target.value)}
                 onKeyPress={this.onKeyPress}

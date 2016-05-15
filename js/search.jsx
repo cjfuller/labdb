@@ -5,13 +5,51 @@ const actions = require("./actions.js");
 const EditableField = require("./editable-field.jsx");
 const ss = require("./shared-styles.js");
 
+// TODO: determine dynamically; share code with nav
+const Types = {
+    Plasmid: "Plasmids",
+    Oligo: "Oligos",
+    Bacterium: "Bacteria",
+    Sample: "Samples",
+    Antibody: "Antibodies",
+    Line: "TC",
+    Yeaststrain: "Yeast",
+};
+
+const TypeSelector = React.createClass({
+    propTypes: {
+        onChange: React.PropTypes.func,
+        selected: React.PropTypes.arrayOf(React.PropTypes.string),
+    },
+    render: function() {
+        const typeSelectors = Object.keys(Types).map((k) => {
+            return <div
+                key={k}
+                onClick={() => this.props.onChange(k)}
+                className={css(styles.typeSelector,
+                               this.props.selected.includes(k) && styles.typeSelectorSelected)}
+            >
+                {Types[k]}
+            </div>
+        });
+        return <div className={css(styles.typeSelectorOuter)}>
+            {typeSelectors}
+        </div>
+    },
+});
+
 const SearchBar = React.createClass({
     propTypes: {
         dispatch: React.PropTypes.func,
         doSearch: React.PropTypes.func,
     },
     getInitialState: function() {
-        return {searchTerms: '', includeSequence: false};
+        return {
+            searchTerms: '',
+            includeSequence: false,
+            person: null,
+            types: Object.keys(Types),
+        };
     },
     updateIncludeSequence: function() {
         this.setState({includeSequence: !this.state.includeSequence});
@@ -19,43 +57,82 @@ const SearchBar = React.createClass({
     updateSearchState: function(value) {
         this.setState({searchTerms: value});
     },
+    updatePersonField: function(value) {
+        this.setState({person: value});
+    },
+    updateTypes: function(type) {
+        if (this.state.types.includes(type)) {
+            this.setState({types: this.state.types.filter((t) => t !== type)});
+        } else {
+            this.setState({types: this.state.types.concat(t)});
+        }
+    },
     closeSearch: function() {
         this.props.dispatch(actions.searchVisibility(false));
     },
     doSearch: function() {
         return this.props.doSearch(this.state.searchTerms,
-                                   this.state.includeSequence);
+                                   this.state.includeSequence,
+                                   this.state.person,
+                                   this.state.types);
     },
     render: function() {
         return <div className={css(styles.searchBarOuter)}>
             <div className={css(styles.searchBar)}>
-                <div>
-                    Search:
+                <div className={css(styles.searchBarRow)}>
+                    <div>
+                        Search:
+                    </div>
+                    <div className={css(styles.searchField)}>
+                        <EditableField
+                            autoFocus={true}
+                            editable={true}
+                            onChange={this.updateSearchState}
+                            onEnter={this.doSearch}
+                            value={this.state.searchTerms}
+                        />
+                    </div>
+                    <div
+                        className={css(styles.searchButton)}
+                        onClick={this.doSearch}
+                    >
+                        Go
+                    </div>
                 </div>
-                <div className={css(styles.searchField)}>
-                    <EditableField
-                        autoFocus={true}
-                        editable={true}
-                        onChange={this.updateSearchState}
-                        onEnter={this.doSearch}
-                        value={this.state.searchTerms}
-                    />
+                <div className={css(styles.searchBarRow)}>
+                    <label>
+                        <div className={css(styles.inline)}>
+                            Person:
+                        </div>
+                        <EditableField
+                            autoFocus={false}
+                            editable={true}
+                            extraStyles={[styles.inline, styles.searchField]}
+                            onChange={this.updatePersonField}
+                            value={this.state.person}
+                        />
+                    </label>
                 </div>
-                <label className={css(styles.seqOption)}>
-                    <input
-                        type="checkbox"
-                        checked={this.state.includeSequence}
-                        className={css(styles.checkBox)}
-                        value={this.state.includeSequence ? "true" : "false"}
-                        onChange={this.updateIncludeSequence}
-                    />
-                    Include sequence in search?
-                </label>
-                <div
-                    className={css(styles.searchButton)}
-                    onClick={this.doSearch}
-                >
-                    Go
+                <div className={css(styles.searchBarRow)}>
+                    <div className={css(styles.inline)}>
+                        Types to search:
+                        <TypeSelector
+                            onChange={this.updateTypes}
+                            selected={this.state.types}
+                        />
+                    </div>
+                </div>
+                <div className={css(styles.searchBarRow)}>
+                    <label className={css(styles.seqOption)}>
+                        <input
+                            type="checkbox"
+                            checked={this.state.includeSequence}
+                            className={css(styles.checkBox)}
+                            value={this.state.includeSequence ? "true" : "false"}
+                            onChange={this.updateIncludeSequence}
+                        />
+                        Include sequence in search?
+                    </label>
                 </div>
             </div>
             <div className={css(styles.searchBarArrow)}>
@@ -73,18 +150,25 @@ const SearchBar = React.createClass({
 const searchWrapMq = '@media(max-width: 899px)';
 
 const styles = StyleSheet.create({
+    inline: {
+        display: "inline-block",
+    },
     searchBar: {
+        alignItems: "flex-start",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "flex-start",
+        width: "100%",
+    },
+    searchBarRow: {
         alignItems: "center",
         display: "flex",
         flexDirection: "row",
         justifyContent: "flex-start",
+        marginBottom: 10,
+        marginTop: 10,
+        whiteSpace: "nowrap",
         width: "100%",
-        [searchWrapMq]: {
-            alignItems: "flex-start",
-            flexDirection: "column",
-            justifyContent: "flex-start",
-            marginTop: 10,
-        },
     },
     searchBarOuter: {
         backgroundColor: "white",
@@ -94,18 +178,14 @@ const styles = StyleSheet.create({
         borderRadius: 4,
         display: "flex",
         fontFamily: ss.fonts.base,
-        height: ss.sizes.navbarHeightPx,
         justifyContent: "space-between",
         paddingLeft: 10,
         position: "fixed",
         right: 0,
         top: ss.sizes.navbarHeightPx,
-        width: "50vw",
+        width: "30vw",
         zIndex: 21,
         ...ss.traits.shadowed,
-        [searchWrapMq]: {
-            height: 2.5 * ss.sizes.navbarHeightPx,
-        },
     },
     searchBarArrow: {
         position: "absolute",
@@ -142,22 +222,34 @@ const styles = StyleSheet.create({
         height: "1.2em",
         marginLeft: 10,
         minWidth: 175,
-        width: "60%",
-        [searchWrapMq]: {
-
-            marginBottom: 10,
-        },
+        width: "80%",
     },
     seqOption: {
         flexShrink: 0,
         fontSize: ss.sizes.fontSizeCaption,
         maxHeight: ss.sizes.navbarHeightPx,
-        [searchWrapMq]: {
-            flexShrink: 1,
-            marginLeft: 10,
-            marginBottom: 10,
-            overflow: "hidden",
+    },
+    typeSelectorOuter: {
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "flex-start",
+        marginLeft: 10,
+    },
+    typeSelector: {
+        boxSizing: "border-box",
+        border: `1px solid ${ss.colors.borderColor}`,
+        fontSize: ss.sizes.fontSizeCaption,
+        padding: 5,
+        ':not(:last-of-type)': {
+            borderRight: "none",
         },
+        ':hover': {
+            cursor: "pointer",
+            borderBottom: `1px solid ${ss.colors.mutedBlueMoreOpaque}`,
+        },
+    },
+    typeSelectorSelected: {
+        backgroundColor: ss.colors.mutedBlueSemitransparent,
     },
 });
 

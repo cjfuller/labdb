@@ -139,7 +139,11 @@ export function setPlasmidMapData(id, data) {
     };
 };
 
-export function doSearchAndRedirect(searchTerm, includeSequence) {
-    window.location = (
-        `/search?term=${searchTerm}&seq=${includeSequence ? 1 : 0}`);
+export function doSearchAndRedirect(searchTerm, includeSequence, person, types) {
+    let url = `/search?term=${searchTerm}&seq=${includeSequence ? 1 : 0}`;
+    if (person) {
+        url += `&person=${person}`
+    }
+    url += `&types=${JSON.stringify(types)}`
+    window.location = url;
 }

@@ -16,8 +16,7 @@
 #++
 
 Labdb::Application.routes.draw do
-
-  root to: "static#index"
+  root to: 'static#index'
 
   post '/logout', to: 'api#logout'
 
@@ -26,7 +25,7 @@ Labdb::Application.routes.draw do
 
   get '/quick_search', to: 'quick_search#do_quick_search'
 
-  common_actions = Proc.new do
+  common_actions = proc do
     collection do
       get 'search'
       post 'search'
@@ -76,20 +75,19 @@ Labdb::Application.routes.draw do
     end
   end
 
-  get '/search/', to: "application#search"
+  get '/search', to: 'application#search'
 
   scope '/api/v1/m' do
-    get '/plasmid_map/:id', to: "api#plasmid_map"
-    post '/:model/new', to: "api#new"
-    get '/:model/list', to: "api#list"
-    post '/:model/:id/copy', to: "api#copy"
-    get '/:model/:id', to: "api#fetch"
-    put '/:model/:id', to: "api#update"
-    delete '/:model/:id', to: "api#delete"
+    get '/plasmid_map/:id', to: 'api#plasmid_map'
+    post '/:model/new', to: 'api#new'
+    get '/:model/list', to: 'api#list'
+    post '/:model/:id/copy', to: 'api#copy'
+    get '/:model/:id', to: 'api#fetch'
+    put '/:model/:id', to: 'api#update'
+    delete '/:model/:id', to: 'api#delete'
   end
 
   scope '/api' do
-    post '/verify', to: "api#verify"
+    post '/verify', to: 'api#verify'
   end
-
 end

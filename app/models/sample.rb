@@ -95,7 +95,7 @@ class Sample < ActiveRecord::Base
     :date_entered
   end
 
-  def owner_field_name
+  def self.owner_field_name
     :entered_by
   end
 

@@ -1,4 +1,3 @@
-
 function extVal(data, lookup) {
     return lookup && data[lookup];
 }

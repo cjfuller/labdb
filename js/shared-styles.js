@@ -11,6 +11,8 @@ const colors = {
     linkBaseColor: "#007799",
     linkHoverColor: "#009977",
     mutedBlue: "#115599",
+    mutedBlueSemitransparent: "rgba(17, 85, 153, 0.3)",
+    mutedBlueMoreOpaque: "rgba(17, 85, 153, 0.8)",
     yesGreen: "#7aa141",
     noRed: "#ff3333",
     ambiguousBlue: "#00aaff",
