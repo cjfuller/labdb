@@ -324,10 +324,13 @@ const Application = React.createClass({
             window.scrollTo(0, 0);
         }
         if (this.props.updateUrl) {
-            window.history.pushState(
-                this.compactResource(this.props.displayedResource),
-                null,
-                currentResourceURI());
+            const newState = this.compactResource(this.props.displayedResource);
+            if (!_.isEqual(newState, window.history.state)) {
+                window.history.pushState(
+                    newState,
+                    null,
+                    currentResourceURI());
+            }
         }
     },
 
