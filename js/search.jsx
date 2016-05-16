@@ -64,7 +64,7 @@ const SearchBar = React.createClass({
         if (this.state.types.includes(type)) {
             this.setState({types: this.state.types.filter((t) => t !== type)});
         } else {
-            this.setState({types: this.state.types.concat(t)});
+            this.setState({types: this.state.types.concat(type)});
         }
     },
     closeSearch: function() {
