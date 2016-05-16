@@ -1,20 +1,3 @@
-#--
-# Copyright (C) 2013  Colin J. Fuller
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Affero General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Affero General Public License for more details.
-#
-# You should have received a copy of the GNU Affero General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#++
-
 require 'exporters'
 require 'numbered'
 require 'described'
@@ -27,24 +10,18 @@ module CheckPlasmidSequence
   # if there isn't one present.
   def sequence
     seq = super
-    if seq and seq.length > 0 then
-      return seq
-    else
-      linked_plas = self.core_alt_link
-      if linked_plas and linked_plas.size > 0 then
-        linked_plas.each do |p|
-          if p and p.sequence and p.sequence.size > 0 then
-            return p.sequence
-          end
-        end
+    return seq if seq && !seq.empty?
+    linked_plas = self.core_alt_link
+    if linked_plas && !linked_plas.empty? then
+      linked_plas.each do |p|
+        return p.sequence if p && p.sequence && !p.sequence.empty?
       end
     end
-    return seq
+    seq
   end
 end
 
 class Bacterium < ActiveRecord::Base
-
   include Exportable
   include LinkableModel
   include Numbered
@@ -54,11 +31,22 @@ class Bacterium < ActiveRecord::Base
   include CheckPlasmidSequence
   include ResourceHelpers
 
-  Fields = [:comments, :date_entered, :entered_by, :genotype, :notebook, :plasmid_number, :species_bkg, :strain_number, :sequence, :strainalias]
+  @headings = {
+    strain_number: "#{obj_tag} Number",
+    date_entered: 'Date',
+    entered_by: 'Entered by',
+    notebook: 'Notebook',
+    comments: 'Description',
+    plasmid_number: "#{Naming.name_for(Plasmid)} Number",
+    species_bkg: 'Species and background',
+    genotype: 'Genotype',
+    sequence: 'Sequence',
+    strainalias: 'Alias',
+  }
 
-  attr_accessible *Fields
+  Fields = @headings.keys
 
-  @headings = {strain_number: "#{obj_tag} Number", date_entered: "Date", entered_by: "Entered by", notebook: "Notebook", comments: "Description", plasmid_number: "#{Naming.name_for(Plasmid)} Number", species_bkg: "Species and background", genotype: "Genotype", sequence: "Sequence", strainalias: "Alias"}
+  attr_accessible(*Fields)
 
   def linked_properties
     [:plasmid_number]
@@ -69,9 +57,9 @@ class Bacterium < ActiveRecord::Base
     get_linked_plasmids(numbers) unless numbers.nil?
   end
 
-	def exportable_fields
-		Fields
-	end
+  def exportable_fields
+    Fields
+  end
 
   def self.number_field_name
     :strain_number
@@ -99,7 +87,7 @@ class Bacterium < ActiveRecord::Base
 
   def core_alt_field
     numbers = get_linked_number_fields(core_alt_field_name) || []
-    numbers.map { |n| "#{Naming.name_for(Plasmid) + " " + n.to_s}" }
+    numbers.map { |n| Naming.name_for(Plasmid) + ' ' + n.to_s }
   end
 
   def core_alt_link
@@ -107,26 +95,27 @@ class Bacterium < ActiveRecord::Base
     (get_linked_number_fields(core_alt_field_name) || []).map { |n| links[n] }
   end
 
-  def groups
-    {sidebar: [:entered_by, :date_entered, :notebook],
-      "Strain information" => [:species_bkg, :genotype]}
-  end
-
   def core_info
     [
-      {name: "Strain information",
-       fields: fields([:species_bkg, :genotype])},
-      {name: "Description",
-       preformatted: true,
-       lookup: :comments,
-       single: true,
-       inlineValue: Labdb::Application::MARKDOWN.render(comments || "").labdb_auto_link.html_safe}
+      {
+        name: 'Strain information',
+        fields: fields([:species_bkg, :genotype])
+      },
+      {
+        name: 'Description',
+        preformatted: true,
+        lookup: :comments,
+        single: true,
+        inlineValue: Labdb::Application::MARKDOWN.render(comments || '')
+                                                 .labdb_auto_link
+                                                 .html_safe
+      }
     ]
   end
 
   def sequence_info
     {
-      sequence: {lookup: :sequence},
+      sequence: { lookup: :sequence },
       verified: nil
     }
   end
@@ -134,5 +123,4 @@ class Bacterium < ActiveRecord::Base
   def supplemental_info
     fields [:entered_by, :date_entered, :notebook]
   end
-
 end

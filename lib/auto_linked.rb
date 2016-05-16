@@ -84,8 +84,8 @@ class String
     ls.sub_labdb_links
     ls.to_s
   end
-  def item_links
+  def item_links(items: false)
     ls = LinkableString.new(self)
-    ls.item_links
+    ls.item_links(items: items)
   end
 end
