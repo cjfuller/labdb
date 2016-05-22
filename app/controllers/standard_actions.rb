@@ -82,7 +82,7 @@ module StandardActions
             type: "collection",
             resourcePath: "/" + type.pluralize.downcase,
             items: @objs.map(&:as_resource_def),
-            numberFieldName: @objs[0].number_field_name
+            numberFieldName: model_class.number_field_name
     })
     @search_results = JSON.generate([]);
     @user_name = current_user.name
