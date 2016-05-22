@@ -20,4 +20,4 @@ spec:
         - name: GET_HOSTS_FROM
           value: dns
         ports:
-        - containerPort: 3001
+        - containerPort: 3000
