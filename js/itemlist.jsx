@@ -99,6 +99,13 @@ const ItemTable = React.createClass({
         if (this.state.sortOrder === "desc") {
             sorted.reverse();
         }
+        if (sorted.length === 0) {
+            return <div
+                className={css(styles.itemsShown)}
+            >
+                No results found.
+            </div>;
+        }
         const items = _.map(sorted, (item) => {
             return <ItemRow
                 clickHandler={() => this.viewItem(item)}
