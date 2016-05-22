@@ -280,7 +280,7 @@ function loadPrefetchedData() {
         const end = _.max(Data.items.map((i) => i.id));
         store.dispatch(
             Actions.displayTable(
-                Data.items[0].type, [start, end], Data.resourcePath,
+                Data.objectType, [start, end], Data.resourcePath,
                 Data.numberFieldName));
     } else {
         store.dispatch(
