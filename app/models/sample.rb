@@ -73,7 +73,7 @@ class Sample < ActiveRecord::Base
       .map do |item|
         {
           link_text: item[0],
-          link_desc: item[1].send(item[1].class.info_field_name)
+          link_desc: (item[1] && item[1].send(item[1].class.info_field_name)) || ""
         }
       end
   end

@@ -275,7 +275,7 @@ function loadPrefetchedData() {
     } else if (Data.type === "collection") {
         store.dispatch(
             Actions.updateTableCache(
-                Data.items[0].type, Data.items));
+                Data.objectType, Data.items));
         const start = _.min(Data.items.map((i) => i.id));
         const end = _.max(Data.items.map((i) => i.id));
         store.dispatch(
