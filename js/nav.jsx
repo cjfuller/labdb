@@ -244,7 +244,7 @@ const Navbar = React.createClass({
                 Bacteria: "/bacteria",
                 Samples: "/samples",
                 Antibodies: "/antibodies",
-                TC: "/lines",
+                Worms: "/lines",
             },
         };
     },
