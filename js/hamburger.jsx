@@ -122,7 +122,7 @@ const Hamburger = React.createClass({
                 data: data,
                 processData: false,
                 contentType: false,
-            }).then(() => window.location.reload);
+            }).then(() => window.location.reload());
         };
     },
     render: function() {
