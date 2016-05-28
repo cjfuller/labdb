@@ -40,6 +40,8 @@ module Exportable
       fe = f.to_s.encode('utf-8')
       output[fe] = self.send(f).to_s.encode('utf-8')
     end
+    output['name'] = self.name_str
+    output['database'] = Naming.name_for('database_full')
     JSON.pretty_generate(self.class.to_s.encode('utf-8') => output)
   end
 
