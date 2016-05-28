@@ -98,6 +98,33 @@ const Hamburger = React.createClass({
             auth: AuthType,
         }),
     },
+    promptUpload: function() {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.multiple = true;
+        input.onchange = this.doUpload(input);
+        input.click();
+    },
+    doUpload: function(elt) {
+        return () => {
+            const data = new FormData();
+            console.log(elt.files)
+            const files = [];
+            for (let i = 0; i < elt.files.length; i++) {
+                files.push(elt.files.item(i));
+            }
+            files
+               .filter((f) => f.type === 'application/json')
+               .forEach((f, idx) => data.append(`file_${idx}`, f));
+            $.ajax({
+                url: '/api/v1/import',
+                type: 'POST',
+                data: data,
+                processData: false,
+                contentType: false,
+            }).then(() => window.location.reload);
+        };
+    },
     render: function() {
         return (
             <div className={css(styles.hamburgerMenu)}>
@@ -128,11 +155,12 @@ const Hamburger = React.createClass({
                     >
                         Manage users
                     </HamburgerEntry>
-                    <HamburgerEntry iconName="cloud_upload" interactive={false}>
+                    <HamburgerEntry
+                        iconName="cloud_upload"
+                        interactive={true}
+                        onClick={this.promptUpload}
+                    >
                         <span>Bulk import data</span>
-                        <span className={css(styles.comingSoon)}>
-                            Coming soon!
-                        </span>
                     </HamburgerEntry>
                     <HamburgerEntry iconName="cloud_download" interactive={false}>
                         <span>Bulk export data</span>

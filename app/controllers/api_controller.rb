@@ -52,15 +52,15 @@ class ApiController < ApplicationController
     render json: {}
   end
 
-  def new_item_setup(obj)
+  def new_item_setup(obj, should_render: true, should_save: true)
     num = generate_object_number(obj.class, obj.number_field_name)
     obj
       .update_dynamic_field(:number_field_name, num)
       .update_dynamic_field(:owner_field_name, curr_username)
       .update_dynamic_field(:timestamp_field_name, Time.now)
 
-    obj.save
-    render json: obj.as_resource_def
+    obj.save if should_save
+    render json: obj.as_resource_def if should_render
   end
 
   def new
@@ -112,5 +112,32 @@ class ApiController < ApplicationController
   def plasmid_map
     plas_id = params[:id]
     render json: Plasmid.find(plas_id).plasmid_map
+  end
+
+  def import
+    files = params.select { |k, _| k.to_s.starts_with? 'file_' }
+                  .values
+                  .map { |f| JSON.parse(f.read) }
+
+    make_reference = proc do |item|
+      "Originally #{item['name']} from the #{item['database']}."
+    end
+
+    files.each do |f|
+      type = f.keys[0]
+      item = f.values[0]
+      cls = type.constantize
+      description = cls.description_field_name.to_s
+      item[description] = (
+        (item[description] || '') + "\n\n\n" + make_reference.call(item))
+      keys_to_delete = ['database', 'name'] + [cls.number_field_name.to_s]
+      item.delete_if { |k, _| keys_to_delete.include?(k) }
+      obj = cls.new
+      new_item_setup(obj, should_render: false, should_save: false)
+      obj.update_attributes(item)
+      obj.save
+    end
+
+    head :no_content
   end
 end

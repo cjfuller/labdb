@@ -87,6 +87,10 @@ Labdb::Application.routes.draw do
     delete '/:model/:id', to: 'api#delete'
   end
 
+  scope '/api/v1' do
+    post '/import', to: 'api#import'
+  end
+
   scope '/api' do
     post '/verify', to: 'api#verify'
   end

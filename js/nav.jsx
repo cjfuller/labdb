@@ -313,6 +313,7 @@ const styles = StyleSheet.create({
     },
     navbar: {
         backgroundColor: ss.colors.labdbGreen,
+        boxShadow: "0px 0px 4px 2px rgba(0, 0, 0, 0.2)",
         boxSizing: "border-box",
         display: "flex",
         fontFamily: ss.fonts.base,
