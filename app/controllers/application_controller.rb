@@ -55,7 +55,7 @@ class ApplicationController < ActionController::Base
 
   def generate_name(an_obj)
     if an_obj.class.respond_to? :owner_field_name then
-      an_obj.send(an_obj.class.owner_field_name + '=',
+      an_obj.send(an_obj.class.owner_field_name.to_s + '=',
                   curr_username)
     end
   end
