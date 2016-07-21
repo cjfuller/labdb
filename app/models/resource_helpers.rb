@@ -54,7 +54,7 @@ module ResourceHelpers
     resource_def = {
       type: self.class.name.demodulize.downcase,
       id: id,
-      timestamp: (self.send(self.timestamp_field_name) if self.respond_to? :timestamp_field_name),
+      timestamp: self.send(self.timestamp_field_name).to_s,
       fieldData: field_data,
       resourcePath: "/#{self.class.name.demodulize.pluralize.downcase}/#{id}",
       name: named_number_string,
