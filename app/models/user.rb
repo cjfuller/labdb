@@ -71,6 +71,10 @@ class User < ActiveRecord::Base
     self.class.number_field_name
   end
 
+  def timestamp_field_name
+    :created_at
+  end
+
   def info_field_name
     :email
   end

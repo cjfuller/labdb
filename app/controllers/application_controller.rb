@@ -132,7 +132,10 @@ class ApplicationController < ActionController::Base
       end
     end
     redirect_to results[0] if results.size == 1
-    @search_results = JSON.generate(results.map(&:as_resource_def))
+    resources = results.map(&:as_resource_def)
+    # TODO: icky hack to sort by date then id; fix.
+    resources.sort_by! { |r| r[:timestamp] || (Date.new(1800, 1, 1) + r[:id].days) }.reverse!
+    @search_results = JSON.generate(resources)
     @content_json = JSON.generate([])
     @user_name = current_user.name
     @user_auth = auth_scope

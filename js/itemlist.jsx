@@ -93,10 +93,8 @@ const ItemTable = React.createClass({
     },
 
     render: function() {
-        const sorted = _.sortBy(
-            this.props.data.items,
-            (x) => this.state.sort.map((field) => x[field]));
-        if (this.state.sortOrder === "desc") {
+        const sorted = this.props.data.items;
+        if (this.state.sortOrder === "asc") {
             sorted.reverse();
         }
         if (sorted.length === 0) {
