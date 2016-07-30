@@ -6,6 +6,9 @@ class Object
     if self.respond_to?(field_name_fn_name) then
       fname = self.send(field_name_fn_name)
       self.send(fname.to_s + "=", value)
+    elsif self.class.respond_to?(field_name_fn_name) then
+      fname = self.class.send(field_name_fn_name)
+      self.send(fname.to_s + "=", value)
     end
     self
   end
