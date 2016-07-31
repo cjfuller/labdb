@@ -85,6 +85,11 @@ defmodule Model do
     |> Labdb.Repo.get(id)
   end
 
+  def delete(type, id) do
+    get(type, id)
+    |> Labdb.Repo.delete!
+  end
+
   def get_list(type, direction: :desc) do
     module_for_type(type)
     |> Ecto.Query.order_by(desc: :id)
@@ -110,8 +115,8 @@ defmodule Model do
     |> String.replace_leading("elixir.", "")
   end
 
-  def depluralize(type) do
-    Map.get(%{
+  defp plurals do
+    %{
       "plasmids" => "plasmid",
       "oligos" => "oligo",
       "bacteria" => "bacterialstrain",
@@ -120,7 +125,16 @@ defmodule Model do
       "samples" => "sample",
       "users" => "user",
       "antibodies" => "antibody",
-    }, type)
+    }
+  end
+
+  def depluralize(type) do
+    Map.get(plurals, type)
+  end
+
+  def pluralize(type) do
+    Enum.find(plurals, fn {k, v} -> v == type end)
+    |> elem(0)
   end
 
   def module_for_type(type) do

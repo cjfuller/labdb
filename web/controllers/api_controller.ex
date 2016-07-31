@@ -13,6 +13,20 @@ defmodule Labdb.APIController do
     json conn, resource
   end
 
+  def model_list(conn, params) do
+    %{"type" => type} = params
+    # TODO: support sort order, paging
+    resources = Model.get_list(type, direction: :desc)
+    |> Enum.map(&Model.module_for_type(type).as_resource_def/1)
+    content = %{
+      type: "collection",
+      resourcePath: "/" <> (Model.pluralize(type) |> String.downcase),
+      items: resources,
+      numberFieldName: Model.module_for_type(type).number_field_name,
+    }
+    json conn, content
+  end
+
   def model_put(conn, params) do
     %{"type" => type, "id" => id} = params
     rest = Map.drop(params, ["type", "id"])
@@ -31,7 +45,11 @@ defmodule Labdb.APIController do
   end
 
   def model_delete(conn, params) do
-    # TODO(colin): implement
+    %{"type" => type, "id" => id} = params
+    Model.delete(type, id)
+    conn
+    |> put_status(:no_content)
+    |> send_resp(204, "")
   end
 
   def model_copy(conn, params) do

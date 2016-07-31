@@ -29,6 +29,7 @@ defmodule Labdb.Router do
     pipe_through :api
 
     get "/m/plasmid_map/:id", APIController, :plasmid_map
+    get "/m/:type/list", APIController, :model_list
     post "/m/:type/new", APIController, :model_new
     get "/m/:type/:id", APIController, :model_get
     put "/m/:type/:id", APIController, :model_put
