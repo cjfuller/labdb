@@ -59,4 +59,30 @@ defmodule Labdb.APIController do
   def plasmid_map(conn, params) do
     json conn, nil
   end
+
+  @app_id "146923434465-alq7iagpanjvoag20smuirj0ivdtfldk.apps.googleusercontent.com"
+
+  def verify(conn, params) do
+    %{"token" => token} = params
+    verifier = "https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=#{token}"
+    resp = HTTPoison.get! verifier
+    retval = nil
+    if resp.status_code == 200 do
+      info = Poison.decode! resp.body
+      if info["aud"] == @app_id and info["email_verified"] == "true" do
+        user = User.get_by_email(info["email"])
+        if user do
+          retval = put_session(conn, :user_id, user.email)
+          |> put_status(:no_content)
+          |> send_resp(204, "")
+        end
+      end
+    end
+    if retval do
+      retval
+    else
+      put_session(conn, :user_id, nil)
+      |> put_status(:forbidden)
+    end
+  end
 end

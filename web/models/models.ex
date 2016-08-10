@@ -592,6 +592,7 @@ defmodule User do
   }
 
   use Model
+  require Ecto.Query
   schema "users" do
     field :name, :string
     field :created_at, Ecto.DateTime
@@ -617,6 +618,10 @@ defmodule User do
   def sequence_info, do: nil
 
   def supplemental_info, do: fields([:name, :email, :notes])
+
+  def get_by_email(email) do
+    Labdb.Repo.get_by(User, email: email)
+  end
 end
 
 defmodule Yeaststrain do
