@@ -14,9 +14,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
+require 'logging'
 
 class NumberAssignment
-
 	@assignment_mutex = Mutex.new
 	@temporary_assignments = {}
 	@session_log = {}
@@ -35,6 +35,7 @@ class NumberAssignment
 	def self.assign_temporary_number(klass, next_index, requesting_session)
 		@temporary_assignments[klass]= {} unless @temporary_assignments[klass]
 		while @temporary_assignments[klass].has_key?(next_index) do
+      Logging.logger.info("Number conflict for #{klass.name} #{next_index}")
 			next_index += 1
 		end
 		@temporary_assignments[klass][next_index]= requesting_session[:session_id]
@@ -52,8 +53,10 @@ class NumberAssignment
 				if index and index.to_i > max_number then
 					max_number = index.to_i
 				end
-			end
+      end
+      Logging.logger.info("Trying to assign number #{klass.name} #{max_number + 1}")
 			assignment = assign_temporary_number(klass, max_number + 1, requesting_session)
+      Logging.logger.info("Assigned number #{klass.name} #{assignment}")
 		end
 		assignment
 	end

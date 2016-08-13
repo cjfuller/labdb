@@ -15,6 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
+require 'logging'
+
 Labdb::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
@@ -50,7 +52,8 @@ Labdb::Application.configure do
   # config.force_ssl = true
 
   # See everything in the log (default is :info)
-  config.log_level = :error
+  config.log_level = :info
+  config.logger = Logging.logger
 
   # Prepend all log lines with the following tags
   # config.log_tags = [ :subdomain, :uuid ]
