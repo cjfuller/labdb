@@ -75,6 +75,7 @@ defmodule Model do
           coreInfoSections: unquote(mod).core_info(item),
           sequenceInfo: unquote(mod).sequence_info(),
           supplementalFields: unquote(mod).supplemental_info(),
+          numberFieldName: to_string(number_field_name()),
         }
       end
     end

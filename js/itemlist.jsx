@@ -112,9 +112,9 @@ const ItemTable = React.createClass({
             />;
         });
         const startItem = extVal(sorted[0].fieldData,
-                                 this.props.data.numberFieldName);
+                                 sorted[0].numberFieldName);
         const endItem = extVal(sorted[sorted.length - 1].fieldData,
-                               this.props.data.numberFieldName);
+                               sorted[sorted.length - 1].numberFieldName);
         return <div>
             {this.props.data.type === "collection" ?
              <div className={css(styles.itemsShown)}>
