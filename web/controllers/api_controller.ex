@@ -60,21 +60,15 @@ defmodule Labdb.APIController do
     verifier = "https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=#{token}"
     resp = HTTPoison.get! verifier
     retval = nil
-    if resp.status_code == 200 do
-      info = Poison.decode! resp.body
-      if info["aud"] == @app_id and info["email_verified"] == "true" do
-        user = User.get_by_email(info["email"])
-        if user do
-          retval = put_session(conn, :user_id, user.email)
-          |> send_resp(:no_content, "")
-        end
-      end
-    end
-    if retval do
-      retval
+    with 200 <- resp.status_code,
+         %{"aud" => @app_id, "email_verified" => "true", "email" => email} <- Poison.decode!(resp.body),
+         %User{email: uid} <- User.get_by_email(email) do
+      put_session(conn, :user_id, uid)
+      |> send_resp(:no_content, "")
     else
-      put_session(conn, :user_id, nil)
-      |> send_resp(:forbidden, "")
+      _ ->
+        put_session(conn, :user_id, nil)
+        |> send_resp(:forbidden, "")
     end
   end
 end
