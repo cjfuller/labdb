@@ -15,6 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
+require 'logging'
+
 Labdb::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
@@ -49,4 +51,7 @@ Labdb::Application.configure do
   config.assets.debug = true
 
   config.force_ssl = false
+
+  config.log_level = :info
+  config.logger = Logging.logger
 end
