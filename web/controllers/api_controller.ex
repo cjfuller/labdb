@@ -1,11 +1,6 @@
 defmodule Labdb.APIController do
   use Labdb.Web, :controller
 
-  def current_user do
-    # TODO: implement, move somewhere else
-    Model.get(User, 1)
-  end
-
   def model_get(conn, params) do
     %{"type" => type, "id" => id} = params
     resource = Model.get(type, id)
@@ -36,8 +31,7 @@ defmodule Labdb.APIController do
     |> Enum.into(%{})
     Model.apply_updates(type, id, rest)
     conn
-    |> put_status(:no_content)
-    |> send_resp(204, "")
+    |> send_resp(:no_content, "")
   end
 
   def model_new(conn, params) do
@@ -48,8 +42,7 @@ defmodule Labdb.APIController do
     %{"type" => type, "id" => id} = params
     Model.delete(type, id)
     conn
-    |> put_status(:no_content)
-    |> send_resp(204, "")
+    |> send_resp(:no_content, "")
   end
 
   def model_copy(conn, params) do
@@ -73,8 +66,7 @@ defmodule Labdb.APIController do
         user = User.get_by_email(info["email"])
         if user do
           retval = put_session(conn, :user_id, user.email)
-          |> put_status(:no_content)
-          |> send_resp(204, "")
+          |> send_resp(:no_content, "")
         end
       end
     end
@@ -82,7 +74,7 @@ defmodule Labdb.APIController do
       retval
     else
       put_session(conn, :user_id, nil)
-      |> put_status(:forbidden)
+      |> send_resp(:forbidden, "")
     end
   end
 end

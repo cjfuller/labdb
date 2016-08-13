@@ -1,10 +1,14 @@
 defmodule Names do
 
   def name_for_model(model, id) do
-    name = Application.fetch_env!(:labdb, :names)
-    |> Keyword.get(model |> String.capitalize |> String.to_atom)
+    if String.downcase(model) == "user" do
+      Model.get(model, id).email
+    else
+      name = Application.fetch_env!(:labdb, :names)
+      |> Keyword.get(model |> String.capitalize |> String.to_atom)
 
-    name <> to_string(id)
+      name <> to_string(id)
+    end
   end
 
   def names do

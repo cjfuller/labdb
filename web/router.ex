@@ -4,6 +4,7 @@ defmodule Labdb.Router do
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
+    plug Labdb.Auth
     plug :fetch_flash
     plug :protect_from_forgery
     plug :put_secure_browser_headers
@@ -12,6 +13,7 @@ defmodule Labdb.Router do
   pipeline :api do
     plug :accepts, ["json"]
     plug :fetch_session
+    plug Labdb.Auth
     plug :protect_from_forgery
     plug :put_secure_browser_headers
   end

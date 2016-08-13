@@ -19,13 +19,14 @@ defmodule Labdb.PageController do
   end
 
   def get_item(conn, params) do
+    user = Labdb.Auth.current_user(conn)
     %{"type" => type, "id" => id} = params
     resource = Model.get(type, String.to_integer(id))
     |> Model.module_for_type(type).as_resource_def
     render conn, "page.html", %{
       content_json: raw_embed!(resource),
-      user_name: raw_embed!("test"),
-      user_auth: raw_embed!("admin"),
+      user_name: raw_embed!(user.name <> " (#{user.email}) "),
+      user_auth: raw_embed!(User.max_auth(user)),
       search_results: raw_embed!([]),
       login_page: false,
       labdb_name: raw_embed!(Names.database_full),
@@ -33,6 +34,7 @@ defmodule Labdb.PageController do
   end
 
   def get_index(conn, params) do
+    user = Labdb.Auth.current_user(conn)
     type = Dict.get(params, "type") |> Model.depluralize
     # TODO(colin): support sort order
     # TODO(colin): support pages
@@ -46,8 +48,8 @@ defmodule Labdb.PageController do
     }
     render conn, "page.html", %{
       content_json: raw_embed!(collection),
-      user_name: raw_embed!("test"),
-      user_auth: raw_embed!("admin"),
+      user_name: raw_embed!(user.name <> " (#{user.email}) "),
+      user_auth: raw_embed!(User.max_auth(user)),
       search_results: raw_embed!([]),
       login_page: false,
       labdb_name: raw_embed!(Names.database_full),

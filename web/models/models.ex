@@ -576,7 +576,7 @@ defmodule User do
   # TODO(colin): Make the id appear as the person's name
 
   @number_field_name nil
-  @info_field_name :email
+  @info_field_name :name
   @description_field_name :email
   @core_alt_field_name nil
   @owner_field_name :name
@@ -589,6 +589,7 @@ defmodule User do
     auth_admin: "Admin access",
     name: "Name",
     notes: "Notes",
+    created_at: "Date",
   }
 
   use Model
@@ -617,10 +618,19 @@ defmodule User do
 
   def sequence_info, do: nil
 
-  def supplemental_info, do: fields([:name, :email, :notes])
+  def supplemental_info, do: fields([:name, :email, :notes, :created_at])
 
   def get_by_email(email) do
     Labdb.Repo.get_by(User, email: email)
+  end
+
+  def max_auth(user) do
+    case user do
+      %User{auth_admin: true} -> "admin"
+      %User{auth_write: true} -> "write"
+      %User{auth_read: true} -> "read"
+      _ -> nil
+    end
   end
 end
 

@@ -55,7 +55,7 @@ const ItemRow = React.createClass({
                 {this.props.data.name}
             </td>
             <td className={css(styles.itemField)}>
-                {this.suppField("Date")}
+                {(this.suppField("Date") || "").slice(0, 10)}
             </td>
             <td className={css(styles.itemField)}>
                 {this.suppField("Entered by")}
