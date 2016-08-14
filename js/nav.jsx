@@ -72,14 +72,14 @@ const CtxActions = React.createClass({
         let sortOrder = null;
         // TODO: what if there's no items?  Should probably disable buttons.
         if (desc) {
-            nextIndex = (
-                this.props.data.items[this.props.data.items.length - 1]
-                    .fieldData[this.props.data.numberFieldName] - 1);
+            const item = this.props.data.items[
+                this.props.data.items.length - 1];
+            nextIndex = item.fieldData[item.numberFieldName] - 1;
             sortOrder = "DESC";
         } else {
-            nextIndex = (
-                this.props.data.items[this.props.data.items.length - 1]
-                    .fieldData[this.props.data.numberFieldName] + 1);
+            const item = this.props.data.items[
+                this.props.data.items.length - 1];
+            nextIndex = item.fieldData[item.numberFieldName] + 1;
             sortOrder = "ASC";
         }
         // TODO: make this not require a reload using:
@@ -111,12 +111,12 @@ const CtxActions = React.createClass({
         if (desc) {
             nextIndex = (
                 this.props.data.items[0]
-                    .fieldData[this.props.data.numberFieldName] + offset);
+                    .fieldData[this.props.data.items[0]] + offset);
             sortOrder = "DESC";
         } else {
             nextIndex = (
                 this.props.data.items[0]
-                    .fieldData[this.props.data.numberFieldName] - offset);
+                    .fieldData[this.props.data.items[0]] - offset);
             sortOrder = "ASC";
         }
         window.location.search = `sort_order=${sortOrder}&start=${nextIndex}`;
