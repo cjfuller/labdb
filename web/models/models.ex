@@ -91,6 +91,30 @@ defmodule Model do
     |> Labdb.Repo.delete!
   end
 
+  def new(type, current_user) do
+    mod = module_for_type(type)
+    next_num = Labdb.Numbering.assign_number(mod)
+    num_field = mod.number_field_name
+    owner_field = mod.owner_field_name
+    date_field = mod.timestamp_field_name
+
+    curr_time_utc = Ecto.DateTime.utc
+
+    result = struct(mod, %{
+          num_field => next_num,
+          owner_field => current_user.name,
+          date_field => Ecto.DateTime.to_date(curr_time_utc),
+          created_at: curr_time_utc,
+          updated_at: curr_time_utc,
+                    })
+    |> Labdb.Repo.insert
+
+    Labdb.Numbering.release(mod, next_num)
+
+    {:ok, obj} = result
+    obj
+  end
+
   def get_list(type, direction: :desc) do
     module_for_type(type)
     |> Ecto.Query.order_by(desc: :id)
@@ -104,8 +128,7 @@ defmodule Model do
     if item do
       ch = Ecto.Changeset.change(item, fields)
 
-      {:ok, item} = ch
-      |> Labdb.Repo.update
+      {:ok, item} = ch |> Labdb.Repo.update
     end
   end
 

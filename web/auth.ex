@@ -1,6 +1,6 @@
 defmodule Labdb.Auth do
   @behaviour Plug
-  import Plug.Conn, only: [get_session: 2, send_resp: 3, put_status: 2, halt: 1]
+  import Plug.Conn, only: [get_session: 2, send_resp: 3, halt: 1]
 
   def init([]), do: false
   def call(conn, _opts) do

@@ -35,7 +35,12 @@ defmodule Labdb.APIController do
   end
 
   def model_new(conn, params) do
-    # TODO(colin): implement
+    %{"type" => type} = params
+    current_user = Labdb.Auth.current_user(conn)
+    resource = Model.new(type, current_user)
+    |> Model.module_for_type(type).as_resource_def
+
+    json conn, resource
   end
 
   def model_delete(conn, params) do
