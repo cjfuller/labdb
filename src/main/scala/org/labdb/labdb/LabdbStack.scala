@@ -61,7 +61,7 @@ trait LabdbStack extends ScalatraServlet {
     if (List(301, 302, 303, 307) contains result.code) {
       // For redirect, we want to grab the relative url and then return our own
       // redirect.
-      val newUrl = headers("Location").replaceAll(proxyHost, "")
+      val newUrl = headers("Location").replaceAll("https", "http").replaceAll(proxyHost, "")
       val newHeaders = headers - "Location"
       TemporaryRedirect(
         newUrl,
