@@ -3,7 +3,7 @@ package org.labdb.labdb
 import java.time.temporal.ChronoUnit
 import java.time.{ZoneId, ZonedDateTime}
 import java.util.Date
-import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.{HttpServletRequest, HttpServletResponse}
 
 import org.scalatra._
 import org.slf4j.LoggerFactory
@@ -36,13 +36,13 @@ trait LabdbStack extends ScalatraServlet {
     result
   }
 
-  def proxyRequest(request: HttpServletRequest): ActionResult = {
-    var url = proxyHost + request.getRequestURI
+  def proxyRequest(implicit request: HttpServletRequest, response: HttpServletResponse): ActionResult = {
+    var proxiedUrl = proxyHost + request.getRequestURI
     val queryString = request.getQueryString
     if (queryString != null) {
-      url += "?" + queryString
+      proxiedUrl += "?" + queryString
     }
-    var proxiedRequest = Http(url)
+    var proxiedRequest = Http(proxiedUrl)
 
     if (request.body != null && request.body.length > 0) {
       proxiedRequest = proxiedRequest.postData(request.body)
@@ -53,15 +53,26 @@ trait LabdbStack extends ScalatraServlet {
 
 
     val result = proxiedRequest.asString
+    val headers = result.headers.map {
+      // TODO(colin): is the last header what we want if there are repeated headers?
+      case (key: String, values: IndexedSeq[String]) => (key, values.last)
+    }
 
-    ActionResult(
-      ResponseStatus(result.code, ""),
-      result.body,
-      result.headers.map {
-        // TODO(colin): is the last header what we want if there are repeated headers?
-        case (key: String, values: IndexedSeq[String]) => (key, values.last)
-      }
-    )
+    if (List(301, 302, 303, 307) contains result.code) {
+      // For redirect, we want to grab the relative url and then return our own
+      // redirect.
+      val newUrl = headers("Location").replaceAll(proxyHost, "")
+      val newHeaders = headers - "Location"
+      TemporaryRedirect(
+        newUrl,
+        newHeaders)
+    } else {
+      ActionResult(
+        ResponseStatus(result.code, ""),
+        result.body,
+        headers
+      )
+    }
   }
 
   notFound {
