@@ -2,14 +2,9 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: labdb-web-<LAB>
-  labels:
-    name: labdb-web-<LAB>
 spec:
   replicas: 2
   template:
-    metadata:
-      labels:
-        name: labdb-web-<LAB>
     spec:
       containers:
       - name: labdb
