@@ -48,6 +48,7 @@ class ApiController < ApplicationController
   end
 
   def update
+    puts params
     cls = params[:model].classify.constantize
     @obj = cls.find(params[:id])
     filtered_attrs = params.select { |k| cls::Fields.include? k.to_sym }

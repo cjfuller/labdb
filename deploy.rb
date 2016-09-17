@@ -5,12 +5,12 @@ require 'optparse'
 require 'yaml'
 
 UPDATE_STAGES = [
-  "./labdb_web_controller.yaml"
+  "./labdb_web_deployment.yaml"
 ]
 DEPLOY_STAGES = [
   "./postgres_controller.yaml",
   "./postgres_service.yaml",
-  "./labdb_web_controller.yaml",
+  "./labdb_web_deployment.yaml",
   "./labdb_web_service.yaml",
 ]
 INJECT_VERSION_REPLACE = "<VERSION>"
@@ -21,7 +21,7 @@ PROJECT_NAME = "labdb-io"
 CONTAINER_NAME = "labdb_web"
 
 LAB_TEMPLATES = [
-  "./labdb_web_controller.yaml",
+  "./labdb_web_deployment.yaml",
   "./labdb_web_service.yaml",
   "./postgres_controller.yaml",
   "./postgres_service.yaml",
@@ -60,6 +60,11 @@ def before_deploy
   cmd("gcloud config set project #{PROJECT_NAME}")
 end
 
+def build_proxy()
+  # TODO(colin): move this to Dockerfile or move all build steps here.
+  cmd("sbt assembly")
+end
+
 def docker_build(version)
   cmd("#{docker_env}docker build -t #{container_name(version)} .")
   cmd("#{docker_env}gcloud --project #{PROJECT_NAME} docker push #{container_name(version)}")
@@ -91,9 +96,8 @@ end
 def update_image(version)
   UPDATE_STAGES.each do |f|
     new_fn = interpolate_version(f, version)
-    if new_fn.include? "controller" then
-      name = YAML.load(File.read(new_fn))['metadata']['name']
-      cmd("kubectl rolling-update #{name} --image=#{container_name(version)}")
+    if new_fn.include? "deployment" then
+      cmd("kubectl replace -f #{new_fn}")
     end
     FileUtils.rm(new_fn)
   end

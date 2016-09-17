@@ -36,3 +36,10 @@ public/*.js
 public/*.map
 jscssdeps
 public/_s/*.js
+
+# scala things
+.idea
+project/target
+project/project
+target
+

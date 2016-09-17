@@ -1,8 +1,8 @@
-FROM google/ruby
+FROM ruby:2.3
 RUN apt-get update -qq && apt-get install -y lsb-release apt-transport-https postgresql-client libv8-dev
 RUN curl -sL https://deb.nodesource.com/setup_5.x | bash -
 RUN apt-get install -y nodejs
-RUN apt-get update -qq && apt-get install -y build-essential libpq-dev nodejs
+RUN apt-get update -qq && apt-get install -y build-essential libpq-dev nodejs supervisor openjdk-8-jdk
 
 WORKDIR /app
 ADD . /app
@@ -12,4 +12,4 @@ RUN ["/usr/bin/npm", "run-script", "coffee-compile"]
 RUN ["/usr/bin/npm", "run-script", "compile"]
 RUN ["/usr/bin/python", "manage.py", "secret"]
 RUN ["/usr/bin/python", "manage.py", "hostname", "--value", "straight.labdb.io"]
-CMD RAILS_ENV=production bundle exec puma --config config/puma.rb
+CMD ["/usr/bin/supervisord"]
