@@ -60,8 +60,9 @@ export function saveEdits(resource, edits) {
     $.ajax({
         url: `${FETCH_BASE}${resource.resourcePath}`,
         method: "PUT",
-        data: edits,
+        data: JSON.stringify(edits),
         dataType: "json",
+        contentType: "application/json; charset=utf-8",
     }).then(() => {
         clearEdits(resource);
     });
