@@ -147,6 +147,7 @@ def main
   interpolate_templates(opts[:lab])
   return if opts[:templates_only]
   before_deploy
+  build_proxy
   docker_build(NEXT_VERSION)
   if opts[:deploy] then
     fresh_deploy
