@@ -42,4 +42,5 @@ public/_s/*.js
 project/target
 project/project
 target
+src/main/webapp/_s/*.js
 
