@@ -66,7 +66,7 @@ def build_proxy(version)
   cmd("npm install")
   cmd("npm run-script coffee-compile")
   cmd("npm run-script compile")
-  cmd("mv src/main/resources/_s/app_.js src/main/resources/_s/app_#{version}.js")
+  cmd("mv src/main/webapp/_s/app_.js src/main/webapp/_s/app_#{version}.js")
   cmd("echo '#{version}' > config/version.txt")
 end
 
