@@ -178,7 +178,7 @@ const Actions = React.createClass({
     newItem: function() {
         const {data} = this.props;
         const type = (data.type === "collection" ?
-                      data.items.length && data.items[0].type :
+                      data.objectType :
                       data.type);
         // TODO: this won't work on a search with 0 items.
         // Probably should disable new on search.
