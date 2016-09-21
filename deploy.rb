@@ -60,7 +60,7 @@ def before_deploy
   cmd("gcloud config set project #{PROJECT_NAME}")
 end
 
-def build_proxy()
+def build_proxy(version)
   # TODO(colin): move this to Dockerfile or move all build steps here.
   cmd("sbt assembly")
   cmd("npm install")
@@ -152,7 +152,7 @@ def main
   interpolate_templates(opts[:lab])
   return if opts[:templates_only]
   before_deploy
-  build_proxy
+  build_proxy(NEXT_VERSION)
   docker_build(NEXT_VERSION)
   if opts[:deploy] then
     fresh_deploy
