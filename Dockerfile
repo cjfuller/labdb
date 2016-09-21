@@ -9,9 +9,6 @@ RUN gem install bundler
 WORKDIR /app
 ADD . /app
 RUN ["bundle", "install", "--without", "development", "test", "--deployment"]
-RUN ["/usr/bin/npm", "install"]
-RUN ["/usr/bin/npm", "run-script", "coffee-compile"]
-RUN ["/usr/bin/npm", "run-script", "compile"]
 RUN ["/usr/bin/python", "manage.py", "secret"]
 RUN ["/usr/bin/python", "manage.py", "hostname", "--value", "weber.labdb.io"]
 CMD ["/usr/bin/supervisord", "-c", "/app/config/supervisord.conf"]

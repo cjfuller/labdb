@@ -54,4 +54,6 @@ Labdb::Application.configure do
 
   config.log_level = :info
   config.logger = Logging.logger
+
+  config.js_version = ""
 end

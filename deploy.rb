@@ -63,6 +63,11 @@ end
 def build_proxy()
   # TODO(colin): move this to Dockerfile or move all build steps here.
   cmd("sbt assembly")
+  cmd("npm install")
+  cmd("npm run-script coffee-compile")
+  cmd("npm run-script compile")
+  cmd("mv src/main/resources/_s/app_.js src/main/resources/_s/app_#{version}.js")
+  cmd("echo '#{version}' > config/version.txt")
 end
 
 def docker_build(version)
