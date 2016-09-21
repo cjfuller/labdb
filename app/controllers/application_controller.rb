@@ -21,6 +21,11 @@ class ApplicationController < ActionController::Base
   DATABASE_SYSTEM_SHORT_NAME = Naming.name_for('database_short')
 
   prepend_before_filter :set_user_vars
+  prepend_before_filter :set_js_version
+
+  def set_js_version
+    @js_version = Labdb::Application.config.js_version
+  end
 
   def set_user_vars
     @user_name ||= curr_username
