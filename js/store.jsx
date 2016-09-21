@@ -242,6 +242,7 @@ function dataForCurrentResource() {
             type: "collection",
             items: resource.data,
             numberFieldName: resource.numberFieldName,
+            itemType: resource.itemType,
         };
     } else {
         return resource.data;
