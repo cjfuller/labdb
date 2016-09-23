@@ -1,6 +1,7 @@
 import sbt._
 import Keys._
 import org.scalatra.sbt._
+import complete.DefaultParsers._
 import com.earldouglas.xwp.JettyPlugin
 import com.earldouglas.xwp.JettyPlugin.autoImport._
 import com.earldouglas.xwp.ContainerPlugin.autoImport._
@@ -12,6 +13,8 @@ object LabdbBuild extends Build {
   val Version = "2.0.0-pre0"
   val ScalaVersion = "2.11.8"
   val ScalatraVersion = "2.4.1"
+
+  val deploy = inputKey[Unit]("Deploy the labdb!")
 
   lazy val project = Project (
     "labdb",
@@ -33,7 +36,12 @@ object LabdbBuild extends Build {
       ),
       containerPort in Jetty := 4000,
       mainClass in assembly := Some("org.labdb.labdb.JettyLauncher"),
-      assemblyJarName in assembly := s"labdb.jar"
+      assemblyJarName in assembly := s"labdb.jar",
+      deploy := {
+        val args: Seq[String] = spaceDelimited("arg").parsed
+        Deploy.main(args)
+      }
     )
   ).enablePlugins(JettyPlugin)
 }
+
