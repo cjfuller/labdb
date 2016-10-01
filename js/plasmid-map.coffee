@@ -25,6 +25,31 @@
 $ = require("jquery")
 d3 = require("d3")
 
+enzymes_to_show = [
+    "AatII", "AccI", "Acc65I", "AclI", "AfeI", "AflII", "AflIII", "AgeI", "AhdI",
+    "AleI", "AluI", "AlwNI", "AoxI", "ApaI", "ApaBI", "ApaLI", "ApoI", "AscI",
+    "AseI", "Asi256I", "AsiSI", "AvaI", "AvaII", "AvrII", "BaeGI", "BamHI", "BanI",
+    "BanII", "BclI", "BfaI", "BglI", "BglII", "BlpI", "BmtI", "BsaAI", "BsaBI",
+    "BsaHI", "BsaJI", "BsaWI", "BsiEI", "BsiHKAI", "BsiWI", "BslI", "Bsp1286I",
+    "BspEI", "BspHI", "BsrFI", "BsrGI", "BssHII", "BstAPI", "BstBI", "BstEII",
+    "BstNI", "BstUI", "BstXI", "BstYI", "BstZ17I", "Bsu36I", "BtgI", "BthCI",
+    "Cac8I", "ChaI", "ClaI", "CviAII", "CviKI", "CviQI", "DdeI", "DpnI", "DraI",
+    "DraIII", "DrdI", "EaeI", "EagI", "EcoHI", "EcoNI", "EcoO109I", "EcoRI",
+    "EcoRV", "Eco53kI", "EsaBC3I", "FatI", "FmuI", "Fnu4HI", "FseI", "FspI", "HaeI",
+    "HaeII", "HaeIII", "HauII", "HhaI", "HinP1I", "HincII", "HindIII", "HinfI",
+    "HpaI", "HpaII", "Hpy99I", "Hpy166II", "Hpy188I", "Hpy188III", "HpyCH4III",
+    "HpyCH4IV", "HpyCH4V", "KasI", "KpnI", "LpnI", "MboI", "McaTI", "MfeI", "MluI",
+    "MluCI", "MscI", "MseI", "MslI", "MspA1I", "MwoI", "NaeI", "NarI", "NciI",
+    "NcoI", "NdeI", "NgoMIV", "NheI", "NlaIII", "NlaIV", "Nli3877I", "NotI", "NruI",
+    "NsiI", "NspI", "PabI", "PacI", "PciI", "PflMI", "PluTI", "PmeI", "PmlI",
+    "Ppu10I", "PpuMI", "PshAI", "PsiI", "Psp03I", "PspGI", "PspOMI", "PspXI",
+    "PssI", "PstI", "PvuI", "PvuII", "RsaI", "RsrII", "SacI", "SacII", "SalI",
+    "Sau96I", "SbfI", "ScaI", "SciI", "ScrFI", "SelI", "SexAI", "SfcI", "SfiI",
+    "SfoI", "SgrAI", "SmaI", "SmlI", "SnaBI", "SpeI", "SphI", "SrfI", "Sse8647I",
+    "SspI", "Sth302II", "StuI", "StyI", "StyD4I", "SwaI", "TaqI", "TfiI", "TseI",
+    "Tsp45I", "TspRI", "Tth111I", "UnbI", "VpaK11AI", "XbaI", "XcmI", "XhoI",
+    "XmaI", "XmnI", "ZraI",
+]
 # constants -- names, sizes, etc.
 parameters = {
   plas_map_div_id: "#plasmid-map",
@@ -488,6 +513,8 @@ show_initial_features = () ->
   for n, f of o().features_not_displayed
     if n in always_on
       show_feature(n, false)
+    else if f.length > 0 and f[0].type == 'point' and enzymes_to_show.indexOf(f[0].text) < 0
+      hide_feature(n)
     else if f.length == 1 and f[0].type == 'point'
       show_feature(n, false)
     else if f.length > 0 and f[0].type == 'regional'
