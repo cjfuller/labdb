@@ -42,7 +42,8 @@ object LabdbBuild extends Build {
       deploy := {
         val args: Seq[String] = spaceDelimited("arg").parsed
         Deploy.main(args)
-      }
+      },
+      deploy <<= deploy dependsOn assembly
     )
   ).enablePlugins(JettyPlugin)
 }
