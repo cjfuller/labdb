@@ -21,6 +21,7 @@ class LabDBServlet extends LabdbStack with JacksonJsonSupport {
 
   post("/api/v1/plasmid_map") {
     contentType = formats("json")
+    status = 200
     val sequence = request.body
     PlasmidMap.createForSequence(sequence).features
   }
