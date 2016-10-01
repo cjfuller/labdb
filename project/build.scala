@@ -28,6 +28,8 @@ object LabdbBuild extends Build {
       resolvers += "Scalaz Bintray Repo" at "http://dl.bintray.com/scalaz/releases",
       libraryDependencies ++= Seq(
         "org.scalatra" %% "scalatra" % ScalatraVersion,
+        "org.scalatra" %% "scalatra-json" % ScalatraVersion,
+        "org.json4s" %% "json4s-jackson" % "3.3.0",
         "org.scalatra" %% "scalatra-scalatest" % ScalatraVersion % "test",
         "ch.qos.logback" % "logback-classic" % "1.1.5" % "runtime",
         "org.eclipse.jetty" % "jetty-webapp" % "9.3.11.v20160721" % "container;compile",

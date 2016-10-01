@@ -12,18 +12,19 @@ function dispatch(action) {
     return _injected.dispatch(action);
 }
 
-const FETCH_BASE = "/api/v1/m";
+const FETCH_BASE = "/api/v1";
+const MODEL_FETCH_BASE = FETCH_BASE + "/m"
 
 function fetchItem(resourcePath) {
     return $.ajax({
-        url: `${FETCH_BASE}${resourcePath}`,
+        url: `${MODEL_FETCH_BASE}${resourcePath}`,
         method: "GET",
     });
 }
 
 function fetchItemList(resourceType, start, sortOrder) {
     return $.ajax({
-        url: `${FETCH_BASE}/${resourceType}/list?start=${start}&sort_order=${sortOrder}`,
+        url: `${MODEL_FETCH_BASE}/${resourceType}/list?start=${start}&sort_order=${sortOrder}`,
         method: "GET",
     });
 }
@@ -58,7 +59,7 @@ export function editField(resourceType, idx, fieldName, value) {
 
 export function saveEdits(resource, edits) {
     $.ajax({
-        url: `${FETCH_BASE}${resource.resourcePath}`,
+        url: `${MODEL_FETCH_BASE}${resource.resourcePath}`,
         method: "PUT",
         data: JSON.stringify(edits),
         dataType: "json",
@@ -78,7 +79,7 @@ export function clearEdits(resource) {
 
 export function newItem(itemType) {
     return $.ajax({
-        url: `${FETCH_BASE}/${itemType}/new`,
+        url: `${MODEL_FETCH_BASE}/${itemType}/new`,
         method: "POST"
     }).then((data) => {
         return maybeFetchThenDisplay('item', data).then(() => {
@@ -90,7 +91,7 @@ export function newItem(itemType) {
 
 export function copyItem(resource) {
     return $.ajax({
-        url: `${FETCH_BASE}/${resource.type}/${resource.id}/copy`,
+        url: `${MODEL_FETCH_BASE}/${resource.type}/${resource.id}/copy`,
         method: "POST"
     }).then((data) => {
         return maybeFetchThenDisplay('item', data).then(() => {
@@ -103,7 +104,7 @@ export function copyItem(resource) {
 export function deleteItem(resource) {
     if (window.confirm(`Are you sure you want to delete ${resource.name}?  (This cannot be undone.)`)) {
         return $.ajax({
-            url: `${FETCH_BASE}/${resource.type}/${resource.id}`,
+            url: `${MODEL_FETCH_BASE}/${resource.type}/${resource.id}`,
             method: "DELETE",
         }).then(() => {
             // TODO: delete item from cache
@@ -114,8 +115,10 @@ export function deleteItem(resource) {
 
 export function loadPlasmidMapData(resource) {
     return $.ajax({
-        url: `${FETCH_BASE}/plasmid_map/${resource.id}`,
-        method: "GET",
+        url: `${FETCH_BASE}/plasmid_map`,
+        method: "POST",
+        contentType: "text/plain",
+        data: resource.fieldData.sequence,
     }).then((data) => {
         dispatch(Actions.setPlasmidMapData(resource.id, data));
     });

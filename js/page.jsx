@@ -101,6 +101,7 @@ const Page = React.createClass({
                                 <PlasmidMap
                                     data={this.props.data.plasmid_map}
                                     onClose={this.closePlasmidMap}
+                                    plasmid={this.props.data}
                                 /> : null;
         return <div id="page">
             <Navbar

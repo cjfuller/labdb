@@ -20,12 +20,14 @@
  */
 
 (function() {
-  var $, add_all_features, add_feature_from_field, add_hidden_feature, angle_from_bp, calculate_map_offset, calculate_text_anchor_point, clear_map, d3, do_expand_point_group, do_feature_expand, do_map, draw_all, draw_circle, draw_group_labels, draw_plasmid_label, draw_point_features, draw_point_groups, draw_point_labels, draw_regional_features, draw_single_feature_label, ensure_n_feature_groups, feature_angle, fix_feature_overlap, group_feature, hide_feature, hide_feature_from_field, highlight_expanded_feature, initialize_buttons, initialize_features, initialize_map, o, objects, p, parameters, read_data, redraw_map, regional_feature_information, reset_feature_info, reset_point_group_highlight, set_feature_from_field, set_up_feature_information_box, show_feature, show_initial_features, text_for_group, update_offset, update_svg_height, x_from_polar, y_from_polar,
+  var $, add_all_features, add_feature_from_field, add_hidden_feature, angle_from_bp, calculate_map_offset, calculate_text_anchor_point, clear_map, d3, do_expand_point_group, do_feature_expand, do_map, draw_all, draw_circle, draw_group_labels, draw_plasmid_label, draw_point_features, draw_point_groups, draw_point_labels, draw_regional_features, draw_single_feature_label, ensure_n_feature_groups, enzymes_to_show, feature_angle, fix_feature_overlap, group_feature, hide_feature, hide_feature_from_field, highlight_expanded_feature, initialize_buttons, initialize_features, initialize_map, o, objects, p, parameters, read_data, redraw_map, regional_feature_information, reset_feature_info, reset_point_group_highlight, set_feature_from_field, set_up_feature_information_box, show_feature, show_initial_features, text_for_group, update_offset, update_svg_height, x_from_polar, y_from_polar,
     indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   $ = require("jquery");
 
   d3 = require("d3");
+
+  enzymes_to_show = ["AatII", "AccI", "Acc65I", "AclI", "AfeI", "AflII", "AflIII", "AgeI", "AhdI", "AleI", "AluI", "AlwNI", "AoxI", "ApaI", "ApaBI", "ApaLI", "ApoI", "AscI", "AseI", "Asi256I", "AsiSI", "AvaI", "AvaII", "AvrII", "BaeGI", "BamHI", "BanI", "BanII", "BclI", "BfaI", "BglI", "BglII", "BlpI", "BmtI", "BsaAI", "BsaBI", "BsaHI", "BsaJI", "BsaWI", "BsiEI", "BsiHKAI", "BsiWI", "BslI", "Bsp1286I", "BspEI", "BspHI", "BsrFI", "BsrGI", "BssHII", "BstAPI", "BstBI", "BstEII", "BstNI", "BstUI", "BstXI", "BstYI", "BstZ17I", "Bsu36I", "BtgI", "BthCI", "Cac8I", "ChaI", "ClaI", "CviAII", "CviKI", "CviQI", "DdeI", "DpnI", "DraI", "DraIII", "DrdI", "EaeI", "EagI", "EcoHI", "EcoNI", "EcoO109I", "EcoRI", "EcoRV", "Eco53kI", "EsaBC3I", "FatI", "FmuI", "Fnu4HI", "FseI", "FspI", "HaeI", "HaeII", "HaeIII", "HauII", "HhaI", "HinP1I", "HincII", "HindIII", "HinfI", "HpaI", "HpaII", "Hpy99I", "Hpy166II", "Hpy188I", "Hpy188III", "HpyCH4III", "HpyCH4IV", "HpyCH4V", "KasI", "KpnI", "LpnI", "MboI", "McaTI", "MfeI", "MluI", "MluCI", "MscI", "MseI", "MslI", "MspA1I", "MwoI", "NaeI", "NarI", "NciI", "NcoI", "NdeI", "NgoMIV", "NheI", "NlaIII", "NlaIV", "Nli3877I", "NotI", "NruI", "NsiI", "NspI", "PabI", "PacI", "PciI", "PflMI", "PluTI", "PmeI", "PmlI", "Ppu10I", "PpuMI", "PshAI", "PsiI", "Psp03I", "PspGI", "PspOMI", "PspXI", "PssI", "PstI", "PvuI", "PvuII", "RsaI", "RsrII", "SacI", "SacII", "SalI", "Sau96I", "SbfI", "ScaI", "SciI", "ScrFI", "SelI", "SexAI", "SfcI", "SfiI", "SfoI", "SgrAI", "SmaI", "SmlI", "SnaBI", "SpeI", "SphI", "SrfI", "Sse8647I", "SspI", "Sth302II", "StuI", "StyI", "StyD4I", "SwaI", "TaqI", "TfiI", "TseI", "Tsp45I", "TspRI", "Tth111I", "UnbI", "VpaK11AI", "XbaI", "XcmI", "XhoI", "XmaI", "XmnI", "ZraI"];
 
   parameters = {
     plas_map_div_id: "#plasmid-map",
@@ -506,6 +508,8 @@
       f = ref[n];
       if (indexOf.call(always_on, n) >= 0) {
         results.push(show_feature(n, false));
+      } else if (f.length > 0 && f[0].type === 'point' && enzymes_to_show.indexOf(f[0].text) < 0) {
+        results.push(hide_feature(n));
       } else if (f.length === 1 && f[0].type === 'point') {
         results.push(show_feature(n, false));
       } else if (f.length > 0 && f[0].type === 'regional') {
