@@ -123,11 +123,11 @@ ActiveRecord::Schema.define(:version => 201605211916) do
   end
 
   create_table "plasmids", :force => true do |t|
-    t.date     "date_entered"
-    t.string   "enteredby"
+    t.date     "date"
+    t.string   "creator"
     t.string   "notebook"
     t.boolean  "verified"
-    t.string   "plasmidalias"
+    t.string   "alias"
     t.string   "antibiotic"
     t.integer  "plasmidsize"
     t.float    "concentration"
@@ -141,7 +141,7 @@ ActiveRecord::Schema.define(:version => 201605211916) do
     t.string   "plasmidmap_content_type"
     t.integer  "plasmidmap_file_size"
     t.datetime "plasmidmap_updated_at"
-    t.integer  "plasmidnumber"
+    t.integer  "number"
   end
 
   create_table "samples", :force => true do |t|

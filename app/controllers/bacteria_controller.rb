@@ -60,11 +60,11 @@ class BacteriaController < ApplicationController
   end
 
   def copy_fields_from_plasmid(strain, plasmid)
-    strain.strainalias = plasmid.plasmidalias
+    strain.strainalias = plasmid.alias
     strain.entered_by = plasmid.enteredby
     strain.notebook = plasmid.notebook
     strain.comments = plasmid.description
-    strain.plasmid_number = plasmid.plasmidnumber
+    strain.plasmid_number = plasmid.number
   end
 
   def create_from_plasmid
