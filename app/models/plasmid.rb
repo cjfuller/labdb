@@ -25,12 +25,12 @@ class Plasmid < ActiveRecord::Base
   @headings = {
     antibiotic: 'Antibiotic resistances',
     concentration: 'Concentration (μg/mL)',
-    date_entered: 'Date',
+    date: 'Date',
     description: 'Description',
-    enteredby: 'Entered by',
+    creator: 'Entered by',
     notebook: 'Notebook',
-    plasmidalias: 'Alias',
-    plasmidnumber: "#{obj_tag} Number",
+    alias: 'Alias',
+    number: "#{obj_tag} Number",
     sequence: 'Sequence',
     strainnumbers: "#{Naming.name_for(Bacterium)} numbers",
     vector: 'Vector',
@@ -61,11 +61,11 @@ class Plasmid < ActiveRecord::Base
   end
 
   def self.number_field_name
-    :plasmidnumber
+    :number
   end
 
   def self.info_field_name
-    :plasmidalias
+    :alias
   end
 
   def self.description_field_name
@@ -77,23 +77,16 @@ class Plasmid < ActiveRecord::Base
   end
 
   def self.owner_field_name
-    :enteredby
+    :creator
   end
 
   def self.timestamp_field_name
-    :date_entered
+    :date
   end
 
   def core_alt_field
     numbers = get_linked_number_fields(core_alt_field_name) || []
     numbers.map { |n| Naming.name_for(Bacterium) + ' ' + n.to_s }
-  end
-
-  def groups
-    {
-      sidebar: [:enteredby, :date_entered, :notebook, :concentration],
-      'Vector information' => [:vector, :antibiotic]
-    }
   end
 
   def plasmid_map
@@ -129,8 +122,8 @@ class Plasmid < ActiveRecord::Base
 
   def supplemental_info
     [
-      field(:enteredby),
-      field(:date_entered),
+      field(:creator),
+      field(:date),
       field(:notebook),
       field(:concentration)
     ]

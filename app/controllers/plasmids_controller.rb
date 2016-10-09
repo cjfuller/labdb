@@ -45,7 +45,7 @@ class PlasmidsController < ApplicationController
   end
 
   def define_table_view_vars
-    @table_columns = {sort: :plasmidnumber, others: [:date_entered, :enteredby, :plasmidalias, :strainnumbers]}
+    @table_columns = {sort: :number, others: [:date_entered, :enteredby, :alias, :strainnumbers]}
     @controller = self.class
     @table_objects = @plasmids
   end
