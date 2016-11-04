@@ -118,6 +118,7 @@ class ApplicationController < ActionController::Base
       fields = [cls.description_field_name,
                 cls.info_field_name]
       fields += [:sequence] if include_seq
+      fields += [:genotype] if cls::Fields.include? :genotype
       seen_ids = Set.new
       @model_class = cls
       fields.each do |f|
