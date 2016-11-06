@@ -161,6 +161,7 @@ GEM
     thor (0.19.1)
     thread_safe (0.3.5)
     tilt (1.4.1)
+    trollop (2.1.2)
     tzinfo (0.3.48)
     uglifier (3.0.0)
       execjs (>= 0.3.0, < 3)
@@ -175,6 +176,7 @@ PLATFORMS
 DEPENDENCIES
   bcrypt-ruby (~> 3.0.0)
   bio
+  colorize
   facets
   haml (~> 4.0)
   konacha
@@ -195,7 +197,8 @@ DEPENDENCIES
   rspec
   rspec-rails (~> 3)
   rubocop
+  trollop
   uglifier (>= 1.0.3)
 
 BUNDLED WITH
-   1.11.2
+   1.13.1

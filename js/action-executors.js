@@ -35,7 +35,7 @@ export function maybeFetchThenDisplay(fetchType, resource, sortOrder="DESC") {
             dispatch(Actions.updateItemCache(resource.type, data));
             dispatch(Actions.displayItem(resource.type, resource.id));
             if (resource.type === "plasmid" && !resource.plasmid_map) {
-                loadPlasmidMapData(resource);
+                loadPlasmidMapData(data);
             }
         });
         //TODO: error handling

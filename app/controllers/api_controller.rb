@@ -114,8 +114,8 @@ class ApiController < ApplicationController
   end
 
   def plasmid_map
-    plas_id = params[:id]
-    render json: Plasmid.find(plas_id).plasmid_map
+    seq = request.body.read
+    render json: PlasmidMapping.map_for_plasmid(seq).map(&:to_h)
   end
 
   def import

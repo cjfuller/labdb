@@ -81,7 +81,7 @@ const PlasmidMap = React.createClass({
 
         const mapData = {
             "pl_name": this.props.plasmid.name,
-            "pl_size": this.props.plasmid.fieldData.sequence.length,
+            "pl_size": (this.props.plasmid.fieldData.sequence || "").length,
             "point_features": groupByName(reformattedPointFeatures),
             "regional_features": groupByName(reformattedRegionalFeatures),
         };

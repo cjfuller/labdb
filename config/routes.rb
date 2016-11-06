@@ -89,9 +89,11 @@ Labdb::Application.routes.draw do
 
   scope '/api/v1' do
     post '/import', to: 'api#import'
+    post '/plasmid_map', to: 'api#plasmid_map'
   end
 
   scope '/api' do
     post '/verify', to: 'api#verify'
   end
+
 end
