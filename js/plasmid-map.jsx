@@ -63,8 +63,8 @@ const PlasmidMap = React.createClass({
                 "feature_class": f.feature.display["feature_class"],
                 text: f.feature.name,
                 start: f.pos,
-                length: f.featureExtent === "point" ? f.feature.sequence.protein.length * 3 : f.length,
-                type: "regional"
+                length: f.featureExtent === "point" ? f.feature.sequence.length * 3 : f.length,
+                type: "regional",
             };
         });
 
