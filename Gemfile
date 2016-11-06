@@ -23,6 +23,8 @@ group :development, :test do
   gem 'pry-doc'
   gem 'method_source'
   gem 'rubocop'
+  gem 'colorize'
+  gem 'trollop'
 end
 
 gem 'bcrypt-ruby', '~> 3.0.0'
