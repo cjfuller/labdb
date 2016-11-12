@@ -29,7 +29,7 @@ Labdb::Application.configure do
   config.consider_all_requests_local       = false
   config.action_controller.perform_caching = true
 
-  config.serve_static_assets = true
+  config.serve_static_files = true
 
   # Compress JavaScripts and CSS
   config.assets.compress = true
@@ -82,5 +82,5 @@ Labdb::Application.configure do
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
 
-  config.js_version = File.read(Rails.root.join('config/version.txt')).strip
+  config.js_version = ENV['JS_VERSION']
 end
