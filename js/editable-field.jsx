@@ -34,7 +34,7 @@ const EditableField = React.createClass({
                         styles.field,
                         ...(this.props.extraStyles || [])
                     )}
-                disabled={!this.props.editable}
+                readonly={!this.props.editable}
                 onChange={(e) => this.props.onChange(e.target.value)}
                 onKeyPress={this.onKeyPress}
                 ref="input"
