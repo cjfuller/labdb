@@ -24,6 +24,7 @@ class ApplicationController < ActionController::Base
   prepend_before_filter :set_js_version
 
   def set_js_version
+    @production = Rails.env.production?
     @js_version = Labdb::Application.config.js_version
   end
 

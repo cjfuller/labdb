@@ -76,4 +76,7 @@
       %div#landing
       %script{type: "text/javascript"}
         = "window._labdbName = '#{@labdb_name}';".html_safe
-    = javascript_include_tag "/_s/app_#{@js_version}.js"
+    - if @production
+      %script{src: "https://storage.googleapis.com/labdb-static/app_#{@js_version}.js"}
+    - else
+      = javascript_include_tag "/_s/app_#{@js_version}.js"

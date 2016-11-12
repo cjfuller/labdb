@@ -8,40 +8,10 @@
 /.bundle
 vendor
 
-# Ignore the default SQLite database.
-/db/*.sqlite3
-
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
 
-# Ignore certificates
-/config/*.crt
-/config/*.csr
-/config/*.key
-/config/*.pem
-
-# Ignore secret token and hostname
-/config/secret_token.txt
-/config/full_hostname.txt
-
-# ignore rubinius files
-/.rbx
-
-# generated js files
-public/application.js
 node_modules
 npm-debug.log
-public/*.js
-public/*.map
-jscssdeps
-public/_s/*.js
-
-# scala things
-.idea
-project/target
-project/project
-target
-src/main/webapp/_s/*.js
-config/version.txt
 
