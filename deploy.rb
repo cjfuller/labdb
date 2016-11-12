@@ -33,10 +33,6 @@ def deploy(lab)
   cmd ['git', 'push', '-f', "heroku-#{lab}", 'HEAD:master']
 end
 
-def roll_back_local(lab)
-  cmd ['git', 'reset', '--hard', "origin/#{lab}"]
-end
-
 def main
   opts = Trollop::options do
     opt :lab, "Lab", type: :string
@@ -46,7 +42,6 @@ def main
   version = `git log -1 --format=%h`.strip
   before_deploy(version)
   deploy(opts[:lab])
-  roll_back_local(opts[:lab])
 end
 
 main if __FILE__ == $0

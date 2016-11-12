@@ -54,7 +54,7 @@ const InfoSection = React.createClass({
             const sep = isBooleanField ? "?" : ":";
 
             const labelRef = "label-" + f.name;
-            return <div key={f.name}>
+            return <div className={css(styles.fieldContainer)} key={f.name}>
                 <div
                     className={css(styles.fieldName)}
                     key={labelRef}
@@ -104,7 +104,12 @@ const InfoSection = React.createClass({
 });
 
 const styles = StyleSheet.create({
+    fieldContainer: {
+        display: "flex",
+        justifyContent: "flex-start",
+    },
     fieldName: {
+        flexShrink: 0,
         ...ss.elements.fieldName,
     },
     infoSection: {
@@ -128,6 +133,8 @@ const styles = StyleSheet.create({
     },
     fieldValue: {
         display: "inline-block",
+        flexBasis: "100%",
+        flexShrink: 1,
     },
 });
 
