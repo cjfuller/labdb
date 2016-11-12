@@ -22,6 +22,13 @@ class ApplicationController < ActionController::Base
 
   prepend_before_filter :set_user_vars
   prepend_before_filter :set_js_version
+  prepend_before_filter :force_https
+
+  def force_https
+    if Rails.env.production?
+      redirect_to protocol: "https://" unless request.ssl?
+    end
+  end
 
   def set_js_version
     @production = Rails.env.production?
