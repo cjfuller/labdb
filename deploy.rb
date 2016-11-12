@@ -30,7 +30,7 @@ def before_deploy(version)
 end
 
 def deploy(lab)
-  cmd ['git', 'push', '-f', "heroku-#{lab}", 'master']
+  cmd ['git', 'push', '-f', "heroku-#{lab}", 'HEAD:master']
 end
 
 def roll_back_local(lab)
