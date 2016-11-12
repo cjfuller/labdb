@@ -355,6 +355,9 @@ const styles = StyleSheet.create({
         fontSize: "150%",
         paddingLeft: 2 * ss.sizes.paddingPx,
         paddingRight: 4 * ss.sizes.paddingPx,
+        ':hover': {
+            cursor: "pointer",
+        },
     },
 });
 
