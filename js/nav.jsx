@@ -234,8 +234,8 @@ const Navbar = React.createClass({
 
     getDefaultProps: function() {
         return {
-            navitems: ["Plasmids", "Oligos", "Bacteria", "Samples",
-                       "Antibodies", "Worms"],
+            navitems: ["Bacteria", "Worms", "Plasmids", "Oligos",
+                       "Antibodies", "Samples"],
             navlinks: {
                 Plasmids: "/plasmids",
                 Oligos: "/oligos",
