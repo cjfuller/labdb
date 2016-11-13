@@ -8,7 +8,6 @@ one:
   verified: true
   alias: CENP-I
   antibiotic: "carb,kan,gent"
-  plasmidsize: 1
   concentration: 1.5
   strainnumbers: 2
   description: CENP-I plasmid
@@ -23,7 +22,6 @@ two:
   verified: false
   alias: CENP-K
   antibiotic: carb
-  plasmidsize: 1
   concentration: 1.5
   strainnumbers: 1
   description: CENP-K plasmid

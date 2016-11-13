@@ -18,9 +18,5 @@
 require 'spec_helper'
 
 describe AntibodiesController do
-
 	extend CommonControllerSpecs
-
-	search_tests model_class: Antibody, search_field: :alias, count_0_regexp: "/CENP-F/", count_1_regexp: "/CENP-C/", count_2_regexp: "/CENP/", non_regexp_exp: "CENP", ci_exp: "/cenp-c/"
-
 end

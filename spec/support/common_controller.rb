@@ -50,22 +50,10 @@ module CommonControllerSpecs
       export_tests model_class, ["yml"]
       navigation model_class
     end
-
   end
 
   def basic_tests(model_class)
     describe "Basic controller actions" do
-      it "should get a new item" do
-        get :new
-        response.should be_success
-      end
-
-      it "should get a new item with duplicate" do
-        @obj = instance_variable_get(obj_varname = "@" + model_class.to_s.downcase)
-        get :new, id: @obj
-        response.should be_success
-      end
-
       it "should get the search page" do
         get :search
         response.should be_success
@@ -90,8 +78,6 @@ module CommonControllerSpecs
         @obj.exportable_fields.each { |f| @fields_hash[f] = @obj.send(f) }
       end
 
-      model_sym = model_class.to_s.downcase.to_sym
-
       it "should get the index" do
         get :index
         response.should be_success
@@ -101,175 +87,6 @@ module CommonControllerSpecs
       it "should show the #{model_class.to_s.downcase}" do
         get :show, id: @obj
         response.should be_success
-      end
-
-      it "should get the edit page" do
-        get :edit, id: @obj
-        response.should be_success
-      end
-
-      it "should destroy the #{model_class.to_s.downcase}" do
-        lambda { delete :destroy, id: @obj }.should change(model_class, :count).by(-1)
-        response.should redirect_to(polymorphic_path(model_class))
-      end
-
-      it "should create the #{model_class.to_s.downcase}" do
-        lambda { post :create, model_sym => @fields_hash }.should change(model_class, :count)
-        response.should redirect_to(polymorphic_path(assigns(model_sym)))
-      end
-
-      it "should create a #{model_class.to_s.downcase} filled with the appropriate fields" do
-        post :create, model_sym => @fields_hash
-        created_obj = assigns(model_class.to_s.downcase.to_sym)
-        @fields_hash.each_key { |k| created_obj.send(k).should eq @fields_hash[k] }
-      end
-
-      it "should update the #{model_class.to_s.downcase}" do
-        put :update, id: @obj, model_sym => @fields_hash
-        response.should redirect_to(polymorphic_path(assigns(model_sym)))
-      end
-    end
-  end
-
-
-  def search_tests(opts)
-
-    model_class = opts[:model_class]
-    search_field = opts[:search_field]
-    count_0_regexp = opts[:count_0_regexp]
-    count_1_regexp = opts[:count_1_regexp]
-    count_2_regexp = opts[:count_2_regexp]
-    non_regexp_exp = opts[:non_regexp_exp]
-    ci_exp = opts[:ci_exp]
-
-    type = model_class.to_s.downcase.to_sym
-    plural_type = model_class.to_s.pluralize.downcase.to_sym
-
-    describe "search redirection" do
-      it "should redirect to an object if it's the only one found" do
-        get :index, type => {search_field => count_1_regexp}
-        response.should redirect_to assigns(plural_type)[0]
-      end
-
-      it "should not redirect to an object if multiple are found" do
-        get :index, type => {search_field => count_2_regexp}
-        response.should be_success
-      end
-    end
-    
-    describe "regexp search" do
-
-      it "should get all entries matching a given regexp" do
-        get :index, type => {search_field => count_2_regexp}
-        assigns(plural_type).size.should eq 2
-      end
-
-      it "should not get entries not matching a given regexp" do
-        get :index, type => {search_field => count_1_regexp}
-        assigns(plural_type).size.should eq 1
-      end
-
-      it "should get an empty list of entries for a non-matching regexp" do
-        get :index, type => {search_field => count_0_regexp}
-        assigns(plural_type).should be_empty
-      end
-
-    end
-
-
-    describe "non-regexp search" do
-
-      it "should get all entries matching a given wildcard expression" do
-        get :index, type => {search_field => ("*" + non_regexp_exp + "*")}
-        assigns(plural_type).size.should eq 2
-      end
-
-      it "should not find entries that are not an exact match to an expression without wildcards" do
-        get :index, type => {search_field => (non_regexp_exp)}
-        assigns(plural_type).should be_empty
-      end
-    end
-
-    describe "case-insensitive search" do
-
-      it "should do case-sensitive search by default" do
-        get :index, type => {search_field => ci_exp}
-        assigns(plural_type).should be_empty
-      end
-
-      it "should change to case-insensitive with the /i modifier" do
-        get :index, type => {search_field => ci_exp + "i"}
-        assigns(plural_type).size.should eq 1
-      end
-    end
-
-    describe "navigation within search" do 
-
-      context "valid search provided" do
-
-        before :each do 
-          get :index, type => {search_field => count_1_regexp}
-          @s = assigns(:search_id)
-          @search_obj = assigns(plural_type)[0]
-        end
-
-        it "should limit previous navigation to within the search results" do
-          get :previous, id: @search_obj.id, search_id: @s
-          response.should redirect_to(action: :show, id: @search_obj.id, search_id: @s)
-        end
-
-        it "should limit next navigation to within the search results" do
-          get :next, id: @search_obj.id, search_id: @s
-          response.should redirect_to(action: :show, id: @search_obj.id, search_id: @s)
-        end
-      end
-
-      context "invalid search provided" do
-
-        before :each do 
-          get :index, type => {self.send(plural_type, :one).number_field_name => 1.to_s}
-          @s = assigns(:search_id)
-          @search_obj = assigns(plural_type)[0]
-        end
-
-        context "expired search" do
-
-          before :each do 
-            s = Search.find(@s)
-            s.expires = (Time.now - 10).to_date
-            s.save
-          end
-
-          it "should limit previous/next navigation to within the search results when at the first object" do
-            get :previous, id: @search_obj.id, search_id: @s
-            response.should redirect_to(action: :show, id: @search_obj.id)
-          end
-
-          it "should not limit previous/next navigation to within the search results" do
-            get :next, id: @search_obj.id, search_id: @s
-            response.should redirect_to(action: :show, id: self.send(plural_type, :two).id)
-          end
-
-          it "should be an invalid search if the search time has expired" do
-            get :show, id: @search_obj.id, search_id: @s
-            expect(controller.valid_search_requested?).to be_falsey
-#            controller.valid_search_requested?.should_not be_true
-          end
-        end
-
-        context "not recent search" do
-
-          before :each do 
-            get :index, type => {self.send(plural_type, :one).number_field_name => 2.to_s}
-            @s_2 = assigns(:search_id)
-            @search_obj_2 = assigns(plural_type)[0]
-          end
-
-          it "should be an invalid search if it's not the last search a user performed" do 
-            get :show, id: @search_obj_2.id, search_id: @s
-            controller.valid_search_requested?.should be_falsey
-          end
-        end
       end
     end
   end

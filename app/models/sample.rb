@@ -66,7 +66,7 @@ class Sample < ActiveRecord::Base
   end
 
   def sample_links
-    linked_items
+    (linked_items || '')
       .split(',')
       .map(&:strip)
       .map { |item| [item, item.item_links(items: true).first] }

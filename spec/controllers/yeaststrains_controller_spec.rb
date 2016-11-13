@@ -18,9 +18,5 @@
 require 'spec_helper'
 
 describe YeaststrainsController do
-
   extend CommonControllerSpecs
-
-  search_tests model_class: Yeaststrain, search_field: :strainalias, count_0_regexp: "/lys-/", count_1_regexp: "/ade-/", count_2_regexp: "/leu-/", non_regexp_exp: "leu", ci_exp: "/ADE/"
-
 end

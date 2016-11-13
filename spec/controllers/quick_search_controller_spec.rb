@@ -28,7 +28,7 @@ describe QuickSearchController do
   
   it "should redirect to the appropriate search page when searching numbers" do
     get :do_quick_search, database: 'Plasmids', number: '5'
-    response.should redirect_to(controller: 'plasmids', action: 'index', plasmid: {plasmidnumber: 5})
+    response.should redirect_to(controller: 'plasmids', action: 'index', plasmid: {number: 5})
   end
 
   it "should redirect to the appropriate search page when searching aliases" do

@@ -21,9 +21,5 @@ require 'spec_helper'
 require 'spec_helper'
 
 describe SamplesController do
-
   extend CommonControllerSpecs
-
-  search_tests model_class: Sample, search_field: :description, count_0_regexp: "/CENP-C/", count_1_regexp: "/CENP-A/", count_2_regexp: "/H4/", non_regexp_exp: "polycistronic", ci_exp: "/cenp-a/"
-
 end

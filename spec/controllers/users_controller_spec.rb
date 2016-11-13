@@ -19,8 +19,7 @@ describe UsersController do
 
   fixtures :users
 
-  actions = {index: :get, toggle_auth_read: :put, toggle_auth_write: :put, toggle_auth_admin: :put, new: :get, create: :post, edit: :get, update: :put, destroy: :delete}
-  needs_id = [:edit, :toggle_auth_read, :toggle_auth_write, :toggle_auth_admin, :update, :destroy]
+  actions = {index: :get}
 
   before :each do
     request.env['HTTPS'] = 'on'
@@ -36,59 +35,6 @@ describe UsersController do
       assigns(:users).size.should eq 4
     end
 
-    it "should succeed for get edit" do
-      get :edit, id: User.find_by_email('rw@labdb').id
-      response.should be_success
-    end
-
-    it "should succeed for get new" do
-      get :new
-      response.should be_success
-    end
-
-    needs_id.each do |act|
-      it "should fail on #{act} if trying to access the logged in user" do
-        send(actions[act], act, id: @controller.curr_user_id)
-        response.should redirect_to users_path
-      end
-    end
-
-    it "should succeed for put update" do
-      email = 'rw@labdb'
-      new_name = 'test'
-      put :update, id: User.find_by_email(email), user: {name: new_name}
-      User.find_by_email(email).name.should eq new_name
-    end
-
-    it "should succeed for post create" do
-      opts = {
-        name: 'test',
-        email: 'test@labdb',
-        notes: ''
-      }
-
-      post :create, user: opts
-      User.where(email: 'test@labdb').should_not be_empty
-    end
-
-    it "should succeed for delete user" do
-      email = 'unauthorized@labdb'
-      previous_count = User.where(email: email).size
-      previous_count.should_not eq 0
-      delete :destroy, id: User.where(email: email).first.id
-      User.where(email: email).size.should eq previous_count - 1
-    end
-
-    [:toggle_auth_admin, :toggle_auth_write, :toggle_auth_read].each do |tog|
-      it "should succeed for #{tog}" do
-        email = 'rw@labdb'
-        user = User.find_by_email(email)
-        previous_state = user.send(tog.to_s.gsub("toggle_", ""))
-        put tog, id: user.id
-        user = User.find_by_email(email)
-        user.send(tog.to_s.gsub("toggle_", "")).should eq (not previous_state)
-      end
-    end
   end
 
   context "non-admin user" do
@@ -99,11 +45,8 @@ describe UsersController do
     actions.each do |act, method|
       it "should disallow access for action #{act}" do
         opts = {}
-        if needs_id.include? act then
-          opts[:id] = 1
-        end
         send(method, act, opts)
-        response.should redirect_to "/"
+        response.should have_http_status 403
       end
     end
   end
