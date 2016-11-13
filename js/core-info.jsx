@@ -47,6 +47,7 @@ const styles = StyleSheet.create({
         border: `1px solid ${ss.colors.borderColor}`,
         borderRadius: ss.sizes.cornerRadiusPx,
         margin: ss.sizes.paddingPx,
+        maxWidth: "100%",
         padding: 1.5 * ss.sizes.paddingPx,
     },
 });
