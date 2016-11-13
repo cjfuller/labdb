@@ -26,17 +26,17 @@ module Exportable
   def export_to_yaml
     fields = exportable_fields
     output = {}
-    fields.each do |f|
+    fields.sort.each do |f|
       fe = f.to_s.encode('utf-8')
       output[fe] = self.send(f).to_s.encode('utf-8')
     end
-    Psych.dump(self.class.to_s.encode('utf-8') => output)
+    Psych.dump({self.class.to_s.encode('utf-8') => output})
   end
 
   def export_to_json
     fields = exportable_fields
     output = {}
-    fields.each do |f|
+    fields.sort.each do |f|
       fe = f.to_s.encode('utf-8')
       output[fe] = self.send(f).to_s.encode('utf-8')
     end
@@ -47,7 +47,7 @@ module Exportable
 
   def export_to_fasta
     output = ''
-    output << '>' << name_str << ' ' << info_field.to_s << '\n'
+    output << '>' << name_str << ' ' << info_field.to_s << "\n"
     output << wrap_string(self.sequence, 80)
     output
   end

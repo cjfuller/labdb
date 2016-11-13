@@ -1,12 +1,12 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 one:
-  plasmidnumber: 1
-  date_entered: 2012-05-02
-  enteredby: Colin
+  number: 1
+  date: 2012-05-02
+  creator: Colin
   notebook: 1
   verified: true
-  plasmidalias: CENP-I
+  alias: CENP-I
   antibiotic: "carb,kan,gent"
   plasmidsize: 1
   concentration: 1.5
@@ -16,12 +16,12 @@ one:
   vector: pCS2
 
 two:
-  plasmidnumber: 2
-  date_entered: 2012-05-02
-  enteredby: Colin
+  number: 2
+  date: 2012-05-02
+  creator: Colin
   notebook: 1
   verified: false
-  plasmidalias: CENP-K
+  alias: CENP-K
   antibiotic: carb
   plasmidsize: 1
   concentration: 1.5

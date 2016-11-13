@@ -26,7 +26,22 @@ describe Antibody do
 
 	it "should correctly export to YAML" do
 
-		yaml_str = "---\nAntibody:\n  ab_number: '1'\n  alias: human anti-CENP-A\n  box: human\n  comments: Fix in methanol for best results.\n  entered_by: Colin\n  fluorophore: ''\n  good_for_if: 'true'\n  good_for_western: 'true'\n  host: rabbit\n  label: anti-CENP-A\n  vendor: Cocalico/straightlab\n  date_entered: '2013-03-08'\n"
+		yaml_str = <<~YAML
+      ---
+      Antibody:
+        ab_number: '1'
+        alias: human anti-CENP-A
+        box: human
+        comments: Fix in methanol for best results.
+        date_entered: '2013-03-08'
+        entered_by: Colin
+        fluorophore: ''
+        good_for_if: 'true'
+        good_for_western: 'true'
+        host: rabbit
+        label: anti-CENP-A
+        vendor: Cocalico/straightlab
+      YAML
 
 		antibodies(:one).export_to_yaml.should eq yaml_str
 	end

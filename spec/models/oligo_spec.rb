@@ -29,7 +29,19 @@ describe Oligo do
 	end
 
 	it "should correctly export to YAML" do
-		yaml_str = "---\nOligo:\n  oligoalias: forward\n  date_entered: '2013-02-07'\n  entered_by: Colin\n  notebook: '1'\n  oligo_number: '1'\n  organism: Xenopus laevis\n  purpose: cloning\n  sequence: ATGGAGGAGAGGCCACCACAGAAAAGCC\n  vendor: ''\n"
+		yaml_str = <<~YAML
+      ---
+      Oligo:
+        date_entered: '2013-02-07'
+        entered_by: Colin
+        notebook: '1'
+        oligo_number: '1'
+        oligoalias: forward
+        organism: Xenopus laevis
+        purpose: cloning
+        sequence: ATGGAGGAGAGGCCACCACAGAAAAGCC
+        vendor: ''
+      YAML
 
 		oligos(:one).export_to_yaml.should eq yaml_str
 	end

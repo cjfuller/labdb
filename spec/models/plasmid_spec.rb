@@ -29,22 +29,22 @@ describe Plasmid do
 	end
 
 	it "should correctly export to YAML" do
-		yaml_str = <<YAML
-Plasmid:
-  antibiotic: carb,kan,gent
-  concentration: '1.5'
-  date_entered: '2012-05-02'
-  description: CENP-I plasmid
-  enteredby: Colin
-  notebook: '1'
-  plasmidalias: CENP-I
-  plasmidnumber: '1'
-  plasmidsize: '1'
-  sequence: ATTTGAGAGAAA
-  strainnumbers: '2'
-  vector: pCS2
-  verified: 'true'
-YAML
+		yaml_str = <<~YAML
+      ---
+      Plasmid:
+        alias: CENP-I
+        antibiotic: carb,kan,gent
+        concentration: '1.5'
+        creator: Colin
+        date: '2012-05-02'
+        description: CENP-I plasmid
+        notebook: '1'
+        number: '1'
+        sequence: ATTTGAGAGAAA
+        strainnumbers: '2'
+        vector: pCS2
+        verified: 'true'
+      YAML
 		plasmids(:one).export_to_yaml.should eq yaml_str
 	end
 
@@ -52,18 +52,6 @@ YAML
 	it "should correctly export to FASTA" do
 		fasta_str = ">#{Naming.name_for(Plasmid)}1 CENP-I\nATTTGAGAGAAA"
 		plasmids(:one).export_to_fasta.should eq fasta_str
-	end
-
-	it "should correctly parse its antibiotics" do
-		plasmids(:one).parse_antibiotics
-
-		[:carb, :kan, :gent].each do |a|
-			plasmids(:one).send(a).should eq "1"
-		end
-
-		[:chlor, :tet, :strep].each do |a|
-			plasmids(:one).send(a).should eq "0"
-		end
 	end
 
 	it "should correctly calculate its size" do

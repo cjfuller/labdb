@@ -5,15 +5,15 @@ describe Sample do
 	fixtures :samples, :plasmids, :bacteria
 
   it "should link to its plasmid" do
-		samples(:one).get_linked(:plasmid_numbers)["1"].should eq plasmids(:one)
+		samples(:one).sample_links[0][:link_desc].should eq plasmids(:one).alias
 	end
 
 	it "should link to its strain" do
-		samples(:one).get_linked(:strain_numbers)["2"].should eq bacteria(:two)
+		samples(:one).sample_links[1][:link_desc].should eq bacteria(:two).strainalias
 	end
 
 	it "should link to another sample" do
-		samples(:one).get_linked(:linked_sample_numbers)["2"].should eq samples(:two)
+		samples(:one).sample_links[2][:link_desc].should eq samples(:two).sample_alias
 	end
 
 	it "should have the number field set to the sample number" do

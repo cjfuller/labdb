@@ -25,8 +25,20 @@ describe Bacterium do
 	end
 
 	it "should correctly export to YAML" do
-		yaml_str = "---\nBacterium:\n  comments: strain 1\n  date_entered: '2013-03-02'\n  entered_by: Colin\n  genotype: ''\n  notebook: '1'\n  plasmid_number: '2'\n  species_bkg: E. coli DH5a\n  strain_number: '1'\n  sequence: GATTTAGAGCC\n  strainalias: ''\n"
-
+		yaml_str = <<~YAML
+      ---
+      Bacterium:
+        comments: strain 1
+        date_entered: '2013-03-02'
+        entered_by: Colin
+        genotype: ''
+        notebook: '1'
+        plasmid_number: '2'
+        sequence: GATTTAGAGCC
+        species_bkg: E. coli DH5a
+        strain_number: '1'
+        strainalias: alias 1
+      YAML
 		bacteria(:one).export_to_yaml.should eq yaml_str
 	end
 

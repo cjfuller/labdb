@@ -6,10 +6,11 @@ one:
   date_entered: 2013-03-02
   entered_by: Colin
   notebook: 1
-  genotype: 
+  genotype:
   comments: strain 1
   plasmid_number: 2
   sequence: ""
+  strainalias: alias 1
 
 two:
   strain_number: 2
@@ -21,3 +22,4 @@ two:
   comments: strain 2
   plasmid_number: 1
   sequence: ""
+  strainalias: alias 2
