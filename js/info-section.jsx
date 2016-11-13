@@ -42,7 +42,7 @@ const InfoSection = React.createClass({
                     />
                 </div> :
                 <div
-                    className="field-value"
+                    className={css(styles.fieldValue)}
                     dangerouslySetInnerHTML={{
                         __html: this.props.contents.inlineValue,
                     }}
@@ -135,6 +135,8 @@ const styles = StyleSheet.create({
         display: "inline-block",
         flexBasis: "100%",
         flexShrink: 1,
+        overflowWrap: "break-word",
+        maxWidth: "100%",
     },
 });
 

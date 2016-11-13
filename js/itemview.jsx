@@ -62,9 +62,16 @@ const ItemInfoView = React.createClass({
     },
 });
 
+const smallScreen = '@media(max-width: 899px)';
+
 const styles = StyleSheet.create({
     coreInfoContainer: {
-        flex: 3,
+        flexGrow: 3,
+        flexShrink: 3,
+        maxWidth: "85%",
+        [smallScreen]: {
+            maxWidth: "100%",
+        },
     },
     itemInfoView: {
         fontFamily: ss.fonts.content,
@@ -74,11 +81,15 @@ const styles = StyleSheet.create({
         alignItems: "flex-start",
         display: "flex",
         flexDirection: "row",
-        flexWrap: "wrap",
         marginBottom: 1.5 * ss.sizes.paddingPx,
+        maxWidth: "100%",
+        [smallScreen]: {
+            flexDirection: "column",
+        },
     },
     supplementalInfoContainer: {
-        flex: 1,
+        flexGrow: 1,
+        flexShrink: 1,
     },
 });
 

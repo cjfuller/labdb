@@ -26,6 +26,7 @@ const styles = StyleSheet.create({
         border: "none",
         fontFamily: ss.fonts.monospace,
         minHeight: 200,
+        overflowWrap: "break-word",
         width: "100%",
     },
 });
