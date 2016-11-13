@@ -33,12 +33,18 @@ def deploy(lab)
   cmd ['git', 'push', '-f', "heroku-#{lab}", 'HEAD:master']
 end
 
+def checkout_and_update(lab)
+  cmd ['git', 'checkout', lab]
+  cmd %w(git merge master)
+  cmd %w(git push)
+end
+
 def main
   opts = Trollop::options do
     opt :lab, "Lab", type: :string
   end
   Trollop::die :lab, "must be specified" unless opts[:lab]
-  cmd ['git', 'checkout', opts[:lab]]
+  checkout_and_update(opts[:lab])
   version = `git log -1 --format=%h`.strip
   before_deploy(version, opts[:lab])
   deploy(opts[:lab])
