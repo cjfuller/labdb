@@ -18,9 +18,5 @@
 require 'spec_helper'
 
 describe OligosController do  
-
   extend CommonControllerSpecs
-
-  search_tests model_class: Oligo, search_field: :organism, count_0_regexp: "/pipens/", count_1_regexp: "/tropicalis/", count_2_regexp: "/Xenopus/", non_regexp_exp: "Xenopus", ci_exp: "/LAEVIS/"
-  
 end

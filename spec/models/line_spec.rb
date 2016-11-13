@@ -5,50 +5,48 @@ describe Line do
 	fixtures :lines, :plasmids
 
   it "should link to its plasmid" do
-
 		lines(:one).get_linked(:plasmid_numbers)["1"].should eq plasmids(:one)
-
 	end
 
 	it "should have the number field set to the sample number" do
-
 		lines(:one).number_field.to_i.should eq 1
-
 	end
 
 	it "should list exportable fields" do
-
 		lines(:one).exportable_fields.should_not be_empty
-
 	end
 
 	it "should name itself correctly" do
-
 		lines(:one).name_str.should eq "#{Naming.name_for(Line)}1"
-
 	end
 
 	it "should correctly set YAML export parameters" do
-
 		lines(:one).get_export_params("yml")[:filename].should eq "#{Naming.name_for(Line)}1.yml"
-
 	end
 
 	it "should correctly export to YAML" do
-
-		yaml_str = "---\nLine:\n  current_stock_counts: 1 (clone 2),3 (clone 7)\n  date_entered: '2013-04-15'\n  description: N-terminal GFP-CENP-A HeLa constitutive expressing\n  entered_by: Colin Fuller\n  line_alias: GFP-CENP-A HeLa\n  line_number: '1'\n  locations: lN2R1S1,lN2R1S2\n  notebook: '1'\n  parent_line: HeLa\n  plasmid_numbers: '1'\n  selectable_markers: neo\n  sequence: ''\n  species: human\n  genotype: ''\n  stock_person: Colin Fuller, Colin Fuller\n  stock_date: 20130415, 20130416\n"
+		yaml_str = <<~YAML
+      ---
+      Line:
+        current_stock_counts: 1 (clone 2),3 (clone 7)
+        date_entered: '2013-04-15'
+        description: N-terminal GFP-CENP-A HeLa constitutive expressing
+        entered_by: Colin Fuller
+        genotype: ''
+        line_alias: GFP-CENP-A HeLa
+        line_number: '1'
+        locations: lN2R1S1,lN2R1S2
+        notebook: '1'
+        parent_line: HeLa
+        plasmid_numbers: '1'
+        selectable_markers: neo
+        sequence: ''
+        species: human
+        stock_date: 20130415, 20130416
+        stock_person: Colin Fuller, Colin Fuller
+      YAML
 
 		lines(:one).export_to_yaml.should eq yaml_str
-
-	end
-
-	it "should correctly generate inventory" do
-		inv = lines(:one).inventory
-		inv[0].location.should eq "lN2R1S1"
-		inv[0].clone.should eq 2.to_s
-		inv[0].count.should eq 1
-		inv[0].date.should eq Date.parse("2013-04-15")
-		inv[0].person.should eq "Colin Fuller"
 	end
 
 	it "should correctly generate inventory fields from an inventory" do
@@ -80,7 +78,5 @@ describe Line do
 		l.locations.should eq loc.join(",")
 		l.stock_person.should eq person.join(",")
 		l.stock_date.should eq date.join(",")
-
 	end
-
 end

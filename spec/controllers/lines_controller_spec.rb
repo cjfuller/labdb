@@ -21,9 +21,5 @@ require 'spec_helper'
 require 'spec_helper'
 
 describe LinesController do
-
   extend CommonControllerSpecs
-
-  search_tests model_class: Line, search_field: :line_alias, count_0_regexp: "/CENP-C/", count_1_regexp: "/CENP-A/", count_2_regexp: "/GFP/", non_regexp_exp: "HeLa", ci_exp: "/h3/"
-
 end
