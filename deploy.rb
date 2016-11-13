@@ -17,9 +17,9 @@ def gcs_path(version)
   "gs://labdb-static/#{js_file(version)}"
 end
 
-def before_deploy(version)
-  cmd ["heroku", "config:set", "SECRET_TOKEN=$(rake secret)"]
-  cmd ["heroku", "config:set", "JS_VERSION=#{version}"]
+def before_deploy(version, lab)
+  cmd ["heroku", "config:set", "SECRET_TOKEN=$(rake secret)", "-a labdb-#{lab}"]
+  cmd ["heroku", "config:set", "JS_VERSION=#{version}", "-a labdb-#{lab}"]
   cmd ['rm', 'public/_s/*.js'], ignore_err: true
   cmd %w(npm install)
   cmd %w(npm run-script coffee-compile)
@@ -40,7 +40,7 @@ def main
   Trollop::die :lab, "must be specified" unless opts[:lab]
   cmd ['git', 'checkout', opts[:lab]]
   version = `git log -1 --format=%h`.strip
-  before_deploy(version)
+  before_deploy(version, opts[:lab])
   deploy(opts[:lab])
 end
 
