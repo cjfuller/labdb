@@ -54,7 +54,7 @@ Labdb::Application.configure do
 
   config.force_ssl = false
 
-  config.log_level = :info
+  config.log_level = :debug
   config.logger = Logging.logger
 
   config.js_version = ""
