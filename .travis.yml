@@ -1,12 +1,10 @@
 language: ruby
+dist: trusty
+sudo: false
 rvm:
-  - 2.1.0
+  - 2.3.1
 branches:
   only:
-    - develop
     - master
 before_script:
   - psql -c 'create database test;' -U postgres
-  - python manage.py --value localhost hostname
-  - python manage.py secret
-  - rake db:reset
