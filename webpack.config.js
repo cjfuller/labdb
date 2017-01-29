@@ -15,6 +15,7 @@ module.exports = {
                     "array-includes",
                     "syntax-object-rest-spread",
                     "transform-object-rest-spread",
+                    "transform-flow-strip-types",
                 ],
             },
         }],
