@@ -10,6 +10,14 @@ import org.labdb.labdb.plasmidmapping.PlasmidMap
 class LabDBServlet extends LabdbStack with JacksonJsonSupport {
   protected implicit val jsonFormats: Formats = DefaultFormats
 
+  before() {
+    val usesTLSOnHeroku = request.headers.getOrElse("X-Forwarded-Proto", "http") == "https"
+    if (!usesTLSOnHeroku && Env.isProd) {
+      val newLocation = "https://" + request.getServerName + request.getRequestURI
+      redirect(newLocation)
+    }
+  }
+
   get("*") {proxyRequest}
   post("*") {proxyRequest}
   put("*") {proxyRequest}
