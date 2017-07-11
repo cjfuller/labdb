@@ -45,7 +45,7 @@ trait LabdbStack extends ScalatraServlet {
       .map {
         // TODO(colin): is the last header what we want if there are repeated headers?
         case (key: String, values: IndexedSeq[String]) => (key, values.last)
-      }
+      } - "Content-Encoding"
 
     if (List(301, 302, 303, 307) contains result.code) {
       // For redirect, we want to grab the relative url and then return our own
