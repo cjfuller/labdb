@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 4.0.0'
+gem 'rails', '~> 4.2.0'
 gem 'protected_attributes'
 gem 'haml', '~> 4.0'
 
@@ -44,4 +44,4 @@ gem 'bio'
 
 gem 'rails_12factor', group: :production
 
-ruby '2.3.1'
+ruby '2.3.3'

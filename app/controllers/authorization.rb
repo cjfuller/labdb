@@ -14,6 +14,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
+require 'active_support/security_utils'
+require 'openssl'
+require 'time'
 
 module Authorization
 
@@ -46,7 +49,6 @@ module Authorization
 
   def auth?(auth_type_key)
     #return request.query_parameters["reauth"] != "1"
-    curr_uid = session[:user_id]
     return false if curr_uid.nil?
 
     curr_user = User.find_by_email(curr_uid)
@@ -62,8 +64,27 @@ module Authorization
     end
   end
 
+  def curr_uid
+    if request.headers["HTTP_X_LABDB_USERID"] then
+      unverified_uid = request.headers["HTTP_X_LABDB_USERID"]
+      signature_timestamp = request.headers["HTTP_X_LABDB_SIGNATURE_TIMESTAMP"]
+      signature_time = Time.iso8601(signature_timestamp)
+      curr_time = Time.new.utc
+      signature = request.headers["HTTP_X_LABDB_SIGNATURE"].downcase
+      computed_signature = OpenSSL::HMAC.hexdigest(
+        "SHA256", Labdb::Application.config.signing_key, unverified_uid + signature_timestamp)
+      if ActiveSupport::SecurityUtils.secure_compare(signature, computed_signature) && curr_time - signature_time < 5 then
+        curr = unverified_uid
+      else
+        curr = nil
+      end
+    else
+      curr = session[:user_id]
+    end
+    curr
+  end
+
   def current_user
-    curr_uid = session[:user_id]
     return curr_uid && User.find_by_email(curr_uid)
   end
 

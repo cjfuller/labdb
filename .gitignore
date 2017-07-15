@@ -16,3 +16,7 @@ node_modules
 npm-debug.log
 
 public/_s/*.js
+
+.idea
+target
+project/target
