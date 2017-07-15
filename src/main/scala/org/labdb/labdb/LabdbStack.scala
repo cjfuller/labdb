@@ -4,14 +4,15 @@ import java.time.{ZoneId, ZonedDateTime}
 import javax.servlet.http.{HttpServletRequest, HttpServletResponse}
 
 import org.scalatra._
-import org.slf4j.{Logger, LoggerFactory}
+import org.slf4j.Logger
 
 import scalaj.http.Http
 
 trait LabdbStack extends ScalatraServlet {
 
-  val logger: Logger = LoggerFactory.getLogger(getClass)
+  val logger: Logger = Config.logger
   val PROXY_SUFFIX = "-backend.labdb.io"
+  val mac = javax.crypto.Mac.getInstance("HmacSHA256")
 
   def nowUTC: ZonedDateTime = ZonedDateTime.now(ZoneId.of("Z"))
 
@@ -20,7 +21,9 @@ trait LabdbStack extends ScalatraServlet {
   def proxyPort: String = if (Env.isDev) ":3001" else ""
   def proxyProtocol: String = if (Env.isDev) "http://" else "https://"
 
-  def proxyRequest(implicit request: HttpServletRequest, response: HttpServletResponse): ActionResult = {
+  def proxyRequest(userId: Option[String])(implicit request: HttpServletRequest, response: HttpServletResponse): ActionResult = {
+    mac.reset()
+    mac.init(Config.signingKey)
     var proxiedUrl = proxyProtocol + proxyHost(request.getServerName) + proxyPort + request.getRequestURI
     val queryString = request.getQueryString
     if (queryString != null) {
@@ -31,10 +34,20 @@ trait LabdbStack extends ScalatraServlet {
     if (request.body != null && request.body.length > 0) {
       proxiedRequest = proxiedRequest.postData(request.body)
     }
-    val headersForProxyRequest = request.headers
+    var headersForProxyRequest = request.headers
       .filter {
         case (key: String, _) => !key.toLowerCase.startsWith("cf-")
       } - "X-Forwarded-For"
+
+    userId.foreach { userId: String =>
+      val ts = java.time.OffsetDateTime.now(ZoneId.of("UTC")).toString
+      val signature = javax.xml.bind.DatatypeConverter.printHexBinary(
+        mac.doFinal((userId + ts).getBytes("UTF-8")))
+      headersForProxyRequest = headersForProxyRequest
+        .updated("X-LabDB-UserId", userId)
+        .updated("X-LabDB-Signature", signature)
+        .updated("X-LabDB-Signature-Timestamp", ts)
+    }
 
     proxiedRequest = proxiedRequest
       .headers(headersForProxyRequest)
@@ -68,5 +81,14 @@ trait LabdbStack extends ScalatraServlet {
     // remove content type in case it was set through an action
     contentType = null
     resourceNotFound()
+  }
+
+  error {
+    case e: Throwable =>
+      val message: String = e.getStackTrace.foldLeft(e.getMessage) { (msg, tr) =>
+        msg + "\n" + tr.toString
+      }
+      Config.logger.error(message)
+      InternalServerError()
   }
 }
