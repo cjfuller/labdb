@@ -60,14 +60,14 @@ module StandardActions
     if sort_order == "DESC" then
       @objs = model_class.order(index_order).where(model_class.number_field_name => 0..start_id).limit(page_size)
     else
-      @objs = model_class.order(index_order).where(model_class.number_field_name => start_id..(2**32 - 1)).limit(page_size)
+      @objs = model_class.order(index_order).where(model_class.number_field_name => start_id..(2**31 - 1)).limit(page_size)
     end
   end
 
   def index
     page_size = 100
     start_id = (params[:start] or (
-      (sort_order == "DESC") and 2**64 - 1) or 0).to_i
+      (sort_order == "DESC") and 2**31 - 1) or 0).to_i
     index_all(page_size, start_id)
 
     instance_variable_set("@" + type.pluralize, @objs)
