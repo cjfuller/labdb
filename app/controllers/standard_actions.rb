@@ -133,9 +133,13 @@ module StandardActions
     params_hash = {}
 
     if next_obj then
-      redirect_to polymorphic_path(next_obj, params_hash)
+      self.status = 302
+      self.location = polymorphic_path(next_obj, params_hash)
+      self.response_body = ""
     else
-      redirect_to polymorphic_path(obj, params_hash)
+      self.status = 302
+      self.location = polymorphic_path(obj, params_hash)
+      self.response_body = ""
     end
 
   end

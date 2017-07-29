@@ -144,8 +144,13 @@ const styles = StyleSheet.create({
         marginRight: "1em",
         ...ss.elements.link,
     },
+
     itemField: {
-        padding: `${ss.sizes.paddingPx / 2}px ${ss.sizes.paddingPx}px`,
+        ':not(:last-of-type)': {
+            paddingRight: ss.sizes.paddingPx * 2,
+        },
+        paddingTop: ss.sizes.paddingPx / 2,
+        paddingBottom: ss.sizes.paddingPx / 2,
     },
     itemRow: {
         ':nth-of-type(2n)': {
@@ -169,6 +174,7 @@ const styles = StyleSheet.create({
         borderSpacing: 0,
         fontFamily: ss.fonts.content,
         fontSize: ss.sizes.fontSizeMedium,
+        textAlign: "left",
     },
 
 });
