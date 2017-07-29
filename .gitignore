@@ -20,3 +20,4 @@ public/_s/*.js
 .idea
 target
 project/target
+.vscode
