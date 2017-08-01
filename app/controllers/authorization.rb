@@ -81,6 +81,7 @@ module Authorization
     else
       curr = session[:user_id]
     end
+    logger.info("Current user is #{curr}")
     curr
   end
 
