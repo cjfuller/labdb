@@ -42,7 +42,6 @@ class ApplicationController < ActionController::Base
   end
 
   def curr_user_obj
-    curr_uid = session[:user_id]
     return nil if curr_uid.nil?
     User.find_by_email(curr_uid)
   end
