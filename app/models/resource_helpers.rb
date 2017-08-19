@@ -51,12 +51,13 @@ module ResourceHelpers
                  else
                    nil
                  end
+    item_type = if self.respond_to? :type then type else self.class.name.demodulize.downcase end
     resource_def = {
-      type: self.class.name.demodulize.downcase,
+      type: item_type,
       id: id,
       timestamp: self.send(self.timestamp_field_name).to_s,
       fieldData: field_data,
-      resourcePath: "/#{self.class.name.demodulize.pluralize.downcase}/#{id}",
+      resourcePath: "/#{item_type.pluralize}/#{id}",
       name: named_number_string,
       shortDesc: {lookup: info_field_name, inlineValue: (info_field || "").labdb_auto_link.html_safe, name: "Alias"},
       coreLinks: core_links,

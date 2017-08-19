@@ -7,3 +7,5 @@ database_short: ASDB
 database_full: StraightlabDB
 Line: ASTC
 Sample: SLS
+SeqLib: ASSL
+RnaiClone: ASRC

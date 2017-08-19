@@ -75,6 +75,9 @@ Labdb::Application.routes.draw do
     end
   end
 
+  resources :seq_libs, &common_actions
+  resources :rnai_clones, &common_actions
+
   get '/search', to: 'application#search'
 
   scope '/api/v1/m' do

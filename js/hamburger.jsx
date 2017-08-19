@@ -274,6 +274,13 @@ const Hamburger = React.createClass({
                 >
                     <span>Yeast</span>
                 </HamburgerEntry>
+                <HamburgerEntry
+                    href="/seq_libs"
+                    iconName="folder_open"
+                    interactive={true}
+                >
+                    <span>Sequence libraries</span>
+                </HamburgerEntry>
             </div>
         );
     },
