@@ -72,17 +72,20 @@ module StandardActions
 
     instance_variable_set("@" + type.pluralize, @objs)
 
-    if @objs.size == 1 then
-      redirect_to @objs[0] and return
-    end
     define_table_view_vars
     define_sort_direction
 
+    resource_name = if self.class.respond_to? :resource_name
+      self.class.resource_name
+    else
+      type
+    end
+
     @content_json = JSON.generate({
             type: "collection",
-            resourcePath: "/" + type.pluralize.downcase,
+            resourcePath: "/" + resource_name.pluralize.downcase,
             items: @objs.map(&:as_resource_def),
-            objectType: type,
+            objectType: resource_name.pluralize,
             numberFieldName: model_class.number_field_name
     })
     @search_results = JSON.generate([]);
