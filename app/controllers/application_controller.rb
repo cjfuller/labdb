@@ -118,7 +118,7 @@ class ApplicationController < ActionController::Base
     end
     # TODO: don't hardcode these
     model_classes = [
-      Plasmid, Oligo, Bacterium, Sample, Antibody, Line, Yeaststrain
+      Plasmid, Oligo, Bacterium, Sample, Antibody, Line, Yeaststrain, SeqLib, RnaiClone
     ]
     model_classes = model_classes.select { |t| types.include? t.name } if types
     model_classes.map do |cls|
@@ -144,7 +144,6 @@ class ApplicationController < ActionController::Base
         results += partial_results
       end
     end
-    redirect_to results[0] if results.size == 1
     resources = results.map(&:as_resource_def)
     # TODO: icky hack to sort by date then id; fix.
     resources.sort_by! { |r| r[:timestamp] || (Date.new(1800, 1, 1) + r[:id].days) }.reverse!
