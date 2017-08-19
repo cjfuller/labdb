@@ -254,7 +254,6 @@ const Navbar = React.createClass({
                 "TC",
                 "Yeast",
                 "SeqLib",
-                "RNAiClone",
             ],
             navlinks: {
                 Plasmids: "/plasmids",
@@ -265,7 +264,6 @@ const Navbar = React.createClass({
                 TC: "/lines",
                 Yeast: "/yeaststrains",
                 SeqLib: "/seq_libs",
-                RNAiClone: "/rnai_clones",
             },
         };
     },
