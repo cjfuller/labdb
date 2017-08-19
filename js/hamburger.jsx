@@ -265,7 +265,7 @@ const Hamburger = React.createClass({
                     iconName="folder_open"
                     interactive={true}
                 >
-                    <span>TC</span>
+                    <span>Worms</span>
                 </HamburgerEntry>
                 <HamburgerEntry
                     href="/yeaststrains"
@@ -273,6 +273,13 @@ const Hamburger = React.createClass({
                     interactive={true}
                 >
                     <span>Yeast</span>
+                </HamburgerEntry>
+                <HamburgerEntry
+                    href="/rnai_clones"
+                    iconName="folder_open"
+                    interactive={true}
+                >
+                    <span>RNAi clones</span>
                 </HamburgerEntry>
             </div>
         );
