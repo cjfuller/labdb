@@ -14,7 +14,6 @@ const Types = {
     Antibody: "Antibodies",
     Line: "TC",
     Yeaststrain: "Yeast",
-    SeqLib: "SeqLib",
     RnaiClone: "RNAi clone",
 };
 
