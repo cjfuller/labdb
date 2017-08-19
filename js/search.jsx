@@ -12,9 +12,8 @@ const Types = {
     Bacterium: "Bacteria",
     Sample: "Samples",
     Antibody: "Antibodies",
-    Line: "TC",
-    Yeaststrain: "Yeast",
-    RnaiClone: "RNAi clone",
+    Line: "Worms",
+    RnaiClone: "RNAi clones",
 };
 
 const TypeSelector = React.createClass({
