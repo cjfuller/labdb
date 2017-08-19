@@ -279,7 +279,7 @@ const Hamburger = React.createClass({
                     iconName="folder_open"
                     interactive={true}
                 >
-                    <span>Sequence libraries</span>
+                    <span>Sequencing libraries</span>
                 </HamburgerEntry>
             </div>
         );
