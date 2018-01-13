@@ -79,6 +79,7 @@ Labdb::Application.routes.draw do
   resources :rnai_clones, &common_actions
 
   get '/search', to: 'application#search'
+  post '/search_result', to: 'application#search_result'
 
   scope '/api/v1/m' do
     get '/plasmid_map/:id', to: 'api#plasmid_map'

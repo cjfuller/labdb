@@ -219,7 +219,7 @@ DEPENDENCIES
   omniauth
   omniauth-browserid
   omniauth-openid
-  pg
+  pg (~> 0.21.0)
   protected_attributes
   pry
   pry-doc
@@ -240,4 +240,4 @@ RUBY VERSION
    ruby 2.3.3p222
 
 BUNDLED WITH
-   1.15.0
+   1.16.1
