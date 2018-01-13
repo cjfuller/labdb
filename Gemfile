@@ -4,7 +4,7 @@ gem 'rails', '~> 4.2.0'
 gem 'protected_attributes'
 gem 'haml', '~> 4.0'
 
-gem 'pg'
+gem 'pg', '~> 0.21.0'
 
 gem 'redcarpet', '~> 2.2.2'
 

@@ -152,4 +152,19 @@ class ApplicationController < ActionController::Base
     @user_name = current_user.name
     @user_auth = auth_scope
   end
+
+  def search_result
+    resources = params[:items].map do |item|
+      model_type = item[0]
+      model_id = item[1]
+      cls = model_type.classify.constantize
+      cls.find(model_id).as_resource_def
+    end
+    # TODO: icky hack to sort by date then id; fix.
+    resources.sort_by! { |r| r[:timestamp] || (Date.new(1800, 1, 1) + r[:id].days) }.reverse!
+    @search_results = JSON.generate(resources)
+    @content_json = JSON.generate([])
+    @user_name = current_user.name
+    @user_auth = auth_scope
+  end
 end
