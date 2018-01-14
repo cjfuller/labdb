@@ -73,7 +73,7 @@ module Authorization
       signature = request.headers["HTTP_X_LABDB_SIGNATURE"].downcase
       computed_signature = OpenSSL::HMAC.hexdigest(
         "SHA256", Labdb::Application.config.signing_key, unverified_uid + signature_timestamp)
-      if ActiveSupport::SecurityUtils.secure_compare(signature, computed_signature) && curr_time - signature_time < 5 then
+      if ActiveSupport::SecurityUtils.secure_compare(signature, computed_signature) && curr_time - signature_time < 60 then
         curr = unverified_uid
       else
         curr = nil
