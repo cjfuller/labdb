@@ -156,11 +156,18 @@ class ApplicationController < ActionController::Base
   end
 
   def search_result
-    resources = params[:items].map do |item|
+    resources = (params[:items] || []).map do |item|
       model_type = item[0]
       model_id = item[1]
       cls = model_type.classify.constantize
       cls.find(model_id).as_resource_def
+    end
+    # We also check the raw search term to see if it was a direct-linked item.
+    search_term = params[:term]
+    linked_term = LinkableString.new(search_term)
+    maybe_linked_items = linked_term.item_links(items: true)
+    if maybe_linked_items then
+      resources += maybe_linked_items.map(&:as_resource_def)
     end
     # TODO: icky hack to sort by date then id; fix.
     resources.sort_by! { |r| r[:timestamp] || (Date.new(1800, 1, 1) + r[:id].days) }.reverse!
