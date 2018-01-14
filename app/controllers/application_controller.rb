@@ -15,7 +15,9 @@ class ApplicationController < ActionController::Base
   include Searching
   include Authorization
 
-  protect_from_forgery
+  # While search_result is a POST, this is just so that we can include large
+  # request body; it's a non-mutative route.
+  protect_from_forgery except: :search_result
 
   DATABASE_SYSTEM_NAME = Naming.name_for('database_full')
   DATABASE_SYSTEM_SHORT_NAME = Naming.name_for('database_short')
