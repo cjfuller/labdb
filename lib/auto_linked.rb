@@ -67,7 +67,7 @@ class LinkableString
 
   def sub_labdb_links
     self.item_links.each do |lnk|
-      @str = @str.gsub(lnk[0], "<a class=\"auto-link\" href=\"#{lnk[1]}\">#{lnk[0]}</a>")
+      @str = @str.gsub(/#{lnk[0]}(?!\d)/, "<a class=\"auto-link\" href=\"#{lnk[1]}\">#{lnk[0]}</a>")
     end
     self
   end
