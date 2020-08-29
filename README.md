@@ -8,7 +8,9 @@ Labdb is a web-based laboratory database system for tracking objects in a biolog
 
 # License
 
-Labdb is distributed under the GNU Affero General Public License, version 3.  See the file LICENSE for the full license text.
+Labdb is copyright 2013-2020, Colin J. Fuller, and distributed under the GNU
+Affero General Public License, version 3, or (at your option) any later
+version. See the file LICENSE for the full license text.
 
 
 
