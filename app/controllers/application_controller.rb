@@ -22,9 +22,9 @@ class ApplicationController < ActionController::Base
   DATABASE_SYSTEM_NAME = Naming.name_for('database_full')
   DATABASE_SYSTEM_SHORT_NAME = Naming.name_for('database_short')
 
-  prepend_before_filter :set_user_vars
-  prepend_before_filter :set_js_version
-  prepend_before_filter :force_https
+  prepend_before_action :set_user_vars
+  prepend_before_action :set_js_version
+  prepend_before_action :force_https
 
   def force_https
     if Rails.env.production?

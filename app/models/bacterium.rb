@@ -46,8 +46,6 @@ class Bacterium < ActiveRecord::Base
 
   Fields = @headings.keys
 
-  attr_accessible(*Fields)
-
   def linked_properties
     [:plasmid_number]
   end

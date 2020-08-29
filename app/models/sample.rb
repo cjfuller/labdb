@@ -28,8 +28,6 @@ class Sample < ActiveRecord::Base
 
   Fields = @headings.keys
 
-  attr_accessible(*Fields)
-
   def exportable_fields
     Fields
   end

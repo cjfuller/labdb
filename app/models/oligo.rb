@@ -28,7 +28,6 @@ class Oligo < ActiveRecord::Base
   }
 
   Fields = @headings.keys
-  attr_accessible(*Fields)
 
   def get_linked(_propertyname)
     nil

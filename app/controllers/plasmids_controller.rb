@@ -19,8 +19,8 @@ class PlasmidsController < ApplicationController
 
   include StandardActions
 
-  before_filter :antibiotic_params_from_form_for_create, only: [:create]
-  before_filter :antibiotic_params_from_form, only: [:update]
+  before_action :antibiotic_params_from_form_for_create, only: [:create]
+  before_action :antibiotic_params_from_form, only: [:update]
 
   @@plasmid_number_mutex = Mutex.new
 

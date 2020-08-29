@@ -27,7 +27,7 @@ module Authorization
 
   def self.included(base)
     base.class_exec do
-      before_filter :require_authorization
+      before_action :require_authorization
       helper_method :auth?
     end
   end

@@ -1,14 +1,11 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 4.2.0'
-gem 'protected_attributes'
-gem 'haml', '~> 4.0'
+gem 'rails', '~> 6.0.3.2'
+gem 'haml', '~> 5.1.2'
 
-gem 'pg', '~> 0.21.0'
+gem 'pg', '~> 1.2.3'
 
-gem 'redcarpet', '~> 2.2.2'
-
-gem 'uglifier', '>= 1.0.3'
+gem 'redcarpet', '~> 3.5.0'
 
 group :test do
 	gem 'rake'
@@ -16,8 +13,7 @@ end
 
 group :development, :test do
 	gem 'rspec'
-	gem 'rspec-rails', '~> 3'
-  gem 'konacha'
+	gem 'rspec-rails', '~> 4.0.1'
   gem 'pry-rails'
   gem 'pry'
   gem 'pry-doc'
@@ -27,14 +23,14 @@ group :development, :test do
   gem 'trollop'
 end
 
-gem 'bcrypt-ruby', '~> 3.0.0'
+gem 'bcrypt-ruby', '~> 3.1.5'
 
 gem 'omniauth'
 
 gem 'omniauth-openid'
 gem 'omniauth-browserid'
 
-gem 'puma', '~> 2.7'
+gem 'puma', '~> 4.3.5'
 
 gem 'facets', require: false
 
@@ -42,6 +38,4 @@ gem 'racc'
 
 gem 'bio'
 
-gem 'rails_12factor', group: :production
-
-ruby '2.3.3'
+ruby '2.7.1'

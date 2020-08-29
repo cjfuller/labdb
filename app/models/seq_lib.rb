@@ -32,8 +32,6 @@ class SeqLib < ActiveRecord::Base
 
   Fields = @headings.keys
 
-  attr_accessible(*Fields)
-
   def type
     'seq_lib'
   end

@@ -17,8 +17,8 @@
 
 class UsersController < ApplicationController
 
-  before_filter :require_admin
-  before_filter :safeguard_self_modification, except: [:index]
+  before_action :require_admin
+  before_action :safeguard_self_modification, except: [:index]
 
   include StandardActions
 

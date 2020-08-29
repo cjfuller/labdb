@@ -19,7 +19,7 @@ class LinesController < ApplicationController
 
   include StandardActions
 
-  before_filter :generate_location_params, only: [:create, :update]
+  before_action :generate_location_params, only: [:create, :update]
 
   def obj_tag
     self.class.model_class.obj_tag

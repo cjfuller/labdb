@@ -22,7 +22,6 @@ class User < ActiveRecord::Base
   include ResourceHelpers
 
   Fields = :name, :email, :auth_read, :auth_write, :auth_admin, :notes
-  attr_accessible(*Fields)
 
   has_one :search
 

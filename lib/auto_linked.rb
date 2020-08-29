@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-require 'action_view/helpers/url_helper'
+require 'action_dispatch/routing/url_for'
 
 require 'object_naming'
 

@@ -1,5 +1,4 @@
 class Search < ActiveRecord::Base
-  attr_accessible :expires, :result, :searchparams, :user_id
 
   belongs_to :user
 

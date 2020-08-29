@@ -15,8 +15,8 @@ class Object
 end
 
 class ApiController < ApplicationController
-  skip_before_filter :require_authorization, only: [:verify, :logout]
-  before_filter :safeguard_self_modification, only: [:delete, :update]
+  skip_before_action :require_authorization, only: [:verify, :logout]
+  before_action :safeguard_self_modification, only: [:delete, :update]
 
   def safeguard_self_modification
     return unless params[:id]
@@ -52,7 +52,7 @@ class ApiController < ApplicationController
     cls = params[:model].classify.constantize
     @obj = cls.find(params[:id])
     filtered_attrs = params.select { |k| cls::Fields.include? k.to_sym }
-    @obj.update_attributes(filtered_attrs)
+    @obj.update_attributes(filtered_attrs.permit(cls::Fields))
     render json: {}
   end
 

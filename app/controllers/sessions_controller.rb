@@ -19,7 +19,7 @@ require 'number_assignment'
 
 class SessionsController < ApplicationController
 
-  skip_before_filter :require_authorization, :only => [:create, :failure, :destroy]
+  skip_before_action :require_authorization, :only => [:create, :failure, :destroy]
 
   def new
   end

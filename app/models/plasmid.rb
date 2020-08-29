@@ -39,8 +39,6 @@ class Plasmid < ActiveRecord::Base
 
   Fields = @headings.keys
 
-  attr_accessible(*Fields)
-
   attr_accessor :search_by_regex
 
   def calculate_size

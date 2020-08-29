@@ -63,8 +63,6 @@ class Line < ActiveRecord::Base
     :stock_date
   ]
 
-  attr_accessible(*Fields)
-
   class InventoryItem
     Fields = [:location, :count, :person, :date, :clone]
     attr_accessor(*Fields)
