@@ -24,6 +24,23 @@ class LinkableString
     matches
   end
 
+  def lazy_item_links()
+    matches = []
+    Naming::NAMES_LOOKUP.each_key do |k|
+      scan_matchobjs(/#{k}N?\W*(\d+)/) do |m|
+        matches << [
+          m[0], url_for(
+            controller: "application",
+            action: :show_by_name,
+            name: m[0],
+            only_path: true,
+          )
+        ]
+      end
+    end
+    matches
+  end
+
   def item_links(items: false)
     matches = []
     Naming::NAMES_LOOKUP.each_key do |k|
@@ -50,7 +67,7 @@ class LinkableString
   end
 
   def sub_labdb_links
-    self.item_links.each do |lnk|
+    self.lazy_item_links.each do |lnk|
       @str = @str.gsub(/#{lnk[0]}(?!\d)/, "<a class=\"auto-link\" href=\"#{lnk[1]}\">#{lnk[0]}</a>")
     end
     self
@@ -71,5 +88,10 @@ class String
   def item_links(items: false)
     ls = LinkableString.new(self)
     ls.item_links(items: items)
+  end
+
+  def lazy_item_links()
+    ls = LinkableString.new(self)
+    ls.lazy_item_links()
   end
 end

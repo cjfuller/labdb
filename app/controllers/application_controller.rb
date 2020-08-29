@@ -146,7 +146,7 @@ class ApplicationController < ActionController::Base
         results += partial_results
       end
     end
-    resources = results.map(&:as_resource_def)
+    resources = results.map { |r| r.as_resource_def(include_sequence: false)}
     # TODO: icky hack to sort by date then id; fix.
     resources.sort_by! { |r| r[:timestamp] || (Date.new(1800, 1, 1) + r[:id].days) }.reverse!
     @search_results = JSON.generate(resources)
@@ -175,5 +175,15 @@ class ApplicationController < ActionController::Base
     @content_json = JSON.generate([])
     @user_name = current_user.name
     @user_auth = auth_scope
+  end
+
+  def show_by_name
+    item_name = params[:name]
+    return head(:bad_request) if item_name.nil?
+    result = item_name.item_links(items: true)
+    return head(:not_found) if result.empty?
+    return head(:bad_request) if result.size != 1
+    single_result = result[0]
+    redirect_to single_result
   end
 end

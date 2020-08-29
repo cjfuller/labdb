@@ -7,6 +7,7 @@ Labdb::Application.routes.draw do
   match "/auth/failure", to: "sessions#failure", via: [:get, :post]
 
   get "/quick_search", to: "quick_search#do_quick_search"
+  get "/by_name/:name", to: "application#show_by_name"
 
   common_actions = proc do
     collection do

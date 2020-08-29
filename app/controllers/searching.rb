@@ -1,3 +1,5 @@
+require "logger"
+
 module Searching
   REGEX_DETECTION_REGEX = /\A\/.*\/(i?)\Z/
 
@@ -38,6 +40,18 @@ module Searching
     regex_conditions
   end
 
+  def chunked_query(query, chunk_size: 1000)
+    offset = 0
+    more = true
+    while more
+      logger.info("chunk")
+      chunk = query.limit(chunk_size).offset(offset).to_a
+      more = !chunk.empty?
+      chunk.each { |item| yield item }
+      offset += chunk_size
+    end
+  end
+
   def process_search_query(search_params, search_class)
     preprocessed_conditions = preprocess_search_query(search_params)
     regex_conditions = generate_regex_conditions(search_params)
@@ -48,14 +62,18 @@ module Searching
 
     preliminary_list = search_class.order(index_order)
 
-    final_list = preliminary_list.select do |p|
-      regex_conditions.any? do |k, r|
+    final_list = []
+
+    chunked_query(preliminary_list) do |p|
+      if (regex_conditions.any? do |k, r|
         if p.respond_to? k
           val = p.send(k.to_s).to_s
           r.match(val)
         else
           nil
         end
+      end)
+        final_list << p
       end
     end
 

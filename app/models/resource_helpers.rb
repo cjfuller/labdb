@@ -32,16 +32,16 @@ module ResourceHelpers
   end
 
   def maybe_link_item(item)
-    if item.item_links.empty?
+    if item.lazy_item_links.empty?
       [[item, nil]]
     else
-      item.item_links
+      item.lazy_item_links
     end
   end
 
-  def as_resource_def
+  def as_resource_def(include_sequence: true)
     field_data = {}
-    exportable_fields.each { |f| field_data[f] = self.send f }
+    exportable_fields.filter { |f| include_sequence || f != :sequence }.each { |f| field_data[f] = self.send f }
     field_data[:id] = id
     # TODO: this doesn't work for items where the core alt field is not a link!
     core_links = if self.respond_to? :core_alt_field and not [:depleted].include? self.core_alt_field_name
@@ -59,10 +59,13 @@ module ResourceHelpers
       fieldData: field_data,
       resourcePath: "/#{item_type.pluralize}/#{id}",
       name: named_number_string,
-      shortDesc: { lookup: info_field_name, inlineValue: (info_field || "").labdb_auto_link.html_safe, name: "Alias" },
+      shortDesc: {
+        lookup: info_field_name,
+         inlineValue: (info_field || "").labdb_auto_link.html_safe,
+          name: "Alias" },
       coreLinks: core_links,
       coreInfoSections: core_info,
-      sequenceInfo: sequence_info,
+      sequenceInfo: (if include_sequence then sequence_info else nil end),
       supplementalFields: supplemental_info,
     }
     if self.respond_to? :inventory
