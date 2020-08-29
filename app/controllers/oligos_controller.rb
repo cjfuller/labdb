@@ -16,7 +16,6 @@
 #++
 
 class OligosController < ApplicationController
-
   include StandardActions
 
   def self.get_heading(var_name)
@@ -40,11 +39,8 @@ class OligosController < ApplicationController
   end
 
   def define_table_view_vars
-
-    @table_columns = {sort: :oligo_number, others: [:date_entered, :entered_by, :oligoalias]}
+    @table_columns = { sort: :oligo_number, others: [:date_entered, :entered_by, :oligoalias] }
     @controller = self.class
     @table_objects = @oligos
-
   end
-
 end

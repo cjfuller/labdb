@@ -16,7 +16,6 @@
 #++
 
 module Headings
-
   def self.included(base)
     base.class_eval do
       def self.get_heading(var_name)
@@ -36,5 +35,4 @@ module Headings
   def obj_tag
     Naming.name_for(self.class)
   end
-
 end

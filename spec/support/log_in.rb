@@ -16,11 +16,11 @@
 #++
 
 def log_in_address(session_obj, address)
-  session_obj[:user_id]= address
+  session_obj[:user_id] = address
 end
 
 def log_in(session_obj)
-	log_in_admin(session_obj)
+  log_in_admin(session_obj)
 end
 
 def log_in_admin(session_obj)

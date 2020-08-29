@@ -1,9 +1,9 @@
-require 'exporters'
-require 'numbered'
-require 'described'
-require 'headings'
-require 'dna_sequence'
-require 'resource_helpers'
+require "exporters"
+require "numbered"
+require "described"
+require "headings"
+require "dna_sequence"
+require "resource_helpers"
 
 class Yeaststrain < ActiveRecord::Base
   include Exportable
@@ -16,18 +16,18 @@ class Yeaststrain < ActiveRecord::Base
 
   @headings = {
     strain_number: "#{obj_tag} Number",
-    date_entered: 'Date entered',
-    entered_by: 'Entered by',
-    notebook: 'Notebook',
-    comments: 'Description',
+    date_entered: "Date entered",
+    entered_by: "Entered by",
+    notebook: "Notebook",
+    comments: "Description",
     plasmidnumber: "#{Naming.name_for(Plasmid)} Number",
-    strain_bkg: 'Strain background',
-    genotype: 'Genotype',
-    antibiotic: 'Antibiotics',
-    location: 'Location in freezer',
-    sequence: 'Sequence',
-    species: 'Species',
-    strainalias: 'Alias',
+    strain_bkg: "Strain background",
+    genotype: "Genotype",
+    antibiotic: "Antibiotics",
+    location: "Location in freezer",
+    sequence: "Sequence",
+    species: "Species",
+    strainalias: "Alias",
   }
 
   Fields = @headings.keys
@@ -71,7 +71,7 @@ class Yeaststrain < ActiveRecord::Base
 
   def core_alt_field
     numbers = get_linked_number_fields(core_alt_field_name) || []
-    numbers.map { |n| Naming.name_for(Plasmid) + ' ' + n.to_s }
+    numbers.map { |n| Naming.name_for(Plasmid) + " " + n.to_s }
   end
 
   def core_alt_link
@@ -82,19 +82,19 @@ class Yeaststrain < ActiveRecord::Base
   def core_info
     [
       {
-        name: 'Strain information',
+        name: "Strain information",
         fields: fields([:species, :strain_bkg, :genotype, :antibiotic]),
       },
       {
-        name: 'Description',
+        name: "Description",
         preformatted: true,
         lookup: :comments,
         single: true,
         inlineValue: Labdb::Application::MARKDOWN
-          .render(comments || '')
+          .render(comments || "")
           .labdb_auto_link
           .html_safe,
-      }
+      },
     ]
   end
 

@@ -1,8 +1,8 @@
-require 'exporters'
-require 'numbered'
-require 'described'
-require 'headings'
-require 'resource_helpers'
+require "exporters"
+require "numbered"
+require "described"
+require "headings"
+require "resource_helpers"
 
 class SeqLib < ActiveRecord::Base
   include Exportable
@@ -13,27 +13,27 @@ class SeqLib < ActiveRecord::Base
   include ResourceHelpers
 
   @headings = {
-    genome: 'Genome',
-    method: 'Method',
-    entered_by: 'Entered by',
-    project: 'Project',
-    storage_location: 'Storage location',
-    concentration: 'Concentration',
-    size_distribution: 'Size distribution',
-    index_id: 'Index ID',
-    index_seq: 'Index sequence',
-    description: 'Description',
-    linked_items: 'Linked items',
-    alias: 'Alias',
-    notebook: 'Notebook',
+    genome: "Genome",
+    method: "Method",
+    entered_by: "Entered by",
+    project: "Project",
+    storage_location: "Storage location",
+    concentration: "Concentration",
+    size_distribution: "Size distribution",
+    index_id: "Index ID",
+    index_seq: "Index sequence",
+    description: "Description",
+    linked_items: "Linked items",
+    alias: "Alias",
+    notebook: "Notebook",
     number: "#{obj_tag} number",
-    created_at: 'Date entered'
+    created_at: "Date entered",
   }
 
   Fields = @headings.keys
 
   def type
-    'seq_lib'
+    "seq_lib"
   end
 
   def exportable_fields
@@ -63,29 +63,29 @@ class SeqLib < ActiveRecord::Base
   def core_info
     [
       {
-        name: 'Core info',
-        fields: fields([:genome, :method, :project, :storage_location, :concentration, :size_distribution, :index_id, :index_seq])
+        name: "Core info",
+        fields: fields([:genome, :method, :project, :storage_location, :concentration, :size_distribution, :index_id, :index_seq]),
       },
       {
-        name: 'Description',
+        name: "Description",
         preformatted: true,
         lookup: :description,
         single: true,
         inlineValue: Labdb::Application::MARKDOWN
-          .render(description || '')
+          .render(description || "")
           .labdb_auto_link
-          .html_safe
+          .html_safe,
       },
       {
-        name: 'Linked items',
+        name: "Linked items",
         preformatted: true,
         lookup: :linked_items,
         single: true,
         inlineValue: Labdb::Application::MARKDOWN
-          .render(linked_items || '')
+          .render(linked_items || "")
           .labdb_auto_link
-          .html_safe
-      }
+          .html_safe,
+      },
     ]
   end
 

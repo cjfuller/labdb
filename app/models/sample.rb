@@ -1,9 +1,9 @@
-require 'exporters'
-require 'numbered'
-require 'described'
-require 'object_naming'
-require 'headings'
-require 'resource_helpers'
+require "exporters"
+require "numbered"
+require "described"
+require "object_naming"
+require "headings"
+require "resource_helpers"
 
 class Sample < ActiveRecord::Base
   include Exportable
@@ -14,16 +14,16 @@ class Sample < ActiveRecord::Base
   include ResourceHelpers
 
   @headings = {
-    date_entered: 'Date',
-    depleted: 'Sample depleted?',
-    description: 'Description',
-    entered_by: 'Entered by',
-    linked_items: 'Linked to',
-    notebook: 'Notebook',
-    sample_alias: 'Alias',
+    date_entered: "Date",
+    depleted: "Sample depleted?",
+    description: "Description",
+    entered_by: "Entered by",
+    linked_items: "Linked to",
+    notebook: "Notebook",
+    sample_alias: "Alias",
     sample_number: "#{obj_tag} number",
-    sample_type: 'Sample type',
-    storage_type: 'Storage location',
+    sample_type: "Sample type",
+    storage_type: "Storage location",
   }
 
   Fields = @headings.keys
@@ -53,7 +53,7 @@ class Sample < ActiveRecord::Base
   end
 
   def core_alt_field
-    self.depleted ? ['Depleted'] : []
+    self.depleted ? ["Depleted"] : []
   end
 
   def self.core_alt_field_name
@@ -64,44 +64,44 @@ class Sample < ActiveRecord::Base
   end
 
   def sample_links
-    (linked_items || '')
-      .split(',')
+    (linked_items || "")
+      .split(",")
       .map(&:strip)
       .map { |item| [item, item.item_links(items: true).first] }
       .map do |item|
-        {
-          link_text: item[0],
-          link_desc: (item[1] && item[1].send(item[1].class.info_field_name)) || ""
-        }
-      end
+      {
+        link_text: item[0],
+        link_desc: (item[1] && item[1].send(item[1].class.info_field_name)) || "",
+      }
+    end
   end
 
   def core_info
     [
       {
-        name: 'Sample storage',
-        fields: fields([:sample_type, :storage_type])
+        name: "Sample storage",
+        fields: fields([:sample_type, :storage_type]),
       },
       {
-        name: 'Description',
+        name: "Description",
         preformatted: true,
         lookup: :description,
         single: true,
         inlineValue: Labdb::Application::MARKDOWN
-          .render(description || '')
+          .render(description || "")
           .labdb_auto_link
-          .html_safe
+          .html_safe,
       },
       {
-        name: 'Linked items',
+        name: "Linked items",
         preformatted: true,
         lookup: :linked_items,
         inlineValue: (sample_links || [])
-          .map { |lnk| lnk[:link_text] + ': ' + lnk[:link_desc] }
-          .join('<br />')
+          .map { |lnk| lnk[:link_text] + ": " + lnk[:link_desc] }
+          .join("<br />")
           .labdb_auto_link
-          .html_safe
-      }
+          .html_safe,
+      },
     ]
   end
 

@@ -1,12 +1,12 @@
-require 'net/http'
+require "net/http"
 
 class Object
   # TODO: seriously, don't do this.
   def update_dynamic_field(field_name_fn_name, value)
-    if self.respond_to?(field_name_fn_name) then
+    if self.respond_to?(field_name_fn_name)
       fname = self.send(field_name_fn_name)
       self.send(fname.to_s + "=", value)
-    elsif self.class.respond_to?(field_name_fn_name) then
+    elsif self.class.respond_to?(field_name_fn_name)
       fname = self.class.send(field_name_fn_name)
       self.send(fname.to_s + "=", value)
     end
@@ -23,7 +23,7 @@ class ApiController < ApplicationController
     cls = params[:model].classify.constantize
     return unless cls == User
     @user = User.find(params[:id])
-    if @user == curr_user_obj then
+    if @user == curr_user_obj
       return head :conflict
     end
   end
@@ -42,7 +42,7 @@ class ApiController < ApplicationController
       type: "collection",
       resourcePath: "/" + params[:model].pluralize.downcase,
       items: objs.map(&:as_resource_def),
-      numberFieldName: objs[0].number_field_name
+      numberFieldName: objs[0].number_field_name,
     }
     render json: content_json
   end
@@ -93,11 +93,11 @@ class ApiController < ApplicationController
     Net::HTTP.start(endpoint.host, endpoint.port, use_ssl: true) do |http|
       request = Net::HTTP::Get.new endpoint
       response = http.request request
-      if response.code == '200' then
+      if response.code == "200"
         info = JSON.parse(response.body)
-        if info["aud"].include? APP_ID and info["email_verified"] == "true" then
+        if info["aud"].include? APP_ID and info["email_verified"] == "true"
           user = User.find_by_email(info["email"])
-          if user then
+          if user
             session[:user_id] = user.email
             return head :no_content
           end
@@ -119,12 +119,12 @@ class ApiController < ApplicationController
   end
 
   def import
-    files = params.select { |k, _| k.to_s.starts_with? 'file_' }
+    files = params.select { |k, _| k.to_s.starts_with? "file_" }
                   .values
                   .map { |f| JSON.parse(f.read) }
 
     make_reference = proc do |item|
-      "Originally #{item['name']} from the #{item['database']}."
+      "Originally #{item["name"]} from the #{item["database"]}."
     end
 
     files.each do |f|
@@ -132,9 +132,8 @@ class ApiController < ApplicationController
       item = f.values[0]
       cls = type.constantize
       description = cls.description_field_name.to_s
-      item[description] = (
-        (item[description] || '') + "\n\n\n" + make_reference.call(item))
-      keys_to_delete = ['database', 'name'] + [cls.number_field_name.to_s]
+      item[description] = ((item[description] || "") + "\n\n\n" + make_reference.call(item))
+      keys_to_delete = ["database", "name"] + [cls.number_field_name.to_s]
       item.delete_if { |k, _| keys_to_delete.include?(k) }
       obj = cls.new
       new_item_setup(obj, should_render: false, should_save: false)

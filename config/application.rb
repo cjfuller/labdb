@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-require File.expand_path('../boot', __FILE__)
+require File.expand_path("../boot", __FILE__)
 
 require "active_record/railtie"
 require "active_storage/engine"

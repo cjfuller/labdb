@@ -16,7 +16,6 @@
 #++
 
 module ApplicationHelper
-
   def readonly?
     @readonly
   end
@@ -25,5 +24,4 @@ module ApplicationHelper
     @tab_index ||= 0
     @tab_index += 1
   end
-
 end

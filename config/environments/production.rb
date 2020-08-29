@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-require 'logging'
+require "logging"
 
 Labdb::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
@@ -26,7 +26,7 @@ Labdb::Application.configure do
   config.cache_classes = true
 
   # Full error reports are disabled and caching is turned on
-  config.consider_all_requests_local       = false
+  config.consider_all_requests_local = false
   config.action_controller.perform_caching = true
 
   config.serve_static_files = true
@@ -67,5 +67,5 @@ Labdb::Application.configure do
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
 
-  config.js_version = ENV['JS_VERSION']
+  config.js_version = ENV["JS_VERSION"]
 end

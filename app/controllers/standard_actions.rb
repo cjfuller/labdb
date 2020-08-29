@@ -39,10 +39,10 @@ module StandardActions
   end
 
   def sort_order
-    if params[:sort_order] == 'ASC' then
-      'ASC'
+    if params[:sort_order] == "ASC"
+      "ASC"
     else
-      'DESC'
+      "DESC"
     end
   end
 
@@ -57,17 +57,16 @@ module StandardActions
   end
 
   def index_all(page_size, start_id)
-    if sort_order == "DESC" then
+    if sort_order == "DESC"
       @objs = model_class.order(index_order).where(model_class.number_field_name => 0..start_id).limit(page_size)
     else
-      @objs = model_class.order(index_order).where(model_class.number_field_name => start_id..(2**31 - 1)).limit(page_size)
+      @objs = model_class.order(index_order).where(model_class.number_field_name => start_id..(2 ** 31 - 1)).limit(page_size)
     end
   end
 
   def index
     page_size = 100
-    start_id = (params[:start] or (
-      (sort_order == "DESC") and 2**31 - 1) or 0).to_i
+    start_id = (params[:start] or ((sort_order == "DESC") and 2 ** 31 - 1) or 0).to_i
     index_all(page_size, start_id)
 
     instance_variable_set("@" + type.pluralize, @objs)
@@ -76,22 +75,22 @@ module StandardActions
     define_sort_direction
 
     resource_name = if self.class.respond_to? :resource_name
-      self.class.resource_name
-    else
-      type
-    end
+        self.class.resource_name
+      else
+        type
+      end
 
     @content_json = JSON.generate({
-            type: "collection",
-            resourcePath: "/" + resource_name.pluralize.downcase,
-            items: @objs.map(&:as_resource_def),
-            objectType: resource_name.pluralize,
-            numberFieldName: model_class.number_field_name
+      type: "collection",
+      resourcePath: "/" + resource_name.pluralize.downcase,
+      items: @objs.map(&:as_resource_def),
+      objectType: resource_name.pluralize,
+      numberFieldName: model_class.number_field_name,
     })
-    @search_results = JSON.generate([]);
+    @search_results = JSON.generate([])
     @user_name = current_user.name
     @user_auth = auth_scope
-    render 'layouts/application.html.haml'
+    render "layouts/application.html.haml"
   end
 
   def show
@@ -104,8 +103,8 @@ module StandardActions
     @content_json = @obj.as_json.html_safe
     @user_name = current_user.name
     @user_auth = auth_scope
-    @search_results = JSON.generate([]);
-    render 'layouts/application.html.haml'
+    @search_results = JSON.generate([])
+    render "layouts/application.html.haml"
   end
 
   def auto_fill_generated_fields
@@ -135,7 +134,7 @@ module StandardActions
   def handle_next_previous_redirection(next_obj, obj)
     params_hash = {}
 
-    if next_obj then
+    if next_obj
       self.status = 302
       self.location = polymorphic_path(next_obj, params_hash)
       self.response_body = ""
@@ -144,12 +143,11 @@ module StandardActions
       self.location = polymorphic_path(obj, params_hash)
       self.response_body = ""
     end
-
   end
 
   def find_next_or_previous_obj(direction)
-    num_comparators = {next: :>, previous: :<}
-    sort_direction = {next: "ASC", previous: "DESC"}
+    num_comparators = { next: :>, previous: :< }
+    sort_direction = { next: "ASC", previous: "DESC" }
     obj = model_class.find(params[:id])
     num = obj.number_field.to_i
     next_obj = nil
@@ -166,7 +164,4 @@ module StandardActions
   def previous
     find_next_or_previous_obj(:previous)
   end
-
 end
-
-

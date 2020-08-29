@@ -16,7 +16,6 @@
 #++
 
 class YeaststrainsController < ApplicationController
-  
   include StandardActions
 
   def obj_tag
@@ -40,12 +39,8 @@ class YeaststrainsController < ApplicationController
   end
 
   def define_table_view_vars
-
-    @table_columns = {sort: :strain_number, others: [:date_entered, :entered_by, :species, :strainalias]}
+    @table_columns = { sort: :strain_number, others: [:date_entered, :entered_by, :species, :strainalias] }
     @controller = self.class
     @table_objects = @yeaststrains
-
   end
-
 end
-

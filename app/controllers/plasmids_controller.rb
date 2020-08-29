@@ -16,7 +16,6 @@
 #++
 
 class PlasmidsController < ApplicationController
-
   include StandardActions
 
   before_action :antibiotic_params_from_form_for_create, only: [:create]
@@ -45,7 +44,7 @@ class PlasmidsController < ApplicationController
   end
 
   def define_table_view_vars
-    @table_columns = {sort: :number, others: [:date_entered, :enteredby, :alias, :strainnumbers]}
+    @table_columns = { sort: :number, others: [:date_entered, :enteredby, :alias, :strainnumbers] }
     @controller = self.class
     @table_objects = @plasmids
   end
@@ -66,12 +65,11 @@ class PlasmidsController < ApplicationController
     params[:plasmid][:antibiotic] = antibiotic_string
   end
 
-
   def fix_antibiotic_params(param_hash)
     abs = Plasmid.get_antibiotics
     newparams = Hash.new
     param_hash.each_key do |k|
-      unless abs.has_value?(k) then
+      unless abs.has_value?(k)
         newparams[k] = param_hash[k]
       end
     end
@@ -79,11 +77,11 @@ class PlasmidsController < ApplicationController
   end
 
   def generate_antibiotics_string(params_hash)
-    antibiotic=""
+    antibiotic = ""
     Plasmid.get_antibiotics.each_value do |v|
-      if params_hash[v] == "1" then
-        if antibiotic.length > 0 then
-          antibiotic= antibiotic + ","
+      if params_hash[v] == "1"
+        if antibiotic.length > 0
+          antibiotic = antibiotic + ","
         end
         antibiotic = antibiotic + v
       end
@@ -94,9 +92,9 @@ class PlasmidsController < ApplicationController
   def preprocess_search_query(search_params)
     antibiotics_string = generate_antibiotics_string(search_params)
     mod_search_params = fix_antibiotic_params(search_params)
-    search_params.delete_if { |e| not (mod_search_params.include?(e)) }
+    search_params.delete_if { |e| not(mod_search_params.include?(e)) }
     conditions = {}
-    if antibiotics_string != "" then
+    if antibiotics_string != ""
       conditions[:antibiotic] = antibiotics_string
     end
     conditions

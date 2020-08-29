@@ -15,63 +15,49 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-require 'psych'
-require 'csv'
+require "psych"
+require "csv"
 
 module Importers
+  def self.import_from_yaml(yaml_str)
+    loaded = Psych.load_stream(yaml_str)
 
-	def self.import_from_yaml(yaml_str)
+    objs = []
 
-		loaded = Psych.load_stream(yaml_str)
+    loaded.each do |obj_info|
+      classname = obj_info.keys[0]
 
-		objs = []
+      params = obj_info[classname]
 
-		loaded.each do |obj_info|
+      objs << Kernel.const_get(classname).new(params)
+    end
 
-			classname = obj_info.keys[0]
+    objs
+  end
 
-			params = obj_info[classname]
+  def self.import_from_csv(csv_str)
+    lines = CSV.parse(csv_str)
 
-			objs << Kernel.const_get(classname).new(params)
+    headers = lines.shift.map(&:strip).map(&:to_sym)
 
-		end
+    objs = []
 
-		objs
+    lines.each do |l|
+      l.map! { |e| e.nil? ? "" : e }
 
-	end
+      fields = l.map(&:strip)
 
+      params = {}
 
-	def self.import_from_csv(csv_str)
+      headers.each_with_index do |h, i|
+        params[h] = fields[i]
+      end
 
-		lines = CSV.parse(csv_str)
+      type = params.delete(:type)
 
-		headers = lines.shift.map(&:strip).map(&:to_sym)
+      objs << Kernel.const_get(type).new(params)
+    end
 
-		objs = []
-
-		lines.each do |l|
-
-			l.map! { |e| e.nil? ? "" : e }
-
-			fields = l.map(&:strip)
-
-			params = {}
-
-			headers.each_with_index do |h, i|
-
-				params[h] = fields[i]
-
-			end
-
-			type = params.delete(:type)
-
-			objs << Kernel.const_get(type).new(params)
-
-		end
-
-		objs
-
-	end
-
+    objs
+  end
 end
-

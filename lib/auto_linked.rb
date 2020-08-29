@@ -15,12 +15,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-require 'action_dispatch/routing/url_for'
+require "action_dispatch/routing/url_for"
 
-require 'object_naming'
+require "object_naming"
 
 class LinkableString
-
   include Rails.application.routes.url_helpers
 
   def controller
@@ -48,8 +47,8 @@ class LinkableString
       scan_matchobjs(/#{k}N?\W*(\d+)/) do |m|
         cls = Naming.named_class_for(k).constantize
         id = cls.where(cls.number_field_name => m[1]).first
-        if id then
-          if items then
+        if id
+          if items
             matches << id
           else
             matches << [
@@ -57,7 +56,9 @@ class LinkableString
                 controller: Naming.named_class_for(k).downcase.pluralize,
                 action: :show,
                 id: id,
-                only_path: true)]
+                only_path: true,
+              ),
+            ]
           end
         end
       end
@@ -75,7 +76,6 @@ class LinkableString
   def to_s
     @str
   end
-
 end
 
 class String
@@ -84,6 +84,7 @@ class String
     ls.sub_labdb_links
     ls.to_s
   end
+
   def item_links(items: false)
     ls = LinkableString.new(self)
     ls.item_links(items: items)

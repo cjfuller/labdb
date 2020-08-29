@@ -16,13 +16,12 @@
 #++
 
 describe UsersController do
-
   fixtures :users
 
-  actions = {index: :get}
+  actions = { index: :get }
 
   before :each do
-    request.env['HTTPS'] = 'on'
+    request.env["HTTPS"] = "on"
   end
 
   context "admin user" do
@@ -34,7 +33,6 @@ describe UsersController do
       get :index
       assigns(:users).size.should eq 4
     end
-
   end
 
   context "non-admin user" do
@@ -51,5 +49,3 @@ describe UsersController do
     end
   end
 end
-
-

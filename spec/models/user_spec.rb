@@ -15,8 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-describe User do 
-
+describe User do
   before :each do
     @u = User.new
     @perms = [:auth_read, :auth_write, :auth_admin]
@@ -38,5 +37,4 @@ describe User do
       @u.send(perm).should be false
     end
   end
-
 end

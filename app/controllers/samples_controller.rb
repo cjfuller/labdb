@@ -16,7 +16,6 @@
 #++
 
 class SamplesController < ApplicationController
-  
   include StandardActions
 
   def obj_tag
@@ -40,11 +39,8 @@ class SamplesController < ApplicationController
   end
 
   def define_table_view_vars
-
-    @table_columns = {sort: :sample_number, others: [:date_entered, :entered_by, :sample_alias, :sample_type]}
+    @table_columns = { sort: :sample_number, others: [:date_entered, :entered_by, :sample_alias, :sample_type] }
     @controller = self.class
     @table_objects = @samples
-
   end
-
 end

@@ -22,10 +22,10 @@
 # Make sure the secret is at least 30 characters and all random,
 # no regular words or you'll be exposed to dictionary attacks.
 token = if Rails.env.production?
-          ENV['SECRET_TOKEN']
-        else
-          'development-token'
-        end
+    ENV["SECRET_TOKEN"]
+  else
+    "development-token"
+  end
 
 Labdb::Application.config.secret_token = token
 Labdb::Application.config.secret_key_base = token

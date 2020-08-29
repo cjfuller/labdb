@@ -14,8 +14,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
-require 'headings'
-require 'resource_helpers'
+require "headings"
+require "resource_helpers"
 
 class User < ActiveRecord::Base
   include Headings
@@ -80,12 +80,12 @@ class User < ActiveRecord::Base
 
   def core_info
     [
-      {name: "Permissions",
+      { name: "Permissions",
        fields: [
-         field(:auth_read, type: :boolean),
-         field(:auth_write, type: :boolean),
-         field(:auth_admin, type: :boolean),
-       ]},
+        field(:auth_read, type: :boolean),
+        field(:auth_write, type: :boolean),
+        field(:auth_admin, type: :boolean),
+      ] },
     ]
   end
 
@@ -97,8 +97,7 @@ class User < ActiveRecord::Base
     [
       field(:name),
       field(:email),
-      field(:notes)
+      field(:notes),
     ]
   end
-
 end

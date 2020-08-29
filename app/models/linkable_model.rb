@@ -16,7 +16,6 @@
 #++
 
 module LinkableModel
-
   def get_linked_items(klass, field, field_values)
     field_values.delete_if { |e| e == "none" }
     linked = {}
@@ -54,6 +53,4 @@ module LinkableModel
   def linkable?
     true
   end
-
 end
-

@@ -27,5 +27,3 @@ namespace :user do
     u.save
   end
 end
-
-

@@ -15,23 +15,22 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-require 'spec_helper'
+require "spec_helper"
 
 describe SessionsController do
-
   fixtures :users
 
   before :each do
-    request.env['HTTPS'] = 'on'
+    request.env["HTTPS"] = "on"
     log_in(request.session)
   end
-  
+
   it "should raise an error on get new" do
     lambda { get :new }.should raise_error
   end
 
   it "should get create" do
-    request.env['omniauth.auth']= {provider: 'google', uid: '0001', 'info' => {'email' => 'example@gmail.com', 'name' => 'First Last'}}
+    request.env["omniauth.auth"] = { provider: "google", uid: "0001", "info" => { "email" => "example@gmail.com", "name" => "First Last" } }
     get :create, provider: "google"
     response.should redirect_to "/"
   end
@@ -40,5 +39,4 @@ describe SessionsController do
     get :failure
     response.should redirect_to "/"
   end
-
 end

@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-require 'logging'
+require "logging"
 
 Labdb::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
@@ -29,7 +29,7 @@ Labdb::Application.configure do
   config.reload_classes_only_on_change = false
 
   # Show full error reports and disable caching
-  config.consider_all_requests_local       = true
+  config.consider_all_requests_local = true
   config.action_controller.perform_caching = false
 
   # Print deprecation notices to the Rails logger

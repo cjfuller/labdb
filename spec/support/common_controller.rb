@@ -16,7 +16,6 @@
 #++
 
 module CommonControllerSpecs
-
   def self.extended(base)
     base.class_exec do
       include Rails.application.routes.url_helpers
@@ -40,7 +39,7 @@ module CommonControllerSpecs
       fixtures :users, plural_class_sym
 
       before :each do
-        request.env['HTTPS'] = 'on'
+        request.env["HTTPS"] = "on"
         log_in(request.session)
         instance_variable_set(base.inst_var_name, self.send(base.plural_class_sym, :one))
       end
@@ -62,14 +61,13 @@ module CommonControllerSpecs
       it "url_for should match the correct resource" do
         plural_class = self.class.plural_class_sym.to_s
         @obj = instance_variable_get(obj_varname = "@" + model_class.to_s.downcase)
-        url_for(controller: plural_class, host: "test.host", action: :show, id: @obj.id, protocol: 'https').should eq "https://test.host/#{plural_class}/#{@obj.id}"
+        url_for(controller: plural_class, host: "test.host", action: :show, id: @obj.id, protocol: "https").should eq "https://test.host/#{plural_class}/#{@obj.id}"
       end
     end
   end
 
-
   def object_tests(model_class)
-    describe "Basic object testing" do 
+    describe "Basic object testing" do
       obj_varname = "@" + model_class.to_s.downcase
 
       before :each do
@@ -99,8 +97,8 @@ module CommonControllerSpecs
           get :export, { exportformat: f, id: instance_variable_get(obj_varname) }
           response.should be_success
 
-          if f == "yml" then
-            lambda{ YAML.load(response.body) }.should_not raise_error
+          if f == "yml"
+            lambda { YAML.load(response.body) }.should_not raise_error
           end
         end
       end
@@ -108,7 +106,6 @@ module CommonControllerSpecs
   end
 
   def navigation(model_class)
-
     obj_varname = "@" + model_class.to_s.downcase
     plural_type = model_class.to_s.downcase.pluralize
 
@@ -116,8 +113,7 @@ module CommonControllerSpecs
       @obj = instance_variable_get(obj_varname)
     end
 
-    describe "previous / next navigation" do 
-
+    describe "previous / next navigation" do
       it "should get the correct item for the next action" do
         get :next, { id: @obj }
         response.should redirect_to self.send(plural_type, :two)
@@ -130,4 +126,3 @@ module CommonControllerSpecs
     end
   end
 end
-

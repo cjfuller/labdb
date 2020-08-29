@@ -15,11 +15,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #++
 
-require 'spec_helper'
-require 'auto_linked'
+require "spec_helper"
+require "auto_linked"
 
 describe LinkableString do
-
   fixtures :oligos, :plasmids
 
   it "should identify and link an object reference" do
@@ -38,7 +37,6 @@ describe LinkableString do
 
   it "should fail gracefully when encountering a nonexistent reference" do
     ls = LinkableString.new("ASON3444992")
-    expect {ls.sub_labdb_links}.not_to raise_error
+    expect { ls.sub_labdb_links }.not_to raise_error
   end
-
 end

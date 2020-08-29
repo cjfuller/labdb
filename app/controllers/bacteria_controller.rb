@@ -16,7 +16,6 @@
 #++
 
 class BacteriaController < ApplicationController
-
   include StandardActions
 
   def obj_tag
@@ -40,23 +39,19 @@ class BacteriaController < ApplicationController
   end
 
   def define_table_view_vars
-
-    @table_columns = {sort: :strain_number, others: [:date_entered, :entered_by, :strainalias, :plasmid_number]}
+    @table_columns = { sort: :strain_number, others: [:date_entered, :entered_by, :strainalias, :plasmid_number] }
     @controller = self.class
     @table_objects = @bacteria
-
   end
 
   def append_strain_number(strain, plasmid)
-
-    if /\d+/.match(plasmid.strainnumbers) then
+    if /\d+/.match(plasmid.strainnumbers)
       plasmid.strainnumbers = plasmid.strainnumbers + ",#{strain.strain_number}"
     else
       plasmid.strainnumbers = strain.strain_number
     end
 
     plasmid.save
-
   end
 
   def copy_fields_from_plasmid(strain, plasmid)
@@ -68,11 +63,10 @@ class BacteriaController < ApplicationController
   end
 
   def create_from_plasmid
-
     plas_id = params[:plasmid_id]
 
     if plas_id.nil?
-      redirect_to controller: 'bacteria', action: :new and return
+      redirect_to controller: "bacteria", action: :new and return
     end
 
     plas = Plasmid.find(plas_id)
@@ -88,6 +82,4 @@ class BacteriaController < ApplicationController
     @obj.save
     render json: @obj.id
   end
-
-
 end
