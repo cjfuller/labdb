@@ -1,16 +1,16 @@
-const React = require("react");
-const _ = require("underscore");
-const {StyleSheet, css} = require("aphrodite");
+import React from "react";
+import _ from "underscore";
+import {StyleSheet, css} from "aphrodite";
 
-const Actions = require("./actions.js");
-const ActionExecutors = require("./action-executors.js");
-const Hamburger = require("./hamburger.jsx");
-const ItemTable = require("./itemlist.jsx");
-const ItemInfoView = require("./itemview.jsx");
-const Navbar = require("./nav.jsx");
-const PlasmidMap = require("./plasmid-map.jsx");
-const ss = require("./shared-styles.js");
-const SearchBar = require("./search.jsx");
+import * as Actions from "./actions"
+import * as ActionExecutors from "./action-executors"
+import Hamburger from "./hamburger"
+import ItemTable from "./itemlist"
+import ItemInfoView from "./itemview"
+import Navbar from "./nav"
+import PlasmidMap from "./plasmid-map"
+import ss from "./shared-styles"
+import SearchBar from "./search"
 
 const Page = React.createClass({
     propTypes: {

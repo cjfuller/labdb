@@ -1,15 +1,14 @@
-const icepick = require("icepick");
-const React = require("react");
-const ReactDOM = require("react-dom");
-const ReactRedux = require("react-redux");
-const Redux = require("redux");
-const _ = require("underscore");
-const $ = require("jquery");
+import React from "react"
+import ReactDOM from "react-dom"
+import ReactRedux from "react-redux"
+import Redux from "redux"
+import _ from "underscore"
+import $ from "jquery"
 
-const Actions = require("./actions.js");
-const ActionExecutors = require("./action-executors.js");
-const LandingPage = require("./landing.jsx");
-const Page = require("./page.jsx");
+import * as Actions from "./actions"
+import * as ActionExecutors from "./action-executors"
+import LandingPage from "./landing"
+import Page from "./page"
 
 const Data = window._labdbPrefetch;
 const Provider = ReactRedux.Provider;

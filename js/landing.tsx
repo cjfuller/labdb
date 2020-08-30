@@ -1,8 +1,8 @@
-const React = require("react");
-const {StyleSheet, css} = require("aphrodite");
-const $ = require("jquery");
+import React from "react"
+import {StyleSheet, css} from "aphrodite"
+import $ from "jquery"
 
-const ss = require("./shared-styles.js");
+import ss from "./shared-styles"
 
 const LandingPage = React.createClass({
     componentDidMount: function() {

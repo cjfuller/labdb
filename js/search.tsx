@@ -1,9 +1,9 @@
-const React = require("react");
-const {StyleSheet, css} = require("aphrodite");
+import React from "react"
+import {StyleSheet, css} from "aphrodite"
 
-const actions = require("./actions.js");
-const EditableField = require("./editable-field.jsx");
-const ss = require("./shared-styles.js");
+import * as actions from "./actions"
+import EditableField from "./editable-field"
+import ss from "./shared-styles"
 
 // TODO: determine dynamically; share code with nav
 const Types = {

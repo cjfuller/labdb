@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+      "allowSyntheticDefaultImports": true,
+      "emitDecoratorMetadata": true,
+      "esModuleInterop": true,
+      "experimentalDecorators": true,
+      "jsx": "react",
+      "lib": ["ES2019", "DOM", "ES2019.Array"],
+      "module": "commonjs",
+      "noUnusedLocals": true,
+      "skipLibCheck": true,
+      "strict": true,
+      "target": "ES2019",
+    },
+    "include": ["js/**/*.ts", "js/**/*.tsx"],
+    "exclude": ["node_modules"]
+  }

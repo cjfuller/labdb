@@ -1,9 +1,9 @@
-const React = require("react");
-const {StyleSheet, css} = require("aphrodite");
+import React from "react"
+import {StyleSheet, css} from "aphrodite"
 
-const EditableText = require("./editable-text.jsx");
-const {extVal} = require("./util.js");
-const ss = require("./shared-styles.js");
+import EditableText from "./editable-text"
+import {extVal} from "./util"
+import ss from "./shared-styles"
 
 const MegaBar = React.createClass({
     propTypes: {

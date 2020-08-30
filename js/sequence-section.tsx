@@ -1,10 +1,10 @@
-const React = require("react");
-const {StyleSheet, css} = require("aphrodite");
+import React from "react"
+import {StyleSheet, css} from "aphrodite"
 
-const EditableBoolean = require("./editable-boolean.jsx");
-const EditableText = require("./editable-text.jsx");
-const {extVal} = require("./util.js");
-const ss = require("./shared-styles.js");
+import EditableBoolean from "./editable-boolean"
+import EditableText from "./editable-text"
+import {extVal } from "./util"
+import ss from "./shared-styles"
 
 const SequenceSection = React.createClass({
     propTypes: {

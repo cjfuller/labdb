@@ -1,9 +1,9 @@
-const React = require("react");
-const {StyleSheet, css} = require("aphrodite");
+import React from "react"
+import {StyleSheet, css} from "aphrodite"
 
-const ActionExecutors = require("./action-executors.js");
-const EditableText = require("./editable-text.jsx");
-const ss = require("./shared-styles.js");
+import * as ActionExecutors from "./action-executors"
+import EditableText from "./editable-text"
+import ss from "./shared-styles"
 
 const {extVal} = require("./util.js");
 

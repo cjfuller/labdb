@@ -1,11 +1,11 @@
-const React = require("react");
-const {StyleSheet, css} = require("aphrodite");
+import React from "react"
+import {StyleSheet, css} from "aphrodite"
 
-const ActionExecutors = require("./action-executors.js");
-const CoreInfo = require("./core-info.jsx");
-const MegaBar = require("./megabar.jsx");
-const ss = require("./shared-styles.js");
-const SupplementalInfo = require("./supplemental-info.jsx");
+import * as ActionExecutors from "./action-executors"
+import CoreInfo from "./core-info"
+import MegaBar from "./megabar"
+import ss from "./shared-styles"
+import SupplementalInfo from "./supplemental-info"
 
 const ItemInfoView = React.createClass({
     propTypes: {

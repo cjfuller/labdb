@@ -1,10 +1,10 @@
-const { css, StyleSheet } = require("aphrodite");
-const React = require("react");
+import React from "react"
+import {css, StyleSheet} from "aphrodite"
 
-const actions = require("./actions.js");
-const ae = require("./action-executors.js");
-const auth = require("./auth.js");
-const ss = require("./shared-styles.js");
+import * as actions from "./actions"
+import * as ae from "./action-executors"
+import auth from "./auth"
+import ss from "./shared-styles"
 
 const NavItem = React.createClass({
     propTypes: {

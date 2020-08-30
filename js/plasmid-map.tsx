@@ -1,9 +1,9 @@
-const React = require("react");
-const {StyleSheet, css} = require("aphrodite");
+import React from "react"
+import {StyleSheet, css} from "aphrodite"
 
-const Modal = require("./modal.jsx");
-const showMap = require("./plasmid-map.js");
-const ss = require("./shared-styles.js");
+import Modal from "./modal"
+import showMap from "./plasmid-map-legacy"
+import ss from "./shared-styles"
 
 const PlasmidMap = React.createClass({
     propTypes: {
