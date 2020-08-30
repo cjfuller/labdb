@@ -137,7 +137,7 @@ class ApplicationController < ActionController::Base
 
         if person
           partial_results = partial_results.select do |r|
-            r.send(r.class.owner_field_name).downcase.include? person.downcase
+            (r.send(r.class.owner_field_name) || "").downcase.include? person.downcase
           end
         end
         partial_results.each do |r|

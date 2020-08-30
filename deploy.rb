@@ -21,7 +21,6 @@ def before_deploy(version, lab)
   # cmd ["heroku", "config:set", "SECRET_TOKEN=$(rake secret)", "-a labdb-#{lab}"]
   cmd ["rm", "public/_s/*.js"], ignore_err: true
   cmd %w(npm install)
-  cmd %w(npm run-script coffee-compile)
   cmd %w(npm run-script compile)
   cmd ["gsutil", "cp", "public/_s/app_.js", gcs_path(version)]
   cmd ["gsutil", "acl", "ch", "-u", "AllUsers:R", gcs_path(version)]
