@@ -98,7 +98,7 @@ class Bacterium < ActiveRecord::Base
     numbers = get_linked_number_fields(core_alt_field_name) || []
     plasmids = if numbers.nil? then [] else get_linked_plasmids(numbers).values end
     resistances = plasmids.flat_map do |p| 
-      if p.nil?
+      if p.nil? or p.antibiotic.nil?
         []
       else
         p.antibiotic
