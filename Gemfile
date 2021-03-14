@@ -5,7 +5,7 @@ gem "haml", "~> 5.1.2"
 
 gem "pg", "~> 1.2.3"
 
-gem "redcarpet", "~> 3.5.0"
+gem "redcarpet", "~> 3.5.1"
 
 group :test do
   gem "rake"

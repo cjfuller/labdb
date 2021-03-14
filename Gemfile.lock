@@ -155,7 +155,7 @@ GEM
       thor (>= 0.20.3, < 2.0)
     rainbow (3.0.0)
     rake (13.0.1)
-    redcarpet (3.5.0)
+    redcarpet (3.5.1)
     regexp_parser (1.7.1)
     rexml (3.2.4)
     rspec (3.9.0)
@@ -242,7 +242,7 @@ DEPENDENCIES
   racc
   rails (~> 6.0.3.2)
   rake
-  redcarpet (~> 3.5.0)
+  redcarpet (~> 3.5.1)
   rspec
   rspec-rails (~> 4.0.1)
   rubocop
