@@ -96,14 +96,18 @@ export default function PlasmidMap(props: Props) {
     const mapData = {
       pl_name: props.plasmid.name,
       pl_size: (props.plasmid.fieldData.sequence || "").length,
-      point_features: groupByName(reformattedPointFeatures),
-      regional_features: groupByName(reformattedRegionalFeatures),
+      features: groupByName([
+        ...reformattedPointFeatures,
+        ...reformattedRegionalFeatures,
+      ]),
     };
 
     // finally, we need to set the count parameter on the point features.
-    Object.keys(mapData["point_features"]).forEach((group) => {
-      const groupValues = mapData["point_features"][group];
-      groupValues.forEach((f: any) => (f.count = groupValues.length));
+    Object.keys(mapData.features).forEach((group) => {
+      const groupValues = mapData.features[group];
+      if (groupValues[0].type === "point") {
+        groupValues.forEach((f: any) => (f.count = groupValues.length));
+      }
     });
     return mapData;
   };

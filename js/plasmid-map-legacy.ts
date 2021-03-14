@@ -16,7 +16,7 @@ import $ from "jquery";
 
 import d3 from "d3";
 
-const enzymes_to_show = [
+const enzymes_to_show = new Set([
   "AatII",
   "AccI",
   "Acc65I",
@@ -209,9 +209,36 @@ const enzymes_to_show = [
   "XmaI",
   "XmnI",
   "ZraI",
-];
+]);
+
+type BaseFeature = {
+  feature_class: "restriction" | "affinity tag" | "protease";
+  text: string;
+  grouped?: boolean;
+  group?: number;
+};
+
+type PointFeature = BaseFeature & {
+  type: "point";
+  at: number;
+  count: number;
+};
+
+type RegionalFeature = BaseFeature & {
+  type: "regional";
+  length: number;
+  start: number;
+};
+
+type Feature = PointFeature | RegionalFeature;
+
+const mapWidth = 500;
+const mapHeight = 400;
+const mapRadius = mapWidth / 4;
+const arcWidth = mapWidth / 96;
+
 // constants -- names, sizes, etc.
-const parameters: any = {
+const parameters = {
   plas_map_div_id: "#plasmid-map",
   data_attr: "data-mapinfo",
   dyn_enz_field: "#enzyme",
@@ -229,8 +256,8 @@ const parameters: any = {
   css_feature_label: "feature-label",
   css_plasmid_label: "plasmid-label",
 
-  map_width: 500,
-  map_height: 400,
+  map_width: mapWidth,
+  map_height: mapHeight,
   map_offset_x: 0,
   map_offset_y: 35,
   info_offset_y: 0,
@@ -243,75 +270,37 @@ const parameters: any = {
 
   initially_displayed_enzymes: ["AscI", "PacI"],
   initially_display_single_cutters: true,
+
+  map_radius: mapRadius,
+  arc_width: arcWidth,
+  inner_radius: mapRadius - arcWidth,
+  outer_radius: mapRadius + arcWidth,
+  display_height: mapHeight,
 };
 
-parameters.map_radius = parameters.map_width / 4;
-parameters.arc_width = parameters.map_width / 96;
-parameters.inner_radius = parameters.map_radius - parameters.arc_width;
-parameters.outer_radius = parameters.map_radius + parameters.arc_width;
-parameters.display_height = parameters.map_height;
+const pointFeatures = (objects: Objects): PointFeature[] =>
+  Object.entries(objects.features)
+    .filter(
+      (e) =>
+        e[1][0].type === "point" && objects.featureNamesToDisplay.includes(e[0])
+    )
+    .flatMap((e) => e[1]) as PointFeature[];
 
-// holder for the various features
-const objects: any = {
-  features_displayed: {},
-  features_not_displayed: {},
-};
-
-// function to get a parameter
-// Args:
-// name (optional) the property name to retrieve; if
-//   not supplied returns the parameters object
-const p = function (name?: any) {
-  if (name == null) {
-    name = undefined;
-  }
-  if (name) {
-    return parameters[name];
-  } else {
-    return parameters;
-  }
-};
-
-// function to get the holder for the features
-const o = () => objects;
-
-// retrieves the point features that should be displayed
-// return: an array of feature objects
-objects.point_features = function () {
-  const f_to_draw = o().features_displayed;
-  const point_f_to_draw = [];
-  for (let k in f_to_draw) {
-    const v = f_to_draw[k];
-    if (v[0].type === "point") {
-      for (let vi of Array.from(v)) {
-        point_f_to_draw.push(vi);
-      }
-    }
-  }
-  return point_f_to_draw;
-};
-
-// retrieves the regional features that should be displayed
-// return: an array of feature objects
-objects.regional_features = function () {
-  const f_to_draw = o().features_displayed;
-  const reg_f_to_draw = [];
-  for (let k in f_to_draw) {
-    const v = f_to_draw[k];
-    if (v[0].type === "regional") {
-      for (let vi of Array.from(v)) {
-        reg_f_to_draw.push(vi);
-      }
-    }
-  }
-  return reg_f_to_draw;
-};
+const regionalFeatures = (objects: Objects): RegionalFeature[] =>
+  Object.entries(objects.features)
+    .filter(
+      (e) =>
+        e[1][0].type === "regional" &&
+        objects.featureNamesToDisplay.includes(e[0])
+    )
+    .flatMap((e) => e[1]) as RegionalFeature[];
 
 //# Functions to calculate various properties of features
 
 // calculates the angle in radians around the circular plasmid, given a position
 //   in base pairs
-const angle_from_bp = (bp: number) => (2 * Math.PI * bp) / p("pl_size");
+const angle_from_bp = (o: Objects, bp: number) =>
+  (2 * Math.PI * bp) / o.pl_size;
 
 // calculates the x-coordinate given r,theta polar coordinates, accounting for
 //   the fact that angle 0 points straight up
@@ -328,7 +317,8 @@ const y_from_polar = (r: number, theta: number) =>
 //   d: the point feature (responds to .at)
 //   i: ignored
 // Return: the angle (radians)
-const feature_angle = (d: any, i?: undefined) => angle_from_bp(d.at);
+const feature_angle = (o: Objects, d: any, i?: undefined) =>
+  angle_from_bp(o, d.at);
 
 // formats the text for a group of point features
 // Args:
@@ -351,20 +341,20 @@ const text_for_group = function (g: Iterable<any> | ArrayLike<any>, i: number) {
 // calculates an offset correction for the map that compensates for the size of
 //   any displayed regional/group feature information
 const calculate_map_offset = function () {
-  if ($(`.${p("css_featureinfo")}`).length > 0) {
-    return (p().info_offset_y =
-      -1 * ($(`.${p("css_featureinfo")}`)?.outerHeight(true) ?? 0));
+  if ($(`.${parameters.css_featureinfo}`).length > 0) {
+    return (parameters.info_offset_y =
+      -1 * ($(`.${parameters.css_featureinfo}`)?.outerHeight(true) ?? 0));
   } else {
-    return (p().info_offset_y = 0);
+    return (parameters.info_offset_y = 0);
   }
 };
 
 // updates the height of the svg element to the current display height parameter
 const update_svg_height = function () {
-  $("svg").attr("height", p("display_height"));
+  $("svg").attr("height", parameters.display_height);
   return $(".chart").attr(
     "style",
-    `width: ${p("map_width")}px; height: ${p("display_height")}px;`
+    `width: ${parameters.map_width}px; height: ${parameters.display_height}px;`
   );
 };
 
@@ -373,11 +363,13 @@ const update_svg_height = function () {
 const update_offset = function () {
   $("#offset-group").attr(
     "transform",
-    `translate(${p("map_width") / 2 + p("map_offset_x")}, ${
-      p("map_height") / 2 + p("map_offset_y") + p("info_offset_y")
+    `translate(${parameters.map_width / 2 + parameters.map_offset_x}, ${
+      parameters.map_height / 2 +
+      parameters.map_offset_y +
+      parameters.info_offset_y
     })`
   );
-  p().display_height = p().map_height + p().info_offset_y;
+  parameters.display_height = parameters.map_height + parameters.info_offset_y;
   return update_svg_height();
 };
 
@@ -385,33 +377,33 @@ const update_offset = function () {
 
 // Remove active feature highlighting
 const reset_point_group_highlight = () =>
-  $(`.${p("css_selected")}`).removeClass(p("css_selected"));
+  $(`.${parameters.css_selected}`).removeClass(parameters.css_selected);
 
 // Reset the information box
 const reset_feature_info = function () {
-  p().info_offset_y = 0;
+  parameters.info_offset_y = 0;
   update_offset();
   reset_point_group_highlight();
-  return $(`.${p("css_featureinfo")}`).remove();
+  return $(`.${parameters.css_featureinfo}`).remove();
 };
 
 // Highlights the selected feature
 const highlight_expanded_feature = function (f_element: any) {
   reset_point_group_highlight();
-  return $(f_element).addClass(p("css_selected"));
+  return $(f_element).addClass(parameters.css_selected);
 };
 
 // Adds an information box for the feature information and updates the map
 // position to compensate for the box
 const set_up_feature_information_box = function (text: any) {
-  $(`.${p("css_featureinfo")}`).remove();
+  $(`.${parameters.css_featureinfo}`).remove();
   const info_el = document.createElement("div");
   info_el.className = "feature-info";
-  $(p("plas_map_div_id")).prepend(info_el);
-  $(`.${p("css_featureinfo")}`).append(
+  $(parameters.plas_map_div_id).prepend(info_el);
+  $(`.${parameters.css_featureinfo}`).append(
     '<button type="button" class="close"><i class="material-icons">highlight_off</i></button>'
   );
-  $(`.${p("css_featureinfo")}`).append(`<div>${text}</div>`);
+  $(`.${parameters.css_featureinfo}`).append(`<div>${text}</div>`);
   $("button.close").click(reset_feature_info);
   calculate_map_offset();
   return update_offset();
@@ -424,18 +416,21 @@ const do_feature_expand = function (f_element: any, text: string) {
 };
 
 // Mouseover event handler for expanding a group of point features
-const do_expand_point_group = function (event: { target: any }) {
-  const f_element = event.target;
-  const gr_index = parseInt($(f_element).attr(p("group_index_attr")) as any);
-  const g = o().groups[gr_index];
-  const text = text_for_group(g, gr_index + 1);
-  return do_feature_expand(f_element, text);
-};
+const do_expand_point_group = (objects: Objects) =>
+  function (event: { target: any }) {
+    const f_element = event.target;
+    const gr_index = parseInt(
+      $(f_element).attr(parameters.group_index_attr) as any
+    );
+    const g = objects.groups[gr_index];
+    const text = text_for_group(g, gr_index + 1);
+    return do_feature_expand(f_element, text);
+  };
 
 // Mouseover event handler for expanding a regional feature
 const regional_feature_information = function (event: { target: any }) {
   const f_element = event.target;
-  const text = f_element.getAttribute(p("feature_text_attr"));
+  const text = f_element.getAttribute(parameters.feature_text_attr);
   return do_feature_expand(f_element, text);
 };
 
@@ -452,96 +447,99 @@ const calculate_text_anchor_point = function (angle: number) {
 };
 
 // Draws the circle representing the plasmid
-const draw_circle = () =>
-  o()
-    .svg.append("g")
+const draw_circle = (mapSVG: any) =>
+  mapSVG.svg
+    .append("g")
     .selectAll("circle")
     .data([0])
     .enter()
     .append("circle")
     .attr("cx", 0)
     .attr("cy", 0)
-    .attr("r", p("map_radius"))
+    .attr("r", parameters.map_radius)
     .style("fill", "none")
     .style("stroke", "#000");
 
 // Draw all of the point features to be displayed
-const draw_point_features = function () {
+const draw_point_features = function (objects: Objects, mapSVG: any) {
   //TODO: use data
-  const grp = o().svg.append("g");
-  return Array.from(o().point_features()).map((f) =>
+  const grp = mapSVG.svg.append("g");
+  pointFeatures(objects).forEach((f) => {
+    console.log(f);
     grp
       .append("path")
-      .attr("class", `line ${p("css_point_feature")}`)
+      .attr("class", `line ${parameters.css_point_feature}`)
       .attr(
         "d",
         (d3.svg as any).line.radial()([
-          [p("inner_radius"), feature_angle(f)],
-          [p("outer_radius"), feature_angle(f)],
+          [parameters.inner_radius, feature_angle(objects, f)],
+          [parameters.outer_radius, feature_angle(objects, f)],
         ])
-      )
-  );
+      );
+  });
 };
 
 // Draw all of the regional features to be displayed
-const draw_regional_features = function () {
-  const grp = o().svg.append("g");
-  o()
-    .regional_features()
-    .foreach((f: any) => {
-      grp
-        .append("path")
-        .attr(
-          "class",
-          `arc ${p("css_regional_feature")} feature-${f.feature_class}`
-        )
-        .attr(
-          p("feature_text_attr"),
-          `${f.text} (${f.start} - ${f.start + f.length - 1})`
-        )
-        .attr(
-          "d",
-          (d3.svg as any)
-            .arc()
-            .outerRadius(p("outer_radius"))
-            .innerRadius(p("inner_radius"))
-            .startAngle(angle_from_bp(f.start))
-            .endAngle(angle_from_bp(f.start + f.length))
-        );
-    });
-  return $(`.${p("css_regional_feature")}`).mouseover(
+const draw_regional_features = function (objects: Objects, mapSVG: any) {
+  const grp = mapSVG.svg.append("g");
+  regionalFeatures(objects).forEach((f: any) => {
+    console.log(f);
+    grp
+      .append("path")
+      .attr(
+        "class",
+        `arc ${parameters.css_regional_feature} feature-${f.feature_class}`
+      )
+      .attr(
+        parameters.feature_text_attr,
+        `${f.text} (${f.start} - ${f.start + f.length - 1})`
+      )
+      .attr(
+        "d",
+        (d3.svg as any)
+          .arc()
+          .outerRadius(parameters.outer_radius)
+          .innerRadius(parameters.inner_radius)
+          .startAngle(angle_from_bp(objects, f.start))
+          .endAngle(angle_from_bp(objects, f.start + f.length))
+      );
+  });
+  $(`.${parameters.css_regional_feature}`).mouseover(
     regional_feature_information
   );
 };
 
 // Draw all of the groups of overlapping point features
-const draw_point_groups = function () {
+const draw_point_groups = function (objects: Objects, mapSVG: any) {
   //TODO: use data
-  const grp = o().svg.append("g");
-  const iterable = o().groups;
+  const grp = mapSVG.svg.append("g");
+  const iterable = objects.groups;
   for (let i = 0; i < iterable.length; i++) {
     const g = iterable[i];
     grp
       .append("path")
-      .attr("class", `arc ${p("css_point_group")}`)
+      .attr("class", `arc ${parameters.css_point_group}`)
       .attr("group-index", i)
       .attr(
         "d",
         (d3.svg as any)
           .arc()
           .outerRadius(
-            p("outer_radius") +
-              p("point_group_offset") +
-              p("point_group_thickness")
+            parameters.outer_radius +
+              parameters.point_group_offset +
+              parameters.point_group_thickness
           )
-          .innerRadius(p("outer_radius") + p("point_group_offset"))
-          .startAngle(angle_from_bp(g[0].at) - p("angle_min_thickness"))
+          .innerRadius(parameters.outer_radius + parameters.point_group_offset)
+          .startAngle(
+            angle_from_bp(objects, g[0].at) - parameters.angle_min_thickness
+          )
           .endAngle(
-            angle_from_bp(g[g.length - 1].at) + p("angle_min_thickness")
+            angle_from_bp(objects, g[g.length - 1].at) +
+              parameters.angle_min_thickness
           )
       );
   }
-  return $(`.${p("css_point_group")}`).mouseover(do_expand_point_group);
+  $(`.${parameters.css_point_group}`).mouseover(do_expand_point_group(objects));
 };
 
 // Draw a label for one of the features
@@ -576,13 +574,13 @@ const draw_single_feature_label = function (
   if (angle > Math.PI) {
     rotation_angle *= -1;
   }
-  const x = x_from_polar(p("outer_radius") + radial_offset, angle);
+  const x = x_from_polar(parameters.outer_radius + radial_offset, angle);
   const y =
-    y_from_polar(p("outer_radius") + radial_offset, angle) +
+    y_from_polar(parameters.outer_radius + radial_offset, angle) +
     Math.sin(symm_angle / 2) * 8;
   return grp
     .append("text")
-    .attr("class", p("css_feature_label"))
+    .attr("class", parameters.css_feature_label)
     .attr("x", x)
     .attr("y", y)
     .attr("text-anchor", calculate_text_anchor_point(angle))
@@ -591,301 +589,291 @@ const draw_single_feature_label = function (
 };
 
 // Draw all the point feature labels
-const draw_point_labels = function () {
-  const grp = o().svg.append("g");
-  return (() => {
-    const result: any[] = [];
-    o().point_features.foreach((f: any) => {
-      if (f.grouped) {
-        return;
-      }
-      const angle = angle_from_bp(f.at);
-      const text = `${f.text} (${f.at})`;
-      result.push(draw_single_feature_label(grp, angle, text));
-    });
-    return result;
-  })();
+const draw_point_labels = function (objects: Objects, mapSVG: any) {
+  const grp = mapSVG.svg.append("g");
+  pointFeatures(objects).forEach((f: any) => {
+    if (f.grouped) {
+      return;
+    }
+    const angle = angle_from_bp(objects, f.at);
+    const text = `${f.text} (${f.at})`;
+    draw_single_feature_label(grp, angle, text);
+  });
 };
 
 // Draw all the point feature group labels
-const draw_group_labels = function () {
-  const grp = o().svg.append("g");
-  return (() => {
-    const result = [];
-    const iterable = o().groups;
-    for (let i = 0; i < iterable.length; i++) {
-      const g = iterable[i];
-      const angle =
-        (angle_from_bp(g[0].at) + angle_from_bp(g[g.length - 1].at)) / 2;
-      const text = `${i + 1}`;
-      result.push(draw_single_feature_label(grp, angle, text, 10, false));
-    }
-    return result;
-  })();
+const draw_group_labels = function (objects: Objects, mapSVG: any) {
+  const grp = mapSVG.svg.append("g");
+  const iterable = objects.groups;
+  for (let i = 0; i < iterable.length; i++) {
+    const g = iterable[i];
+    const angle =
+      (angle_from_bp(objects, g[0].at) +
+        angle_from_bp(objects, g[g.length - 1].at)) /
+      2;
+    const text = `${i + 1}`;
+    draw_single_feature_label(grp, angle, text, 10, false);
+  }
 };
 
 // Draw the plasmid label
-const draw_plasmid_label = function () {
-  const grp = o().svg.append("g");
+const draw_plasmid_label = function (objects: Objects, mapSVG: any) {
+  const grp = mapSVG.svg.append("g");
   return grp
     .append("text")
-    .attr("class", `${p("css_plasmid_label")}`)
-    .text(`${p("pl_name")} (${p("pl_size")}bp)`)
+    .attr("class", `${parameters.css_plasmid_label}`)
+    .text(`${objects.pl_name} (${objects.pl_size}bp)`)
     .attr("text-anchor", "middle");
 };
 
 // Initialize all the elements necessary to draw the map
 const initialize_map = function () {
-  o().svg = d3
-    .select(p("plas_map_div_id"))
-    .append("div")
-    .attr("class", "chart")
-    .style("width", `${p("map_width")}px`)
-    .style("height", `${p("display_height")}px`)
-    .append("svg")
-    .attr("width", p("map_width"))
-    .attr("height", p("display_height"))
-    .append("g")
-    .attr("id", "offset-group")
-    .attr(
-      "transform",
-      `translate(${p("map_width") / 2 + p("map_offset_x")}, ${
-        p("map_height") / 2 + p("map_offset_y") + p("info_offset_y")
-      })`
-    );
-  return update_offset();
+  const mapSVG = {
+    svg: d3
+      .select(parameters.plas_map_div_id)
+      .append("div")
+      .attr("class", "chart")
+      .style("width", `${parameters.map_width}px`)
+      .style("height", `${parameters.display_height}px`)
+      .append("svg")
+      .attr("width", parameters.map_width)
+      .attr("height", parameters.display_height)
+      .append("g")
+      .attr("id", "offset-group")
+      .attr(
+        "transform",
+        `translate(${parameters.map_width / 2 + parameters.map_offset_x}, ${
+          parameters.map_height / 2 +
+          parameters.map_offset_y +
+          parameters.info_offset_y
+        })`
+      ),
+  };
+  update_offset();
+  return mapSVG;
 };
 
 // Clear the map
 const clear_map = () => $(".chart").remove();
 
 // Draw all of the elements of the map
-const draw_all = function () {
-  fix_feature_overlap();
+const draw_all = function (objects: Objects) {
+  fix_feature_overlap(objects);
   calculate_map_offset();
   update_offset();
-  initialize_map();
+  const mapSVG = initialize_map();
   update_offset();
-  draw_circle();
-  draw_regional_features();
-  draw_point_features();
-  draw_point_groups();
-  draw_point_labels();
-  draw_group_labels();
-  return draw_plasmid_label();
+  draw_circle(mapSVG);
+  draw_regional_features(objects, mapSVG);
+  draw_point_features(objects, mapSVG);
+  draw_point_groups(objects, mapSVG);
+  draw_point_labels(objects, mapSVG);
+  draw_group_labels(objects, mapSVG);
+  draw_plasmid_label(objects, mapSVG);
 };
 
 // Redraw the map if it has been displayed already
-const redraw_map = function () {
+const redraw_map = function (objects: Objects) {
   clear_map();
-  return draw_all();
+  return draw_all(objects);
 };
 
 //# Feature handling functions
 
 // Helper to ensure that there are at least as many point feature groups as
 // necessary
-const ensure_n_feature_groups = (n: number) =>
-  (() => {
-    const result = [];
-    while (o().groups.length < n) {
-      result.push(o().groups.push([]));
-    }
-    return result;
-  })();
+const ensure_n_feature_groups = (objects: Objects, n: number) => {
+  while (objects.groups.length < n) {
+    objects.groups.push([]);
+  }
+};
 
 // Adds a feature to the specified group.
 // Args:
 //   f: the feature to add
 //   group_n: the 0-indexed group number; pass a negative number to indicate
 //     not grouped
-const group_feature = function (f: any, group_n: number) {
+const group_feature = function (objects: Objects, f: Feature, group_n: number) {
   if (group_n < 0) {
     f.grouped = false;
     return;
   }
-  ensure_n_feature_groups(group_n + 1);
-  o().groups[group_n].push(f);
+  ensure_n_feature_groups(objects, group_n + 1);
+  objects.groups[group_n].push(f);
   f.grouped = true;
   return (f.group = group_n);
 };
 
 // Fixes overlapping point features by adding closely spaced features to a group
-var fix_feature_overlap = function () {
+const fix_feature_overlap = function (objects: Objects) {
   let f: any;
-  o().groups = [];
-  const all_features = [];
-  const object = o().features_displayed;
-  for (let name in object) {
-    const f_list = object[name];
-    for (f of Array.from(f_list)) {
-      if (f.type === "point") {
-        all_features.push(f);
-      }
-    }
-  }
-  all_features.sort((a, b) => a.at - b.at);
+  objects.groups = [];
+  const allDisplayedPointFeatures: PointFeature[] = Object.entries(
+    displayedFeatures(objects)
+  )
+    .filter((entry) => entry[1][0].type === "point")
+    .flatMap((entry) => entry[1] as PointFeature[]);
+  allDisplayedPointFeatures.sort((a, b) => a.at - b.at);
 
   let last_start = undefined;
   let last_f = undefined;
 
-  return (() => {
-    const result = [];
-    for (f of Array.from(all_features)) {
-      //TODO: check for full circle first
-      if (last_start !== undefined) {
-        if (angle_from_bp(f.at) - last_start < p("min_angular_dist")) {
-          group_feature(f, o().groups.length - 1);
-        } else {
-          last_start = undefined;
-          group_feature(f, -1);
-        }
+  for (f of allDisplayedPointFeatures) {
+    //TODO: check for full circle first
+    if (last_start !== undefined) {
+      if (
+        angle_from_bp(objects, f.at) - last_start <
+        parameters.min_angular_dist
+      ) {
+        group_feature(objects, f, objects.groups.length - 1);
       } else {
-        if (last_f !== undefined) {
-          if (
-            angle_from_bp(f.at) - angle_from_bp(last_f.at) <
-            p("min_angular_dist")
-          ) {
-            last_start = angle_from_bp(last_f.at);
-            const new_group_index = o().groups.length;
-            group_feature(last_f, new_group_index);
-            group_feature(f, new_group_index);
-          } else {
-            group_feature(f, -1);
-          }
+        last_start = undefined;
+        group_feature(objects, f, -1);
+      }
+    } else {
+      if (last_f !== undefined) {
+        if (
+          angle_from_bp(objects, f.at) - angle_from_bp(objects, last_f.at) <
+          parameters.min_angular_dist
+        ) {
+          last_start = angle_from_bp(objects, last_f.at);
+          const new_group_index = objects.groups.length;
+          group_feature(objects, last_f, new_group_index);
+          group_feature(objects, f, new_group_index);
+        } else {
+          group_feature(objects, f, -1);
         }
       }
-      result.push((last_f = f));
     }
-    return result;
-  })();
-};
-
-// Add a feature to the map, but don't display it yet
-const add_hidden_feature = function (name: string, f: unknown) {
-  if (o()["features_not_displayed"][name] === undefined) {
-    o()["features_not_displayed"][name] = [];
+    last_f = f;
   }
-
-  return o()["features_not_displayed"][name].push(f);
 };
 
 // Shows a previously hidden feature
-const show_feature = function (name: string) {
-  if (o()["features_displayed"][name] === undefined) {
-    o()["features_displayed"][name] = [];
-  }
-
-  if (o()["features_not_displayed"][name] !== undefined) {
-    for (let f of Array.from(o()["features_not_displayed"][name])) {
-      o()["features_displayed"][name].push(f);
-    }
-    return (o()["features_not_displayed"][name] = []);
+const show_feature = function (objects: Objects, name: string) {
+  if (!objects.featureNamesToDisplay.includes(name)) {
+    objects.featureNamesToDisplay.push(name);
   }
 };
 
 // Hides a previously shown feature
-const hide_feature = function (name: string) {
-  if (o()["features_displayed"][name] !== undefined) {
-    for (let f of Array.from(o()["features_displayed"][name])) {
-      o()["features_not_displayed"][name].push(f);
-    }
-    return delete o()["features_displayed"][name];
+const hide_feature = function (objects: Objects, name: string) {
+  if (objects.featureNamesToDisplay.includes(name)) {
+    objects.featureNamesToDisplay = objects.featureNamesToDisplay.filter(
+      (visibleName) => visibleName !== name
+    );
   }
 };
 
 // Set the visibility of a feature grabbed from the feature field according to # whether the show or hide button was pressed.
-const set_feature_from_field = function (visible: boolean) {
-  const name: any = $(p().dyn_enz_field).val();
+const set_feature_from_field = function (objects: Objects, visible: boolean) {
+  const name: any = $(parameters.dyn_enz_field).val();
   if (visible) {
-    show_feature(name);
+    show_feature(objects, name);
   } else {
-    hide_feature(name);
+    hide_feature(objects, name);
   }
-  return redraw_map();
+  return redraw_map(objects);
 };
 
 // Show a feature named by the user in the feature field
-const add_feature_from_field = () => set_feature_from_field(true);
+const add_feature_from_field = (objects: Objects) =>
+  set_feature_from_field(objects, true);
 
 // Hide a feature named by the user in the feature field
-const hide_feature_from_field = () => set_feature_from_field(false);
+const hide_feature_from_field = (objects: Objects) =>
+  set_feature_from_field(objects, false);
 
 //# Initialization functions
 
 // Read, parse, and return the json plasmid map data from the plasmid map page
 // element
 const read_data = function () {
-  const data = JSON.parse($(p("plas_map_div_id")).attr(p("data_attr")) as any);
+  const data = JSON.parse(
+    $(parameters.plas_map_div_id).attr(parameters.data_attr) as any
+  );
   return data;
 };
 
-// Add all features in a collection to the map (initially hidden)
-// Input should be a mapping {name: [list of features with that name]}
-const add_all_features = (f_collection: { [x: string]: any }) =>
-  (() => {
-    const result = [];
-    for (var name in f_collection) {
-      const f_list = f_collection[name];
-      result.push(Array.from(f_list).map((f) => add_hidden_feature(name, f)));
-    }
-    return result;
-  })();
-
 // Show the features that should be initially displayed
-const show_initial_features = function () {
-  const always_on = p("initially_displayed_enzymes");
+const with_shown_initial_features = function (o: Objects): Objects {
+  const always_on = parameters.initially_displayed_enzymes;
 
-  return (() => {
-    const result = [];
-    const object = o().features_not_displayed;
-    for (let n in object) {
-      const f = object[n];
-      if (Array.from(always_on).includes(n)) {
-        result.push(show_feature(n));
-      } else if (
-        f.length > 0 &&
-        f[0].type === "point" &&
-        enzymes_to_show.indexOf(f[0].text) < 0
+  const findShownFeatures = (features: {
+    [name: string]: Feature[];
+  }): string[] => {
+    const featureNamesToDisplay = [...always_on];
+    for (let featureName in features) {
+      const currFeatures = features[featureName];
+      if (currFeatures.length === 0) {
+        continue;
+      }
+      if (
+        currFeatures[0].type === "point" &&
+        !enzymes_to_show.has(currFeatures[0].text)
       ) {
-        result.push(hide_feature(n));
-      } else if (f.length === 1 && f[0].type === "point") {
-        result.push(show_feature(n));
-      } else if (f.length > 0 && f[0].type === "regional") {
-        result.push(show_feature(n));
-      } else {
-        result.push(undefined);
+        continue;
+      }
+      if (currFeatures.length === 1 && currFeatures[0].type === "point") {
+        featureNamesToDisplay.push(featureName);
+      } else if (currFeatures[0].type === "regional") {
+        featureNamesToDisplay.push(featureName);
       }
     }
-    return result;
-  })();
+    return featureNamesToDisplay;
+  };
+
+  return {
+    ...o,
+    featureNamesToDisplay: findShownFeatures(o.features),
+  };
 };
 
+type Objects = {
+  data: any;
+  featureNamesToDisplay: string[];
+  groups: any[];
+  pl_size: number;
+  pl_name: string;
+  features: { [name: string]: Feature[] };
+};
+
+function displayedFeatures(o: Objects): { [name: string]: Feature[] } {
+  return Object.fromEntries(
+    Object.entries(o.features).filter((entry) =>
+      o.featureNamesToDisplay.includes(entry[0])
+    )
+  ) as { [name: string]: Feature[] };
+}
+
 // Do all of the feature setup, including reading from the page
-const initialize_features = function () {
+const initialize_features = (): Objects => {
   const fs = read_data();
-  o().data = fs;
-  o().features_displayed = {};
-  o().features_not_displayed = {};
-  p().pl_size = fs.pl_size;
-  p().pl_name = fs.pl_name;
-  add_all_features(fs["point_features"]);
-  add_all_features(fs["regional_features"]);
-  return show_initial_features();
+  const o: Objects = {
+    data: fs,
+    featureNamesToDisplay: [],
+    pl_size: fs.pl_size,
+    pl_name: fs.pl_name,
+    groups: [],
+    features: { ...fs["features"] },
+  };
+  return with_shown_initial_features(o);
 };
 
 // Set up the show/hide button click handlers
-const initialize_buttons = function () {
-  $(p("enz_remove_button")).click(hide_feature_from_field);
-  return $(p("enz_add_button")).click(add_feature_from_field);
+const initialize_buttons = function (objects: Objects) {
+  $(parameters.enz_remove_button).click(() => hide_feature_from_field(objects));
+  return $(parameters.enz_add_button).click(() =>
+    add_feature_from_field(objects)
+  );
 };
 
 // Do everything required to make the map
 const do_map = function () {
   clear_map();
-  initialize_features();
-  initialize_buttons();
-  return draw_all();
+  const objects = initialize_features();
+  initialize_buttons(objects);
+  draw_all(objects);
 };
 
 export default do_map;
