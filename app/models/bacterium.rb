@@ -42,6 +42,7 @@ class Bacterium < ActiveRecord::Base
     genotype: "Genotype",
     sequence: "Sequence",
     strainalias: "Alias",
+    intrinsic_resistance: "Intrinsic antibiotic resistances"
   }
 
   Fields = @headings.keys
@@ -93,11 +94,37 @@ class Bacterium < ActiveRecord::Base
     (get_linked_number_fields(core_alt_field_name) || []).map { |n| links[n] }
   end
 
+  def combined_resistances
+    numbers = get_linked_number_fields(core_alt_field_name) || []
+    plasmids = if numbers.nil? then [] else get_linked_plasmids(numbers).values end
+    resistances = plasmids.flat_map do |p| 
+      if p.nil?
+        []
+      else
+        p.antibiotic
+          .split(",")
+          .map { |r| r.strip }
+          .filter{ |r| !r.empty?}
+          .map { |r| "#{r} (via #{Naming.name_for(Plasmid) + ' ' + p.number.to_s})"}
+      end
+    end
+    resistances += (self.intrinsic_resistance || "")
+     .split(",")
+     .map { |r| r.strip }
+     .filter { |r| !r.empty? }
+    resistances = resistances.uniq
+  end
+
   def core_info
     [
       {
         name: "Strain information",
-        fields: fields([:species_bkg, :genotype]),
+        fields: fields([:species_bkg, :genotype]) + [
+          field(:intrinsic_resistance).merge({
+            precalculatedValue: combined_resistances.join(", "),
+            name: "Antibiotic resistances",
+          })
+        ],
       },
       {
         name: "Description",

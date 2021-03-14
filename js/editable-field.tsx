@@ -11,6 +11,7 @@ type Props = {
   onChange: Function;
   onEnter?: Function | undefined;
   value: any;
+  valueForDisplayOnly?: string;
 };
 export default function EditableField(props: Props) {
   const onKeyPress = (event: KeyboardEvent) => {
@@ -32,7 +33,11 @@ export default function EditableField(props: Props) {
         onChange={(e) => props.onChange(e.target.value)}
         onKeyPress={onKeyPress}
         type="text"
-        value={props.value}
+        value={
+          props.valueForDisplayOnly && !props.editable
+            ? props.valueForDisplayOnly
+            : props.value ?? ""
+        }
       />
     </div>
   );

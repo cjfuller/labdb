@@ -26,6 +26,10 @@ class ApplicationController < ActionController::Base
   prepend_before_action :set_js_version
   prepend_before_action :force_https
 
+  def default_url_options
+    {only_path: true}
+  end
+
   def force_https
     if Rails.env.production?
       redirect_to protocol: "https://" unless request.ssl?
@@ -178,6 +182,7 @@ class ApplicationController < ActionController::Base
   end
 
   def show_by_name
+    puts request.headers["Host"]
     item_name = params[:name]
     return head(:bad_request) if item_name.nil?
     result = item_name.item_links(items: true)
