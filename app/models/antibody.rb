@@ -1,8 +1,8 @@
-require 'exporters'
-require 'numbered'
-require 'described'
-require 'headings'
-require 'resource_helpers'
+require "exporters"
+require "numbered"
+require "described"
+require "headings"
+require "resource_helpers"
 
 class Antibody < ActiveRecord::Base
   include Exportable
@@ -13,21 +13,20 @@ class Antibody < ActiveRecord::Base
 
   @headings = {
     ab_number: "#{obj_tag} Number",
-    date_entered: 'Date entered',
-    label: 'Label',
-    entered_by: 'Entered by',
-    alias: 'Alias',
-    comments: 'Description',
-    host: 'Host',
-    vendor: 'Vendor',
-    good_for_if: 'Good for IF',
-    good_for_western: 'Good for westerns',
-    fluorophore: 'Fluorophores',
-    box: 'Box'
+    date_entered: "Date entered",
+    label: "Label",
+    entered_by: "Entered by",
+    alias: "Alias",
+    comments: "Description",
+    host: "Host",
+    vendor: "Vendor",
+    good_for_if: "Good for IF",
+    good_for_western: "Good for westerns",
+    fluorophore: "Fluorophores",
+    box: "Box",
   }
 
   Fields = @headings.keys
-  attr_accessible(*Fields)
 
   def get_linked(_propertyname)
     nil
@@ -60,30 +59,30 @@ class Antibody < ActiveRecord::Base
   def core_info
     [
       {
-        name: 'Antibody information',
+        name: "Antibody information",
         fields: fields([:host, :fluorophore]),
       },
       {
-        name: 'Location information',
+        name: "Location information",
         fields: fields([:box, :label]),
       },
       {
-        name: 'Uses',
+        name: "Uses",
         fields: [
           field(:good_for_if, type: :boolean),
-          field(:good_for_western, type: :boolean)
+          field(:good_for_western, type: :boolean),
         ],
       },
       {
-        name: 'Description',
+        name: "Description",
         preformatted: true,
         lookup: :comments,
         single: true,
         inlineValue: Labdb::Application::MARKDOWN
-          .render(comments || '')
+          .render(comments || "")
           .labdb_auto_link
           .html_safe,
-      }
+      },
     ]
   end
 

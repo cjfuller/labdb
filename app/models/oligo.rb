@@ -1,11 +1,11 @@
-require 'json'
+require "json"
 
-require 'exporters'
-require 'numbered'
-require 'described'
-require 'headings'
-require 'dna_sequence'
-require 'resource_helpers'
+require "exporters"
+require "numbered"
+require "described"
+require "headings"
+require "dna_sequence"
+require "resource_helpers"
 
 class Oligo < ActiveRecord::Base
   include Exportable
@@ -17,18 +17,17 @@ class Oligo < ActiveRecord::Base
 
   @headings = {
     oligo_number: "#{obj_tag} Number",
-    date_entered: 'Date',
-    entered_by: 'Entered by',
-    notebook: 'Notebook',
-    oligoalias: 'Alias',
-    purpose: 'Description',
-    sequence: 'Sequence',
-    organism: 'Organism',
-    vendor: 'Vendor',
+    date_entered: "Date",
+    entered_by: "Entered by",
+    notebook: "Notebook",
+    oligoalias: "Alias",
+    purpose: "Description",
+    sequence: "Sequence",
+    organism: "Organism",
+    vendor: "Vendor",
   }
 
   Fields = @headings.keys
-  attr_accessible(*Fields)
 
   def get_linked(_propertyname)
     nil
@@ -61,14 +60,14 @@ class Oligo < ActiveRecord::Base
   def core_info
     [
       {
-        name: 'Description',
+        name: "Description",
         preformatted: true,
         lookup: :purpose,
         single: true,
-        inlineValue: Labdb::Application::MARKDOWN.render(purpose || '')
+        inlineValue: Labdb::Application::MARKDOWN.render(purpose || "")
                                                  .labdb_auto_link
                                                  .html_safe,
-      }
+      },
     ]
   end
 

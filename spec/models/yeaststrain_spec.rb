@@ -1,48 +1,34 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe Yeaststrain do
+  fixtures :yeaststrains, :plasmids
 
-	fixtures :yeaststrains, :plasmids
+  it "should link to its plasmid" do
+    yeaststrains(:one).get_linked(:plasmidnumber)["2"].should eq plasmids(:two)
+  end
 
-	it "should link to its plasmid" do
+  it "should have the number field set to the strain number" do
+    yeaststrains(:one).number_field.to_i.should eq 1
+  end
 
-		yeaststrains(:one).get_linked(:plasmidnumber)["2"].should eq plasmids(:two)
+  it "should list exportable fields" do
+    yeaststrains(:one).exportable_fields.should_not be_empty
+  end
 
-	end
+  it "should name itself correctly" do
+    yeaststrains(:one).name_str.should eq "#{Naming.name_for(Yeaststrain)}1"
+  end
 
-	it "should have the number field set to the strain number" do
+  it "should correctly set YAML export parameters" do
+    yeaststrains(:one).get_export_params("yml")[:filename].should eq "#{Naming.name_for(Yeaststrain)}1.yml"
+  end
 
-		yeaststrains(:one).number_field.to_i.should eq 1
+  it "should correctly set FASTA export parameters" do
+    yeaststrains(:one).get_export_params("fasta")[:filename].should eq "#{Naming.name_for(Yeaststrain)}1.fasta"
+  end
 
-	end
-
-	it "should list exportable fields" do
-
-		yeaststrains(:one).exportable_fields.should_not be_empty
-
-	end
-
-	it "should name itself correctly" do
-
-		yeaststrains(:one).name_str.should eq "#{Naming.name_for(Yeaststrain)}1"
-
-	end
-
-	it "should correctly set YAML export parameters" do
-
-		yeaststrains(:one).get_export_params("yml")[:filename].should eq "#{Naming.name_for(Yeaststrain)}1.yml"
-
-	end
-
-	it "should correctly set FASTA export parameters" do
-
-		yeaststrains(:one).get_export_params("fasta")[:filename].should eq "#{Naming.name_for(Yeaststrain)}1.fasta"
-
-	end
-
-	it "should correctly export to YAML" do
-
-		yaml_str = <<~YAML
+  it "should correctly export to YAML" do
+    yaml_str = <<~YAML
       ---
       Yeaststrain:
         antibiotic: ''
@@ -58,19 +44,14 @@ describe Yeaststrain do
         strain_bkg: 972 h-
         strain_number: '1'
         strainalias: leu-/ura- h-
-      YAML
+    YAML
 
-		yeaststrains(:one).export_to_yaml.should eq yaml_str
+    yeaststrains(:one).export_to_yaml.should eq yaml_str
+  end
 
-	end
+  it "should correctly export to FASTA" do
+    fasta_str = ">#{Naming.name_for(Yeaststrain)}1 leu-/ura- h-\nAATAAGAGAGC"
 
-
-	it "should correctly export to FASTA" do
-
-		fasta_str = ">#{Naming.name_for(Yeaststrain)}1 leu-/ura- h-\nAATAAGAGAGC"
-
-		yeaststrains(:one).export_to_fasta.should eq fasta_str
-
-	end
-
+    yeaststrains(:one).export_to_fasta.should eq fasta_str
+  end
 end

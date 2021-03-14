@@ -1,7 +1,7 @@
-require 'json'
-require 'yaml'
+require "json"
+require "yaml"
 
-require 'bio'
+require "bio"
 
 module PlasmidMapping
 
@@ -25,7 +25,9 @@ module PlasmidMapping
 
   Protein = Struct.new(:name, :sequence, :exact, :display) do
     include FeaturePrototype
+
     def feature_extent() :regional end
+
     def feature_from_position(pos)
       ProteinSequence.new(self, pos + 1, self.sequence.length)
     end
@@ -33,7 +35,9 @@ module PlasmidMapping
 
   Protease = Struct.new(:name, :sequence, :exact, :display) do
     include FeaturePrototype
+
     def feature_extent() :point end
+
     def feature_from_position(pos)
       ProteaseSite.new(self, pos + 1)
     end
@@ -50,6 +54,7 @@ module PlasmidMapping
     end
 
     def feature_extent() :point end
+
     def feature_from_position(pos)
       RestrictionSite.new(self, pos + 1 + self.cuts_before)
     end
@@ -69,32 +74,34 @@ module PlasmidMapping
 
   module RegionalFeature
     attr_accessor :feature_length
+
     def to_h
-      super().merge({length: self.feature_length})
+      super().merge({ length: self.feature_length })
     end
   end
 
   class RestrictionSite < Feature
     def feature_class
-      'restriction'
+      "restriction"
     end
   end
 
   class ProteaseSite < Feature
     def feature_class
-      'protease'
+      "protease"
     end
   end
 
   class ProteinSequence < Feature
     include RegionalFeature
+
     def initialize(prototype, pos, feature_length)
       super(prototype, pos)
       self.feature_length = feature_length
     end
 
     def feature_class
-      'protein'
+      "protein"
     end
   end
 
@@ -117,16 +124,16 @@ module PlasmidMapping
 
   def self.load_all_known_features
     @known_features = YAML.load_file(FEATURE_LIST).map do |name, info|
-      if info['display']['feature_class'] == 'protease'
-        Protease.new(name, info['sequence'].downcase, info['exact'], info['display'])
+      if info["display"]["feature_class"] == "protease"
+        Protease.new(name, info["sequence"].downcase, info["exact"], info["display"])
       else
-        Protein.new(name, info['sequence'].downcase, info['exact'], info['display'])
+        Protein.new(name, info["sequence"].downcase, info["exact"], info["display"])
       end
     end
     @known_enzymes = YAML.load_file(ENZYME_LIST).map do |name, info|
-      degen_seq = info['rec_seq'].downcase
+      degen_seq = info["rec_seq"].downcase
       seq = DEGENERATES.reduce(degen_seq) { |curr_seq, degen| curr_seq.gsub(*degen) }
-      RestrictionEnzyme.new(name, seq, info['display'], info['cut_bef'])
+      RestrictionEnzyme.new(name, seq, info["display"], info["cut_bef"])
     end
   end
 
@@ -140,7 +147,7 @@ module PlasmidMapping
 
   load_all_known_features
 
-  def self.find_features(seq, feature_re, offset=0)
+  def self.find_features(seq, feature_re, offset = 0)
   end
 
   def self.map_restriction_enzymes(seq)
@@ -148,10 +155,10 @@ module PlasmidMapping
   end
 
   def self.translations(seq)
-    unless seq and seq.length > 0 then
+    unless seq and seq.length > 0
       return ["", "", ""]
     end
-    seq = Bio::Sequence::NA.new(seq*2) #double the sequence to avoid end effects
+    seq = Bio::Sequence::NA.new(seq * 2) #double the sequence to avoid end effects
     (1..3).map { |i| seq.translate(i).to_s }
   end
 
@@ -159,7 +166,7 @@ module PlasmidMapping
     translations(seq).flat_map.with_index do |tr, frame|
       features = @known_features.flat_map do |f|
         # TODO(colin): don't assume all these have to be proteins.
-        raise 'Assertion failed: feature must be a protein' unless f.is_a?(Protein) || f.is_a?(Protease)
+        raise "Assertion failed: feature must be a protein" unless f.is_a?(Protein) || f.is_a?(Protease)
         f.locate_all_in(tr)
       end
       # features now has 1-indexed positions in terms of protein sequence, and

@@ -1,26 +1,8 @@
-#--
-# Copyright (C) 2013  Colin J. Fuller
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Affero General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Affero General Public License for more details.
-#
-# You should have received a copy of the GNU Affero General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#++
+require "action_dispatch/routing/url_for"
 
-require 'action_view/helpers/url_helper'
-
-require 'object_naming'
+require "object_naming"
 
 class LinkableString
-
   include Rails.application.routes.url_helpers
 
   def controller
@@ -42,14 +24,31 @@ class LinkableString
     matches
   end
 
+  def lazy_item_links()
+    matches = []
+    Naming::NAMES_LOOKUP.each_key do |k|
+      scan_matchobjs(/#{k}N?\W*(\d+)/) do |m|
+        matches << [
+          m[0], url_for(
+            controller: "application",
+            action: :show_by_name,
+            name: m[0],
+            only_path: true,
+          )
+        ]
+      end
+    end
+    matches
+  end
+
   def item_links(items: false)
     matches = []
     Naming::NAMES_LOOKUP.each_key do |k|
       scan_matchobjs(/#{k}N?\W*(\d+)/) do |m|
         cls = Naming.named_class_for(k).constantize
         id = cls.where(cls.number_field_name => m[1]).first
-        if id then
-          if items then
+        if id
+          if items
             matches << id
           else
             matches << [
@@ -57,7 +56,9 @@ class LinkableString
                 controller: Naming.named_class_for(k).downcase.pluralize,
                 action: :show,
                 id: id,
-                only_path: true)]
+                only_path: true,
+              ),
+            ]
           end
         end
       end
@@ -66,7 +67,7 @@ class LinkableString
   end
 
   def sub_labdb_links
-    self.item_links.each do |lnk|
+    self.lazy_item_links.each do |lnk|
       @str = @str.gsub(/#{lnk[0]}(?!\d)/, "<a class=\"auto-link\" href=\"#{lnk[1]}\">#{lnk[0]}</a>")
     end
     self
@@ -75,7 +76,6 @@ class LinkableString
   def to_s
     @str
   end
-
 end
 
 class String
@@ -84,8 +84,14 @@ class String
     ls.sub_labdb_links
     ls.to_s
   end
+
   def item_links(items: false)
     ls = LinkableString.new(self)
     ls.item_links(items: items)
+  end
+
+  def lazy_item_links()
+    ls = LinkableString.new(self)
+    ls.lazy_item_links()
   end
 end

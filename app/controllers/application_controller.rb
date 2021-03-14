@@ -1,15 +1,15 @@
-require 'json'
-require 'set'
+require "json"
+require "set"
 
-require 'psych'
+require "psych"
 
-require 'authorization'
-require 'auto_linked'
-require 'helptext'
-require 'number_assignment'
-require 'object_naming'
-require 'searching'
-require 'standard_actions'
+require "authorization"
+require "auto_linked"
+require "helptext"
+require "number_assignment"
+require "object_naming"
+require "searching"
+require "standard_actions"
 
 class ApplicationController < ActionController::Base
   include Searching
@@ -19,12 +19,16 @@ class ApplicationController < ActionController::Base
   # request body; it's a non-mutative route.
   protect_from_forgery except: :search_result
 
-  DATABASE_SYSTEM_NAME = Naming.name_for('database_full')
-  DATABASE_SYSTEM_SHORT_NAME = Naming.name_for('database_short')
+  DATABASE_SYSTEM_NAME = Naming.name_for("database_full")
+  DATABASE_SYSTEM_SHORT_NAME = Naming.name_for("database_short")
 
-  prepend_before_filter :set_user_vars
-  prepend_before_filter :set_js_version
-  prepend_before_filter :force_https
+  prepend_before_action :set_user_vars
+  prepend_before_action :set_js_version
+  prepend_before_action :force_https
+
+  def default_url_options
+    {only_path: true}
+  end
 
   def force_https
     if Rails.env.production?
@@ -68,8 +72,8 @@ class ApplicationController < ActionController::Base
   end
 
   def generate_name(an_obj)
-    if an_obj.class.respond_to? :owner_field_name then
-      an_obj.send(an_obj.class.owner_field_name.to_s + '=',
+    if an_obj.class.respond_to? :owner_field_name
+      an_obj.send(an_obj.class.owner_field_name.to_s + "=",
                   curr_username)
     end
   end
@@ -92,8 +96,8 @@ class ApplicationController < ActionController::Base
 
   def do_export(obj)
     send_data(
-      obj.export_to(params['exportformat'].to_sym),
-      obj.get_export_params(params['exportformat'].to_sym)
+      obj.export_to(params["exportformat"].to_sym),
+      obj.get_export_params(params["exportformat"].to_sym)
     )
   end
 
@@ -106,7 +110,7 @@ class ApplicationController < ActionController::Base
 
   def search
     search_term = params[:term]
-    include_seq = params[:seq] == '1'
+    include_seq = params[:seq] == "1"
     types = params[:types] &&
             !params[:types].strip.empty? &&
             JSON.parse(params[:types].strip)
@@ -115,12 +119,12 @@ class ApplicationController < ActionController::Base
              params[:person].strip
     linked_term = LinkableString.new(search_term)
     results = []
-    if linked_term.item_links(items: true) then
+    if linked_term.item_links(items: true)
       results += linked_term.item_links(items: true)
     end
     # TODO: don't hardcode these
     model_classes = [
-      Plasmid, Oligo, Bacterium, Sample, Antibody, Line, Yeaststrain, SeqLib, RnaiClone
+      Plasmid, Oligo, Bacterium, Sample, Antibody, Line, Yeaststrain, SeqLib, RnaiClone,
     ]
     model_classes = model_classes.select { |t| types.include? t.name } if types
     model_classes.map do |cls|
@@ -133,11 +137,11 @@ class ApplicationController < ActionController::Base
       fields.each do |f|
         query = { f => search_term }
         partial_results = process_search_query(query, cls)
-                          .reject { |r| seen_ids.include? r.id }
+          .reject { |r| seen_ids.include? r.id }
 
-        if person then
+        if person
           partial_results = partial_results.select do |r|
-            r.send(r.class.owner_field_name).downcase.include? person.downcase
+            (r.send(r.class.owner_field_name) || "").downcase.include? person.downcase
           end
         end
         partial_results.each do |r|
@@ -146,7 +150,7 @@ class ApplicationController < ActionController::Base
         results += partial_results
       end
     end
-    resources = results.map(&:as_resource_def)
+    resources = results.map { |r| r.as_resource_def(include_sequence: false)}
     # TODO: icky hack to sort by date then id; fix.
     resources.sort_by! { |r| r[:timestamp] || (Date.new(1800, 1, 1) + r[:id].days) }.reverse!
     @search_results = JSON.generate(resources)
@@ -166,7 +170,7 @@ class ApplicationController < ActionController::Base
     search_term = params[:term]
     linked_term = LinkableString.new(search_term)
     maybe_linked_items = linked_term.item_links(items: true)
-    if maybe_linked_items then
+    if maybe_linked_items
       resources += maybe_linked_items.map(&:as_resource_def)
     end
     # TODO: icky hack to sort by date then id; fix.
@@ -175,5 +179,16 @@ class ApplicationController < ActionController::Base
     @content_json = JSON.generate([])
     @user_name = current_user.name
     @user_auth = auth_scope
+  end
+
+  def show_by_name
+    puts request.headers["Host"]
+    item_name = params[:name]
+    return head(:bad_request) if item_name.nil?
+    result = item_name.item_links(items: true)
+    return head(:not_found) if result.empty?
+    return head(:bad_request) if result.size != 1
+    single_result = result[0]
+    redirect_to single_result
   end
 end

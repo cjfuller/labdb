@@ -1,11 +1,11 @@
-require 'exporters'
-require 'numbered'
-require 'described'
-require 'headings'
-require 'dna_sequence'
-require 'resource_helpers'
+require "exporters"
+require "numbered"
+require "described"
+require "headings"
+require "dna_sequence"
+require "resource_helpers"
 
-require 'json'
+require "json"
 
 class Line < ActiveRecord::Base
   include Exportable
@@ -17,23 +17,23 @@ class Line < ActiveRecord::Base
   include ResourceHelpers
 
   @headings = {
-    current_stock_counts: 'Stock counts',
-    date_entered: 'Date entered',
-    description: 'Description',
-    entered_by: 'Entered by',
-    line_alias: 'Alias',
+    current_stock_counts: "Stock counts",
+    date_entered: "Date entered",
+    description: "Description",
+    entered_by: "Entered by",
+    line_alias: "Alias",
     line_number: "#{obj_tag} number",
-    locations: 'Locations',
-    notebook: 'Notebook',
-    parent_line: 'Parent line',
+    locations: "Locations",
+    notebook: "Notebook",
+    parent_line: "Parent line",
     plasmid_numbers: "#{Naming.name_for(Plasmid)} numbers",
-    selectable_markers: 'Selectable markers',
-    sequence: 'Associated sequence',
-    species: 'Species',
-    genotype: 'Genotype',
-    stock_person: 'Person',
-    stock_date: 'Date',
-    stock_clone: 'Clone',
+    selectable_markers: "Selectable markers",
+    sequence: "Associated sequence",
+    species: "Species",
+    genotype: "Genotype",
+    stock_person: "Person",
+    stock_date: "Date",
+    stock_clone: "Clone",
   }
 
   Fields = [
@@ -52,7 +52,7 @@ class Line < ActiveRecord::Base
     :species,
     :genotype,
     :stock_person,
-    :stock_date
+    :stock_date,
   ]
 
   InvFields = [
@@ -60,10 +60,8 @@ class Line < ActiveRecord::Base
     :current_stock_counts,
     :stock_clone,
     :stock_person,
-    :stock_date
+    :stock_date,
   ]
-
-  attr_accessible(*Fields)
 
   class InventoryItem
     Fields = [:location, :count, :person, :date, :clone]
@@ -75,17 +73,17 @@ class Line < ActiveRecord::Base
         count: self.count,
         person: self.person,
         date: self.date,
-        clone: self.clone
+        clone: self.clone,
       }.to_json
     end
 
     def self.from_hash(hash)
       ii = InventoryItem.new
-      hash.each { |k, v| ii.send(k.to_s + '=', v) }
+      hash.each { |k, v| ii.send(k.to_s + "=", v) }
       begin
         ii.date = Date.parse(ii.date.to_s) unless ii.date.to_s.empty?
       rescue ArgumentError
-        puts 'Invalid date'
+        puts "Invalid date"
         ii.date = nil
       end
       ii
@@ -151,28 +149,28 @@ class Line < ActiveRecord::Base
   def core_info
     [
       {
-        name: 'Line information',
+        name: "Line information",
         fields: fields(
           [:species, :genotype, :selectable_markers, :parent_line]
         ),
       },
       {
-        name: 'Description',
+        name: "Description",
         preformatted: true,
         single: true,
         lookup: :description,
         inlineValue: Labdb::Application::MARKDOWN
-          .render(description || '')
+          .render(description || "")
           .labdb_auto_link
           .html_safe,
-      }
+      },
     ]
   end
 
   def sequence_info
     {
       sequence: { lookup: :sequence },
-      verified: nil
+      verified: nil,
     }
   end
 
@@ -189,18 +187,18 @@ class Line < ActiveRecord::Base
 
     return inv unless self.locations
 
-    locs = self.locations.split(',')
-    counts = self.current_stock_counts.split(',')
+    locs = self.locations.split(",")
+    counts = self.current_stock_counts.split(",")
 
-    self.stock_person ||= ',' * (self.locations.count(','))
-    self.stock_date ||= ',' * (self.locations.count(','))
+    self.stock_person ||= "," * (self.locations.count(","))
+    self.stock_date ||= "," * (self.locations.count(","))
 
-    people = self.stock_person.split(',')
-    dates = self.stock_date.split(',')
-    clones = counts.map { '' }
+    people = self.stock_person.split(",")
+    dates = self.stock_date.split(",")
+    clones = counts.map { "" }
 
-    counts.each.with_index do |c,i|
-      if /\s*\d+\s*\(\s*clone\s*\d+\)/.match(c) then
+    counts.each.with_index do |c, i|
+      if /\s*\d+\s*\(\s*clone\s*\d+\)/.match(c)
         matchobj = /\s*(\d+)\s*\(\s*clone\s*(\d+)\s*\)/.match(c)
         counts[i] = matchobj[1]
         clones[i] = matchobj[2]
@@ -213,11 +211,11 @@ class Line < ActiveRecord::Base
       inv_item.count = counts[i].to_i
       inv_item.clone = clones[i]
       inv_item.person = people[i]
-      inv_item.date = if !dates[i].nil? && !dates[i].empty? then
-                        Date.parse(dates[i])
-                      else
-                        ''
-                      end
+      inv_item.date = if !dates[i].nil? && !dates[i].empty?
+          Date.parse(dates[i])
+        else
+          ""
+        end
       inv << inv_item
     end
 
@@ -235,18 +233,18 @@ class Line < ActiveRecord::Base
       begin
         Date.parse(e.date.to_s).to_s
       rescue
-        ''
+        ""
       end
     end
 
-    self.locations = locs.join(',')
+    self.locations = locs.join(",")
     self.current_stock_counts = counts.map.with_index do |e, i|
-      clone_string = ''
+      clone_string = ""
       clone_string = "(clone #{clones[i]})" unless clones[i].empty?
       e.to_s + clone_string
     end
-    self.current_stock_counts = self.current_stock_counts.join(',')
-    self.stock_person = people.join(',')
-    self.stock_date = date.join(',')
+    self.current_stock_counts = self.current_stock_counts.join(",")
+    self.stock_person = people.join(",")
+    self.stock_date = date.join(",")
   end
 end

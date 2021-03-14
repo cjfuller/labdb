@@ -1,16 +1,16 @@
-require 'spec_helper'
-require 'plasmid_mapping'
+require "spec_helper"
+require "plasmid_mapping"
 
 describe PlasmidMapping do
-  Sequence = File.read('spec/fixtures/mapping.txt').strip
+  Sequence = File.read("spec/fixtures/mapping.txt").strip
 
-  it 'should locate restriction enzymes in a DNA sequence' do
+  it "should locate restriction enzymes in a DNA sequence" do
     sites = PlasmidMapping.map_restriction_enzymes(Sequence)
-    first_pos = sites.select { |s| s.prototype.name == "NdeI" }.first.pos 
+    first_pos = sites.select { |s| s.prototype.name == "NdeI" }.first.pos
     expect(first_pos).to eq 5148
   end
 
-  it 'should locate protein features in a DNA sequence' do
+  it "should locate protein features in a DNA sequence" do
     sites = PlasmidMapping.map_other_features(Sequence)
     hisSites = sites.select { |s| s.prototype.name == "6xHis" }
     expect(hisSites.first.pos).to eq 5083

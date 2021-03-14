@@ -1,4 +1,3 @@
-
 class SeqLibsController < ApplicationController
   include StandardActions
 
@@ -15,7 +14,7 @@ class SeqLibsController < ApplicationController
   end
 
   def define_table_view_vars
-    @table_columns = {sort: :number, others: [:created_at, :entered_by, :alias]}
+    @table_columns = { sort: :number, others: [:created_at, :entered_by, :alias] }
     @controller = self.class
     @table_objects = @seq_libs
   end

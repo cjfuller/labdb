@@ -1,25 +1,7 @@
-#--
-# Copyright (C) 2013  Colin J. Fuller
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Affero General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Affero General Public License for more details.
-#
-# You should have received a copy of the GNU Affero General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#++
-
-require 'spec_helper'
-require 'auto_linked'
+require "spec_helper"
+require "auto_linked"
 
 describe LinkableString do
-
   fixtures :oligos, :plasmids
 
   it "should identify and link an object reference" do
@@ -38,7 +20,6 @@ describe LinkableString do
 
   it "should fail gracefully when encountering a nonexistent reference" do
     ls = LinkableString.new("ASON3444992")
-    expect {ls.sub_labdb_links}.not_to raise_error
+    expect { ls.sub_labdb_links }.not_to raise_error
   end
-
 end
