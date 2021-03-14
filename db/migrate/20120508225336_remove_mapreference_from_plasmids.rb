@@ -1,7 +1,7 @@
 class RemoveMapreferenceFromPlasmids < ActiveRecord::Migration
   def up
     remove_column :plasmids, :mapreference
-      end
+  end
 
   def down
     add_column :plasmids, :mapreference, :string

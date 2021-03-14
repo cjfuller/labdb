@@ -1,1 +1,1 @@
-require 'auto_linked'
+require "auto_linked"

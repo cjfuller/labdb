@@ -21,3 +21,4 @@ public/_s/*.js
 target
 project/target
 .vscode
+.metals

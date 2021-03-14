@@ -1,15 +1,15 @@
 # coding: utf-8
-require 'json'
+require "json"
 
-require 'exporters'
-require 'numbered'
-require 'described'
-require 'headings'
-require 'dna_sequence'
-require 'plasmid_mapping'
-require 'resource_helpers'
+require "exporters"
+require "numbered"
+require "described"
+require "headings"
+require "dna_sequence"
+require "plasmid_mapping"
+require "resource_helpers"
 
-require 'facets/string/word_wrap'
+require "facets/string/word_wrap"
 
 class Plasmid < ActiveRecord::Base
   include Exportable
@@ -23,28 +23,26 @@ class Plasmid < ActiveRecord::Base
   # TODO: be more deliberate about class instance var / class var / constant
   # choices
   @headings = {
-    antibiotic: 'Antibiotic resistances',
-    concentration: 'Concentration (μg/mL)',
-    date: 'Date',
-    description: 'Description',
-    creator: 'Entered by',
-    notebook: 'Notebook',
-    alias: 'Alias',
+    antibiotic: "Antibiotic resistances",
+    concentration: "Concentration (μg/mL)",
+    date: "Date",
+    description: "Description",
+    creator: "Entered by",
+    notebook: "Notebook",
+    alias: "Alias",
     number: "#{obj_tag} Number",
-    sequence: 'Sequence',
+    sequence: "Sequence",
     strainnumbers: "#{Naming.name_for(Bacterium)} numbers",
-    vector: 'Vector',
-    verified: 'Sequence verified?',
+    vector: "Vector",
+    verified: "Sequence verified?",
   }
 
   Fields = @headings.keys
 
-  attr_accessible(*Fields)
-
   attr_accessor :search_by_regex
 
   def calculate_size
-    self.plasmidsize = self.sequence.gsub(/\W/, '').length
+    self.plasmidsize = self.sequence.gsub(/\W/, "").length
   end
 
   def linked_properties
@@ -86,7 +84,7 @@ class Plasmid < ActiveRecord::Base
 
   def core_alt_field
     numbers = get_linked_number_fields(core_alt_field_name) || []
-    numbers.map { |n| Naming.name_for(Bacterium) + ' ' + n.to_s }
+    numbers.map { |n| Naming.name_for(Bacterium) + " " + n.to_s }
   end
 
   def plasmid_map
@@ -96,20 +94,20 @@ class Plasmid < ActiveRecord::Base
   def core_info
     [
       {
-        name: 'Vector information',
+        name: "Vector information",
         fields: [
           field(:vector),
-          field(:antibiotic)
-        ]
+          field(:antibiotic),
+        ],
       },
       {
-        name: 'Description',
+        name: "Description",
         preformatted: true,
         lookup: :description,
         single: true,
-        inlineValue: Labdb::Application::MARKDOWN.render(description || '')
-                                                 .labdb_auto_link.html_safe
-      }
+        inlineValue: Labdb::Application::MARKDOWN.render(description || "")
+                                                 .labdb_auto_link.html_safe,
+      },
     ]
   end
 
@@ -125,7 +123,7 @@ class Plasmid < ActiveRecord::Base
       field(:creator),
       field(:date),
       field(:notebook),
-      field(:concentration)
+      field(:concentration),
     ]
   end
 end

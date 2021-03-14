@@ -1,9 +1,9 @@
-require 'exporters'
-require 'numbered'
-require 'described'
-require 'headings'
-require 'dna_sequence'
-require 'resource_helpers'
+require "exporters"
+require "numbered"
+require "described"
+require "headings"
+require "dna_sequence"
+require "resource_helpers"
 
 module CheckPlasmidSequence
   # Patches the Bacterium class to check a linked plasmid for a sequence
@@ -12,7 +12,7 @@ module CheckPlasmidSequence
     seq = super
     return seq if seq && !seq.empty?
     linked_plas = self.core_alt_link
-    if linked_plas && !linked_plas.empty? then
+    if linked_plas && !linked_plas.empty?
       linked_plas.each do |p|
         return p.sequence if p && p.sequence && !p.sequence.empty?
       end
@@ -33,20 +33,18 @@ class Bacterium < ActiveRecord::Base
 
   @headings = {
     strain_number: "#{obj_tag} Number",
-    date_entered: 'Date',
-    entered_by: 'Entered by',
-    notebook: 'Notebook',
-    comments: 'Description',
+    date_entered: "Date",
+    entered_by: "Entered by",
+    notebook: "Notebook",
+    comments: "Description",
     plasmid_number: "#{Naming.name_for(Plasmid)} Number",
-    species_bkg: 'Species and background',
-    genotype: 'Genotype',
-    sequence: 'Sequence',
-    strainalias: 'Alias',
+    species_bkg: "Species and background",
+    genotype: "Genotype",
+    sequence: "Sequence",
+    strainalias: "Alias",
   }
 
   Fields = @headings.keys
-
-  attr_accessible(*Fields)
 
   def linked_properties
     [:plasmid_number]
@@ -87,7 +85,7 @@ class Bacterium < ActiveRecord::Base
 
   def core_alt_field
     numbers = get_linked_number_fields(core_alt_field_name) || []
-    numbers.map { |n| Naming.name_for(Plasmid) + ' ' + n.to_s }
+    numbers.map { |n| Naming.name_for(Plasmid) + " " + n.to_s }
   end
 
   def core_alt_link
@@ -98,25 +96,25 @@ class Bacterium < ActiveRecord::Base
   def core_info
     [
       {
-        name: 'Strain information',
-        fields: fields([:species_bkg, :genotype])
+        name: "Strain information",
+        fields: fields([:species_bkg, :genotype]),
       },
       {
-        name: 'Description',
+        name: "Description",
         preformatted: true,
         lookup: :comments,
         single: true,
-        inlineValue: Labdb::Application::MARKDOWN.render(comments || '')
+        inlineValue: Labdb::Application::MARKDOWN.render(comments || "")
                                                  .labdb_auto_link
-                                                 .html_safe
-      }
+                                                 .html_safe,
+      },
     ]
   end
 
   def sequence_info
     {
       sequence: { lookup: :sequence },
-      verified: nil
+      verified: nil,
     }
   end
 

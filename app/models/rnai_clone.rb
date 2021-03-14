@@ -1,8 +1,8 @@
-require 'exporters'
-require 'numbered'
-require 'described'
-require 'headings'
-require 'resource_helpers'
+require "exporters"
+require "numbered"
+require "described"
+require "headings"
+require "resource_helpers"
 
 class RnaiClone < ActiveRecord::Base
   include Exportable
@@ -14,25 +14,24 @@ class RnaiClone < ActiveRecord::Base
 
   @headings = {
     number: "#{obj_tag} number",
-    alias: 'Alias',
-    notebook: 'Notebook',
-    description: 'Description',
-    entered_by: 'Entered by',
-    sequence_name: 'Sequence name',
-    library: 'Library',
-    host_strain: 'Host strain',
-    plasmid_backbone: 'Plasmid backbone',
-    antibiotic: 'Antibiotic',
-    location: 'Location',
-    sequenced: 'Sequenced?',
-    created_at: 'Date entered',
+    alias: "Alias",
+    notebook: "Notebook",
+    description: "Description",
+    entered_by: "Entered by",
+    sequence_name: "Sequence name",
+    library: "Library",
+    host_strain: "Host strain",
+    plasmid_backbone: "Plasmid backbone",
+    antibiotic: "Antibiotic",
+    location: "Location",
+    sequenced: "Sequenced?",
+    created_at: "Date entered",
   }
 
   Fields = @headings.keys
-  attr_accessible(*Fields)
 
   def type
-    'rnai_clone'
+    "rnai_clone"
   end
 
   def exportable_fields
@@ -62,24 +61,24 @@ class RnaiClone < ActiveRecord::Base
   def core_info
     [
       {
-        name: 'Clone info',
+        name: "Clone info",
         fields: fields([
-          :sequence_name, :library, :host_strain, :plasmid_backbone, :antibiotic
-        ])
+          :sequence_name, :library, :host_strain, :plasmid_backbone, :antibiotic,
+        ]),
       },
       {
-        name: 'Description',
+        name: "Description",
         preformatted: true,
         lookup: :description,
         single: true,
         inlineValue: Labdb::Application::MARKDOWN
-          .render(description || '')
+          .render(description || "")
           .labdb_auto_link
-          .html_safe
+          .html_safe,
       },
       {
-        name: 'Other info',
-        fields: [field(:location), field(:sequenced, type: :boolean)]
+        name: "Other info",
+        fields: [field(:location), field(:sequenced, type: :boolean)],
       },
     ]
   end
