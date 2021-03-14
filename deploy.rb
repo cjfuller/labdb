@@ -34,7 +34,7 @@ end
 
 def checkout_and_update(lab)
   cmd ["git", "checkout", lab]
-  cmd %w(git merge master)
+  cmd %w(git merge v2)
   cmd %w(git push)
 end
 

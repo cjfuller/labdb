@@ -179,6 +179,7 @@ class ApplicationController < ActionController::Base
     @content_json = JSON.generate([])
     @user_name = current_user.name
     @user_auth = auth_scope
+    render "layouts/application.html.haml"
   end
 
   def show_by_name
