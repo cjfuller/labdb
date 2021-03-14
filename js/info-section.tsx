@@ -39,7 +39,13 @@ function SectionContents(props: Props) {
     );
   }
   return props.contents.fields.map(
-    (f: { name: string; type: string; value: any; lookup: string }) => {
+    (f: {
+      name: string;
+      type: string;
+      value: any;
+      lookup: string;
+      precalculatedValue?: string;
+    }) => {
       const isBooleanField = f.type && f.type === "boolean";
       const sep = isBooleanField ? "?" : ":";
 
@@ -69,6 +75,7 @@ function SectionContents(props: Props) {
                 editable={props.editable}
                 onChange={props.makeUpdater(f.lookup)}
                 value={val(f.lookup)}
+                valueForDisplayOnly={f.precalculatedValue}
               />
             )}
           </div>
