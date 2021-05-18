@@ -225,7 +225,7 @@ export default function Navbar(props: Props) {
   return (
     <div className={css(styles.navbar)}>
       <div className={css(styles.navbarTextSection)}>
-        <NavLogo text={"LabDB2.\u03b2"} />
+        <NavLogo text={"LabDB2"} />
         {navitems.map((n, i) => {
           return <NavItem addr={navlinks[n]} name={n} key={n} />;
         })}
