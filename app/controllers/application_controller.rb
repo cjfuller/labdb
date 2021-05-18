@@ -163,6 +163,11 @@ class ApplicationController < ActionController::Base
     resources = (params[:items] || []).map do |item|
       model_type = item[0]
       model_id = item[1]
+      if model_type == "RNAiClone"
+        # The go frontend and the rails backend use two different naming conventions.
+        # It's easier to translate between them than to defy the convention.
+        model_type = "RnaiClone"
+      end
       cls = model_type.classify.constantize
       cls.find(model_id).as_resource_def
     end
