@@ -26,16 +26,20 @@ class LinkableString
 
   def lazy_item_links()
     matches = []
+    seen = Set.new
     Naming::NAMES_LOOKUP.each_key do |k|
       scan_matchobjs(/#{k}N?\W*(\d+)/) do |m|
-        matches << [
-          m[0], url_for(
-            controller: "application",
-            action: :show_by_name,
-            name: m[0],
-            only_path: true,
-          )
-        ]
+        if !seen.include?(m[0])
+          seen << m[0]
+          matches << [
+            m[0], url_for(
+              controller: "application",
+              action: :show_by_name,
+              name: m[0],
+              only_path: true,
+            )
+          ]
+        end
       end
     end
     matches
