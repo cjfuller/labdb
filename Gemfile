@@ -32,7 +32,7 @@ gem "omniauth"
 gem "omniauth-openid"
 gem "omniauth-browserid"
 
-gem "puma", "~> 4.3.5"
+gem "puma", "~> 4.3.9"
 
 gem "facets", require: false
 
