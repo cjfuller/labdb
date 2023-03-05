@@ -54,6 +54,9 @@ module Authorization
       signature_time = Time.iso8601(signature_timestamp)
       curr_time = Time.new.utc
       signature = request.headers["HTTP_X_LABDB_SIGNATURE"].downcase
+      puts unverified_uid
+      puts signature_timestamp
+      puts signature
       computed_signature = OpenSSL::HMAC.hexdigest(
         "SHA256", Labdb::Application.config.signing_key, unverified_uid + signature_timestamp
       )

@@ -3,7 +3,7 @@ source "https://rubygems.org"
 gem "rails", "~> 6.0.3.2"
 gem "haml", "~> 5.1.2"
 
-gem "pg", "~> 1.2.3"
+gem "pg", "~> 1.4.6"
 
 gem "redcarpet", "~> 3.5.0"
 
@@ -32,7 +32,7 @@ gem "omniauth"
 gem "omniauth-openid"
 gem "omniauth-browserid"
 
-gem "puma", "~> 4.3.5"
+gem "puma", "~> 4.3.12"
 
 gem "facets", require: false
 
@@ -40,4 +40,4 @@ gem "racc"
 
 gem "bio"
 
-ruby "2.7.1"
+ruby "~> 2.7.1"
