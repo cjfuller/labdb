@@ -7,7 +7,7 @@
 token = if Rails.env.production?
     ENV["SECRET_TOKEN"]
   else
-    "development-token"
+    "development-token-00000000000000000000000000000000000000000000000"
   end
 
 Labdb::Application.config.secret_token = token

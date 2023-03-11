@@ -51,4 +51,11 @@ Labdb::Application.configure do
   config.active_support.deprecation = :notify
 
   config.js_version = ENV["JS_VERSION"]
+
+  config.hosts << "test.labdb.io"
+  config.hosts << "weber.labdb.io"
+  config.hosts << "straight.labdb.io"
+  config.hosts << "test-backend.labdb.io"
+  config.hosts << "weber-backend.labdb.io"
+  config.hosts << "straight-backend.labdb.io"
 end
