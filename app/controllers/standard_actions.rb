@@ -73,6 +73,7 @@ module StandardActions
     @search_results = JSON.generate([])
     @user_name = current_user.name
     @user_auth = auth_scope
+    @user_email = current_user.email
     render "layouts/application.html.haml"
   end
 
@@ -86,6 +87,7 @@ module StandardActions
     @content_json = @obj.as_json.html_safe
     @user_name = current_user.name
     @user_auth = auth_scope
+    @user_email = current_user.email
     @search_results = JSON.generate([])
     render "layouts/application.html.haml"
   end

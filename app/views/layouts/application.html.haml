@@ -1,9 +1,6 @@
 !!!
 %html
   %head
-    %meta{name: "google-signin-client_id",
-          content: "146923434465-alq7iagpanjvoag20smuirj0ivdtfldk.apps.googleusercontent.com"}
-    %script{src: "https://apis.google.com/js/platform.js", async: true, defer: true}
     %title= ApplicationController::DATABASE_SYSTEM_NAME
     %link{rel: "stylesheet", type: "text/css", href: "//fonts.googleapis.com/css?family=Montserrat:400"}
     %link{rel: "stylesheet", type: "text/css", href: "//fonts.googleapis.com/css?family=Rokkitt:400"}
@@ -32,6 +29,7 @@
       = "window._labdbPrefetch = #{@content_json};".html_safe
       = "window._labdbUser = '#{@user_name || ""}';".html_safe
       = "window._labdbAuth = '#{@user_auth || ""}';".html_safe
+      = "window._labdbEmail = '#{@user_email || ""}';".html_safe
       = "window._labdbSearchResults = #{@search_results};".html_safe
     - if @login_page
       %div#landing
@@ -41,3 +39,5 @@
       %script{src: "https://storage.googleapis.com/labdb-static/app_#{@js_version}.js"}
     - else
       %script{src: "/_s/app_#{@js_version}.js", type: "text/javascript"}
+
+    %script{src: "https://accounts.google.com/gsi/client", async: true, defer: true}
