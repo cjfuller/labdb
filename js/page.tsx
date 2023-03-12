@@ -22,6 +22,7 @@ type Props = {
   unsavedChanges: any;
   user: {
     name: string;
+    email: string;
     auth: "admin" | "write" | "read";
   };
 };

@@ -108,11 +108,12 @@ export function hamburgerVisibility(visible: boolean): Action {
   };
 }
 
-export function setUserAndAuth(user: any, auth: any): Action {
+export function setUserAndAuth(user: any, auth: any, email: any): Action {
   return {
     type: USER,
     name: user,
     auth: auth,
+    email: email,
   };
 }
 

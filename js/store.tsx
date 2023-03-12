@@ -223,8 +223,11 @@ function hamburgerHandler(state: any, action: { visible: any }) {
   return { ...state, showHamburger: action.visible };
 }
 
-function userHandler(state: any, action: { name: any; auth: any }) {
-  return { ...state, user: { name: action.name, auth: action.auth } };
+function userHandler(state: any, action: { name: any; auth: any; email: any }) {
+  return {
+    ...state,
+    user: { name: action.name, auth: action.auth, email: action.email },
+  };
 }
 
 function searchBarHandler(state: any, action: { visible: any }) {
@@ -353,7 +356,8 @@ function loadPrefetchedData() {
   store.dispatch(
     Actions.setUserAndAuth(
       (window as any)._labdbUser,
-      (window as any)._labdbAuth
+      (window as any)._labdbAuth,
+      (window as any)._labdbEmail
     )
   );
 }
@@ -429,7 +433,6 @@ window.onload = () => {
   if (document.getElementById("landing")) {
     ReactDOM.render(<LandingPage />, document.getElementById("landing"));
   } else {
-    (window as any).gapi.load("auth2", () => (window as any).gapi.auth2.init());
     loadPrefetchedData();
     ActionExecutors.injectDispatch(store.dispatch);
     ReactDOM.render(

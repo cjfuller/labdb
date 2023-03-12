@@ -48,13 +48,13 @@ function HamburgerSectionName(props: { name: string }) {
   );
 }
 
-function logout() {
+function logout(email: string) {
   return $.ajax({
     url: "/logout",
     method: "POST",
   })
     .then(() => {
-      return (window as any).gapi.auth2.getAuthInstance().signOut();
+      return (window as any).google.accounts.id.revoke(email);
     })
     .then(() => {
       window.location.href = "/";
@@ -89,6 +89,7 @@ type Props = {
   getState: Function;
   user: {
     name: string;
+    email: string;
     auth: Scope;
   };
 };
@@ -129,8 +130,15 @@ export default function Hamburger(props: Props) {
       <HamburgerEntry iconName="person">
         <span className={css(styles.userName)}>{props.user.name}</span>
       </HamburgerEntry>
-      <HamburgerEntry iconName="cloud_off" interactive={true} onClick={logout}>
+      <HamburgerEntry
+        iconName="cloud_off"
+        interactive={true}
+        onClick={() => logout(props.user.email)}
+      >
         <span>Log out</span>
+        <span className={css(styles.comingSoon)}>
+          Does not log you out of Google.
+        </span>
       </HamburgerEntry>
       <Auth required="admin" auth={props.user.auth}>
         <HamburgerSectionName name="Administration" />

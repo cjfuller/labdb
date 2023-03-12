@@ -4,31 +4,32 @@ import $ from "jquery";
 
 import ss from "./shared-styles";
 
+const clientID =
+  "146923434465-alq7iagpanjvoag20smuirj0ivdtfldk.apps.googleusercontent.com";
+
+function onSignIn({ credential }: { credential: string }) {
+  return $.ajax({
+    url: `/api/verify?jwt=${credential}`,
+    method: "POST",
+  }).then(() => {
+    // TODO: make a logged in landing page.
+    window.location.href = "/plasmids";
+  });
+}
+
 export default function LandingPage() {
   useEffect(() => {
-    const onSignIn = function (googleUser: any) {
-      const token = googleUser.getAuthResponse().id_token;
-      return $.ajax({
-        url: `/api/verify?token=${token}`,
-        method: "POST",
-      }).then(
-        () => {
-          // TODO: make a logged in landing page.
-          window.location.href = "/plasmids";
-        },
-        () => {
-          (window as any).gapi.auth2.getAuthInstance().signOut();
-        }
-      );
-    };
-    (window as any).gapi.signin2.render("g-signin2", {
-      scope: "openid email profile",
-      longtitle: true,
-      prompt: "select_account",
-      theme: "dark",
-      width: 200,
-      onsuccess: onSignIn,
+    (window as any).google.accounts.id.initialize({
+      auto_select: true,
+      client_id: clientID,
+      callback: onSignIn,
     });
+    (window as any).google.accounts.id.renderButton(
+      document.getElementById("google-signin-button"),
+      { theme: "outline", size: "large" }
+    );
+
+    (window as any).google.accounts.id.prompt();
   }, []);
   return (
     <div className={css(styles.container)}>
@@ -38,9 +39,7 @@ export default function LandingPage() {
         </div>
         <div>Please log in.</div>
         <div className={css(styles.prompt)}>
-          <div>
-            <div id="g-signin2">Sign in with google.</div>
-          </div>
+          <div id="google-signin-button"></div>
         </div>
       </div>
     </div>
