@@ -4,8 +4,9 @@ development:
   pool: 5
   timeout: 5000
   encoding: utf8
-  host:
-  username:
+  host: localhost
+  port: 5432
+  username: postgres
   password:
 
 # Warning: The database defined as "test" will be erased and
@@ -23,10 +24,10 @@ test:
 
 production:
   adapter: postgresql
-  database: labdb
-  username: labdb
-  password:
+  database: <%= ENV['PG_DB'] %>
+  host: "/cloudsql/labdb-io:northamerica-northeast1:labdb"
+  username: postgres
+  password: <%= ENV['DB_PASSWORD'] %>
   pool: 5
   timeout: 5000
   encoding: utf8
-  host: postgres-weber
