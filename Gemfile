@@ -22,7 +22,7 @@ group :development, :test do
   gem "colorize"
   gem "trollop"
   gem "rufo"
-  gem "standardrb"
+  gem "standard", "~> 1.33"
 end
 
 gem "bcrypt-ruby", "~> 3.1.5"

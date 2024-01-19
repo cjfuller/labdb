@@ -40,6 +40,6 @@
   "scripts": {
     "flow": "node_modules/.bin/flow",
     "compile": "webpack --define-process-env-node-env production",
-    "watch": "node node_modules/webpack/bin/webpack.js --watch-stdin --progress --colors"
+    "watch": "node node_modules/webpack/bin/webpack.js watch --progress"
   }
 }

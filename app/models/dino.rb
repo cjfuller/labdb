@@ -1,10 +1,12 @@
+require "json"
+
 require "exporters"
 require "numbered"
 require "described"
 require "headings"
 require "resource_helpers"
 
-class RnaiClone < ActiveRecord::Base
+class Dino < ActiveRecord::Base
   include Exportable
   include LinkableModel
   include Numbered
@@ -18,20 +20,16 @@ class RnaiClone < ActiveRecord::Base
     notebook: "Notebook",
     description: "Description",
     entered_by: "Entered by",
-    sequence_name: "Sequence name",
-    library: "Library",
-    host_strain: "Host strain",
-    plasmid_backbone: "Plasmid backbone",
-    antibiotic: "Antibiotic",
-    location: "Location",
-    sequenced: "Sequenced?",
-    created_at: "Date entered"
+    genotype: "Genotype",
+    species: "Species",
+    selectable_markers: "Selectable markers",
+    created_at: "Date created"
   }
 
   Fields = @headings.keys
 
   def type
-    "rnai_clone"
+    "dino"
   end
 
   def exportable_fields
@@ -61,24 +59,19 @@ class RnaiClone < ActiveRecord::Base
   def core_info
     [
       {
-        name: "Clone info",
-        fields: fields([
-          :sequence_name, :library, :host_strain, :plasmid_backbone, :antibiotic
-        ])
+        name: "Strain information",
+        fields: [
+          field(:species),
+          field(:genotype),
+          field(:selectable_markers)
+        ]
       },
       {
         name: "Description",
         preformatted: true,
         lookup: :description,
         single: true,
-        inlineValue: Labdb::Application::MARKDOWN
-          .render(description || "")
-          .labdb_auto_link
-          .html_safe
-      },
-      {
-        name: "Other info",
-        fields: [field(:location), field(:sequenced, type: :boolean)]
+        inlineValue: Labdb::Application::MARKDOWN.render(description || "").labdb_auto_link.html_safe
       }
     ]
   end
@@ -88,6 +81,10 @@ class RnaiClone < ActiveRecord::Base
   end
 
   def supplemental_info
-    fields [:entered_by, :created_at, :notebook]
+    [
+      field(:entered_by),
+      field(:created_at),
+      field(:notebook)
+    ]
   end
 end

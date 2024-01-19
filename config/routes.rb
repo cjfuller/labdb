@@ -61,6 +61,7 @@ Labdb::Application.routes.draw do
 
   resources :seq_libs, &common_actions
   resources :rnai_clones, &common_actions
+  resources :dinos, &common_actions
 
   get "/search", to: "application#search"
   post "/search_result", to: "application#search_result"

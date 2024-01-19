@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 201605211916) do
+ActiveRecord::Schema.define(version: 2024_01_19_125715) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -46,6 +46,19 @@ ActiveRecord::Schema.define(version: 201605211916) do
     t.text "sequence"
     t.string "strainalias", limit: 255
     t.string "intrinsic_resistance"
+  end
+
+  create_table "dinos", force: :cascade do |t|
+    t.integer "number"
+    t.string "alias"
+    t.string "description"
+    t.string "entered_by"
+    t.string "notebook"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "species"
+    t.string "genotype"
+    t.string "selectable_markers"
   end
 
   create_table "lines", id: :serial, force: :cascade do |t|
