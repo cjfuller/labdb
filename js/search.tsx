@@ -10,10 +10,10 @@ const Types = {
   Plasmid: "Plasmids",
   Oligo: "Oligos",
   Bacterium: "Bacteria",
-  Sample: "Samples",
   Antibody: "Antibodies",
   Line: "Worms",
   RnaiClone: "RNAi clones",
+  Dino: "Dinos",
 };
 
 type TypeKey = keyof typeof Types;

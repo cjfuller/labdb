@@ -229,9 +229,6 @@ export default function Hamburger(props: Props) {
       >
         <span>Bacteria</span>
       </HamburgerEntry>
-      <HamburgerEntry href="/samples" iconName="folder_open" interactive={true}>
-        <span>Samples</span>
-      </HamburgerEntry>
       <HamburgerEntry
         href="/antibodies"
         iconName="folder_open"
@@ -243,18 +240,14 @@ export default function Hamburger(props: Props) {
         <span>Worms</span>
       </HamburgerEntry>
       <HamburgerEntry
-        href="/yeaststrains"
-        iconName="folder_open"
-        interactive={true}
-      >
-        <span>Yeast</span>
-      </HamburgerEntry>
-      <HamburgerEntry
         href="/rnai_clones"
         iconName="folder_open"
         interactive={true}
       >
         <span>RNAi clones</span>
+      </HamburgerEntry>
+      <HamburgerEntry href="/dinos" iconName="folder_open" interactive={true}>
+        <span>Dinoflagellates</span>
       </HamburgerEntry>
     </div>
   );

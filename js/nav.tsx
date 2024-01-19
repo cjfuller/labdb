@@ -207,6 +207,7 @@ export default function Navbar(props: Props) {
   const navitems = props.navitems ?? [
     "Bacteria",
     "Worms",
+    "Dinos",
     "RNAiClones",
     "Plasmids",
     "Antibodies",
@@ -219,6 +220,7 @@ export default function Navbar(props: Props) {
     Antibodies: "/antibodies",
     Worms: "/lines",
     RNAiClones: "/rnai_clones",
+    Dinos: "/dinos",
   };
   return (
     <div className={css(styles.navbar)}>
