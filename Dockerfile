@@ -1,6 +1,6 @@
 FROM ruby:2.7
 RUN apt-get update -qq && apt-get install -y lsb-release apt-transport-https postgresql-client libv8-dev libpq-dev build-essential
-RUN gem install bundler
+RUN gem install bundler -v 2.4.22
 
 WORKDIR /app
 ADD . /app

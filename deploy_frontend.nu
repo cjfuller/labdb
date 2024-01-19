@@ -5,7 +5,7 @@ export def current_hash [] {
 }
 
 def prepare_js [] {
-    rm public/_s/*.js
+    rm -f public/_s/*.js
     npm install
     npm run-script compile
 }
