@@ -207,10 +207,10 @@ export default function Navbar(props: Props) {
   const navitems = props.navitems ?? [
     "Bacteria",
     "Worms",
-    "Plasmids",
-    "Oligos",
-    "Antibodies",
     "RNAiClones",
+    "Plasmids",
+    "Antibodies",
+    "Oligos",
   ];
   const navlinks = props.navlinks ?? {
     Plasmids: "/plasmids",
