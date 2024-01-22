@@ -9,8 +9,10 @@ const colors = {
   lightBackground: "#f8f8f8",
   mediumBackground: "#e0e0e0",
   bitDarkBackground: "#c0c0c0",
-  linkBaseColor: "#007799",
-  linkHoverColor: "#009977",
+  // Synced to radix cyan 7
+  linkBaseColor: "#12677e",
+  // Synced to radix lime 7
+  linkHoverColor: "#496231",
   mutedBlue: "#115599",
   mutedBlueSemitransparent: "rgba(17, 85, 153, 0.3)",
   mutedBlueMoreOpaque: "rgba(17, 85, 153, 0.8)",
