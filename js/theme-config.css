@@ -5,3 +5,7 @@
 .nav-button button {
     color: black;
 }
+
+.nav-button button:hover {
+    cursor: pointer;
+}

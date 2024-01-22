@@ -140,7 +140,7 @@ export default function (props: Props) {
   return (
     <Popover.Root>
       <Popover.Trigger>
-        <IconButton variant="ghost">
+        <IconButton variant="ghost" radius="none">
           <AccessibleIcon label="search">
             <MagnifyingGlassIcon width={20} height={20} />
           </AccessibleIcon>
