@@ -12,6 +12,7 @@ import {
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 
 import { Types, TypeKey } from "./search";
+import { StyleSheet, css } from "aphrodite";
 
 type Props = {
   doSearch: (
@@ -90,32 +91,38 @@ function SearchPageContent(props: Props) {
         />
         Include sequence in search?
       </Flex>
-      <Strong>Filters</Strong>
-      <label>
-        Person
-        <TextField.Input onChange={setPerson} value={person ?? ""} />
-      </label>
-      <Flex direction="column" gap="1">
-        <div>Types to search</div>
-        <Flex direction="row" gap="1" align="center" wrap="wrap">
-          {Object.keys(Types).map((t) => (
-            <TypeSelector
-              name={t as TypeKey}
-              selected={types.has(t as TypeKey)}
-              setSelected={(selected) => {
-                if (selected) {
-                  const newSet = new Set(types);
-                  newSet.add(t as TypeKey);
-                  setTypes(newSet);
-                } else {
-                  const newSet = new Set(types);
-                  newSet.delete(t as TypeKey);
-                  setTypes(newSet);
-                }
-              }}
-            />
-          ))}
-        </Flex>
+      <Flex direction="column" gap="0">
+        <Strong>Filters</Strong>
+        <div className={css(styles.filterDiv)}>
+          <Flex direction="column" gap="4">
+            <label style={{ marginTop: "4px" }}>
+              Person
+              <TextField.Input onChange={setPerson} value={person ?? ""} />
+            </label>
+            <Flex direction="column" gap="1">
+              <div>Types to search</div>
+              <Flex direction="row" gap="1" align="center" wrap="wrap">
+                {Object.keys(Types).map((t) => (
+                  <TypeSelector
+                    name={t as TypeKey}
+                    selected={types.has(t as TypeKey)}
+                    setSelected={(selected) => {
+                      if (selected) {
+                        const newSet = new Set(types);
+                        newSet.add(t as TypeKey);
+                        setTypes(newSet);
+                      } else {
+                        const newSet = new Set(types);
+                        newSet.delete(t as TypeKey);
+                        setTypes(newSet);
+                      }
+                    }}
+                  />
+                ))}
+              </Flex>
+            </Flex>
+          </Flex>
+        </div>
       </Flex>
       <Button
         color="cyan"
@@ -139,9 +146,17 @@ export default function (props: Props) {
           </AccessibleIcon>
         </IconButton>
       </Popover.Trigger>
-      <Popover.Content style={{ width: 480 }}>
+      <Popover.Content style={{ width: 360 }}>
         <SearchPageContent doSearch={props.doSearch} />
       </Popover.Content>
     </Popover.Root>
   );
 }
+
+const styles = StyleSheet.create({
+  filterDiv: {
+    paddingLeft: 8,
+    // Radix cyan-9
+    borderLeft: `2px solid #00a2c7`,
+  },
+});
