@@ -29,6 +29,10 @@ module.exports = {
         exclude: /node_modules/,
         use: [{ loader: "ts-loader" }],
       },
+      {
+        test: /\.css?$/,
+        use: ["style-loader", "css-loader"],
+      },
     ],
   },
   devtool: "eval-source-map",

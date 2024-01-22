@@ -5,11 +5,14 @@ import { createStore } from "redux";
 import _ from "underscore";
 import $ from "jquery";
 import icepick from "icepick";
+import { Theme } from "@radix-ui/themes";
+import "@radix-ui/themes/styles.css";
 
 import * as Actions from "./actions";
 import * as ActionExecutors from "./action-executors";
 import LandingPage from "./landing";
 import Page from "./page";
+import "./theme-config.css";
 
 const Data = (window as any)._labdbPrefetch;
 
@@ -230,10 +233,6 @@ function userHandler(state: any, action: { name: any; auth: any; email: any }) {
   };
 }
 
-function searchBarHandler(state: any, action: { visible: any }) {
-  return { ...state, showSearch: action.visible };
-}
-
 function searchDataHandler(state: any, action: { data: any }) {
   return { ...state, searchResults: action.data };
 }
@@ -262,7 +261,6 @@ actionHandlers[Actions.UPDATE_ITEM] = updateHandler;
 actionHandlers[Actions.EDIT_MODE] = editHandler;
 actionHandlers[Actions.HAMBURGER_VISIBILITY] = hamburgerHandler;
 actionHandlers[Actions.USER] = userHandler;
-actionHandlers[Actions.SEARCH_VISIBILITY] = searchBarHandler;
 actionHandlers[Actions.SEARCH_DATA] = searchDataHandler;
 actionHandlers[Actions.MAP_VISIBILITY] = mapVisibilityHandler;
 actionHandlers[Actions.MAP_DATA] = mapDataHandler;
@@ -412,7 +410,6 @@ class Application extends React.Component<Props> {
         editMode={this.props.editMode}
         mapVisible={this.props.mapVisible}
         showHamburger={store.getState().showHamburger}
-        showSearch={store.getState().showSearch}
         unsavedChanges={unsavedForCurrentResource()}
         user={store.getState().user}
       />
@@ -437,7 +434,9 @@ window.onload = () => {
     ActionExecutors.injectDispatch(store.dispatch);
     ReactDOM.render(
       <Provider store={store as any}>
-        <App />
+        <Theme accentColor="grass" grayColor="slate">
+          <App />
+        </Theme>
       </Provider>,
       document.getElementById("body")
     );

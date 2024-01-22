@@ -1,10 +1,11 @@
 import React, { MouseEvent } from "react";
 import { css, StyleSheet } from "aphrodite";
 
-import * as actions from "./actions";
 import * as ae from "./action-executors";
 import auth from "./auth";
 import ss from "./shared-styles";
+import Search from "./searchv2";
+import { doSearchAndRedirect } from "./actions";
 
 type NavItemProps = {
   addr: string;
@@ -167,10 +168,6 @@ function Actions(props: ActionProps) {
     }
   };
 
-  const doSearch = () => {
-    props.dispatch(actions.searchVisibility(true));
-  };
-
   return (
     <div className={css(styles.actions)}>
       <CtxActions
@@ -185,8 +182,8 @@ function Actions(props: ActionProps) {
             <i className="material-icons">add</i>
           </div>
         ) : null}
-        <div className={css(styles.action)} onClick={doSearch}>
-          <i className="material-icons">search</i>
+        <div className={`nav-button ${css(styles.action)}`}>
+          <Search doSearch={doSearchAndRedirect} />
         </div>
         <div className={css(styles.hamburgerWrapper)}>
           <div className={css(styles.action)} onClick={props.onClickHamburger}>

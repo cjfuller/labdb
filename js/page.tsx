@@ -10,7 +10,6 @@ import ItemInfoView from "./itemview";
 import Navbar from "./nav";
 import PlasmidMap from "./plasmid-map";
 import ss from "./shared-styles";
-import SearchBar from "./search";
 
 type Props = {
   data: any;
@@ -18,7 +17,6 @@ type Props = {
   editMode: boolean;
   mapVisible: boolean;
   showHamburger: boolean;
-  showSearch: boolean;
   unsavedChanges: any;
   user: {
     name: string;
@@ -48,15 +46,6 @@ export default function Page(props: Props) {
 
   const toggleBurger = (_: MouseEvent) => {
     props.dispatch(Actions.hamburgerVisibility(!props.showHamburger));
-  };
-
-  const doSearch = (
-    searchTerm: string,
-    includeSequence: boolean,
-    person: string,
-    types: string[]
-  ) => {
-    Actions.doSearchAndRedirect(searchTerm, includeSequence, person, types);
   };
 
   const closePlasmidMap = () => {
@@ -109,9 +98,6 @@ export default function Page(props: Props) {
         editMode={props.editMode}
         onClickHamburger={toggleBurger}
       />
-      {props.showSearch ? (
-        <SearchBar dispatch={props.dispatch} doSearch={doSearch} />
-      ) : null}
       {props.showHamburger ? (
         <Hamburger
           close={toggleBurger}
