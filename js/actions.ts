@@ -117,13 +117,6 @@ export function setUserAndAuth(user: any, auth: any, email: any): Action {
   };
 }
 
-export function searchVisibility(visible: boolean): Action {
-  return {
-    type: SEARCH_VISIBILITY,
-    visible: visible,
-  };
-}
-
 export function searchData(data: any): Action {
   return {
     type: SEARCH_DATA,
@@ -155,15 +148,15 @@ export function setPlasmidMapData(id: any, data: any): Action {
 }
 
 export function doSearchAndRedirect(
-  searchTerm: any,
-  includeSequence: any,
-  person: any,
-  types: any
+  searchTerm: string,
+  includeSequence: boolean,
+  person: string | null,
+  types: Set<string>
 ): void {
   let url = `/search?term=${searchTerm}&seq=${includeSequence ? 1 : 0}`;
   if (person) {
     url += `&person=${person}`;
   }
-  url += `&types=${JSON.stringify(types)}`;
+  url += `&types=${JSON.stringify([...types])}`;
   (window.location as any) = url;
 }

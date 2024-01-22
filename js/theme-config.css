@@ -1,0 +1,7 @@
+.radix-themes {
+    --default-font-family: Lato, sans-serif;
+}
+
+.nav-button button {
+    color: black;
+}

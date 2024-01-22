@@ -3,7 +3,8 @@ import type { CSSProperties } from "aphrodite";
 const colors = {
   borderColor: "#e3e3e3",
   darkGray: "rgba(0, 0, 0, 0.2)",
-  labdbGreen: "#559955",
+  // Synced to radix grass 9
+  labdbGreen: "#46A758",
   labdbGreenLight: "#66aa66",
   lightBackground: "#f8f8f8",
   mediumBackground: "#e0e0e0",
