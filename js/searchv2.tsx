@@ -45,7 +45,7 @@ function TypeSelector({
 }: {
   setSelected: (selected: boolean) => void;
   selected: boolean;
-  name: TypeKey;
+  name: string;
 }) {
   const onClick = useCallback(
     () => setSelected(!selected),
@@ -104,7 +104,7 @@ function SearchPageContent(props: Props) {
               <Flex direction="row" gap="1" align="center" wrap="wrap">
                 {Object.keys(Types).map((t) => (
                   <TypeSelector
-                    name={t as TypeKey}
+                    name={Types[t as TypeKey]}
                     selected={types.has(t as TypeKey)}
                     setSelected={(selected) => {
                       if (selected) {
